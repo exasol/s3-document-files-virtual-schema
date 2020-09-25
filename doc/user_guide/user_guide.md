@@ -64,7 +64,7 @@ For that we use the Exasol Document Mapping Language (EDML). It is universal ove
 To learn how to  define such EDML definitions check the [user guide in the common repository for all document Virtual Schemas](https://github.com/exasol/virtual-schema-common-document/doc/user_guide/edml_user_guide.md).
 
 In the definitions you have to define the `source` property. 
-For S3, you there define the key of the files to load.
+For S3, you define the key (S3 term for file identifier) of the files to load.
 Keep in mind the tha adapter prepends the key prefix you defined in the CONNECTION.
 
 This Virtual Schema adapter automatically detects the type of the document file by the file extension.

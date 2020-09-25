@@ -73,7 +73,16 @@ public class S3DocumentFilesAdapterIT {
         connection = EXASOL_CONTAINER.createConnectionForUser(EXASOL_CONTAINER.getUsername(),
                 EXASOL_CONTAINER.getPassword());
         statement = connection.createStatement();
+        createS3TestSetup();
+        exasolObjectFactory = new ExasolObjectFactory(EXASOL_CONTAINER.createConnection());
+        adapterScript = createAdapterScript(exasolObjectFactory);
+        connectionDefinition = getConnectionDefinition();
+        createUdf();
+        final Path mappingFile = saveResourceToFile("mapJsonFile.json");
+        createVirtualSchema(mappingFile);
+    }
 
+    private static void createS3TestSetup() {
         final S3Client s3 = S3Client.builder().endpointOverride(LOCAL_STACK_CONTAINER.getEndpointOverride(S3))
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials
                         .create(LOCAL_STACK_CONTAINER.getAccessKey(), LOCAL_STACK_CONTAINER.getSecretKey())))
@@ -86,13 +95,6 @@ public class S3DocumentFilesAdapterIT {
                 RequestBody.fromBytes("{\"id\": \"book-2\"}".getBytes()));
         s3.putObject(builder -> builder.bucket(TEST_BUCKET).key("otherData.json"),
                 RequestBody.fromBytes("{\"id\": \"other\"}".getBytes()));
-
-        exasolObjectFactory = new ExasolObjectFactory(EXASOL_CONTAINER.createConnection());
-        adapterScript = createAdapterScript(exasolObjectFactory);
-        connectionDefinition = getConnectionDefinition();
-        createUdf();
-        final Path mappingFile = saveResourceToFile("mapJsonFile.json");
-        createVirtualSchema(mappingFile);
     }
 
     private static ConnectionDefinition getConnectionDefinition() {

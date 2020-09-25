@@ -44,7 +44,7 @@ CREATE CONNECTION S3_CONNECTION
     IDENTIFIED BY 'AWS SECRET KEY';
 ``` 
 
-The address (`TO`) must have one of theses formats:
+The address (`TO`) must have one of these formats:
 
 * `https://BUCKET.s3.REGION.amazonaws.com/KEY`
 * `http(s)://BUCKET.s3.REGION.CUSTOM_ENDPOINT/KEY`

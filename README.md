@@ -1,4 +1,4 @@
-# Virtual Schema for Document Files in BucketFS
+# Virtual Schema for Document Files in S3
 
 [![Build Status](https://travis-ci.com/exasol/s3-document-files-virtual-schema.svg?branch=master)](https://travis-ci.com/exasol/s3-document-files-virtual-schema)
 

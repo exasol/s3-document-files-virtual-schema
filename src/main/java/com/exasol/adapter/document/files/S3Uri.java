@@ -38,7 +38,7 @@ public class S3Uri {
         final Matcher matcher = URL_PATTERN.matcher(url);
         if (!matcher.matches()) {
             throw new IllegalArgumentException(
-                    "The given S3 Bucket string has an invalid format. Expected Format: http(s)://BUCKET.s3.REGION.amazonaws.com/KEY or http(s)://BUCKET.s3.REGION.CUSTOM_ENDPOINT/KEY.");
+                    "The given S3 Bucket string has an invalid format. Expected format: http(s)://BUCKET.s3.REGION.amazonaws.com/KEY or http(s)://BUCKET.s3.REGION.CUSTOM_ENDPOINT/KEY.");
         }
         final boolean useSsl = matcher.group(1) != null;
         final String bucket = matcher.group(2);

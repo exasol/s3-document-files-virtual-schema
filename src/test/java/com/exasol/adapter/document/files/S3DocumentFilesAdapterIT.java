@@ -134,7 +134,7 @@ public class S3DocumentFilesAdapterIT {
 
     private static void createUdf() throws SQLException {
         final StringBuilder statementBuilder = new StringBuilder(
-                "CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_DOCUMENT(DATA_LOADER VARCHAR(2000000), REMOTE_TABLE_QUERY VARCHAR(2000000), CONNECTION_NAME VARCHAR(500)) EMITS(...) AS\n");
+                "CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(DATA_LOADER VARCHAR(2000000), REMOTE_TABLE_QUERY VARCHAR(2000000), CONNECTION_NAME VARCHAR(500)) EMITS(...) AS\n");
         statementBuilder.append("    %scriptclass " + UdfEntryPoint.class.getName() + ";\n");
         statementBuilder.append("    %jar /buckets/bfsdefault/default/" + ADAPTER_JAR + ";\n");
         statementBuilder.append("/");

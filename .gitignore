@@ -1,0 +1,29 @@
+/target/
+
+# Eclipse and Maven
+.classpath
+.project
+# .settings : we need Eclipse settings for code formatter and clean-up rules
+target
+.cache
+dependency-reduced-pom.xml
+
+# Intellij
+.idea
+# Intellij recommends to share iml files, however, better don't share files which might be outdated
+*.iml
+
+# Integration tests
+src/test/resources/integration/driver/hive/*.jar
+src/test/resources/integration/driver/oracle/*.jar
+src/test/resources/integration/driver/oracle/*.zip
+
+# Others
+.DS_Store
+*.swp
+local
+Scripts
+.dbeaver*
+**/*.log
+.directory
+venv/

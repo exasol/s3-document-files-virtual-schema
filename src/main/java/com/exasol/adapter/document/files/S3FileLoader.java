@@ -7,10 +7,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import com.exasol.ExaConnectionInformation;
-import com.exasol.adapter.document.documentfetcher.files.FileLoader;
-import com.exasol.adapter.document.documentfetcher.files.GlobToRegexConverter;
-import com.exasol.adapter.document.documentfetcher.files.SegmentDescription;
-import com.exasol.adapter.document.documentfetcher.files.SegmentMatcher;
+import com.exasol.adapter.document.documentfetcher.files.*;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;

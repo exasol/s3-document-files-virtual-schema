@@ -52,7 +52,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 public class S3DocumentFilesAdapterIT {
     public static final String TEST_BUCKET = "test-bucket";
     private static final String TEST_SCHEMA = "TEST_SCHEMA";
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-0.2.0-SNAPSHOT-s3-0.1.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-0.2.1-s3-0.1.0.jar";
     private static final Logger LOGGER = LoggerFactory.getLogger(S3DocumentFilesAdapterIT.class);
     @Container
     private static final ExasolContainer<? extends ExasolContainer<?>> EXASOL_CONTAINER = new ExasolContainer<>()

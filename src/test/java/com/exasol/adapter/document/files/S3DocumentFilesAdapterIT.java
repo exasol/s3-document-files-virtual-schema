@@ -52,7 +52,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 public class S3DocumentFilesAdapterIT {
     public static final String TEST_BUCKET = "test-bucket";
     private static final String TEST_SCHEMA = "TEST_SCHEMA";
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-0.2.0-SNAPSHOT-s3-0.1.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-0.2.0-s3-0.1.0.jar";
     private static final Logger LOGGER = LoggerFactory.getLogger(S3DocumentFilesAdapterIT.class);
     @Container
     private static final ExasolContainer<? extends ExasolContainer<?>> EXASOL_CONTAINER = new ExasolContainer<>()
@@ -104,8 +104,6 @@ public class S3DocumentFilesAdapterIT {
                 LOCAL_STACK_CONTAINER.getAccessKey(), LOCAL_STACK_CONTAINER.getSecretKey());
     }
 
-    // TODO test JSON syntax error
-
     @AfterAll
     static void afterAll() throws SQLException {
         statement.close();
@@ -113,10 +111,12 @@ public class S3DocumentFilesAdapterIT {
     }
 
     private static Path saveResourceToFile(final String resource) throws IOException {
-        final InputStream inputStream = S3DocumentFilesAdapterIT.class.getClassLoader().getResourceAsStream(resource);
-        final Path tempFile = File.createTempFile("resource", "", tempDir).toPath();
-        Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
-        return tempFile;
+        try (final InputStream inputStream = S3DocumentFilesAdapterIT.class.getClassLoader()
+                .getResourceAsStream(resource)) {
+            final Path tempFile = File.createTempFile("resource", "", tempDir).toPath();
+            Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            return tempFile;
+        }
     }
 
     private static AdapterScript createAdapterScript(final ExasolObjectFactory exasolObjectFactory)

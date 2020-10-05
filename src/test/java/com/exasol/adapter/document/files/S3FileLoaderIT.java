@@ -20,6 +20,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.exasol.ExaConnectionInformation;
+import com.exasol.adapter.document.documentfetcher.files.InputStreamWithResourceName;
 import com.exasol.adapter.document.documentfetcher.files.SegmentDescription;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -57,8 +58,8 @@ class S3FileLoaderIT {
                 LOCAL_STACK_CONTAINER, TEST_BUCKET, "");
         final S3FileLoader s3FileLoader = new S3FileLoader("file-1.json", SegmentDescription.NO_SEGMENTATION,
                 connectionInformation);
-        assertThat(s3FileLoader.loadFiles().map(this::readFirstLine).collect(Collectors.toList()),
-                containsInAnyOrder(CONTENT_1));
+        assertThat(s3FileLoader.loadFiles().map(InputStreamWithResourceName::getInputStream).map(this::readFirstLine)
+                .collect(Collectors.toList()), containsInAnyOrder(CONTENT_1));
     }
 
     @CsvSource({ //
@@ -73,8 +74,8 @@ class S3FileLoaderIT {
                 LOCAL_STACK_CONTAINER, TEST_BUCKET, "");
         final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, SegmentDescription.NO_SEGMENTATION,
                 connectionInformation);
-        assertThat(s3FileLoader.loadFiles().map(this::readFirstLine).collect(Collectors.toList()),
-                containsInAnyOrder(CONTENT_1, CONTENT_2));
+        assertThat(s3FileLoader.loadFiles().map(InputStreamWithResourceName::getInputStream).map(this::readFirstLine)
+                .collect(Collectors.toList()), containsInAnyOrder(CONTENT_1, CONTENT_2));
 
     }
 

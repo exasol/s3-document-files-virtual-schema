@@ -104,8 +104,6 @@ public class S3DocumentFilesAdapterIT {
                 LOCAL_STACK_CONTAINER.getAccessKey(), LOCAL_STACK_CONTAINER.getSecretKey());
     }
 
-    // TODO test JSON syntax error
-
     @AfterAll
     static void afterAll() throws SQLException {
         statement.close();
@@ -113,10 +111,12 @@ public class S3DocumentFilesAdapterIT {
     }
 
     private static Path saveResourceToFile(final String resource) throws IOException {
-        final InputStream inputStream = S3DocumentFilesAdapterIT.class.getClassLoader().getResourceAsStream(resource);
-        final Path tempFile = File.createTempFile("resource", "", tempDir).toPath();
-        Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
-        return tempFile;
+        try (final InputStream inputStream = S3DocumentFilesAdapterIT.class.getClassLoader()
+                .getResourceAsStream(resource)) {
+            final Path tempFile = File.createTempFile("resource", "", tempDir).toPath();
+            Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            return tempFile;
+        }
     }
 
     private static AdapterScript createAdapterScript(final ExasolObjectFactory exasolObjectFactory)

@@ -56,7 +56,7 @@ public class S3FileLoader implements FileLoader {
     }
 
     @Override
-    public Stream<InputStream> loadFiles() {
+    public Stream<InputStreamWithResourceName> loadFiles() {
         final Pattern globPattern = GlobToRegexConverter.convert(this.s3Uri.getKey());
         return getObjectKeysOnlyQuickFiltered().filter(key -> globPattern.matcher(key).matches())
                 .filter(this.segmentMatcher::matches).map(this::getS3Object);
@@ -80,9 +80,11 @@ public class S3FileLoader implements FileLoader {
         }
     }
 
-    private InputStream getS3Object(final String key) {
-        return this.s3.getObject(GetObjectRequest.builder().bucket(this.s3Uri.getBucket()).key(key).build(),
+    private InputStreamWithResourceName getS3Object(final String key) {
+        final InputStream inputStream = this.s3.getObject(
+                GetObjectRequest.builder().bucket(this.s3Uri.getBucket()).key(key).build(),
                 ResponseTransformer.toInputStream());
+        return new InputStreamWithResourceName(inputStream, key);
     }
 
     @Override

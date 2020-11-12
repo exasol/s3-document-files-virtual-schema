@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -33,7 +34,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 class S3FileLoaderIT {
 
     @Container
-    private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer().withServices(S3);
+    private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.12.2")).withServices(S3);
     private static final String TEST_BUCKET = "test-bucket";
     private static final String CONTENT_1 = "content-1";
     private static final String CONTENT_2 = "content-2";

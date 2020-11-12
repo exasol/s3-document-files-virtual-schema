@@ -18,6 +18,7 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -51,10 +52,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     private static final ExasolContainer<? extends ExasolContainer<?>> EXASOL_CONTAINER = new ExasolContainer<>()
             .withLogConsumer(new Slf4jLogConsumer(LOGGER)).withReuse(true);
     @Container
-    private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer().withServices(S3);
-    /*
-     * new LocalStackContainer( DockerImageName.parse("localstack/localstack:0.12.2")).withServices(S3);
-     */
+    private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(DockerImageName.parse("localstack/localstack:0.12.2")).withServices(S3);
 
     private static Connection connection;
     private static Statement statement;

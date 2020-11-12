@@ -3,6 +3,9 @@ package com.exasol.adapter.document.files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class represents S3 URIs.
+ */
 public class S3Uri {
     public static final String AWS_ENDPOINT = "amazonaws.com";
     private static final Pattern URL_PATTERN = Pattern.compile("http(s)?://([^.]+)+.s3.([^.]+).([^/]+)/(.*)");
@@ -12,8 +15,17 @@ public class S3Uri {
     private final String endpoint;
     private final String key;
 
-    private S3Uri(final boolean useSsl, final String bucket, final String region, final String endpoint,
-            final String key) {
+    /**
+     * Create a new instance {@link S3Uri}.
+     *
+     * @param useSsl   {@code true} if the connection uses ssl encryption (https)
+     * @param bucket   the name of the bucket
+     * @param region   the AWS region
+     * @param endpoint the AWS endpoint
+     * @param key      the key to fech
+     */
+    public S3Uri(final boolean useSsl, final String bucket, final String region, final String endpoint,
+                 final String key) {
         this.useSsl = useSsl;
         this.bucket = bucket;
         this.region = region;
@@ -30,7 +42,7 @@ public class S3Uri {
      * <li>http(s)://BUCKET.s3.REGION.CUSTOM_ENDPOINT/KEY</li>
      * </ul>
      * </p>
-     * 
+     *
      * @param url URI to parse.
      * @return built {@link S3Uri}
      */
@@ -48,9 +60,15 @@ public class S3Uri {
         return new S3Uri(useSsl, bucket, region, endpoint, key);
     }
 
+    @Override
+    public String toString() {
+        return (this.useSsl ? "https://" : "http://") + this.bucket + ".s3." + this.region + "." + this.endpoint + "/"
+                + this.key;
+    }
+
     /**
      * Get if the URI uses SSL.
-     * 
+     *
      * @return if the URI uses SSL
      */
     public boolean isUseSsl() {
@@ -68,7 +86,7 @@ public class S3Uri {
 
     /**
      * Get the name of the bucket.
-     * 
+     *
      * @return name of the bucket
      */
     public String getBucket() {
@@ -77,7 +95,7 @@ public class S3Uri {
 
     /**
      * Get if the S3Uri has an endpoint different from the default AWS one.
-     * 
+     *
      * @return true if non-default endpoint
      */
     public boolean hasEndpointOverride() {
@@ -89,7 +107,7 @@ public class S3Uri {
      * <p>
      * In case the endpoint is set to the default AWS endpoint {@code null} is returned.
      * </p>
-     * 
+     *
      * @return endpoint override or {@code null}
      */
     public String getEndpointOverride() {
@@ -101,8 +119,17 @@ public class S3Uri {
     }
 
     /**
+     * Get the endpoint.
+     *
+     * @return AWS endpoint
+     */
+    public String getEndpoint() {
+        return this.endpoint;
+    }
+
+    /**
      * Get the key.
-     * 
+     *
      * @return key
      */
     public String getKey() {

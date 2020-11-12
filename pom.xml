@@ -16,8 +16,8 @@
         <junit.platform.version>1.6.2</junit.platform.version>
         <jacoco.version>0.8.5</jacoco.version>
         <gpg.skip>true</gpg.skip>
-        <org.testcontainers.version>1.14.3</org.testcontainers.version>
-        <vs-commom-document-files.version>0.2.0</vs-commom-document-files.version>
+        <org.testcontainers.version>1.15.0</org.testcontainers.version>
+        <vs-commom-document-files.version>0.3.0-SNAPSHOT</vs-commom-document-files.version>
         <!--
         M4 does not fail tests if beforeAll fails
         M5 fails in integration tests with a strange error
@@ -98,7 +98,6 @@
             <version>2.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- Test dependencies -->
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>virtual-schema-common-document-files</artifactId>
@@ -133,7 +132,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-testcontainers</artifactId>
-            <version>3.2.0</version>
+            <version>3.3.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -146,6 +145,12 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>localstack</artifactId>
             <version>${org.testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>test-db-builder-java</artifactId>
+            <version>2.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency><!-- Required by org.testcontainer:localstack -->
@@ -173,6 +178,18 @@
             <version>${jacoco.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>udf-debugging-java</artifactId>
+            <version>0.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>hamcrest-resultset-matcher</artifactId>
+            <version>1.2.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -183,9 +200,7 @@
                 <configuration>
                     <!-- Set the highest log level for coverage testing, so that we
                       have a chance to reach branches in the logging lambdas too. -->
-                    <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties
-                        ${argLine}
-                    </argLine>
+                    <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties ${argLine}</argLine>
                     <excludes>
                         <exclude>**IT.java</exclude>
                     </excludes>
@@ -370,7 +385,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>0.1.0</version>
+                <version>0.2.0</version>
                 <executions>
                     <execution>
                         <goals>

@@ -1,13 +1,14 @@
 package com.exasol.adapter.document.files;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
 class S3UriTest {
     @CsvSource({ //
@@ -60,5 +61,14 @@ class S3UriTest {
     @ParameterizedTest
     void testInvalidSyntax(final String invalidUrl) {
         assertThrows(IllegalArgumentException.class, () -> S3Uri.fromString(invalidUrl));
+    }
+
+    @ValueSource(strings = { //
+            "https://awsexamplebucket1.s3.us-west-2.amazonaws.com/photos/puppy.jpg, true",
+            "http://awsexamplebucket1.s3.us-west-2.amazonaws.com/photos/puppy.jpg, false"//
+    })
+    @ParameterizedTest
+    void testToString(final String uri) {
+        assertThat(S3Uri.fromString(uri).toString(), equalTo(uri));
     }
 }

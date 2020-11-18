@@ -1,0 +1,19 @@
+{
+  "Title": "1984",
+  "Author": {
+    "firstName": "George",
+    "lastName": "Orwell"
+  },
+  "Cover": "https://example.com/cover1985.jpg",
+  "Price": 12.30,
+  "Pages": 384,
+  "Genre": "Science Fiction",
+  "Characters": [
+    "Big Brother",
+    "Emmanuel Goldstein",
+    "O'Brien",
+    "Winston Smith",
+    "Julia",
+    "Syme"
+  ]
+}

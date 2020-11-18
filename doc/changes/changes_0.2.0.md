@@ -16,6 +16,10 @@ The changes also cause an API change for the UDF definition. See the [user guide
 * #4: Use Virtual-Schema-Common-Document-Files-3.0.0
 * #6: Improved errors messages for wrong connection strings
 
+## Documentation
+
+* #7: Added hands-on guide
+
 ## Dependency Updates:
 
 * Updated `com.exasol:exasol-testcontainers` from 3.2.0 to 3.3.0

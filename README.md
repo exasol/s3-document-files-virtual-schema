@@ -21,6 +21,7 @@ For different file systems sources check the [files Virtual Schema][files-vs]
 For supported document file formats: see [files Virtual Schema][files-vs]
 
 * [User Guide](doc/user_guide/user_guide.md)
+* [Hands-on Guide](doc/hands_on/hands_on.md)
 * [Changelog](doc/changes/changelog.md)
 * [Dependencies](NOTICE)
 

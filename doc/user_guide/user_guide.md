@@ -14,15 +14,17 @@ CREATE SCHEMA ADAPTER;
 ```
 
 Next create the Adapter Script:
- ```
-CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FS_FILES_ADAPTER AS
+
+ ```sql
+CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
     %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-0.3.0-SNAPSHOT-s3-0.1.0.jar;
 /
 ```
 
 In addition to the adapter script you need to create a UDF function that will handle the loading of the data:
-```
+
+```sql
 CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   DATA_LOADER VARCHAR(2000000),
   SCHEMA_MAPPING_REQUEST VARCHAR(2000000),
@@ -80,9 +82,9 @@ That means, you can use `*` and `?` as wildcards, where `*` matches multiple cha
 
 ## Creating the Virtual Schema
 
-Finally create the Virtual Schema using:
+Finally, create the Virtual Schema using:
 
-```
+```sql
 CREATE VIRTUAL SCHEMA FILES_VS_TEST USING ADAPTER.S3_FILES_ADAPTER WITH
     CONNECTION_NAME = 'S3_CONNECTION'
     SQL_DIALECT     = 'S3_DOCUMENT_FILES'

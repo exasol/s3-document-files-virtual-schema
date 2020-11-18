@@ -22,13 +22,13 @@ We are going to create a Virtual Schema for these files so that you can access t
 So you may ask yourself "Why not just create an Exasol table and import the data?".
 While in some cases this might even be the better solution, but there are also use cases where you still want to create a Virtual Schema:
 
-### S3 as Cold-Storage
+### Using S3 as Cold-Storage
 
 The first use case is that you have lots of data that you don't need very often in your analytics.
 In that case, you can use S3 as a cheap cold storage and integrate the data only when you needed them into your analytics.
 In case you can identify the data you need by the file name, you can use a filter on the file name, and the Virtual Schema adapter will only transfer the single file.
 
-### Use it for Import
+### Using this Virtual Schema for Importing
 
 Also, if you decide to simply import your data into an Exasol table, you still have to import it.
 For that you can also use this Virtual Schema.
@@ -95,7 +95,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
 
 (If you should experience problems check our [troubleshooting section on the virtual schemas page](https://docs.exasol.com/database_concepts/virtual_schema/user_guide.htm))
 
-## Create the Connection
+## Creating the Connection
 
 The virtual schema needs to connect to your AWS bucket.
 For that it needs an AWS-access key. 
@@ -108,17 +108,17 @@ For that we use a `CONNECTION` definition, that stores your keys securely.
 
  ```sql
 CREATE CONNECTION S3_CONNECTION
-    TO 'https://YOUR_BUCKET.s3.eu-central-1.amazonaws.com/'
+    TO 'https://YOUR_BUCKET.s3.YOUR_REGION.amazonaws.com/'
     USER 'AWS ACCESS KEY'
     IDENTIFIED BY 'AWS SECRET KEY';
 ``` 
 
 The address (`TO`) must have one of these formats:
 
-* `https://BUCKET.s3.REGION.amazonaws.com/KEY`
-* `http(s)://BUCKET.s3.REGION.CUSTOM_ENDPOINT/KEY` (for a local test version of S3)
+* `https://BUCKET.s3.YOUR_REGION.amazonaws.com/KEY`
+* `http(s)://BUCKET.s3.YOUR_REGION.CUSTOM_ENDPOINT/KEY` (for a local test version of S3)
 
-## Create a mapping Definition
+## Creating a mapping Definition
 
 Now we are going to create a [EDML definition][edml-guide] that maps the JSON data to an Exasol table structure.
 We will start simple and only map the title of each book:
@@ -142,7 +142,7 @@ We will start simple and only map the title of each book:
 
 Note that we used the wildcard `book-*.json` as `source`. 
 The Virtual Schema adapter will concatenate this with the address (`TO`) from the connection to:
-`https://YOUR_BUCKET.s3.eu-central-1.amazonaws.com/book-*.json`.
+`https://YOUR_BUCKET.s3.YOUR_REGION.amazonaws.com/book-*.json`.
 
 Save this mapping as a file (for example `myMapping.json`) and upload it to BucketFS:
 
@@ -150,7 +150,7 @@ Save this mapping as a file (for example `myMapping.json`) and upload it to Buck
 curl -I -X PUT -T myMapping.json http://w:writepw@<YOUR_DB_IP>:2580/default/
 ```
  
-## Create the Virtual Schema
+## Creating the Virtual Schema
 
 Now we can create the Virtual Schema:
 

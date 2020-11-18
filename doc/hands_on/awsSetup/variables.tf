@@ -13,3 +13,5 @@ variable "project_name" {
 }
 
 variable "stage" {}
+
+variable "region" {}

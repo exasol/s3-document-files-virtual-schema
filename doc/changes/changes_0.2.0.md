@@ -14,6 +14,7 @@ The changes also cause an API change for the UDF definition. See the [user guide
 ## Features / Enhancements
 
 * #4: Use Virtual-Schema-Common-Document-Files-3.0.0
+* #6: Improved errors messages for wrong connection strings
 
 ## Dependency Updates:
 

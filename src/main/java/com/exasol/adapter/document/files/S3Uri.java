@@ -3,6 +3,8 @@ package com.exasol.adapter.document.files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.exasol.errorreporting.ExaError;
+
 /**
  * This class represents S3 URIs.
  */
@@ -25,7 +27,7 @@ public class S3Uri {
      * @param key      the key to fech
      */
     public S3Uri(final boolean useSsl, final String bucket, final String region, final String endpoint,
-                 final String key) {
+            final String key) {
         this.useSsl = useSsl;
         this.bucket = bucket;
         this.region = region;
@@ -49,8 +51,11 @@ public class S3Uri {
     public static S3Uri fromString(final String url) {
         final Matcher matcher = URL_PATTERN.matcher(url);
         if (!matcher.matches()) {
-            throw new IllegalArgumentException(
-                    "The given S3 Bucket string has an invalid format. Expected format: http(s)://BUCKET.s3.REGION.amazonaws.com/KEY or http(s)://BUCKET.s3.REGION.CUSTOM_ENDPOINT/KEY.");
+            throw new IllegalArgumentException(ExaError.messageBuilder("E-S3VS-1").message(
+                    "The given S3 Bucket string {{S3_URI}} has an invalid format. Expected format: http(s)://BUCKET.s3.REGION.amazonaws.com/KEY or http(s)://BUCKET.s3.REGION.CUSTOM_ENDPOINT/KEY. Note that the address from the CONNECTION and the source are concatenated.")
+                    .parameter("S3_URI", url)
+                    .mitigation("Change the address in your CONNECTION and the source in your mapping definition.")
+                    .toString());
         }
         final boolean useSsl = matcher.group(1) != null;
         final String bucket = matcher.group(2);

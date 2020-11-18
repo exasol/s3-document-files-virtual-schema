@@ -1,0 +1,14 @@
+{
+  "$schema": "https://schemas.exasol.com/edml-1.2.0.json",
+  "source": "testData-*.json",
+  "destinationTable": "MY_TABLE",
+  "addSourceReferenceColumn": true,
+  "mapping": {
+    "fields": {
+      "id": {
+        "toVarcharMapping": {
+        }
+      }
+    }
+  }
+}

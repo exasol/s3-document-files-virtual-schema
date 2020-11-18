@@ -18,7 +18,7 @@ Next create the Adapter Script:
  ```sql
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-0.3.0-SNAPSHOT-s3-0.1.0.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-1.0.0-s3-0.1.0.jar;
 /
 ```
 
@@ -31,7 +31,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   CONNECTION_NAME VARCHAR(500))
   EMITS(...) AS
     %scriptclass com.exasol.adapter.document.UdfEntryPoint;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-0.3.0-SNAPSHOT-s3-0.1.0.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-1.0.0-s3-0.1.0.jar;
 /
 ```
 
@@ -102,3 +102,7 @@ The `CREATE VIRTUAL SCHEMA` command accepts the following properties:
  That means, if data from a single file (for example a JSON-Lines file) is loaded, it will not parallelize.
  
 Now browse the data using your favorite SQL client.
+
+## Known Issues:
+
+* Certain virtual-schema queries can cause a database crash. For details see [#41](https://github.com/exasol/virtual-schema-common-document-files/issues/41).

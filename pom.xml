@@ -12,12 +12,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <junit.version>5.6.2</junit.version>
-        <junit.platform.version>1.6.2</junit.platform.version>
+        <junit.version>5.7.0</junit.version>
         <jacoco.version>0.8.5</jacoco.version>
         <gpg.skip>true</gpg.skip>
         <org.testcontainers.version>1.15.0</org.testcontainers.version>
-        <vs-commom-document-files.version>0.3.0-SNAPSHOT</vs-commom-document-files.version>
+        <vs-commom-document-files.version>1.0.0</vs-commom-document-files.version>
         <!--
         M4 does not fail tests if beforeAll fails
         M5 fails in integration tests with a strange error
@@ -54,7 +53,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.15.2</version>
+                <version>2.15.31</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -117,12 +116,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-runner</artifactId>
-            <version>${junit.platform.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.version}</version>
@@ -131,13 +124,13 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.5.13</version>
+            <version>3.6.0</version>
         </dependency>
         <!--Integration test dependencies-->
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-testcontainers</artifactId>
-            <version>3.3.0</version>
+            <version>3.3.1</version>
             <scope>test</scope>
         </dependency>
         <!-- Overrides Junit 4.12 which is used in test containers but contains a security issue:
@@ -169,7 +162,7 @@
         <dependency><!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.875</version>
+            <version>1.11.903</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -405,7 +398,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>0.2.0</version>
+                <version>0.3.0</version>
                 <executions>
                     <execution>
                         <goals>

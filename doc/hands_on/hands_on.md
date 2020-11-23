@@ -11,6 +11,13 @@ You need:
 * An Exasol database
 * An AWS account
 
+## Video
+
+There also is a video version of this tutorial:
+
+[![Watch the video on YouTube](video.png)](https://youtu.be/Ot4tlVc57GA)
+
+
 ## What is This for?
 
 In this tutorial, we will create a virtual schema for JSON-documents that we store in an S3 Bucket.

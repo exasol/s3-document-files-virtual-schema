@@ -10,13 +10,8 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.SQLDataException;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
@@ -72,7 +67,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         connection = EXASOL_CONTAINER.createConnectionForUser(EXASOL_CONTAINER.getUsername(),
                 EXASOL_CONTAINER.getPassword());
         statement = connection.createStatement();
-        final UdfTestSetup udfTestSetup = new UdfTestSetup(getTestHostIp());
+        final UdfTestSetup udfTestSetup = new UdfTestSetup(getTestHostIp(), EXASOL_CONTAINER.getDefaultBucket());
         exasolObjectFactory = new ExasolObjectFactory(EXASOL_CONTAINER.createConnection(),
                 ExasolObjectConfiguration.builder().withJvmOptions(udfTestSetup.getJvmOptions()).build());
         final ExasolSchema adapterSchema = exasolObjectFactory.createSchema("ADAPTER");

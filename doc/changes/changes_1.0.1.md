@@ -11,7 +11,6 @@ Fixed CVE-2020-25649 that was introduced by the AWS SDK by updating its version.
 * Updated `com.exasol:error-reporting-java:0.2.0` to 0.2.2
 * Updated `org.mockito:mockito-core:3.6.0` to 3.6.28
 * Updated `com.exasol:exasol-testcontainers:3.3.1` to 3.4.0
-* Updated `com.exasol:test-db-builder-java:2.0.0` to 2.1.0
 * Updated `com.amazonaws:aws-java-sdk-s3:1.11.903` to 1.11.921
 * Updated `com.exasol:udf-debugging-java:0.2.0` to 0.3.0
 * Updated `com.exasol:hamcrest-resultset-matcher:1.2.1` to `1.3.0`

@@ -63,14 +63,14 @@ Typically you leave it empty here.
 Before creating a Virtual Schema you need to create a mapping definition that defines how the document data is mapped to Exasol tables.
 
 For that we use the Exasol Document Mapping Language (EDML). It is universal over all document Virtual Schemas. 
-To learn how to  define such EDML definitions check the [user guide in the common repository for all document Virtual Schemas](https://github.com/exasol/virtual-schema-common-document/doc/user_guide/edml_user_guide.md).
+To learn how to  define such EDML definitions check the [user guide in the common repository for all document Virtual Schemas](https://github.com/exasol/virtual-schema-common-document/blob/main/doc/user_guide/edml_user_guide.md).
 
 In the definitions you have to define the `source` property. 
 For S3, you define the key (S3 term for file identifier) of the files to load.
 Keep in mind the tha adapter prepends the key prefix you defined in the CONNECTION.
 
 This Virtual Schema adapter automatically detects the type of the document file by the file extension.
-You can find a list of supported file types and their extensions in the [user guide of the common repository for all file Virtual Schemas](https://github.com/exasol/virtual-schema-common-document-files/doc/user_guide/user_guide.md).
+You can find a list of supported file types and their extensions in the [user guide of the common repository for all file Virtual Schemas](https://github.com/exasol/virtual-schema-common-document-files/blob/main/doc/user_guide/user_guide.md).
 
 ### Mapping multiple files
 

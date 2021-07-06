@@ -1,0 +1,16 @@
+{
+  "$schema": "https://schemas.exasol.com/edml-1.2.0.json",
+  "source": "parquet_sales_pos_200mb0000_part_00.parquet",
+  "destinationTable": "SALES_POSITION",
+  "addSourceReferenceColumn": true,
+  "mapping": {
+    "fields": {
+      "sales_id": {
+        "toDecimalMapping": {
+          "decimalPrecision": 12,
+          "decimalScale": 0
+        }
+      }
+    }
+  }
+}

@@ -23,7 +23,7 @@ Code name: Parquet support
 * Removed `com.exasol:exasol-testcontainers:3.4.0`
 * Updated `com.exasol:hamcrest-resultset-matcher:1.3.0` to `1.4.0`
 * Updated `com.exasol:test-db-builder-java:2.0.0` to `3.2.0`
-* Updated `com.exasol:udf-debugging-java:0.3.0` to `0.4.0`
+* Updated `com.exasol:udf-debugging-java:0.3.0` to `0.4.0-SNAPSHOT`
 * Updated `com.exasol:virtual-schema-common-document-files:1.0.0` to `2.0.0-SNAPSHOT`
 * Updated `junit:junit:4.13.1` to `4.13.2`
 * Updated `org.junit.jupiter:junit-jupiter-engine:5.7.0` to `5.7.2`

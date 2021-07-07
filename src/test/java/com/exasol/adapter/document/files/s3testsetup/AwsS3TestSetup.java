@@ -1,23 +1,28 @@
 package com.exasol.adapter.document.files.s3testsetup;
 
+import com.amazonaws.regions.DefaultAwsRegionProviderChain;
+
 import software.amazon.awssdk.auth.credentials.*;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
 public class AwsS3TestSetup implements S3TestSetup {
     private final AwsCredentials awsCredentials;
+    private final String region;
 
     public AwsS3TestSetup() {
+        this.region = new DefaultAwsRegionProviderChain().getRegion();
         this.awsCredentials = DefaultCredentialsProvider.builder().build().resolveCredentials();
     }
 
     @Override
     public S3Client getS3Client() {
-        return S3Client.builder().build();
+        return S3Client.builder().region(Region.of(this.region)).build();
     }
 
     @Override
     public String getRegion() {
-        return "eu-central-1";
+        return this.region;
     }
 
     @Override

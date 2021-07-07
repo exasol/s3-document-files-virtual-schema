@@ -28,18 +28,19 @@ import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
 @Testcontainers
 class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     private static final S3TestSetup AWS_S3_TEST_SETUP = new AwsS3TestSetup();
-    private static final String S3_BUCKET_NAME = "s3-virtual-schema-test-bucket";
+    private static String s3BucketName;
     private static IntegrationTestSetup SETUP;
 
     @BeforeAll
     static void beforeAll() throws Exception {
-        AWS_S3_TEST_SETUP.getS3Client().createBucket(builder -> builder.bucket(S3_BUCKET_NAME));
-        SETUP = new IntegrationTestSetup(AWS_S3_TEST_SETUP, S3_BUCKET_NAME);
+        s3BucketName = "s3-virtual-schema-test-bucket-" + System.currentTimeMillis();
+        AWS_S3_TEST_SETUP.getS3Client().createBucket(builder -> builder.bucket(s3BucketName));
+        SETUP = new IntegrationTestSetup(AWS_S3_TEST_SETUP, s3BucketName);
     }
 
     @AfterAll
     static void afterAll() throws Exception {
-        AWS_S3_TEST_SETUP.getS3Client().deleteBucket(DeleteBucketRequest.builder().bucket(S3_BUCKET_NAME).build());
+        AWS_S3_TEST_SETUP.getS3Client().deleteBucket(DeleteBucketRequest.builder().bucket(s3BucketName).build());
         SETUP.close();
     }
 
@@ -57,7 +58,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     @Override
     protected void uploadDataFile(final Supplier<InputStream> fileContent, final String fileName) {
         try {
-            SETUP.getS3Client().putObject(builder -> builder.bucket(S3_BUCKET_NAME).key(fileName),
+            SETUP.getS3Client().putObject(builder -> builder.bucket(s3BucketName).key(fileName),
                     RequestBody.fromBytes(fileContent.get().readAllBytes()));
         } catch (final IOException exception) {
             throw new IllegalStateException("Filed to upload test file.", exception);

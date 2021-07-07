@@ -12,12 +12,6 @@ Code name: Parquet support
 
 * Updated `com.exasol:error-reporting-java:0.2.2` to `0.4.0`
 * Updated `com.exasol:virtual-schema-common-document-files:1.0.0` to `2.0.0-SNAPSHOT`
-* Added `com.fasterxml.jackson.core:jackson-core:2.12.3`
-* Added `com.fasterxml.jackson.core:jackson-databind:2.12.3`
-* Added `com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.12.3`
-* Added `com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.12.3`
-* Added `com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.12.3`
-* Added `com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.12.3`
 * Updated `org.mockito:mockito-core:3.6.28` to `3.11.2`
 * Updated `org.slf4j:slf4j-jdk14:1.7.30` to `1.7.31`
 * Updated `software.amazon.awssdk:s3:2.15.51` to `2.16.95`

@@ -1,5 +1,6 @@
 package com.exasol.adapter.document.files;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.exasol.adapter.document.documentfetcher.files.randomaccessinputstream.RandomAccessInputStream;
@@ -62,7 +63,7 @@ class S3RandomAccessInputStream extends RandomAccessInputStream {
 
     @Override
     public int read(final byte[] targetBuffer, final int offset, final int length) {
-        LOGGER.info("read length:" + length);
+        LOGGER.log(Level.INFO, "read length: {}", length);
         if (length == 0) {
             return 0;
         }

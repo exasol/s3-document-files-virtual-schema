@@ -61,15 +61,8 @@
     </dependencyManagement>
     <repositories>
         <repository>
-            <id>maven.exasol.com</id>
-            <url>https://maven.exasol.com/artifactory/exasol-releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>maven.exasol.com-snapshots</id>
-            <url>https://maven.exasol.com/artifactory/exasol-snapshots</url>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>

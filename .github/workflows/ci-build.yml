@@ -29,7 +29,7 @@ jobs:
       - name: MD5 sum dependencies
         run: find ~/.m2/repository -name *.jar -print0 | xargs -0 md5sum
       - name: Run tests and build with Maven
-        run: mvn -B clean verify sonar:sonar --file pom.xml -Dsonar.organization=exasol -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+        run: mvn -B clean verify sonar:sonar --file pom.xml -DtrimStackTrace=false -Dsonar.organization=exasol -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
         env:
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

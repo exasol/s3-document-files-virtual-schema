@@ -24,11 +24,16 @@
 | [Testcontainers :: Localstack][20]              | [MIT][21]                         |
 | [Test Database Builder for Java][24]            | [MIT][1]                          |
 | [AWS Java SDK for Amazon S3][2]                 | [Apache License, Version 2.0][3]  |
-| [JaCoCo :: Agent][28]                           | [Eclipse Public License 2.0][29]  |
 | [JaCoCo :: Core][28]                            | [Eclipse Public License 2.0][29]  |
-| [udf-debugging-java][32]                        | [MIT][1]                          |
-| [Matcher for SQL Result Sets][34]               | [MIT][1]                          |
-| [exasol-test-setup-abstraction-java][36]        | [MIT][1]                          |
+| [udf-debugging-java][30]                        | [MIT][1]                          |
+| [Matcher for SQL Result Sets][32]               | [MIT][1]                          |
+| [exasol-test-setup-abstraction-java][34]        | [MIT][1]                          |
+
+## Runtime Dependencies
+
+| Dependency            | License                          |
+| --------------------- | -------------------------------- |
+| [JaCoCo :: Agent][28] | [Eclipse Public License 2.0][29] |
 
 ## Plugin Dependencies
 
@@ -77,7 +82,7 @@
 [19]: http://www.eclipse.org/legal/epl-v10.html
 [3]: https://aws.amazon.com/apache2.0
 [7]: https://github.com/mockito/mockito/blob/main/LICENSE
-[34]: https://github.com/exasol/hamcrest-resultset-matcher
+[32]: https://github.com/exasol/hamcrest-resultset-matcher
 [62]: http://zlika.github.io/reproducible-build-maven-plugin
 [68]: http://maven.apache.org/plugins/maven-jar-plugin/
 [9]: http://www.opensource.org/licenses/mit-license.php
@@ -88,7 +93,7 @@
 [14]: https://junit.org/junit5/
 [50]: https://sonatype.github.io/ossindex-maven/maven-plugin/
 [20]: https://testcontainers.org
-[32]: https://github.com/exasol/udf-debugging-java
+[30]: https://github.com/exasol/udf-debugging-java
 [10]: http://hamcrest.org/JavaHamcrest/
 [8]: http://www.slf4j.org
 [72]: http://maven.apache.org/plugins/maven-deploy-plugin/
@@ -96,4 +101,4 @@
 [66]: http://maven.apache.org/plugins/maven-resources-plugin/
 [54]: https://github.com/exasol/artifact-reference-checker-maven-plugin
 [60]: https://github.com/exasol/error-code-crawler-maven-plugin
-[36]: https://github.com/exasol/exasol-test-setup-abstraction-java
+[34]: https://github.com/exasol/exasol-test-setup-abstraction-java

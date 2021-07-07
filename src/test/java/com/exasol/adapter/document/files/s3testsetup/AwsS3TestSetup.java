@@ -46,7 +46,7 @@ public class AwsS3TestSetup implements S3TestSetup {
     }
 
     @Override
-    public void teardown() {
+    public void close() {
         // nothing to do
     }
 }

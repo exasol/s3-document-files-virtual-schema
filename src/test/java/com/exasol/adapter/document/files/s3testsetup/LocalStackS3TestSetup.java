@@ -47,7 +47,7 @@ public class LocalStackS3TestSetup implements S3TestSetup {
     }
 
     @Override
-    public void teardown() {
+    public void close() {
         this.localStackContainer.stop();
     }
 }

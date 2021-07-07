@@ -159,7 +159,7 @@
             <artifactId>org.jacoco.agent</artifactId>
             <version>${jacoco.version}</version>
             <classifier>runtime</classifier>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.jacoco</groupId>
@@ -216,6 +216,9 @@
                         **PerformanceIT.java
                     </excludes>
                     <failIfNoTests>true</failIfNoTests>
+                    <systemPropertyVariables>
+                        <test.coverage>true</test.coverage>
+                    </systemPropertyVariables>
                 </configuration>
                 <executions>
                     <execution>
@@ -299,6 +302,7 @@
                         </configuration>
                     </execution>
                 </executions>
+                <groupId>org.apache.maven.plugins</groupId>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -384,6 +388,7 @@
                     <modules>
                         <module>integration_tests</module>
                         <module>jar_artifact</module>
+                        <module>udf_coverage</module>
                     </modules>
                     <excludedPlugins>
                         <excludedPlugin>org.apache.maven.plugins:maven-assembly-plugin</excludedPlugin>

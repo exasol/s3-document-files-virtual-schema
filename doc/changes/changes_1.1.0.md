@@ -16,6 +16,10 @@ Code name: Parquet support
 * Updated `org.slf4j:slf4j-jdk14:1.7.30` to `1.7.31`
 * Updated `software.amazon.awssdk:s3:2.15.51` to `2.16.95`
 
+### Runtime Dependency Updates
+
+* Added `org.jacoco:org.jacoco.agent:0.8.5`
+
 ### Test Dependency Updates
 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.11.924` to `1.12.17`
@@ -26,6 +30,7 @@ Code name: Parquet support
 * Updated `com.exasol:udf-debugging-java:0.3.0` to `0.4.0-SNAPSHOT`
 * Updated `com.exasol:virtual-schema-common-document-files:1.0.0` to `2.0.0-SNAPSHOT`
 * Updated `junit:junit:4.13.1` to `4.13.2`
+* Removed `org.jacoco:org.jacoco.agent:0.8.5`
 * Updated `org.junit.jupiter:junit-jupiter-engine:5.7.0` to `5.7.2`
 * Updated `org.junit.jupiter:junit-jupiter-params:5.7.0` to `5.7.2`
 * Updated `org.testcontainers:junit-jupiter:1.15.1` to `1.15.3`

@@ -1,0 +1,4 @@
+error-tags:
+  S3VS:
+    packages:
+      - com.exasol.adapter.document.files

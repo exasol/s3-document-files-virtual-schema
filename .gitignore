@@ -28,3 +28,4 @@ Scripts
 .directory
 venv/
 pom.xml.versionsBackup
+setEnv.sh

@@ -1,4 +1,4 @@
-package com.myorg;
+package com.exasol.adapter.document.files.ciisolation;
 
 import com.exasol.ciisolation.aws.PolicyReader;
 import com.exasol.ciisolation.aws.ciuser.CiUserStack;

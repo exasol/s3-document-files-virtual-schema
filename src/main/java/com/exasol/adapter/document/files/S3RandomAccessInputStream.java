@@ -24,7 +24,7 @@ class S3RandomAccessInputStream extends RandomAccessInputStream {
 
     @Override
     public void seek(final long position) {
-        LOGGER.info("seek");
+        LOGGER.log(Level.INFO, "Seeked to position {}", position);
         this.position = position;
     }
 
@@ -40,7 +40,7 @@ class S3RandomAccessInputStream extends RandomAccessInputStream {
 
     @Override
     public int read() {
-        LOGGER.info("singleRead");
+        LOGGER.info("Performing single read at position.");
         if (this.position < getLength()) {
             final String range = getRange(this.position, this.position + 1);
             final GetObjectRequest request = GetObjectRequest.builder()//

@@ -37,7 +37,6 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         s3BucketName = "s3-virtual-schema-test-bucket-" + System.currentTimeMillis();
         AWS_S3_TEST_SETUP.getS3Client().createBucket(builder -> builder.bucket(s3BucketName));
         SETUP = new IntegrationTestSetup(AWS_S3_TEST_SETUP, s3BucketName);
-        SETUP.getStatement().executeUpdate("ALTER SESSION SET SCRIPT_OUTPUT_ADDRESS = '127.0.0.1:3000';");
     }
 
     @AfterAll

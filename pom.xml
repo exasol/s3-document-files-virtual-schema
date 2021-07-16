@@ -16,7 +16,7 @@
         <jacoco.version>0.8.5</jacoco.version>
         <gpg.skip>true</gpg.skip>
         <org.testcontainers.version>1.15.3</org.testcontainers.version>
-        <vs-commom-document-files.version>2.0.0-SNAPSHOT</vs-commom-document-files.version>
+        <vs-commom-document-files.version>2.0.0</vs-commom-document-files.version>
         <!--
         M4 does not fail tests if beforeAll fails
         M5 fails in integration tests with a strange error
@@ -170,7 +170,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>udf-debugging-java</artifactId>
-            <version>0.4.0-SNAPSHOT</version>
+            <version>0.4.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -182,7 +182,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-test-setup-abstraction-java</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -376,7 +376,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>0.9.0</version>
+                <version>0.10.0</version>
                 <executions>
                     <execution>
                         <goals>

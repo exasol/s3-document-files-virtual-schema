@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.*;
@@ -16,12 +18,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import com.exasol.ExaConnectionInformation;
-import com.exasol.adapter.document.documentfetcher.files.LoadedFile;
 import com.exasol.adapter.document.documentfetcher.files.SegmentDescription;
 import com.exasol.adapter.document.files.stringfilter.wildcardexpression.WildcardExpression;
 
-import akka.actor.ActorSystem;
-import akka.stream.javadsl.Sink;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -34,7 +33,6 @@ class S3FileLoaderIT {
     @Container
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(
             DockerImageName.parse("localstack/localstack:0.12.2")).withServices(S3);
-    final ActorSystem akka = ActorSystem.create("test");
     private static final String TEST_BUCKET = "test-bucket";
     private static final String CONTENT_1 = "content-1";
     private static final String CONTENT_2 = "content-2";
@@ -60,8 +58,13 @@ class S3FileLoaderIT {
         final S3FileLoader s3FileLoader = new S3FileLoader(
                 WildcardExpression.forNonWildcardString(connectionInformation.getAddress()),
                 SegmentDescription.NO_SEGMENTATION, connectionInformation);
-        assertThat(s3FileLoader.loadFiles().map(LoadedFile::getInputStream).map(this::readFirstLine)
-                .runWith(Sink.seq(), this.akka).toCompletableFuture().get(), containsInAnyOrder(CONTENT_1));
+        assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1));
+    }
+
+    private List<String> runAndGetFirstLines(final S3FileLoader s3FileLoader) {
+        final List<String> result = new ArrayList<>();
+        s3FileLoader.loadFiles().forEachRemaining(file -> result.add(readFirstLine(file.getInputStream())));
+        return result;
     }
 
     @CsvSource({ //
@@ -76,10 +79,7 @@ class S3FileLoaderIT {
         final WildcardExpression filePattern = WildcardExpression.fromGlob(connectionInformation.getAddress());
         final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, SegmentDescription.NO_SEGMENTATION,
                 connectionInformation);
-        assertThat(
-                s3FileLoader.loadFiles().map(LoadedFile::getInputStream).map(this::readFirstLine)
-                        .runWith(Sink.seq(), this.akka).toCompletableFuture().get(),
-                containsInAnyOrder(CONTENT_1, CONTENT_2));
+        assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1, CONTENT_2));
     }
 
     @Test
@@ -89,10 +89,7 @@ class S3FileLoaderIT {
         final WildcardExpression filePattern = WildcardExpression.fromGlob(connectionInformation.getAddress());
         final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, SegmentDescription.NO_SEGMENTATION,
                 connectionInformation);
-        assertThat(
-                s3FileLoader.loadFiles().map(LoadedFile::getInputStream).map(this::readFirstLine)
-                        .runWith(Sink.seq(), this.akka).toCompletableFuture().get(),
-                containsInAnyOrder(CONTENT_1, CONTENT_2, CONTENT_OTHER));
+        assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1, CONTENT_2, CONTENT_OTHER));
     }
 
     private String readFirstLine(final InputStream stream) {

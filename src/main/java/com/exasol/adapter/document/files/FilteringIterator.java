@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 /**
- * This iterators wraps another iterator an filters it's result based on a predicate.
+ * This iterators wraps another iterator and filters its result based on a predicate.
  * 
  * @param <T> type of the source iterator
  */

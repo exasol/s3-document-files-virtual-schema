@@ -1,23 +1,19 @@
 package com.exasol.adapter.document.files;
 
+import java.net.URI;
+import java.util.Iterator;
+
 import com.exasol.ExaConnectionInformation;
-import com.exasol.adapter.document.documentfetcher.files.FileLoader;
-import com.exasol.adapter.document.documentfetcher.files.InputStreamWithResourceName;
-import com.exasol.adapter.document.documentfetcher.files.SegmentDescription;
-import com.exasol.adapter.document.documentfetcher.files.SegmentMatcher;
+import com.exasol.adapter.document.FlatMapIterator;
+import com.exasol.adapter.document.documentfetcher.files.*;
 import com.exasol.adapter.document.files.stringfilter.StringFilter;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.core.sync.ResponseTransformer;
+
+import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
-
-import java.io.InputStream;
-import java.net.URI;
-import java.util.stream.Stream;
 
 /**
  * File loader for files on S3.
@@ -37,7 +33,7 @@ public class S3FileLoader implements FileLoader {
      * @param exaConnectionInformation connection information
      */
     public S3FileLoader(final StringFilter filePattern, final SegmentDescription segmentDescription,
-                        final ExaConnectionInformation exaConnectionInformation) {
+            final ExaConnectionInformation exaConnectionInformation) {
         this.filePattern = filePattern;
         this.segmentMatcher = new SegmentMatcher(segmentDescription);
         this.s3Uri = S3Uri.fromString(filePattern.getStaticPrefix());
@@ -47,17 +43,29 @@ public class S3FileLoader implements FileLoader {
                     URI.create((this.s3Uri.isUseSsl() ? "https://" : "http://") + this.s3Uri.getEndpointOverride()));
         }
         this.s3 = s3ClientBuilder.region(Region.of(this.s3Uri.getRegion()))//
-                .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials
-                        .create(exaConnectionInformation.getUser(), exaConnectionInformation.getPassword())))//
+                .credentialsProvider(StaticCredentialsProvider.create(getCredentials(exaConnectionInformation)))//
                 .build();
     }
 
+    private AwsCredentials getCredentials(final ExaConnectionInformation exaConnectionInformation) {
+        if (exaConnectionInformation.getPassword().contains("##TOKEN##")) {
+            final String[] parts = exaConnectionInformation.getPassword().split("##TOKEN##");
+            return AwsSessionCredentials.create(exaConnectionInformation.getUser(), parts[0], parts[1]);
+        } else {
+            return AwsBasicCredentials.create(exaConnectionInformation.getUser(),
+                    exaConnectionInformation.getPassword());
+        }
+    }
+
     @Override
-    public Stream<InputStreamWithResourceName> loadFiles() {
+    public Iterator<LoadedFile> loadFiles() {
         final com.exasol.adapter.document.files.stringfilter.matcher.Matcher filePatternMatcher = this.filePattern
                 .getDirectoryIgnoringMatcher();
-        return getObjectKeysOnlyQuickFiltered().filter(uri -> filePatternMatcher.matches(uri.toString()))
-                .filter(uri -> this.segmentMatcher.matches(uri.getKey())).map(this::getS3Object);
+        final Iterator<S3ObjectDescription> objectKeys = getQuickFilteredObjectKeys();
+        final FilteringIterator<S3ObjectDescription> filteredObjectKeys = new FilteringIterator<>(objectKeys,
+                s3Object -> filePatternMatcher.matches(s3Object.getUri().toString())
+                        && this.segmentMatcher.matches(s3Object.getUri().getKey()));
+        return new TransformingIterator<>(filteredObjectKeys, this::getS3Object);
     }
 
     /**
@@ -66,19 +74,22 @@ public class S3FileLoader implements FileLoader {
      *
      * @return partially filtered list of object keys
      */
-    private Stream<S3Uri> getObjectKeysOnlyQuickFiltered() {
+    private Iterator<S3ObjectDescription> getQuickFilteredObjectKeys() {
         final String globFreeKey = this.s3Uri.getKey();
-        final ListObjectsV2Iterable listObjectsResponse = this.s3
-                .listObjectsV2Paginator(builder -> builder.bucket(this.s3Uri.getBucket()).prefix(globFreeKey).build());
-        return listObjectsResponse.stream().flatMap(page -> page.contents().stream())
-                .map(s3Object -> new S3Uri(this.s3Uri.isUseSsl(), this.s3Uri.getBucket(), this.s3Uri.getRegion(),
-                        this.s3Uri.getEndpoint(), s3Object.key()));
+        final ListObjectsV2Iterable listObjectsResponse = runS3Request(globFreeKey);
+        final Iterator<S3Object> s3Objects = new FlatMapIterator<>(listObjectsResponse.iterator(),
+                page -> page.contents().iterator());
+        return new TransformingIterator<>(s3Objects,
+                s3Object -> new S3ObjectDescription(new S3Uri(this.s3Uri.isUseSsl(), this.s3Uri.getBucket(),
+                        this.s3Uri.getRegion(), this.s3Uri.getEndpoint(), s3Object.key()), s3Object.size()));
     }
 
-    private InputStreamWithResourceName getS3Object(final S3Uri objectUri) {
-        final InputStream inputStream = this.s3.getObject(
-                GetObjectRequest.builder().bucket(objectUri.getBucket()).key(objectUri.getKey()).build(),
-                ResponseTransformer.toInputStream());
-        return new InputStreamWithResourceName(inputStream, objectUri.toString());
+    private ListObjectsV2Iterable runS3Request(final String globFreeKey) {
+        return this.s3
+                .listObjectsV2Paginator(builder -> builder.bucket(this.s3Uri.getBucket()).prefix(globFreeKey).build());
+    }
+
+    private LoadedFile getS3Object(final S3ObjectDescription objectUri) {
+        return new S3LoadedFile(this.s3, objectUri);
     }
 }

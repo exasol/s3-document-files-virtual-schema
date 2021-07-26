@@ -394,6 +394,9 @@
                         <excludedPlugin>org.apache.maven.plugins:maven-assembly-plugin</excludedPlugin>
                         <excludedPlugin>org.apache.maven.plugins:maven-jar-plugin</excludedPlugin>
                     </excludedPlugins>
+                    <excludedFiles>
+                        <excludedFile>.github/workflows/release_droid_prepare_original_checksum.yml</excludedFile>
+                    </excludedFiles>
                 </configuration>
             </plugin>
             <plugin>

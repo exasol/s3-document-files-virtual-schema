@@ -10,6 +10,10 @@ In this release we added support for parquet files. In addition, we did some per
 
 * #17: Updated vs-common-document-files-dependency
 
+## Bug Fixes:
+
+* #23: Fixed failing release automation
+
 ## Dependency Updates
 
 ### Compile Dependency Updates

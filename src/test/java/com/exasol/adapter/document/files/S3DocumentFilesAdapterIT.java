@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.sql.SQLDataException;
 import java.sql.Statement;
 import java.util.Map;
@@ -57,12 +58,18 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @Override
     protected void uploadDataFile(final Supplier<InputStream> fileContent, final String fileName) {
-        try {
+        try (final InputStream inputStream = fileContent.get()) {
             SETUP.getS3Client().putObject(builder -> builder.bucket(s3BucketName).key(fileName),
-                    RequestBody.fromBytes(fileContent.get().readAllBytes()));
+                    RequestBody.fromBytes(inputStream.readAllBytes()));
         } catch (final IOException exception) {
             throw new IllegalStateException("Filed to upload test file.", exception);
         }
+    }
+
+    @Override
+    protected void uploadDataFile(final Path fileContent, final String fileName) {
+        SETUP.getS3Client().putObject(builder -> builder.bucket(s3BucketName).key(fileName),
+                RequestBody.fromFile(fileContent));
     }
 
     @Override

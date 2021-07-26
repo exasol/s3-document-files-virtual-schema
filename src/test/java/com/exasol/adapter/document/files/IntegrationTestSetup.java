@@ -3,6 +3,7 @@ package com.exasol.adapter.document.files;
 import static com.exasol.adapter.document.UdfEntryPoint.*;
 import static com.exasol.adapter.document.files.S3DocumentFilesAdapter.ADAPTER_NAME;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.sql.*;
@@ -26,7 +27,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.0.0-SNAPSHOT-s3-1.1.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.0.0-s3-1.1.0.jar";
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestcontainerTestSetup();
     private final Connection connection;
@@ -40,14 +41,14 @@ public class IntegrationTestSetup implements AutoCloseable {
     private final S3Client s3;
 
     public IntegrationTestSetup(final S3TestSetup s3TestSetup, final String s3BucketName)
-            throws SQLException, InterruptedException, BucketAccessException, TimeoutException {
+            throws SQLException, InterruptedException, BucketAccessException, TimeoutException, FileNotFoundException {
         this.s3TestSetup = s3TestSetup;
         this.s3BucketName = s3BucketName;
         this.connection = this.exasolTestSetup.createConnection();
         this.statement = this.connection.createStatement();
         final UdfTestSetup udfTestSetup = new UdfTestSetup(this.exasolTestSetup);
         final List<String> jvmOptions = new ArrayList<>(Arrays.asList(udfTestSetup.getJvmOptions()));
-        jvmOptions.add("-Xmx1g");
+        jvmOptions.add("-Xmx500m");
         this.exasolObjectFactory = new ExasolObjectFactory(this.connection,
                 ExasolObjectConfiguration.builder().withJvmOptions(jvmOptions.toArray(String[]::new)).build());
         final ExasolSchema adapterSchema = this.exasolObjectFactory.createSchema("ADAPTER");
@@ -87,7 +88,7 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     private AdapterScript createAdapterScript(final ExasolSchema adapterSchema)
-            throws InterruptedException, BucketAccessException, TimeoutException {
+            throws BucketAccessException, TimeoutException, FileNotFoundException {
         this.bucket.uploadFile(Path.of("target", ADAPTER_JAR), ADAPTER_JAR);
         return adapterSchema.createAdapterScriptBuilder("FILES_ADAPTER")
                 .bucketFsContent("com.exasol.adapter.RequestDispatcher", "/buckets/bfsdefault/default/" + ADAPTER_JAR)
@@ -124,10 +125,11 @@ public class IntegrationTestSetup implements AutoCloseable {
         try {
             this.bucket.uploadInputStream(mapping, "mapping.json");
             final VirtualSchema virtualSchema = getPreconfiguredVirtualSchemaBuilder(schemaName)
-                    .properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json")).build();
+                    .properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json"))// todo "MAX_PARALLEL_UDFS", "1"
+                    .build();
             this.createdObjects.add(virtualSchema);
             return virtualSchema;
-        } catch (final InterruptedException | BucketAccessException | TimeoutException exception) {
+        } catch (final BucketAccessException | TimeoutException exception) {
             throw new IllegalStateException("Failed to create Virtual Schema.", exception);
         }
     }

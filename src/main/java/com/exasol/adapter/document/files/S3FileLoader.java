@@ -1,17 +1,18 @@
 package com.exasol.adapter.document.files;
 
 import java.net.URI;
+import java.util.Iterator;
 
 import com.exasol.ExaConnectionInformation;
+import com.exasol.adapter.document.FlatMapIterator;
 import com.exasol.adapter.document.documentfetcher.files.*;
 import com.exasol.adapter.document.files.stringfilter.StringFilter;
 
-import akka.NotUsed;
-import akka.stream.javadsl.Source;
 import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
+import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 /**
@@ -57,12 +58,14 @@ public class S3FileLoader implements FileLoader {
     }
 
     @Override
-    public Source<LoadedFile, NotUsed> loadFiles() {
+    public Iterator<LoadedFile> loadFiles() {
         final com.exasol.adapter.document.files.stringfilter.matcher.Matcher filePatternMatcher = this.filePattern
                 .getDirectoryIgnoringMatcher();
-        return getObjectKeysOnlyQuickFiltered()
-                .filter(s3Object -> filePatternMatcher.matches(s3Object.getUri().toString()))
-                .filter(object -> this.segmentMatcher.matches(object.getUri().getKey())).map(this::getS3Object);
+        final Iterator<S3ObjectDescription> objectKeys = getQuickFilteredObjectKeys();
+        final FilteringIterator<S3ObjectDescription> filteredObjectKeys = new FilteringIterator<>(objectKeys,
+                s3Object -> filePatternMatcher.matches(s3Object.getUri().toString())
+                        && this.segmentMatcher.matches(s3Object.getUri().getKey()));
+        return new TransformingIterator<>(filteredObjectKeys, this::getS3Object);
     }
 
     /**
@@ -71,11 +74,13 @@ public class S3FileLoader implements FileLoader {
      *
      * @return partially filtered list of object keys
      */
-    private Source<S3ObjectDescription, NotUsed> getObjectKeysOnlyQuickFiltered() {
+    private Iterator<S3ObjectDescription> getQuickFilteredObjectKeys() {
         final String globFreeKey = this.s3Uri.getKey();
         final ListObjectsV2Iterable listObjectsResponse = runS3Request(globFreeKey);
-        return Source.from(listObjectsResponse).flatMapConcat(page -> Source.from(page.contents()))
-                .map(s3Object -> new S3ObjectDescription(new S3Uri(this.s3Uri.isUseSsl(), this.s3Uri.getBucket(),
+        final Iterator<S3Object> s3Objects = new FlatMapIterator<>(listObjectsResponse.iterator(),
+                page -> page.contents().iterator());
+        return new TransformingIterator<>(s3Objects,
+                s3Object -> new S3ObjectDescription(new S3Uri(this.s3Uri.isUseSsl(), this.s3Uri.getBucket(),
                         this.s3Uri.getRegion(), this.s3Uri.getEndpoint(), s3Object.key()), s3Object.size()));
     }
 

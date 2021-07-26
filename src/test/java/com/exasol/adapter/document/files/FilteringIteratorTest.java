@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class FilteringIteratorTest {
 
     @Test
-    void test() {
+    void testFiltering() {
         final List<Integer> result = new ArrayList<>();
         new FilteringIterator<>(List.of(1, 2, 3, 4).iterator(), x -> x % 2 == 0).forEachRemaining(result::add);
         assertThat(result, Matchers.contains(2, 4));

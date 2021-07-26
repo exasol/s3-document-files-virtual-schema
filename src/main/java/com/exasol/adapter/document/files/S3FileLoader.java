@@ -61,7 +61,7 @@ public class S3FileLoader implements FileLoader {
     public Iterator<LoadedFile> loadFiles() {
         final com.exasol.adapter.document.files.stringfilter.matcher.Matcher filePatternMatcher = this.filePattern
                 .getDirectoryIgnoringMatcher();
-        final Iterator<S3ObjectDescription> objectKeys = getObjectKeysOnlyQuickFiltered();
+        final Iterator<S3ObjectDescription> objectKeys = getQuickFilteredObjectKeys();
         final FilteringIterator<S3ObjectDescription> filteredObjectKeys = new FilteringIterator<>(objectKeys,
                 s3Object -> filePatternMatcher.matches(s3Object.getUri().toString())
                         && this.segmentMatcher.matches(s3Object.getUri().getKey()));
@@ -74,7 +74,7 @@ public class S3FileLoader implements FileLoader {
      *
      * @return partially filtered list of object keys
      */
-    private Iterator<S3ObjectDescription> getObjectKeysOnlyQuickFiltered() {
+    private Iterator<S3ObjectDescription> getQuickFilteredObjectKeys() {
         final String globFreeKey = this.s3Uri.getKey();
         final ListObjectsV2Iterable listObjectsResponse = runS3Request(globFreeKey);
         final Iterator<S3Object> s3Objects = new FlatMapIterator<>(listObjectsResponse.iterator(),

@@ -1,4 +1,4 @@
-# Virtual Schema for document data in files on AWS S3 1.1.0, released 2021-??-??
+# Virtual Schema for document data in files on AWS S3 1.1.0, released 2021-07-26
 
 Code name: Parquet support
 

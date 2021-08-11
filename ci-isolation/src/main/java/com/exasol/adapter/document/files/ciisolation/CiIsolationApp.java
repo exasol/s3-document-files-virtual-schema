@@ -11,8 +11,12 @@ import software.amazon.awscdk.core.App;
 public class CiIsolationApp {
     public static void main(final String[] args) {
         final App app = new App();
-        new CiUserStack(app, CiUserStack.CiUserStackProps.builder().projectName("s3-files-vs")
-                .addRequiredPermissions(new PolicyReader().readPolicyFromResources("test-permissions.json")).build());
+        final PolicyReader policyReader = new PolicyReader();
+        new CiUserStack(app,
+                CiUserStack.CiUserStackProps.builder().projectName("s3-files-vs")
+                        .addRequiredPermissions(policyReader.readPolicyFromResources("test-permissions.json"),
+                                policyReader.readPolicyFromResources("exasol-permissions.json"))
+                        .build());
         app.synth();
     }
 }

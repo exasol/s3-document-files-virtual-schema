@@ -23,4 +23,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: Run tests and build with Maven
-        run: mvn --batch-mode --update-snapshots clean verify --file ci-isaolation/pom.xml -DtrimStackTrace=false
+        run: mvn --batch-mode --update-snapshots clean verify --file ci-isolation/pom.xml -DtrimStackTrace=false

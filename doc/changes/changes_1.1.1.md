@@ -4,6 +4,6 @@ Code name:
 
 ## Refactoring
 
-* #19: Added CI-build for ci-islation
+* #19: Added CI-build for ci-isolation
 
 ## Dependency Updates

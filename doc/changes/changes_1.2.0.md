@@ -18,5 +18,4 @@ See the changelog of the [virtual-schema-common-document-files](https://github.c
 
 ### Test Dependency Updates
 
-* Updated `com.exasol:exasol-test-setup-abstraction-java:0.1.1` to `0.2.0`
 * Updated `com.exasol:virtual-schema-common-document-files:2.0.0` to `2.1.0`

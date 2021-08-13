@@ -4,9 +4,10 @@ import java.net.URI;
 import java.util.Iterator;
 
 import com.exasol.ExaConnectionInformation;
-import com.exasol.adapter.document.FlatMapIterator;
 import com.exasol.adapter.document.documentfetcher.files.*;
 import com.exasol.adapter.document.files.stringfilter.StringFilter;
+import com.exasol.adapter.document.iterators.FlatMapIterator;
+import com.exasol.adapter.document.iterators.TransformingIterator;
 
 import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.regions.Region;

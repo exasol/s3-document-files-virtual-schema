@@ -10,6 +10,42 @@
           "decimalPrecision": 12,
           "decimalScale": 0
         }
+      },
+      "product_id": {
+        "toDecimalMapping": {
+          "decimalPrecision": 12,
+          "decimalScale": 0
+        }
+      },
+      "exa_row_roles": {
+        "toDecimalMapping": {
+          "decimalPrecision": 12,
+          "decimalScale": 0
+        }
+      },
+      "sales_price": {
+        "toDecimalMapping": {
+          "decimalPrecision": 12,
+          "decimalScale": 2
+        }
+      },
+      "product_price": {
+        "toDecimalMapping": {
+          "decimalPrecision": 12,
+          "decimalScale": 2
+        }
+      },
+      "quantity": {
+        "toDecimalMapping": {
+          "decimalPrecision": 4,
+          "decimalScale": 0
+        }
+      },
+      "sales_position": {
+        "toDecimalMapping": {
+          "decimalPrecision": 4,
+          "decimalScale": 0
+        }
       }
     }
   }

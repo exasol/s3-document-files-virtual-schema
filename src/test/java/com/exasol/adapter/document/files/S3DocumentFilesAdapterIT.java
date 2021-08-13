@@ -73,7 +73,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     }
 
     @Override
-    protected void createVirtualSchema(final String schemaName, final Supplier<InputStream> mapping) {
+    protected void createVirtualSchema(final String schemaName, final String mapping) {
         SETUP.createVirtualSchema(schemaName, mapping);
     }
 

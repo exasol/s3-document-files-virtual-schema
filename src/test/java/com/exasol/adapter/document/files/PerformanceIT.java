@@ -3,6 +3,7 @@ package com.exasol.adapter.document.files;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -26,7 +27,7 @@ class PerformanceIT {
     }
 
     @Test
-    void test() throws SQLException {
+    void test() throws SQLException, IOException {
         SETUP.getStatement().executeUpdate("ALTER SESSION SET SCRIPT_OUTPUT_ADDRESS = '127.0.0.1:3000';");
         SETUP.createVirtualSchema("SALES_VS",
                 () -> getClass().getClassLoader().getResourceAsStream("performanceTestMapping.json"));

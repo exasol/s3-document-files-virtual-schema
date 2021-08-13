@@ -18,9 +18,12 @@ This Virtual Schemas allows you to access document files stored in S3 like any r
 
 For supported document file formats: see [files Virtual Schema][files-vs]
 
+Additional Information:
+
 * [User Guide](doc/user_guide/user_guide.md)
 * [Hands-on Guide](doc/hands_on/hands_on.md)
 * [Changelog](doc/changes/changelog.md)
 * [Dependencies](dependencies.md)
+* [Developers Guide](doc/developers_guide/developers_guide.md)
 
 [files-vs]: https://github.com/exasol/virtual-schema-common-document-files

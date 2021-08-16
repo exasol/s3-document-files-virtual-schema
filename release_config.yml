@@ -1,7 +1,3 @@
-community-tags:
-  - AWS
-  - S3
-  - Virtual Schema
-community-project-name: Virtual Schema for files on AWS S3
-community-project-description: |
-  The S3 document files Virtual Schemas allows you to access document files stored in AWS S3 like any regular Exasol table.
+platforms:
+  - GitHub
+  - Jira

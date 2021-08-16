@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exasol</groupId>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema</url>
@@ -16,7 +16,7 @@
         <jacoco.version>0.8.5</jacoco.version>
         <gpg.skip>true</gpg.skip>
         <org.testcontainers.version>1.15.3</org.testcontainers.version>
-        <vs-commom-document-files.version>2.0.0</vs-commom-document-files.version>
+        <vs-commom-document-files.version>2.1.0</vs-commom-document-files.version>
         <!--
         M4 does not fail tests if beforeAll fails
         M5 fails in integration tests with a strange error
@@ -38,6 +38,23 @@
             <organizationUrl>https://www.exasol.com/</organizationUrl>
         </developer>
     </developers>
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <test.excludeTags>regression</test.excludeTags>
+            </properties>
+        </profile>
+        <profile>
+            <id>regressionTests</id>
+            <properties>
+                <groups>regression</groups>
+            </properties>
+        </profile>
+    </profiles>
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -199,6 +216,7 @@
                     <excludes>
                         <exclude>**IT.java</exclude>
                     </excludes>
+                    <excludedGroups>${test.excludeTags}</excludedGroups>
                 </configuration>
             </plugin>
             <plugin>
@@ -219,6 +237,7 @@
                     <systemPropertyVariables>
                         <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
+                    <excludedGroups>${test.excludeTags}</excludedGroups>
                 </configuration>
                 <executions>
                     <execution>

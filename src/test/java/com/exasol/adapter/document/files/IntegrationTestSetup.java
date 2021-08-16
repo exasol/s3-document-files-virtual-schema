@@ -3,8 +3,8 @@ package com.exasol.adapter.document.files;
 import static com.exasol.adapter.document.UdfEntryPoint.*;
 import static com.exasol.adapter.document.files.S3DocumentFilesAdapter.ADAPTER_NAME;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.*;
 import java.util.*;
@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.0.0-s3-1.1.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.1.0-s3-1.2.0.jar";
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestcontainerTestSetup();
     private final Connection connection;
@@ -41,7 +41,7 @@ public class IntegrationTestSetup implements AutoCloseable {
     private final S3Client s3;
 
     public IntegrationTestSetup(final S3TestSetup s3TestSetup, final String s3BucketName)
-            throws SQLException, InterruptedException, BucketAccessException, TimeoutException, FileNotFoundException {
+            throws SQLException, BucketAccessException, TimeoutException, FileNotFoundException {
         this.s3TestSetup = s3TestSetup;
         this.s3BucketName = s3BucketName;
         this.connection = this.exasolTestSetup.createConnection();
@@ -121,15 +121,25 @@ public class IntegrationTestSetup implements AutoCloseable {
         return this.s3;
     }
 
-    protected VirtualSchema createVirtualSchema(final String schemaName, final Supplier<InputStream> mapping) {
+    protected VirtualSchema createVirtualSchema(final String schemaName, final Supplier<InputStream> mapping)
+            throws IOException {
+        try (final InputStream stream = mapping.get()) {
+            return createVirtualSchema(schemaName, new String(stream.readAllBytes(), StandardCharsets.UTF_8));
+        }
+    }
+
+    protected VirtualSchema createVirtualSchema(final String schemaName, final String mapping) {
         try {
-            this.bucket.uploadInputStream(mapping, "mapping.json");
+            this.bucket.uploadStringContent(mapping, "mapping.json");
             final VirtualSchema virtualSchema = getPreconfiguredVirtualSchemaBuilder(schemaName)
                     .properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json"))// todo "MAX_PARALLEL_UDFS", "1"
                     .build();
             this.createdObjects.add(virtualSchema);
             return virtualSchema;
-        } catch (final BucketAccessException | TimeoutException exception) {
+        } catch (final BucketAccessException | TimeoutException | InterruptedException exception) {
+            if (exception instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             throw new IllegalStateException("Failed to create Virtual Schema.", exception);
         }
     }

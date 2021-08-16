@@ -1,4 +1,4 @@
-# Virtual Schema for document data in files on AWS S3 1.2.0, released 2021-08-13
+# Virtual Schema for document data in files on AWS S3 1.2.0, released 2021-08-16
 
 Code name: Overriding Document Type
 

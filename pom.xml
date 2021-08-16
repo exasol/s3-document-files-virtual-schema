@@ -216,6 +216,7 @@
                     <excludes>
                         <exclude>**IT.java</exclude>
                     </excludes>
+                    <excludedGroups>${test.excludeTags}</excludedGroups>
                 </configuration>
             </plugin>
             <plugin>
@@ -236,6 +237,7 @@
                     <systemPropertyVariables>
                         <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
+                    <excludedGroups>${test.excludeTags}</excludedGroups>
                 </configuration>
                 <executions>
                     <execution>

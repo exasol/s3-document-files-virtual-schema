@@ -25,7 +25,7 @@ For details see the [changelog of the virtual-schema-common-document](https://gi
 
 ### Compile Dependency Updates
 
-* Updated `com.exasol:virtual-schema-common-document-files:2.1.0` to `2.2.0-SNAPSHOT`
+* Updated `com.exasol:virtual-schema-common-document-files:2.1.0` to `2.2.0`
 * Updated `org.mockito:mockito-core:3.11.2` to `3.12.4`
 * Updated `org.slf4j:slf4j-jdk14:1.7.31` to `1.7.32`
 * Updated `software.amazon.awssdk:s3:2.16.95` to `2.17.47`
@@ -40,7 +40,7 @@ For details see the [changelog of the virtual-schema-common-document](https://gi
 * Updated `com.exasol:exasol-test-setup-abstraction-java:0.1.1` to `0.2.0`
 * Updated `com.exasol:hamcrest-resultset-matcher:1.4.0` to `1.5.0`
 * Updated `com.exasol:test-db-builder-java:3.2.0` to `3.2.1`
-* Updated `com.exasol:virtual-schema-common-document-files:2.1.0` to `2.2.0-SNAPSHOT`
+* Updated `com.exasol:virtual-schema-common-document-files:2.1.0` to `2.2.0`
 * Added `org.jacoco:org.jacoco.agent:0.8.7`
 * Updated `org.jacoco:org.jacoco.core:0.8.5` to `0.8.7`
 * Updated `org.junit.jupiter:junit-jupiter-engine:5.7.2` to `5.8.1`

@@ -12,11 +12,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <junit.version>5.7.2</junit.version>
-        <jacoco.version>0.8.5</jacoco.version>
+        <junit.version>5.8.1</junit.version>
+        <jacoco.version>0.8.7</jacoco.version>
         <gpg.skip>true</gpg.skip>
-        <org.testcontainers.version>1.15.3</org.testcontainers.version>
-        <vs-commom-document-files.version>2.1.0</vs-commom-document-files.version>
+        <org.testcontainers.version>1.16.0</org.testcontainers.version>
+        <vs-commom-document-files.version>2.2.0-SNAPSHOT</vs-commom-document-files.version>
         <!--
         M4 does not fail tests if beforeAll fails
         M5 fails in integration tests with a strange error
@@ -70,7 +70,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.16.95</version>
+                <version>2.17.47</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -130,7 +130,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.11.2</version>
+            <version>3.12.4</version>
         </dependency>
         <!--Integration test dependencies-->
         <!-- Overrides Junit 4.12 which is used in test containers but contains a security issue:
@@ -156,19 +156,19 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>test-db-builder-java</artifactId>
-            <version>3.2.0</version>
+            <version>3.2.1</version>
             <scope>test</scope>
         </dependency>
         <dependency><!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.17</version>
+            <version>1.12.75</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.31</version>
+            <version>1.7.32</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -176,7 +176,7 @@
             <artifactId>org.jacoco.agent</artifactId>
             <version>${jacoco.version}</version>
             <classifier>runtime</classifier>
-            <scope>runtime</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jacoco</groupId>
@@ -193,13 +193,13 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>hamcrest-resultset-matcher</artifactId>
-            <version>1.4.0</version>
+            <version>1.5.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-test-setup-abstraction-java</artifactId>
-            <version>0.1.1</version>
+            <version>0.2.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -395,7 +395,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>0.10.0</version>
+                <version>1.2.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -409,56 +409,15 @@
                         <module>jar_artifact</module>
                         <module>udf_coverage</module>
                     </modules>
-                    <excludedPlugins>
-                        <excludedPlugin>org.apache.maven.plugins:maven-assembly-plugin</excludedPlugin>
-                        <excludedPlugin>org.apache.maven.plugins:maven-jar-plugin</excludedPlugin>
-                    </excludedPlugins>
                     <excludedFiles>
                         <excludedFile>.github/workflows/release_droid_prepare_original_checksum.yml</excludedFile>
                     </excludedFiles>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <id>shade-my-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <finalName>
-                                document-files-virtual-schema-dist-${vs-commom-document-files.version}-s3-${version}
-                            </finalName>
-                            <artifactSet>
-                                <includes>
-                                    <include>*:*</include>
-                                </includes>
-                            </artifactSet>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>reference.conf</resource>
-                                </transformer>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>myapp.Main</Main-Class>
-                                    </manifestEntries>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>error-code-crawler-maven-plugin</artifactId>
-                <version>0.5.0</version>
+                <version>0.6.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -478,6 +437,39 @@
                         <goals>
                             <goal>strip-jar</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>3.3.0</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/assembly/all-dependencies.xml</descriptor>
+                    </descriptors>
+                    <finalName>document-files-virtual-schema-dist-${vs-commom-document-files.version}-s3-${version}
+                    </finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>none</phase>
                     </execution>
                 </executions>
             </plugin>

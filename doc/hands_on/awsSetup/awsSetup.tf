@@ -1,6 +1,6 @@
 provider "aws" {
   region = var.region
-  profile = "default"
+  profile = "c1-admin"
 }
 
 resource "aws_s3_bucket" "aws_bucket" {
@@ -33,5 +33,11 @@ resource "aws_s3_bucket_object" "book-3" {
   key = "book-3.json"
   bucket = aws_s3_bucket.aws_bucket.id
   source = "../books/book-3.json"
+}
+
+resource "aws_s3_bucket_object" "books-parquet" {
+  key = "books.parquet"
+  bucket = aws_s3_bucket.aws_bucket.id
+  source = "../books/books.parquet"
 }
 

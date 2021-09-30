@@ -18,9 +18,7 @@ import com.exasol.bucketfs.BucketAccessException;
 import com.exasol.dbbuilder.dialects.DatabaseObject;
 import com.exasol.dbbuilder.dialects.exasol.*;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
-import com.exasol.exasoltestsetup.ExasolTestSetup;
-import com.exasol.exasoltestsetup.ServiceAddress;
-import com.exasol.exasoltestsetup.testcontainers.ExasolTestcontainerTestSetup;
+import com.exasol.exasoltestsetup.*;
 import com.exasol.udfdebugging.UdfTestSetup;
 
 import software.amazon.awssdk.services.s3.S3Client;
@@ -29,7 +27,8 @@ import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
 public class IntegrationTestSetup implements AutoCloseable {
     private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.2.0-s3-1.4.0.jar";
     public final String s3BucketName;
-    private final ExasolTestSetup exasolTestSetup = new ExasolTestcontainerTestSetup();
+    private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
+            Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
     private final Connection connection;
     private final Statement statement;
     private final ExasolObjectFactory exasolObjectFactory;

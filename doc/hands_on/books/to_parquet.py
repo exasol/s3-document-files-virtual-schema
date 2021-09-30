@@ -10,4 +10,4 @@ spark = SparkSession \
 
 json_df = spark.read.json("./book-*.json", multiLine=True)
 json_df.printSchema()
-json_df.coalesce(1).write.parquet("output.parquet")
+json_df.coalesce(1).write.parquet("output")

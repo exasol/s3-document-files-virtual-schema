@@ -1,21 +1,21 @@
 {
   "Title": "The picture of Dorian Gray",
-  "Authors": {
-    "firstName": "Oscar",
-    "lastName": "Wilde"
-  },
+  "Authors": [
+    {
+      "firstName": "Oscar",
+      "lastName": "Wilde"
+    }
+  ],
   "Price": 5.0,
   "Pages": 253,
   "Genre": "philosophical novel",
-  "Characters": {
-    "L": [
-      "Dorian Gray",
-      "Sibyl Vane",
-      "Lady Victoria Wotton",
-      "Lord Henry Wotton",
-      "James Vane",
-      "Basil Hallward",
-      "Alan Campbell"
-    ]
-  }
+  "Characters": [
+    "Dorian Gray",
+    "Sibyl Vane",
+    "Lady Victoria Wotton",
+    "Lord Henry Wotton",
+    "James Vane",
+    "Basil Hallward",
+    "Alan Campbell"
+  ]
 }

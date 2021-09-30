@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.2.0-s3-1.3.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.2.0-s3-1.4.0.jar";
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestcontainerTestSetup();
     private final Connection connection;

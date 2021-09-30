@@ -1,9 +1,11 @@
 {
   "Title": "1984",
-  "Author": {
-    "firstName": "George",
-    "lastName": "Orwell"
-  },
+  "Authors": [
+    {
+      "firstName": "George",
+      "lastName": "Orwell"
+    }
+  ],
   "Cover": "https://example.com/cover1985.jpg",
   "Price": 12.30,
   "Pages": 384,

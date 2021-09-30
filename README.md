@@ -21,7 +21,8 @@ For supported document file formats: see [files Virtual Schema][files-vs]
 Additional Information:
 
 * [User Guide](doc/user_guide/user_guide.md)
-* [Hands-on Guide](doc/hands_on/hands_on.md)
+* [Hands-on Guide (JSON Files)](doc/hands_on/hands_on.md)
+* [Hands-on Guide (Parquet Files)](doc/hands_on/hands_on_parquet.md)
 * [Changelog](doc/changes/changelog.md)
 * [Dependencies](dependencies.md)
 * [Developers Guide](doc/developers_guide/developers_guide.md)

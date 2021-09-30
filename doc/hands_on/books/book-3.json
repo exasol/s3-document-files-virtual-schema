@@ -1,9 +1,11 @@
 {
   "Title": "Wuthering Heights",
-  "Author": {
-    "firstName": "Emily",
-    "lastName": "Brontë"
-  },
+  "Authors": [
+    {
+      "firstName": "Emily",
+      "lastName": "Brontë"
+    }
+  ],
   "Price": "7.40",
   "Genre": "Novel"
 }

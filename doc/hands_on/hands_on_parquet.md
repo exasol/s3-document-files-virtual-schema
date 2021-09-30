@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In this guide, we will walk through the setup of the Virtual Schema for document files stored on [AWS S3](https://aws.amazon.com/s3/). As an example we will create a virtual-schema for a parquet file.
+In this guide, we will walk through the setup of the Virtual Schema for document files stored on [AWS S3](https://aws.amazon.com/s3/). As an example, we will create a virtual-schema for a parquet file.
 
 There is also a different [tutorial using JSON files](./hands_on.md).
 
@@ -13,11 +13,11 @@ You need:
 
 ## What is This for?
 
-In this tutorial, we will create a virtual schema for Parquet files stored in a S3 Bucket. If you've never heard of S3, that is not a problem. You can imagine it as a very basic file storage. You can store files and access them using a key.
+In this tutorial, we will create a virtual schema for Parquet files stored in an S3 Bucket. If you've never heard of S3, that is not a problem. You can imagine it as a very basic file storage. You can store files and access them using a key.
 
 We are going to create a Virtual Schema for these files so that you can access them just like a regular Exasol table.
 
-The example file we use in this tutorial has the same content as the three JSON files in the [books/](./books) folder. To get a first impression you can take a look on them instead of the parquet file itself, since for the parquet file you need a viewer.
+The example file we use in this tutorial has the same content as the three JSON files in the [books/](./books) folder. To get a first impression you can take a look at them instead of the parquet file itself since for the parquet file you need a viewer.
 
 ## Getting Started
 
@@ -25,7 +25,7 @@ So now, let's get started with the setup. First, we need to create a S3 bucket a
 
 No matter which way you chose now you should be able to see your bucket in the AWS Console:
 
-![Screenshot of AWS Console with Bcuket and Parquet file](./awsBucketWithParquetFile.png)
+![Screenshot of AWS Console with Bucket and Parquet file](./awsBucketWithParquetFile.png)
 
 ## The S3 Virtual Schema Adapter
 
@@ -95,7 +95,7 @@ The address (`TO`) must have one of these formats:
 
 ## Creating a Mapping Definition
 
-Now we are going to create a [EDML definition][edml-guide] that maps the JSON data to an Exasol table structure. Usually you do this by hand. However, for parquet files we have the [parquet-edml-generator](https://github.com/exasol/parquet-edml-generator/) in place that suggests a mapping definition based on the parquet-schema.
+Now we are going to create a [EDML definition][edml-guide] that maps the parquet data to an Exasol table structure. Usually you do this by hand. However, for parquet files we have the [parquet-edml-generator](https://github.com/exasol/parquet-edml-generator/) in place that suggests a mapping definition based on the parquet-schema.
 
 So download this tool from the [GitHub releases](https://github.com/exasol/parquet-edml-generator/releases).
 
@@ -192,11 +192,11 @@ The generator creates the following mapping:
 }
 ```
 
-The generator writes the mapping without formatting. For easier viewing and editing use an editor / IDE with good JSON support and format the file. Good editors also help with editing because they can give you code-completion based on the JSON-schema.
+The generator writes the mapping without formatting. For easier viewing and editing use an editor / IDE with good JSON support and format the file. Good editors also help with editing because they can give you code completion based on the JSON schema.
 
 ## Improving the Mapping
 
-You can edit this mapping to fine tune how the virtual schema maps the data. For example, you can change the varchar column sizes, if you know that your data has a certain max-size (2,000,000 is the Exasol limit). For details on the EDML mapping language check the [edml user-guide][edml-guide].
+You can edit this mapping to fine-tune how the virtual schema maps the data. For example, you can change the varchar column sizes, if you know that your data has a certain max-size (2,000,000 is the Exasol limit). For details on the EDML mapping language check the [edml user-guide][edml-guide].
 
 One thing that you should always check in the generated file is the `source` property. This property must point to the source file(s) in your S3 bucket. So if you just uploaded the `books.parquet` file to the bucket, the generated value is ok. If you renamed it or moved it to a subfolder you need to change the name in the mapping definition.
 
@@ -234,7 +234,7 @@ SELECT * FROM FILES_VS_TEST.BOOKS;
 
 ## What's next
 
-So now you know everything for creating your first S3 Virtual Schema. If you want to do more advanced mappings , check out the [EDML documentation][edml-guide]. For example, you could change the mapping so that the nested list authors is no longer mapped to a column with JSON string but to a separate table.
+So now you know everything for creating your first S3 Virtual Schema. If you want to do more advanced mappings, check out the [EDML documentation][edml-guide]. For example, you could change the mapping so that the nested list authors are no longer mapped to a column with JSON string but to a separate table.
 
 
 [edml-guide]: https://github.com/exasol/virtual-schema-common-document/blob/main/doc/user_guide/edml_user_guide.md

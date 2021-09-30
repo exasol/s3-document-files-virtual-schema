@@ -1,0 +1,55 @@
+name: Regression Tests
+
+on:
+  - workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Create AWS test setup
+        run: |
+          echo "owner = \"$OWNER\"" > cloudSetup/terraform.tfvars
+          echo "deputy = \"$DEPUTY\"" >> cloudSetup/terraform.tfvars
+          terraform -chdir=cloudSetup/ init
+          terraform -chdir=cloudSetup/ apply -auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          OWNER: ${{ secrets.AWS_TAG_OWNER }}
+          DEPUTY: ${{ secrets.AWS_TAG_DEPUTY }}
+      - name: Run tests and build with Maven
+        run: mvn --batch-mode --update-snapshots clean verify -DtrimStackTrace=false -PregressionTests
+        env:
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "eu-central-1"
+      - name: Destroy cluster
+        run: terraform -chdir=cloudSetup/ destroy -auto-approve
+        if: always() # also run if tests failed
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Upload regression test result
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: target/performanceLog-*.csv

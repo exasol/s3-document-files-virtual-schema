@@ -2,6 +2,10 @@
 
 Code name:
 
+## Features
+
+* #35: Add GitHub workflow to run regression tests
+
 ## Documentation
 
 * #33: Added hands-on guide for parquet files

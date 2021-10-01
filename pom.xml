@@ -16,7 +16,7 @@
         <jacoco.version>0.8.7</jacoco.version>
         <gpg.skip>true</gpg.skip>
         <org.testcontainers.version>1.16.0</org.testcontainers.version>
-        <vs-commom-document-files.version>2.2.0</vs-commom-document-files.version>
+        <vs-commom-document-files.version>2.2.1-SNAPSHOT</vs-commom-document-files.version>
         <!--
         M4 does not fail tests if beforeAll fails
         M5 fails in integration tests with a strange error
@@ -187,7 +187,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>udf-debugging-java</artifactId>
-            <version>0.4.0</version>
+            <version>0.4.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -11,3 +11,7 @@ Code name:
 * #33: Added hands-on guide for parquet files
 
 ## Dependency Updates
+
+### Test Dependency Updates
+
+* Updated `com.exasol:exasol-test-setup-abstraction-java:0.2.0` to `0.2.1-SNAPSHOT`

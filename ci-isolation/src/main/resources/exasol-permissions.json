@@ -4,15 +4,6 @@
     {
       "Effect": "Allow",
       "Action": [
-        "ec2:DescribeInstances",
-        "ec2:DescribeVpcs",
-        "ec2:DescribeKeyPairs",
-        "ec2:DescribeSubnets",
-        "ec2:DescribePlacementGroups",
-        "ec2:DescribeInstanceStatus",
-        "ec2:DescribeInternetGateways",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeRouteTables",
         "ec2:RebootInstances",
         "ec2:TerminateInstances",
         "ec2:StartInstances",
@@ -21,7 +12,6 @@
         "ec2:AttachInternetGateway",
         "ec2:CreateVpc",
         "ec2:CreateVpcEndpoint",
-        "ec2:DescribeVpcEndpoints",
         "ec2:DeleteVpc",
         "ec2:ModifyVpcAttribute",
         "ec2:CreateSubnet",
@@ -40,9 +30,11 @@
         "ec2:DeleteRouteTable",
         "ec2:DetachInternetGateway",
         "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:AuthorizeSecurityGroupEgress",
         "ec2:CreateRoute",
         "ec2:DeleteRoute",
         "ec2:RevokeSecurityGroupIngress",
+        "ec2:RevokeSecurityGroupEgress",
         "ec2:AssociateRouteTable",
         "ec2:DisassociateRouteTable",
         "ec2:ModifyInstanceAttribute",
@@ -73,7 +65,11 @@
         "s3:DeleteBucket",
         "s3:PutBucketTagging",
         "lambda:GetFunction",
-        "iam:GetRolePolicy"
+        "iam:GetRolePolicy",
+        "ec2:Describe*",
+        "ec2:ImportKeyPair",
+        "ec2:CreateKeyPair",
+        "ec2:DeleteKeyPair"
       ],
       "Resource": "*"
     }

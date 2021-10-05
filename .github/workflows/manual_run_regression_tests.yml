@@ -51,5 +51,16 @@ jobs:
       - name: Upload regression test result
         uses: actions/upload-artifact@v2
         with:
-          name: my-artifact
+          name: performance-test-results
           path: target/performanceLog-*.csv
+      - name: Upload results to Exasol DB
+        run: |
+          curl https://www.exasol.com/support/secure/attachment/161224/EXAplus-7.1.1.tar.gz -o exaplus.tar.gz
+          echo "c950b321eecf82456c8d4414a212fd2d89a1f877b914c5143ed0cdfda7f88c3f20cfc510d8b865f633fcad38f8f90d818db9a9934c4593f8ecb050edbdfce56a  exaplus.tar.gz" | sha512sum -c
+          tar -xvzf exaplus.tar.gz
+          cp target/performanceLog-*.csv target/performanceLog.csv
+          # add release name column ($ matches end of line)
+          sed "s/\$/,\"$RELEASE_NAME\"/" performanceLog.csv > performanceLogWithReleaseNane.csv
+          EXAplus-7.1.1/exaplus -c demodb.exasol.com -u ${{ secrets.DEMODB_LOG_SUBMIT_USER }} -p ${{ secrets.DEMODB_LOG_SUBMIT_PASS }} -sql "IMPORT INTO EXASOL_JABR.REGRESSION_TEST_RESULTS  FROM LOCAL CSV FILE './performanceLogWithReleaseNane.csv' COLUMN SEPARATOR = ',' SKIP = 1;"
+        env:
+          RELEASE_NAME: ""

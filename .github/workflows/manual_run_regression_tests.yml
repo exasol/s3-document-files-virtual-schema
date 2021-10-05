@@ -60,7 +60,7 @@ jobs:
           tar -xvzf exaplus.tar.gz
           cp target/performanceLog-*.csv target/performanceLog.csv
           # add release name column ($ matches end of line)
-          sed "s/\$/,\"$RELEASE_NAME\"/" performanceLog.csv > performanceLogWithReleaseNane.csv
-          EXAplus-7.1.1/exaplus -c demodb.exasol.com -u ${{ secrets.DEMODB_LOG_SUBMIT_USER }} -p ${{ secrets.DEMODB_LOG_SUBMIT_PASS }} -sql "IMPORT INTO EXASOL_JABR.REGRESSION_TEST_RESULTS  FROM LOCAL CSV FILE './performanceLogWithReleaseNane.csv' COLUMN SEPARATOR = ',' SKIP = 1;"
+          sed "s/\$/,\"$RELEASE_NAME\"/" target/performanceLog.csv > target/performanceLogWithReleaseName.csv
+          EXAplus-7.1.1/exaplus -c demodb.exasol.com -u ${{ secrets.DEMODB_LOG_SUBMIT_USER }} -p ${{ secrets.DEMODB_LOG_SUBMIT_PASS }} -sql "IMPORT INTO EXASOL_JABR.REGRESSION_TEST_RESULTS  FROM LOCAL CSV FILE './target/performanceLogWithReleaseName.csv' COLUMN SEPARATOR = ',' SKIP = 1;"
         env:
           RELEASE_NAME: ""

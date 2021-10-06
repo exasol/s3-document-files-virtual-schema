@@ -230,9 +230,6 @@
                     <includes>
                         <include>**IT.java</include>
                     </includes>
-                    <excludes>
-                        **PerformanceIT.java
-                    </excludes>
                     <failIfNoTests>true</failIfNoTests>
                     <systemPropertyVariables>
                         <test.coverage>true</test.coverage>

@@ -1,12 +1,17 @@
 name: Regression Tests
 
 on:
-  - workflow_dispatch
+  workflow_dispatch:
+  release:
+    types:
+      - created
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Print tag name
+        run: echo ${{ github.event.release.tag_name }}
       - name: Checkout the repository
         uses: actions/checkout@v2
         with:
@@ -34,7 +39,7 @@ jobs:
           OWNER: ${{ secrets.AWS_TAG_OWNER }}
           DEPUTY: ${{ secrets.AWS_TAG_DEPUTY }}
       - name: Run tests and build with Maven
-        run: mvn --batch-mode --update-snapshots clean verify -DtrimStackTrace=false -PregressionTests
+        run: mvn --batch-mode --update-snapshots clean verify -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false
         env:
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,4 +68,4 @@ jobs:
           sed "s/\$/,\"$RELEASE_NAME\"/" target/performanceLog.csv > target/performanceLogWithReleaseName.csv
           EXAplus-7.1.1/exaplus -c demodb.exasol.com -u ${{ secrets.DEMODB_LOG_SUBMIT_USER }} -p ${{ secrets.DEMODB_LOG_SUBMIT_PASS }} -sql "IMPORT INTO EXASOL_JABR.REGRESSION_TEST_RESULTS  FROM LOCAL CSV FILE './target/performanceLogWithReleaseName.csv' COLUMN SEPARATOR = ',' SKIP = 1;"
         env:
-          RELEASE_NAME: ""
+          RELEASE_NAME: "${{ github.event.release.tag_name }}"

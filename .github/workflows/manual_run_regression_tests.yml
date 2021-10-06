@@ -39,7 +39,7 @@ jobs:
           OWNER: ${{ secrets.AWS_TAG_OWNER }}
           DEPUTY: ${{ secrets.AWS_TAG_DEPUTY }}
       - name: Run tests and build with Maven
-        run: mvn --batch-mode --update-snapshots clean verify -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false
+        run: mvn --batch-mode --update-snapshots clean verify -X -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false
         env:
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -45,11 +45,10 @@ public class IntegrationTestSetup implements AutoCloseable {
         this.s3BucketName = s3BucketName;
         this.connection = this.exasolTestSetup.createConnection();
         this.statement = this.connection.createStatement();
+        this.statement.executeUpdate("ALTER SESSION SET QUERY_CACHE = 'OFF';");
         final UdfTestSetup udfTestSetup = new UdfTestSetup(this.exasolTestSetup);
-        final List<String> jvmOptions = new ArrayList<>(Arrays.asList(udfTestSetup.getJvmOptions()));
-        jvmOptions.add("-Xmx500m");
         this.exasolObjectFactory = new ExasolObjectFactory(this.connection,
-                ExasolObjectConfiguration.builder().withJvmOptions(jvmOptions.toArray(String[]::new)).build());
+                ExasolObjectConfiguration.builder().withJvmOptions(udfTestSetup.getJvmOptions()).build());
         final ExasolSchema adapterSchema = this.exasolObjectFactory.createSchema("ADAPTER");
         this.bucket = this.exasolTestSetup.getDefaultBucket();
         this.connectionDefinition = getConnectionDefinition();

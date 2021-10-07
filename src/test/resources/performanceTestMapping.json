@@ -1,6 +1,6 @@
 {
   "$schema": "https://schemas.exasol.com/edml-1.2.0.json",
-  "source": "parquet_sales_pos_200mb0000_part_*.parquet",
+  "source": "parquet_sales_pos_200mb*.parquet",
   "destinationTable": "SALES_POSITION",
   "addSourceReferenceColumn": true,
   "mapping": {

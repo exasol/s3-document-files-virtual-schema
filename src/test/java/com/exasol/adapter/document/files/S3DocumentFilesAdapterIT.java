@@ -78,7 +78,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     }
 
     @Test
-    void testEmptyConnectionString() throws InterruptedException, BucketAccessException, TimeoutException {
+    void testEmptyConnectionString() throws BucketAccessException, TimeoutException {
         SETUP.getBucket().uploadInputStream(() -> getClass().getClassLoader().getResourceAsStream("simpleMapping.json"),
                 "mapping.json");
         final ConnectionDefinition connection = SETUP.getExasolObjectFactory().createConnectionDefinition(

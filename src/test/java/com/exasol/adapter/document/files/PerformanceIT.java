@@ -25,6 +25,7 @@ class PerformanceIT {
         SETUP.close();
     }
 
+    @Test
     @Tag("regression")
     void testLoadSalesParquetFiles(final TestInfo testInfo) throws Exception {
         // SETUP.getStatement().executeUpdate("ALTER SESSION SET SCRIPT_OUTPUT_ADDRESS = '127.0.0.1:3000';");

@@ -37,7 +37,7 @@ class PerformanceIT {
                         .executeQuery("SELECT COUNT(*) FROM SALES_VS.SALES_POSITION");
                 resultSet.next();
                 final long size = resultSet.getLong(1);
-                assertThat(size, Matchers.equalTo(452668348L));
+                assertThat(size, Matchers.equalTo(3621459710L));
             });
         }
     }

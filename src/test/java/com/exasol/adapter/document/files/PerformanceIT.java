@@ -28,7 +28,6 @@ class PerformanceIT {
     @Test
     @Tag("regression")
     void testLoadSalesParquetFiles(final TestInfo testInfo) throws Exception {
-        // SETUP.getStatement().executeUpdate("ALTER SESSION SET SCRIPT_OUTPUT_ADDRESS = '127.0.0.1:3000';");
         SETUP.createVirtualSchema("SALES_VS",
                 () -> getClass().getClassLoader().getResourceAsStream("performanceTestMapping.json"));
         for (int runCounter = 0; runCounter < 5; runCounter++) {

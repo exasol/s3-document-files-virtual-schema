@@ -52,7 +52,7 @@ The address (`TO`) must have one of these formats:
 
 You can not use two-factor authentication (session credentials) with this adapter. Instead, you need to create a machine account without two-factor authentication.
 
-Please mind the trailing slash. The adapter will simply join this string with the `source` from you mapping definitions. You can also add a prefix here. For example:
+Please mind the trailing slash. The adapter will simply join this string with the `source` from you mapping definitions. You can also add a prefix in connection object after the trailing slash. For example:
 
 ```
 https://BUCKET.s3.REGION.amazonaws.com/my-folder/

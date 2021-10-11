@@ -5,7 +5,7 @@ This user guide helps you with getting started with the S3 Files Virtual Schemas
 ### Installation
  
 Upload the latest available [release of this adapter](https://github.com/exasol/s3-document-files-virtual-schema/releases) to BucketFS.
-See [Create a bucket in BucketFS](https://docs.exasol.com/administration/on-premise/bucketfs/create_new_bucket_in_bucketfs_service.htm) and [Upload the driver to BucketFS](https://docs.exasol.com/administration/on-premise/bucketfs/accessfiles.htm) for details.
+See the Exasol documentation for details: [Create a bucket in BucketFS](https://docs.exasol.com/administration/on-premise/bucketfs/create_new_bucket_in_bucketfs_service.htm), [Access Files in BucketFS](https://docs.exasol.com/administration/on-premise/bucketfs/accessfiles.htm).
 
 Then create a schema to hold the adapter script.
 

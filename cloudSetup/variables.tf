@@ -17,10 +17,10 @@ variable "additional_tags" {
 
 variable "override_node_count" {
   default = 4
-  description = "override the data-node count. Warning: Don't override for regression tests!"
+  description = "Override the data-node count. Warning: Don't override for regression tests!"
 }
 
 variable "override_instance_type" {
   default = "c5.4xlarge"
-  description = "override the data-node instance type. Warning: Don't override for regression tests!"
+  description = "Override the data-node instance type. Warning: Don't override for regression tests!"
 }

@@ -80,7 +80,7 @@ public class S3Cache {
             return toHex(checksumBuilder.digest());
         } catch (final NoSuchAlgorithmException | IOException exception) {
             throw new IllegalStateException(ExaError.messageBuilder("F-S3VS-3")
-                    .message("Failed to calc checksum of file {{file}}.", localPath).toString(), exception);
+                    .message("Failed to calculate checksum of file {{file}}.", localPath).toString(), exception);
         }
     }
 

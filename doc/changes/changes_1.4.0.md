@@ -4,7 +4,8 @@ Code name:
 
 ## Features
 
-* #35: Add GitHub workflow to run regression tests
+* #35: Added GitHub workflow to run regression tests
+* #41: Added cache for s3 uploads during tests
 
 ## Documentation
 

@@ -14,6 +14,11 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
+/**
+ * This class speeds up write requests to an S3 bucket using an additional cache bucket. If the file exists in the cache
+ * bucket this class copies the file from that bucket which is a lot faster than uploading from a test PC (depending on
+ * your bandwidth).
+ */
 public class S3Cache {
     private static final Logger LOGGER = Logger.getLogger(S3Cache.class.getName());
     private final S3Interface s3Interface;
@@ -45,7 +50,8 @@ public class S3Cache {
         try {
             return Files.size(file);
         } catch (final IOException exception) {
-            throw new UncheckedIOException(exception);
+            throw new UncheckedIOException(ExaError.messageBuilder("E-S3VS-5")
+                    .message("Failed to determine size of {{file}}.", file).toString(), exception);
         }
     }
 
@@ -57,8 +63,8 @@ public class S3Cache {
                 throw new IllegalStateException(ExaError.messageBuilder("F-S3VS-4")
                         .message("Found a different sized version of file {{file name}} in cache with same checksum.",
                                 fileName)
-                        .message("This can be caused by a very unlikely checksum collision.").ticketMitigation()
-                        .toString());
+                        .message("This can be caused by a very unlikely checksum collision.")
+                        .mitigation("Try to empty the cache.").toString());
             }
             return false;
         } else {
@@ -79,8 +85,10 @@ public class S3Cache {
             }
             return toHex(checksumBuilder.digest());
         } catch (final NoSuchAlgorithmException | IOException exception) {
-            throw new IllegalStateException(ExaError.messageBuilder("F-S3VS-3")
-                    .message("Failed to calculate checksum of file {{file}}.", localPath).toString(), exception);
+            throw new IllegalStateException(
+                    ExaError.messageBuilder("F-S3VS-3")
+                            .message("Failed to calculate checksum of file {{file}}.", localPath).toString(),
+                    exception);
         }
     }
 

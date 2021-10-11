@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.sql.SQLDataException;
 import java.sql.Statement;
 import java.util.Map;
@@ -14,6 +14,8 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
@@ -22,21 +24,23 @@ import com.exasol.bucketfs.BucketAccessException;
 import com.exasol.dbbuilder.dialects.exasol.ConnectionDefinition;
 import com.exasol.dbbuilder.dialects.exasol.VirtualSchema;
 
-import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
 
 @Tag("integration")
 @Testcontainers
 class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     private static final S3TestSetup AWS_S3_TEST_SETUP = new AwsS3TestSetup();
+    private static final String CACHE_BUCKET_NAME = "persistent-s3-vs-test-file-cache";
     private static String s3BucketName;
     private static IntegrationTestSetup SETUP;
+    private static S3Cache s3Cache;
 
     @BeforeAll
     static void beforeAll() throws Exception {
         s3BucketName = "s3-virtual-schema-test-bucket-" + System.currentTimeMillis();
         AWS_S3_TEST_SETUP.getS3Client().createBucket(builder -> builder.bucket(s3BucketName));
         SETUP = new IntegrationTestSetup(AWS_S3_TEST_SETUP, s3BucketName);
+        s3Cache = new S3Cache(SETUP.getS3Client(), s3BucketName, CACHE_BUCKET_NAME);
     }
 
     @AfterAll
@@ -59,8 +63,10 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     @Override
     protected void uploadDataFile(final Supplier<InputStream> fileContent, final String fileName) {
         try (final InputStream inputStream = fileContent.get()) {
-            SETUP.getS3Client().putObject(builder -> builder.bucket(s3BucketName).key(fileName),
-                    RequestBody.fromBytes(inputStream.readAllBytes()));
+            final Path tempFile = Files.createTempFile("data-file", ".data");
+            Files.copy(inputStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            uploadDataFile(tempFile, fileName);
+            Files.delete(tempFile);
         } catch (final IOException exception) {
             throw new IllegalStateException("Filed to upload test file.", exception);
         }
@@ -68,8 +74,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @Override
     protected void uploadDataFile(final Path fileContent, final String fileName) {
-        SETUP.getS3Client().putObject(builder -> builder.bucket(s3BucketName).key(fileName),
-                RequestBody.fromFile(fileContent));
+        s3Cache.uploadFile(fileContent, fileName);
     }
 
     @Override

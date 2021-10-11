@@ -1,12 +1,17 @@
 name: Regression Tests
 
 on:
-  - workflow_dispatch
+  workflow_dispatch:
+  release:
+    types:
+      - created
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Print tag name
+        run: echo ${{ github.event.release.tag_name }}
       - name: Checkout the repository
         uses: actions/checkout@v2
         with:
@@ -34,7 +39,7 @@ jobs:
           OWNER: ${{ secrets.AWS_TAG_OWNER }}
           DEPUTY: ${{ secrets.AWS_TAG_DEPUTY }}
       - name: Run tests and build with Maven
-        run: mvn --batch-mode --update-snapshots clean verify -DtrimStackTrace=false -PregressionTests
+        run: mvn --batch-mode --update-snapshots clean verify -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false
         env:
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -42,6 +47,11 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "eu-central-1"
+      - name: Publish Test Report for ${{ matrix.docker_db_version }}
+        uses: scacap/action-surefire-report@v1
+        if: ${{ always() }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Destroy cluster
         run: terraform -chdir=cloudSetup/ destroy -auto-approve
         if: always() # also run if tests failed
@@ -51,5 +61,16 @@ jobs:
       - name: Upload regression test result
         uses: actions/upload-artifact@v2
         with:
-          name: my-artifact
+          name: performance-test-results
           path: target/performanceLog-*.csv
+      - name: Upload results to Exasol Demo DB
+        run: |
+          curl https://www.exasol.com/support/secure/attachment/161224/EXAplus-7.1.1.tar.gz -o exaplus.tar.gz
+          echo "c950b321eecf82456c8d4414a212fd2d89a1f877b914c5143ed0cdfda7f88c3f20cfc510d8b865f633fcad38f8f90d818db9a9934c4593f8ecb050edbdfce56a  exaplus.tar.gz" | sha512sum -c
+          tar -xvzf exaplus.tar.gz
+          cp target/performanceLog-*.csv target/performanceLog.csv
+          # add release name column ($ matches end of line)
+          sed "s/\$/,\"$RELEASE_NAME\"/" target/performanceLog.csv > target/performanceLogWithReleaseName.csv
+          EXAplus-7.1.1/exaplus -c demodb.exasol.com -u ${{ secrets.DEMODB_LOG_SUBMIT_USER }} -p ${{ secrets.DEMODB_LOG_SUBMIT_PASS }} -sql "IMPORT INTO EXASOL_JABR.REGRESSION_TEST_RESULTS  FROM LOCAL CSV FILE './target/performanceLogWithReleaseName.csv' COLUMN SEPARATOR = ',' SKIP = 1;"
+        env:
+          RELEASE_NAME: "${{ github.event.release.tag_name }}"

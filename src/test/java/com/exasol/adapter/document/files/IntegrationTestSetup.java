@@ -25,7 +25,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.2.0-s3-1.4.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.2.1-SNAPSHOT-s3-1.4.0.jar";
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
             Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
@@ -45,11 +45,10 @@ public class IntegrationTestSetup implements AutoCloseable {
         this.s3BucketName = s3BucketName;
         this.connection = this.exasolTestSetup.createConnection();
         this.statement = this.connection.createStatement();
+        this.statement.executeUpdate("ALTER SESSION SET QUERY_CACHE = 'OFF';");
         final UdfTestSetup udfTestSetup = new UdfTestSetup(this.exasolTestSetup);
-        final List<String> jvmOptions = new ArrayList<>(Arrays.asList(udfTestSetup.getJvmOptions()));
-        jvmOptions.add("-Xmx500m");
         this.exasolObjectFactory = new ExasolObjectFactory(this.connection,
-                ExasolObjectConfiguration.builder().withJvmOptions(jvmOptions.toArray(String[]::new)).build());
+                ExasolObjectConfiguration.builder().withJvmOptions(udfTestSetup.getJvmOptions()).build());
         final ExasolSchema adapterSchema = this.exasolObjectFactory.createSchema("ADAPTER");
         this.bucket = this.exasolTestSetup.getDefaultBucket();
         this.connectionDefinition = getConnectionDefinition();

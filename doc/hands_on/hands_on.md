@@ -105,8 +105,10 @@ CREATE CONNECTION S3_CONNECTION
 
 The address (`TO`) must have one of these formats:
 
-* `https://BUCKET.s3.YOUR_REGION.amazonaws.com/KEY`
-* `http(s)://BUCKET.s3.YOUR_REGION.CUSTOM_ENDPOINT/KEY` (for a local test version of S3)
+* `https://BUCKET.s3.YOUR_REGION.amazonaws.com/`
+* `http(s)://BUCKET.s3.YOUR_REGION.CUSTOM_ENDPOINT/` (for a local test version of S3)
+
+Please mind the trailing slash! For details see the [user-guide](../user_guide/user_guide.md).
 
 ## Creating a mapping Definition
 

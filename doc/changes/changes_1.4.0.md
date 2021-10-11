@@ -10,6 +10,7 @@ Code name:
 ## Documentation
 
 * #33: Added hands-on guide for parquet files
+* #31: Clarified connection string documentation
 
 ## Dependency Updates
 

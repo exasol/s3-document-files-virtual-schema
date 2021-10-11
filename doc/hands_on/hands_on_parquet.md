@@ -93,7 +93,7 @@ The address (`TO`) must have one of these formats:
 * `https://BUCKET.s3.YOUR_REGION.amazonaws.com/`
 * `http(s)://BUCKET.s3.YOUR_REGION.CUSTOM_ENDPOINT/` (for a local test version of S3)
 
-The adapter will simply join this string with the `source` from you mapping definitions. So please note that you need a `/`. We recommend adding a trailing slash in the connection and set `source` without slash.
+Please mind the trailing slash! For details see the [user-guide](../user_guide/user_guide.md).
 
 ## Creating a Mapping Definition
 

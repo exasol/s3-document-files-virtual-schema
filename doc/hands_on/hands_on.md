@@ -105,8 +105,10 @@ CREATE CONNECTION S3_CONNECTION
 
 The address (`TO`) must have one of these formats:
 
-* `https://BUCKET.s3.YOUR_REGION.amazonaws.com/KEY`
-* `http(s)://BUCKET.s3.YOUR_REGION.CUSTOM_ENDPOINT/KEY` (for a local test version of S3)
+* `https://BUCKET.s3.YOUR_REGION.amazonaws.com/`
+* `http(s)://BUCKET.s3.YOUR_REGION.CUSTOM_ENDPOINT/` (for a local test version of S3)
+
+The adapter will simply join this string with the `source` from you mapping definitions. So please note that you need a `/`. We recommend adding a trailing slash in the connection and set `source` without slash.
 
 ## Creating a mapping Definition
 

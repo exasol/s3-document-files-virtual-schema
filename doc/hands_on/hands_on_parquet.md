@@ -93,6 +93,8 @@ The address (`TO`) must have one of these formats:
 * `https://BUCKET.s3.YOUR_REGION.amazonaws.com/`
 * `http(s)://BUCKET.s3.YOUR_REGION.CUSTOM_ENDPOINT/` (for a local test version of S3)
 
+The adapter will simply join this string with the `source` from you mapping definitions. So please note that you need a `/`. We recommend adding a trailing slash in the connection and set `source` without slash.
+
 ## Creating a Mapping Definition
 
 Now we are going to create a [EDML definition][edml-guide] that maps the parquet data to an Exasol table structure. Usually you do this by hand. However, for parquet files we have the [parquet-edml-generator](https://github.com/exasol/parquet-edml-generator/) in place that suggests a mapping definition based on the parquet-schema.

@@ -9,7 +9,7 @@ import com.exasol.errorreporting.ExaError;
  * This class represents S3 URIs.
  */
 public class S3Uri {
-    public static final String AWS_ENDPOINT = "amazonaws.com";
+    private static final String AWS_ENDPOINT = "amazonaws.com";
     private static final Pattern URL_PATTERN = Pattern.compile("http(s)?://([^.]++).s3.([^.]++).([^/]++)/(.*+)");
     private final boolean useSsl;
     private final String bucket;

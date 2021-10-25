@@ -1,7 +1,7 @@
-name: Release Droid - Print Quick Checksum
+name: CI Build next Java
 
 on:
-  workflow_dispatch:
+  - push
 
 jobs:
   build:
@@ -11,11 +11,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: 11
+          java-version: 17
       - name: Cache local Maven repository
         uses: actions/cache@v2
         with:
@@ -23,8 +23,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: Build with Maven skipping tests
-        run: mvn --batch-mode clean verify -DskipTests
-      - name: Print checksum
-        run: echo 'checksum_start==';find target -maxdepth 1 -name *.jar -exec sha256sum "{}" + | xargs;echo '==checksum_end'
-
+      - name: Run tests and build with Maven
+        run: mvn --batch-mode --update-snapshots clean package -DtrimStackTrace=false
+      - name: Publish Test Report
+        uses: scacap/action-surefire-report@v1
+        if: ${{ always() }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

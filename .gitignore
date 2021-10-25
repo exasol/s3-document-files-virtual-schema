@@ -29,3 +29,10 @@ Scripts
 venv/
 pom.xml.versionsBackup
 setEnv.sh
+
+~*
+*.lock
+*.bak
+*.orig
+*.old
+*.md.html

@@ -96,6 +96,8 @@ class ManySmallJsonFilesOnS3Fixture implements AutoCloseable {
         return role;
     }
 
+    @SuppressWarnings("java:S2925") // we have no alternative to active waiting here since AWS is only eventual
+                                    // consistent
     private void waitForRoleBeingFullyCreated() {
         try {
             Thread.sleep(30000);

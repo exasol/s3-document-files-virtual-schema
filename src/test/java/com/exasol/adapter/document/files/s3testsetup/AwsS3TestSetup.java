@@ -10,11 +10,11 @@ import software.amazon.awssdk.services.s3.S3Client;
 public class AwsS3TestSetup implements S3TestSetup {
     private final AwsCredentials awsCredentials;
     private final String region;
-    private final ProfileCredentialsProvider credentialsProvider;
+    private final AwsCredentialsProvider credentialsProvider;
 
     public AwsS3TestSetup() {
         this.region = new DefaultAwsRegionProviderChain().getRegion();
-        this.credentialsProvider = ProfileCredentialsProvider.create(TestConfig.instance().getAwsProfile());
+        this.credentialsProvider = TestConfig.instance().getAwsCredentialsProvider();
         this.awsCredentials = this.credentialsProvider.resolveCredentials();
     }
 

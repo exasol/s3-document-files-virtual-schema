@@ -76,6 +76,7 @@
 [26]: https://github.com/exasol/test-db-builder-java
 [56]: http://maven.apache.org/plugins/maven-dependency-plugin/
 [58]: http://www.mojohaus.org/versions-maven-plugin/
+[76]: http://anthonywhitford.com/lombok.maven/lombok-maven-plugin/
 [13]: http://opensource.org/licenses/BSD-3-Clause
 [54]: https://maven.apache.org/plugins/maven-compiler-plugin/
 [23]: http://opensource.org/licenses/MIT
@@ -91,7 +92,6 @@
 [9]: http://www.opensource.org/licenses/mit-license.php
 [49]: https://www.apache.org/licenses/LICENSE-2.0.txt
 [62]: https://maven.apache.org/enforcer/maven-enforcer-plugin/
-[76]: https://awhitford.github.com/lombok.maven/lombok-maven-plugin/
 [17]: https://www.eclipse.org/legal/epl-v20.html
 [82]: http://maven.apache.org/plugins/maven-install-plugin/
 [16]: https://junit.org/junit5/

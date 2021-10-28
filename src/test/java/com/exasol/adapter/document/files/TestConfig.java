@@ -6,6 +6,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import lombok.Data;
+import software.amazon.awssdk.auth.credentials.*;
 
 @Data
 public class TestConfig {
@@ -16,6 +17,14 @@ public class TestConfig {
 
     public static TestConfig instance() {
         return CONFIG;
+    }
+
+    public AwsCredentialsProvider getAwsCredentialsProvider() {
+        if (this.awsProfile != null && !this.awsProfile.isBlank()) {
+            return ProfileCredentialsProvider.create(TestConfig.instance().getAwsProfile());
+        } else {
+            return DefaultCredentialsProvider.builder().build();
+        }
     }
 
     private static class Reader {

@@ -15,7 +15,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import jakarta.json.*;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.http.async.SdkAsyncHttpClient;
 import software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient;
@@ -47,8 +47,7 @@ class ManySmallJsonFilesOnS3Fixture implements AutoCloseable {
         try {
             this.bucket = bucket;
             this.numberOfJsonFiles = numberOfJsonFiles;
-            final String awsProfile = TestConfig.instance().getAwsProfile();
-            final ProfileCredentialsProvider credentialsProvider = ProfileCredentialsProvider.create(awsProfile);
+            final AwsCredentialsProvider credentialsProvider = TestConfig.instance().getAwsCredentialsProvider();
             this.accountId = StsClient.builder().credentialsProvider(credentialsProvider).build().getCallerIdentity()
                     .account();
             final LambdaClient lambdaClient = LambdaClient.builder().credentialsProvider(credentialsProvider).build();
@@ -63,7 +62,7 @@ class ManySmallJsonFilesOnS3Fixture implements AutoCloseable {
         }
     }
 
-    private void deployFunction(final ProfileCredentialsProvider credentialsProvider, final LambdaClient lambdaClient)
+    private void deployFunction(final AwsCredentialsProvider credentialsProvider, final LambdaClient lambdaClient)
             throws IOException {
         final Role role = createRoleForLambda(credentialsProvider);
         final SdkBytes zipBytes = getZipedCreateFilesLambda();
@@ -81,7 +80,7 @@ class ManySmallJsonFilesOnS3Fixture implements AutoCloseable {
                 .connectionTimeout(Duration.ofMinutes(1)).maxConcurrency(100).build();
     }
 
-    private Role createRoleForLambda(final ProfileCredentialsProvider credentialsProvider) {
+    private Role createRoleForLambda(final AwsCredentialsProvider credentialsProvider) {
         final IamClient iamClient = IamClient.builder().region(Region.AWS_GLOBAL)
                 .credentialsProvider(credentialsProvider).build();
         final Policy policy = iamClient

@@ -38,6 +38,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           OWNER: ${{ secrets.AWS_TAG_OWNER }}
           DEPUTY: ${{ secrets.AWS_TAG_DEPUTY }}
+      - name: Create test_config.yml
+        run: |
+          echo "owner: ${{ secrets.AWS_TAG_OWNER }}" > test_config.yml
       - name: Run tests and build with Maven
         run: mvn --batch-mode --update-snapshots clean verify -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false
         env:

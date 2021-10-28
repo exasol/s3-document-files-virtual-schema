@@ -36,3 +36,5 @@ setEnv.sh
 *.orig
 *.old
 *.md.html
+test_config.yml
+deleteLambdaResources.sh

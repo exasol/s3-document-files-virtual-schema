@@ -1,6 +1,7 @@
 package com.exasol.adapter.document.files.s3testsetup;
 
 import com.amazonaws.regions.DefaultAwsRegionProviderChain;
+import com.exasol.adapter.document.files.TestConfig;
 
 import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.regions.Region;
@@ -9,15 +10,17 @@ import software.amazon.awssdk.services.s3.S3Client;
 public class AwsS3TestSetup implements S3TestSetup {
     private final AwsCredentials awsCredentials;
     private final String region;
+    private final ProfileCredentialsProvider credentialsProvider;
 
     public AwsS3TestSetup() {
         this.region = new DefaultAwsRegionProviderChain().getRegion();
-        this.awsCredentials = DefaultCredentialsProvider.builder().build().resolveCredentials();
+        this.credentialsProvider = ProfileCredentialsProvider.create(TestConfig.instance().getAwsProfile());
+        this.awsCredentials = this.credentialsProvider.resolveCredentials();
     }
 
     @Override
     public S3Client getS3Client() {
-        return S3Client.builder().region(Region.of(this.region)).build();
+        return S3Client.builder().region(Region.of(this.region)).credentialsProvider(this.credentialsProvider).build();
     }
 
     @Override

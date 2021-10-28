@@ -2,6 +2,17 @@
 
 This guide contains information for developers.
 
+## Configuring Local Test Setup
+
+The integration tests of this project use an S3 bucket. Using a local mock was not possible since the tested local-stack s3 implementation did not work.
+
+For that reason you need to configure the test. For that create a `test_config.yml` file:
+
+```yml
+awsProfile: <AWS profile>
+owner: <your email used for exa:owner tag>
+```
+
 ## Running Regression Test
 
 This project contains some regression tests to monitor the performance cross releases. To run them locally use:

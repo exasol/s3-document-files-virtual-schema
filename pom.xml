@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exasol</groupId>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema</url>
@@ -200,6 +200,33 @@
             <groupId>com.exasol</groupId>
             <artifactId>exasol-test-setup-abstraction-java</artifactId>
             <version>0.2.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <artifactId>lombok</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <version>1.18.22</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.29</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>lambda</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>iam</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sts</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -405,6 +432,7 @@
                         <module>integration_tests</module>
                         <module>jar_artifact</module>
                         <module>udf_coverage</module>
+                        <module>lombok</module>
                     </modules>
                     <excludedFiles>
                         <excludedFile>.github/workflows/release_droid_prepare_original_checksum.yml</excludedFile>
@@ -422,6 +450,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <sourcePaths>
+                        <sourcePath>target/delombok/main</sourcePath>
+                        <sourcePath>target/delombok/test</sourcePath>
+                    </sourcePaths>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>io.github.zlika</groupId>
@@ -467,6 +501,37 @@
                     <execution>
                         <id>default-jar</id>
                         <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.18.20.0</version>
+                <executions>
+                    <execution>
+                        <id>delombok-main</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                        <configuration>
+                            <addOutputDirectory>false</addOutputDirectory>
+                            <sourceDirectory>src/main/java</sourceDirectory>
+                            <outputDirectory>target/delombok/main</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>delombok-test</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>testDelombok</goal>
+                        </goals>
+                        <configuration>
+                            <addOutputDirectory>false</addOutputDirectory>
+                            <sourceDirectory>src/test/java</sourceDirectory>
+                            <outputDirectory>target/delombok/test</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

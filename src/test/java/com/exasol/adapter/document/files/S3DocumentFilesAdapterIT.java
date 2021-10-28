@@ -1,5 +1,6 @@
 package com.exasol.adapter.document.files;
 
+import static com.exasol.matcher.ResultSetStructureMatcher.table;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,22 +8,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
-import java.sql.SQLDataException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import com.exasol.adapter.document.edml.*;
+import com.exasol.adapter.document.edml.serializer.EdmlSerializer;
 import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
 import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
 import com.exasol.bucketfs.BucketAccessException;
 import com.exasol.dbbuilder.dialects.exasol.ConnectionDefinition;
 import com.exasol.dbbuilder.dialects.exasol.VirtualSchema;
+import com.exasol.matcher.TypeMatchMode;
+import com.exasol.performancetestrecorder.PerformanceTestRecorder;
 
 import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
 
@@ -98,6 +100,30 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
                     "E-S3VS-1: The given S3 Bucket string 'testData-' has an invalid format. Expected format: http(s)://BUCKET.s3.REGION.amazonaws.com/KEY or http(s)://BUCKET.s3.REGION.CUSTOM_ENDPOINT/KEY. Note that the address from the CONNECTION and the source are concatenated. Change the address in your CONNECTION and the source in your mapping definition."));
         } finally {
             virtualSchema.drop();
+        }
+    }
+
+    @Test
+    @Tag("regression")
+    void testManySmallJsonFiles(final TestInfo testInfo) throws Exception {
+        final int numberOfJsonFiles = 100_000;
+        try (final ManySmallJsonFilesOnS3Fixture fixture = new ManySmallJsonFilesOnS3Fixture(s3BucketName,
+                numberOfJsonFiles)) {
+            final EdmlDefinition edmlDefinition = EdmlDefinition.builder()
+                    .schema("https://schemas.exasol.com/edml-1.3.0.json").source("test-data-*.json")
+                    .destinationTable("TEST")//
+                    .mapping(Fields.builder()//
+                            .mapField("id", ToDecimalMapping.builder().build())//
+                            .mapField("name", ToVarcharMapping.builder().varcharColumnSize(200).build()).build())
+                    .build();
+            final String mapping = new EdmlSerializer().serialize(edmlDefinition);
+            createVirtualSchema("SMALL_JSON_FILES_VS", mapping);
+            PerformanceTestRecorder.getInstance().recordExecution(testInfo, () -> {
+                try (final ResultSet resultSet = getStatement()
+                        .executeQuery("SELECT COUNT(*) FROM (SELECT * FROM SMALL_JSON_FILES_VS.TEST)")) {
+                    assertThat(resultSet, table().row(numberOfJsonFiles).matches(TypeMatchMode.NO_JAVA_TYPE_CHECK));
+                }
+            });
         }
     }
 }

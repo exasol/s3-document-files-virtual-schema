@@ -22,10 +22,11 @@ import com.exasol.exasoltestsetup.*;
 import com.exasol.udfdebugging.UdfTestSetup;
 
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.2.1-s3-1.4.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.2.1-s3-1.5.0.jar";
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
             Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
@@ -55,6 +56,9 @@ public class IntegrationTestSetup implements AutoCloseable {
         this.adapterScript = createAdapterScript(adapterSchema);
         createUdf(adapterSchema);
         this.s3 = this.s3TestSetup.getS3Client();
+        if (System.getProperty("test.udf-log", "false").equals("true")) {
+            getStatement().executeUpdate("ALTER SESSION SET SCRIPT_OUTPUT_ADDRESS = '127.0.0.1:3000';");
+        }
     }
 
     private static void createUdf(final ExasolSchema adapterSchema) {
@@ -94,10 +98,12 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     public void emptyS3Bucket() {
-        final ListObjectsResponse listObjectsResponse = this.s3
-                .listObjects(builder -> builder.bucket(this.s3BucketName));
-        listObjectsResponse.contents().forEach(
-                s3Object -> this.s3.deleteObject(builder -> builder.bucket(this.s3BucketName).key(s3Object.key())));
+        final ListObjectsV2Iterable pages = this.s3
+                .listObjectsV2Paginator(request -> request.bucket(this.s3BucketName));
+        for (final ListObjectsV2Response page : pages) {
+            page.contents().forEach(
+                    s3Object -> this.s3.deleteObject(builder -> builder.bucket(this.s3BucketName).key(s3Object.key())));
+        }
     }
 
     @Override

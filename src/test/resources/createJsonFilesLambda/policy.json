@@ -27,11 +27,6 @@
         "arn:aws:s3:::{BUCKET}",
         "arn:aws:s3:::{BUCKET}/*"
       ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": "sqs:*",
-      "Resource": "*"
     }
   ]
 }

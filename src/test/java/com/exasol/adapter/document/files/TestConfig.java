@@ -21,7 +21,7 @@ public class TestConfig {
 
     public AwsCredentialsProvider getAwsCredentialsProvider() {
         if (this.awsProfile != null && !this.awsProfile.isBlank()) {
-            return ProfileCredentialsProvider.create(TestConfig.instance().getAwsProfile());
+            return ProfileCredentialsProvider.create(this.getAwsProfile());
         } else {
             return DefaultCredentialsProvider.builder().build();
         }

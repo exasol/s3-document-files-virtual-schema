@@ -18,9 +18,9 @@ exports.handler = async (event, context) => {
                 Body: json_data
             };
             promises.push(s3.upload(params).promise())
-        }else if(event.action == "delete"){
+        } else if(event.action == "delete") {
             var params = {  Bucket: event.bucket, Key: key };
-            s3.deleteObject(params).promise();
+            promises.push(s3.deleteObject(params).promise());
         }
         await delay(5)
     }

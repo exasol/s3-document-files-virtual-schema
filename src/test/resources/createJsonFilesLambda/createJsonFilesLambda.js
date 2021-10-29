@@ -1,10 +1,29 @@
 const AWS = require('aws-sdk');
 
+async function doWithRetry(func){
+    var retryCounter = 0
+    while(true){
+        try{
+            await func();
+            break;
+        }catch(exception){
+            if(retryCounter < 3){
+                await delay(10000)
+                console.log("operation failed: " + exception)
+                console.log("retrying")
+                retryCounter++
+            }else{
+                throw exception;
+            }
+        }
+    }
+}
+
 exports.handler = async (event, context) => {
     const s3 = new AWS.S3();
     var promises = []
     for (var i = 0; i < event.numberOfFiles; i++) {
-        var fileId = event.offset * event.numberOfFiles + i
+        var fileId = event.offset + i
         var key = 'test-data-' + fileId + ".json"
         if (event.action == "create") {
             var data = {
@@ -17,10 +36,10 @@ exports.handler = async (event, context) => {
                 Key: key,
                 Body: json_data
             };
-            promises.push(s3.upload(params).promise())
+            promises.push(doWithRetry(() => s3.upload(params).promise()));
         } else if(event.action == "delete") {
             var params = {  Bucket: event.bucket, Key: key };
-            promises.push(s3.deleteObject(params).promise());
+            promises.push(doWithRetry(() => s3.deleteObject(params).promise()));
         }
         await delay(5)
     }

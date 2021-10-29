@@ -106,7 +106,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     @Test
     @Tag("regression")
     void testManySmallJsonFiles(final TestInfo testInfo) throws Exception {
-        final int numberOfJsonFiles = 100_000;
+        final int numberOfJsonFiles = 1_000_000;
         try (final ManySmallJsonFilesOnS3Fixture fixture = new ManySmallJsonFilesOnS3Fixture(s3BucketName,
                 numberOfJsonFiles)) {
             final EdmlDefinition edmlDefinition = EdmlDefinition.builder()

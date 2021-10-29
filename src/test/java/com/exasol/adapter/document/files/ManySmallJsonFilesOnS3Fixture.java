@@ -33,7 +33,7 @@ class ManySmallJsonFilesOnS3Fixture implements AutoCloseable {
     private static final String LAMBDA_FUNCTION_NAME = "create-json-files";
     private static final String ROLE_NAME = LAMBDA_FUNCTION_NAME + "-role";
     private static final String POLICY_NAME = LAMBDA_FUNCTION_NAME + "-policy";
-    private static final int FILES_PER_LAMBDA = 1_000;
+    private static final int FILES_PER_LAMBDA = 5_000;
     private static final Logger LOGGER = Logger.getLogger(ManySmallJsonFilesOnS3Fixture.class.getName());
     private static final String ACTION_CREATE = "create";
     private static final String ACTION_DELETE = "delete";
@@ -77,7 +77,7 @@ class ManySmallJsonFilesOnS3Fixture implements AutoCloseable {
     private SdkAsyncHttpClient getHttpClientWithIncreasedTimeouts() {
         return NettyNioAsyncHttpClient.builder().readTimeout(Duration.ofMinutes(16))
                 .connectionAcquisitionTimeout(Duration.ofMinutes(1)).writeTimeout(Duration.ofMinutes(1))
-                .connectionTimeout(Duration.ofMinutes(1)).maxConcurrency(100).build();
+                .connectionTimeout(Duration.ofMinutes(1)).maxConcurrency(600).build();
     }
 
     private Role createRoleForLambda(final AwsCredentialsProvider credentialsProvider) {

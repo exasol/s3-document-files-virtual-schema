@@ -75,11 +75,11 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     private String getS3Address() {
-        final String inDatabaseAddress = getInDatabaseAddress();
+        final String inDatabaseAddress = getInDatabaseS3Address();
         return "http://" + this.s3BucketName + ".s3." + this.s3TestSetup.getRegion() + "." + inDatabaseAddress + "/";
     }
 
-    private String getInDatabaseAddress() {
+    private String getInDatabaseS3Address() {
         final String s3Entrypoint = this.s3TestSetup.getEntrypoint();
         if (s3Entrypoint.contains(":")) {
             return this.exasolTestSetup.makeTcpServiceAccessibleFromDatabase(ServiceAddress.parse(s3Entrypoint))
@@ -133,11 +133,16 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     protected VirtualSchema createVirtualSchema(final String schemaName, final String mapping) {
+        return createVirtualSchema(schemaName, mapping, this.connectionDefinition);
+    }
+
+    protected VirtualSchema createVirtualSchema(final String schemaName, final String mapping,
+            final ConnectionDefinition connection) {
         try {
             this.bucket.uploadStringContent(mapping, "mapping.json");
             final VirtualSchema virtualSchema = getPreconfiguredVirtualSchemaBuilder(schemaName)
-                    .properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json"))// todo "MAX_PARALLEL_UDFS", "1"
-                    .build();
+                    .connectionDefinition(connection)//
+                    .properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json")).build();
             this.createdObjects.add(virtualSchema);
             return virtualSchema;
         } catch (final BucketAccessException | TimeoutException | InterruptedException exception) {

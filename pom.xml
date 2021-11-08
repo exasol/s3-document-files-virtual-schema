@@ -215,18 +215,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>lambda</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>iam</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>sts</artifactId>
+            <groupId>com.exasol</groupId>
+            <artifactId>small-json-files-test-fixture</artifactId>
+            <version>0.1.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

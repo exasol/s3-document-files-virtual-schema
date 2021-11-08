@@ -10,10 +10,8 @@ Code name:
 
 ### Test Dependency Updates
 
+* Added `com.exasol:small-json-files-test-fixture:0.1.0`
 * Added `org.yaml:snakeyaml:1.29`
-* Added `software.amazon.awssdk:iam:2.17.66`
-* Added `software.amazon.awssdk:lambda:2.17.66`
-* Added `software.amazon.awssdk:sts:2.17.66`
 
 ### Plugin Dependency Updates
 

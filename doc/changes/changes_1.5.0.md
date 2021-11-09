@@ -10,7 +10,7 @@ Code name:
 
 ### Test Dependency Updates
 
-* Added `com.exasol:small-json-files-test-fixture:0.1.0`
+* Added `com.exasol:small-json-files-test-fixture:0.1.1`
 * Added `org.yaml:snakeyaml:1.29`
 
 ### Plugin Dependency Updates

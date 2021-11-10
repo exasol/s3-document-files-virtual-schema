@@ -15,13 +15,13 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
-class S3LoadedFileTest {
+class S3RemoteFileTest {
     private static final String TEST_BUCKET = "test";
     private static final String TEST_DATA_VALUE = "test content";
-    private static S3TestSetup testSetup;
     private static final String TEST_DATA_KEY = "TEST_DATA";
+    private static S3TestSetup testSetup;
     private static S3Client s3Client;
-    private static S3LoadedFile loadedFile;
+    private static S3RemoteFile loadedFile;
 
     @BeforeAll
     static void beforeAll() {
@@ -29,7 +29,7 @@ class S3LoadedFileTest {
         s3Client = testSetup.getS3Client();
         s3Client.createBucket(CreateBucketRequest.builder().bucket(TEST_BUCKET).build());
         s3Client.putObject(b -> b.bucket(TEST_BUCKET).key(TEST_DATA_KEY), RequestBody.fromString(TEST_DATA_VALUE));
-        loadedFile = new S3LoadedFile(s3Client, new S3ObjectDescription(
+        loadedFile = new S3RemoteFile(s3Client, new S3ObjectDescription(
                 new S3Uri(false, TEST_BUCKET, "eu-central-1", "", TEST_DATA_KEY), TEST_DATA_VALUE.length()));
     }
 

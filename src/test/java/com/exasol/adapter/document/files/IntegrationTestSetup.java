@@ -22,10 +22,11 @@ import com.exasol.exasoltestsetup.*;
 import com.exasol.udfdebugging.UdfTestSetup;
 
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.2.1-s3-1.4.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-2.2.1-s3-1.5.0.jar";
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
             Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
@@ -55,6 +56,9 @@ public class IntegrationTestSetup implements AutoCloseable {
         this.adapterScript = createAdapterScript(adapterSchema);
         createUdf(adapterSchema);
         this.s3 = this.s3TestSetup.getS3Client();
+        if (System.getProperty("test.udf-log", "false").equals("true")) {
+            getStatement().executeUpdate("ALTER SESSION SET SCRIPT_OUTPUT_ADDRESS = '127.0.0.1:3000';");
+        }
     }
 
     private static void createUdf(final ExasolSchema adapterSchema) {
@@ -71,11 +75,11 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     private String getS3Address() {
-        final String inDatabaseAddress = getInDatabaseAddress();
+        final String inDatabaseAddress = getInDatabaseS3Address();
         return "http://" + this.s3BucketName + ".s3." + this.s3TestSetup.getRegion() + "." + inDatabaseAddress + "/";
     }
 
-    private String getInDatabaseAddress() {
+    private String getInDatabaseS3Address() {
         final String s3Entrypoint = this.s3TestSetup.getEntrypoint();
         if (s3Entrypoint.contains(":")) {
             return this.exasolTestSetup.makeTcpServiceAccessibleFromDatabase(ServiceAddress.parse(s3Entrypoint))
@@ -94,10 +98,12 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     public void emptyS3Bucket() {
-        final ListObjectsResponse listObjectsResponse = this.s3
-                .listObjects(builder -> builder.bucket(this.s3BucketName));
-        listObjectsResponse.contents().forEach(
-                s3Object -> this.s3.deleteObject(builder -> builder.bucket(this.s3BucketName).key(s3Object.key())));
+        final ListObjectsV2Iterable pages = this.s3
+                .listObjectsV2Paginator(request -> request.bucket(this.s3BucketName));
+        for (final ListObjectsV2Response page : pages) {
+            page.contents().forEach(
+                    s3Object -> this.s3.deleteObject(builder -> builder.bucket(this.s3BucketName).key(s3Object.key())));
+        }
     }
 
     @Override
@@ -127,11 +133,16 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     protected VirtualSchema createVirtualSchema(final String schemaName, final String mapping) {
+        return createVirtualSchema(schemaName, mapping, this.connectionDefinition);
+    }
+
+    protected VirtualSchema createVirtualSchema(final String schemaName, final String mapping,
+            final ConnectionDefinition connection) {
         try {
             this.bucket.uploadStringContent(mapping, "mapping.json");
             final VirtualSchema virtualSchema = getPreconfiguredVirtualSchemaBuilder(schemaName)
-                    .properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json"))// todo "MAX_PARALLEL_UDFS", "1"
-                    .build();
+                    .connectionDefinition(connection)//
+                    .properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json")).build();
             this.createdObjects.add(virtualSchema);
             return virtualSchema;
         } catch (final BucketAccessException | TimeoutException | InterruptedException exception) {

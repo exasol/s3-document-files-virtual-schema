@@ -7,6 +7,18 @@
         "s3:*"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreatePolicy",
+        "iam:CreateRole",
+        "iam:AttachRolePolicy",
+        "iam:DeleteRole",
+        "iam:DeletePolicy",
+        "iam:DetachRolePolicy"
+      ],
+      "Resource": "*"
     }
   ]
 }

@@ -41,7 +41,7 @@ class PerformanceIT {
     @Test
     @Tag("regression")
     void testLoadFewBigSalesParquetFiles(final TestInfo testInfo) throws Exception {
-        runSalesPositionsTest(testInfo, "/parquet_sales_pos/*.parquet");
+        runSalesPositionsTest(testInfo, "parquet_sales_pos/*.parquet");
     }
 
     private void runSalesPositionsTest(final TestInfo testInfo, final String source) throws Exception {

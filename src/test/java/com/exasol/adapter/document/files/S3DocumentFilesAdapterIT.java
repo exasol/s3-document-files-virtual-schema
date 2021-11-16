@@ -118,12 +118,14 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
                 "SMALL_FILES_BUCKET", bucketAddress, AWS_S3_TEST_SETUP.getUsername(), AWS_S3_TEST_SETUP.getPassword());
         try {
             SETUP.createVirtualSchema("SMALL_JSON_FILES_VS", mapping, connection);
-            PerformanceTestRecorder.getInstance().recordExecution(testInfo, () -> {
-                try (final ResultSet resultSet = getStatement()
-                        .executeQuery("SELECT COUNT(*) FROM (SELECT * FROM SMALL_JSON_FILES_VS.TEST)")) {
-                    assertThat(resultSet, table().row(numberOfJsonFiles).matches(TypeMatchMode.NO_JAVA_TYPE_CHECK));
-                }
-            });
+            for (int runCounter = 0; runCounter < 5; runCounter++) {
+                PerformanceTestRecorder.getInstance().recordExecution(testInfo, () -> {
+                    try (final ResultSet resultSet = getStatement()
+                            .executeQuery("SELECT COUNT(*) FROM (SELECT * FROM SMALL_JSON_FILES_VS.TEST)")) {
+                        assertThat(resultSet, table().row(numberOfJsonFiles).matches(TypeMatchMode.NO_JAVA_TYPE_CHECK));
+                    }
+                });
+            }
         } finally {
             connection.drop();
         }

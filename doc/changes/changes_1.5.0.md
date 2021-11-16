@@ -5,6 +5,7 @@ Code name:
 ## Features
 
 * #48: Added regression test for many small JSON files
+* #52: Added performance test for few big parquet files
 
 ## Dependency Updates
 

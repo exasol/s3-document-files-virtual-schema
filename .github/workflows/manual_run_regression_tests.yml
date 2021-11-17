@@ -55,12 +55,6 @@ jobs:
         if: ${{ always() }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Destroy cluster
-        run: terraform -chdir=cloudSetup/ destroy -auto-approve
-        if: always() # also run if tests failed
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Upload regression test result
         uses: actions/upload-artifact@v2
         with:
@@ -72,3 +66,9 @@ jobs:
           RELEASE_NAME: "${{ github.event.release.tag_name }}"
           DEMODB_LOG_SUBMIT_USER: "${{ secrets.DEMODB_LOG_SUBMIT_USER }}"
           DEMODB_LOG_SUBMIT_PASS: "${{ secrets.DEMODB_LOG_SUBMIT_PASS }}"
+      - name: Destroy cluster
+        run: terraform -chdir=cloudSetup/ destroy -auto-approve
+        if: always() # also run if tests failed
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -64,23 +64,20 @@ class PerformanceIT {
                 .destinationTable("SALES_POSITION")//
                 .addSourceReferenceColumn(true)//
                 .mapping(//
-                        Fields.builder()//
-                                .mapField("sales_id",
-                                        ToDecimalMapping.builder().decimalPrecision(12).decimalScale(0).build())
-                                .mapField("product_id",
-                                        ToDecimalMapping.builder().decimalPrecision(12).decimalScale(0).build())
-                                .mapField("exa_row_roles",
-                                        ToDecimalMapping.builder().decimalPrecision(12).decimalScale(0).build())
-                                .mapField("sales_price",
-                                        ToDecimalMapping.builder().decimalPrecision(12).decimalScale(2).build())
-                                .mapField("product_price",
-                                        ToDecimalMapping.builder().decimalPrecision(12).decimalScale(2).build())
-                                .mapField("quantity",
-                                        ToDecimalMapping.builder().decimalPrecision(4).decimalScale(0).build())
-                                .mapField("sales_position",
-                                        ToDecimalMapping.builder().decimalPrecision(4).decimalScale(0).build())
-                                .build())
+                        buildColumnMappingForSalesPositions())
                 .build();
         return new EdmlSerializer().serialize(edmlDefinition);
+    }
+
+    private Fields buildColumnMappingForSalesPositions() {
+        return Fields.builder()//
+                .mapField("sales_id", ToDecimalMapping.builder().decimalPrecision(12).decimalScale(0).build())
+                .mapField("product_id", ToDecimalMapping.builder().decimalPrecision(12).decimalScale(0).build())
+                .mapField("exa_row_roles", ToDecimalMapping.builder().decimalPrecision(12).decimalScale(0).build())
+                .mapField("sales_price", ToDecimalMapping.builder().decimalPrecision(12).decimalScale(2).build())
+                .mapField("product_price", ToDecimalMapping.builder().decimalPrecision(12).decimalScale(2).build())
+                .mapField("quantity", ToDecimalMapping.builder().decimalPrecision(4).decimalScale(0).build())
+                .mapField("sales_position", ToDecimalMapping.builder().decimalPrecision(4).decimalScale(0).build())
+                .build();
     }
 }

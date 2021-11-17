@@ -7,6 +7,10 @@ Code name:
 * #48: Added regression test for many small JSON files
 * #52: Added performance test for few big Parquet files
 
+## Bug Fixes
+
+* #47: Fixed upload of regression test results
+
 ## Dependency Updates
 
 ### Test Dependency Updates

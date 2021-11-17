@@ -63,9 +63,7 @@ class PerformanceIT {
                 .source(source)//
                 .destinationTable("SALES_POSITION")//
                 .addSourceReferenceColumn(true)//
-                .mapping(//
-                        buildColumnMappingForSalesPositions())
-                .build();
+                .mapping(buildColumnMappingForSalesPositions()).build();
         return new EdmlSerializer().serialize(edmlDefinition);
     }
 

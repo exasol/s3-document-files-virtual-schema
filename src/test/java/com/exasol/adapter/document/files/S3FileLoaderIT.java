@@ -17,7 +17,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import com.exasol.ExaConnectionInformation;
-import com.exasol.adapter.document.documentfetcher.files.segmentation.NoSegmentationSegmentDescription;
 import com.exasol.adapter.document.files.stringfilter.wildcardexpression.WildcardExpression;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -55,8 +54,7 @@ class S3FileLoaderIT {
         final ExaConnectionInformation connectionInformation = new LocalStackS3ConnectionInformation(
                 LOCAL_STACK_CONTAINER, TEST_BUCKET, "file-1.json");
         final S3FileLoader s3FileLoader = new S3FileLoader(
-                WildcardExpression.forNonWildcardString(connectionInformation.getAddress()),
-                new NoSegmentationSegmentDescription(), connectionInformation);
+                WildcardExpression.forNonWildcardString(connectionInformation.getAddress()), connectionInformation);
         assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1));
     }
 
@@ -76,8 +74,7 @@ class S3FileLoaderIT {
         final ExaConnectionInformation connectionInformation = new LocalStackS3ConnectionInformation(
                 LOCAL_STACK_CONTAINER, TEST_BUCKET, fileGlob);
         final WildcardExpression filePattern = WildcardExpression.fromGlob(connectionInformation.getAddress());
-        final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, new NoSegmentationSegmentDescription(),
-                connectionInformation);
+        final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, connectionInformation);
         assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1, CONTENT_2));
     }
 
@@ -86,8 +83,7 @@ class S3FileLoaderIT {
         final ExaConnectionInformation connectionInformation = new LocalStackS3ConnectionInformation(
                 LOCAL_STACK_CONTAINER, TEST_BUCKET, "*");
         final WildcardExpression filePattern = WildcardExpression.fromGlob(connectionInformation.getAddress());
-        final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, new NoSegmentationSegmentDescription(),
-                connectionInformation);
+        final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, connectionInformation);
         assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1, CONTENT_2, CONTENT_OTHER));
     }
 

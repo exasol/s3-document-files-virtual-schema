@@ -6,7 +6,6 @@ import java.util.Iterator;
 import com.exasol.ExaConnectionInformation;
 import com.exasol.adapter.document.documentfetcher.files.FileLoader;
 import com.exasol.adapter.document.documentfetcher.files.RemoteFile;
-import com.exasol.adapter.document.documentfetcher.files.segmentation.*;
 import com.exasol.adapter.document.files.stringfilter.StringFilter;
 import com.exasol.adapter.document.iterators.FlatMapIterator;
 import com.exasol.adapter.document.iterators.TransformingIterator;
@@ -23,7 +22,6 @@ import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
  */
 public class S3FileLoader implements FileLoader {
     private final StringFilter filePattern;
-    private final SegmentMatcher segmentMatcher;
     private final S3Client s3;
 
     private final S3Uri s3Uri;
@@ -32,13 +30,10 @@ public class S3FileLoader implements FileLoader {
      * Create a new instance of {@link S3FileLoader}.
      *
      * @param filePattern              files to load
-     * @param segmentDescription       segment of this loader
      * @param exaConnectionInformation connection information
      */
-    public S3FileLoader(final StringFilter filePattern, final SegmentDescription segmentDescription,
-            final ExaConnectionInformation exaConnectionInformation) {
+    public S3FileLoader(final StringFilter filePattern, final ExaConnectionInformation exaConnectionInformation) {
         this.filePattern = filePattern;
-        this.segmentMatcher = SegmentMatcherFactory.buildSegmentMatcher(segmentDescription);
         this.s3Uri = S3Uri.fromString(filePattern.getStaticPrefix());
         final S3ClientBuilder s3ClientBuilder = S3Client.builder();
         if (this.s3Uri.hasEndpointOverride()) {
@@ -67,9 +62,7 @@ public class S3FileLoader implements FileLoader {
         final Iterator<S3ObjectDescription> objectKeys = getQuickFilteredObjectKeys();
         final FilteringIterator<S3ObjectDescription> filteredObjectKeys = new FilteringIterator<>(objectKeys,
                 s3Object -> filePatternMatcher.matches(s3Object.getUri().toString()));
-        final TransformingIterator<S3ObjectDescription, RemoteFile> loadedFiles = new TransformingIterator<>(
-                filteredObjectKeys, this::getS3Object);
-        return new FilteringIterator<>(loadedFiles, this.segmentMatcher::matches);
+        return new TransformingIterator<>(filteredObjectKeys, this::getS3Object);
     }
 
     /**

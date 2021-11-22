@@ -16,7 +16,7 @@
         <jacoco.version>0.8.7</jacoco.version>
         <gpg.skip>true</gpg.skip>
         <org.testcontainers.version>1.16.2</org.testcontainers.version>
-        <vs-commom-document-files.version>3.0.0-SNAPSHOT</vs-commom-document-files.version>
+        <vs-commom-document-files.version>3.0.0</vs-commom-document-files.version>
         <!--
             M4 does not fail tests if beforeAll fails
             M5 fails in integration tests with a strange error

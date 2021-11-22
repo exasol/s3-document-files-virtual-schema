@@ -17,7 +17,7 @@ Next create the Adapter Script:
  ```sql
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-3.0.0-SNAPSHOT-s3-1.5.0.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-3.0.0-s3-1.5.0.jar;
 /
 ```
 
@@ -30,7 +30,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   CONNECTION_NAME VARCHAR(500))
   EMITS(...) AS
     %scriptclass com.exasol.adapter.document.UdfEntryPoint;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-3.0.0-SNAPSHOT-s3-1.5.0.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-3.0.0-s3-1.5.0.jar;
 /
 ```
 

@@ -7,7 +7,6 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,7 +17,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import com.exasol.ExaConnectionInformation;
-import com.exasol.adapter.document.documentfetcher.files.SegmentDescription;
 import com.exasol.adapter.document.files.stringfilter.wildcardexpression.WildcardExpression;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -52,12 +50,11 @@ class S3FileLoaderIT {
     }
 
     @Test
-    void testReadFile() throws ExecutionException, InterruptedException {
+    void testReadFile() {
         final ExaConnectionInformation connectionInformation = new LocalStackS3ConnectionInformation(
                 LOCAL_STACK_CONTAINER, TEST_BUCKET, "file-1.json");
         final S3FileLoader s3FileLoader = new S3FileLoader(
-                WildcardExpression.forNonWildcardString(connectionInformation.getAddress()),
-                SegmentDescription.NO_SEGMENTATION, connectionInformation);
+                WildcardExpression.forNonWildcardString(connectionInformation.getAddress()), connectionInformation);
         assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1));
     }
 
@@ -73,22 +70,20 @@ class S3FileLoaderIT {
             "file-?.json" //
     })
     @ParameterizedTest
-    void testReadFilesWithWildcard(final String fileGlob) throws ExecutionException, InterruptedException {
+    void testReadFilesWithWildcard(final String fileGlob) {
         final ExaConnectionInformation connectionInformation = new LocalStackS3ConnectionInformation(
                 LOCAL_STACK_CONTAINER, TEST_BUCKET, fileGlob);
         final WildcardExpression filePattern = WildcardExpression.fromGlob(connectionInformation.getAddress());
-        final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, SegmentDescription.NO_SEGMENTATION,
-                connectionInformation);
+        final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, connectionInformation);
         assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1, CONTENT_2));
     }
 
     @Test
-    void testReadAllFiles() throws ExecutionException, InterruptedException {
+    void testReadAllFiles() {
         final ExaConnectionInformation connectionInformation = new LocalStackS3ConnectionInformation(
                 LOCAL_STACK_CONTAINER, TEST_BUCKET, "*");
         final WildcardExpression filePattern = WildcardExpression.fromGlob(connectionInformation.getAddress());
-        final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, SegmentDescription.NO_SEGMENTATION,
-                connectionInformation);
+        final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, connectionInformation);
         assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1, CONTENT_2, CONTENT_OTHER));
     }
 

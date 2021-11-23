@@ -13,6 +13,7 @@ import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
 import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
 import com.exasol.performancetestrecorder.PerformanceTestRecorder;
 
+@Tag("integration")
 class PerformanceIT {
     private static final S3TestSetup AWS_S3_TEST_SETUP = new AwsS3TestSetup();
     private static IntegrationTestSetup SETUP;

@@ -1,7 +1,6 @@
 package com.exasol.adapter.document.files;
 
 import static com.exasol.adapter.document.UdfEntryPoint.*;
-import static com.exasol.adapter.document.files.S3DocumentFilesAdapter.ADAPTER_NAME;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -26,7 +25,7 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-3.0.0-s3-1.5.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-4.0.0-SNAPSHOT-s3-1.6.0.jar";
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
             Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
@@ -170,8 +169,7 @@ public class IntegrationTestSetup implements AutoCloseable {
 
     public VirtualSchema.Builder getPreconfiguredVirtualSchemaBuilder(final String schemaName) {
         return this.exasolObjectFactory.createVirtualSchemaBuilder(schemaName)
-                .connectionDefinition(this.connectionDefinition).adapterScript(this.adapterScript)
-                .dialectName(ADAPTER_NAME);
+                .connectionDefinition(this.connectionDefinition).adapterScript(this.adapterScript);
     }
 
     public S3TestSetup getS3TestSetup() {

@@ -1,14 +1,12 @@
 package com.exasol.adapter.document.files;
 
 import java.net.URI;
-import java.util.Iterator;
 
 import com.exasol.ExaConnectionInformation;
 import com.exasol.adapter.document.documentfetcher.files.FileLoader;
 import com.exasol.adapter.document.documentfetcher.files.RemoteFile;
 import com.exasol.adapter.document.files.stringfilter.StringFilter;
-import com.exasol.adapter.document.iterators.FlatMapIterator;
-import com.exasol.adapter.document.iterators.TransformingIterator;
+import com.exasol.adapter.document.iterators.*;
 
 import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.regions.Region;
@@ -56,10 +54,10 @@ public class S3FileLoader implements FileLoader {
     }
 
     @Override
-    public Iterator<RemoteFile> loadFiles() {
+    public CloseableIterator<RemoteFile> loadFiles() {
         final com.exasol.adapter.document.files.stringfilter.matcher.Matcher filePatternMatcher = this.filePattern
                 .getDirectoryIgnoringMatcher();
-        final Iterator<S3ObjectDescription> objectKeys = getQuickFilteredObjectKeys();
+        final CloseableIterator<S3ObjectDescription> objectKeys = getQuickFilteredObjectKeys();
         final FilteringIterator<S3ObjectDescription> filteredObjectKeys = new FilteringIterator<>(objectKeys,
                 s3Object -> filePatternMatcher.matches(s3Object.getUri().toString()));
         return new TransformingIterator<>(filteredObjectKeys, this::getS3Object);
@@ -71,11 +69,12 @@ public class S3FileLoader implements FileLoader {
      *
      * @return partially filtered list of object keys
      */
-    private Iterator<S3ObjectDescription> getQuickFilteredObjectKeys() {
+    private CloseableIterator<S3ObjectDescription> getQuickFilteredObjectKeys() {
         final String globFreeKey = this.s3Uri.getKey();
         final ListObjectsV2Iterable listObjectsResponse = runS3Request(globFreeKey);
-        final Iterator<S3Object> s3Objects = new FlatMapIterator<>(listObjectsResponse.iterator(),
-                page -> page.contents().iterator());
+        final CloseableIterator<S3Object> s3Objects = new FlatMapIterator<>(
+                new CloseableIteratorWrapper<>(listObjectsResponse.iterator()),
+                page -> new CloseableIteratorWrapper<>(page.contents().iterator()));
         return new TransformingIterator<>(s3Objects,
                 s3Object -> new S3ObjectDescription(new S3Uri(this.s3Uri.isUseSsl(), this.s3Uri.getBucket(),
                         this.s3Uri.getRegion(), this.s3Uri.getEndpoint(), s3Object.key()), s3Object.size()));

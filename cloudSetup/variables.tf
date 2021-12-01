@@ -16,11 +16,17 @@ variable "additional_tags" {
 }
 
 variable "override_node_count" {
+  # Don't change cluster config. It will destroy comparability to the test history.
   default = 4
   description = "Override the data-node count. Warning: Don't override for regression tests!"
 }
 
 variable "override_instance_type" {
+  # Don't change cluster config. It will destroy comparability to the test history.
   default = "c5.4xlarge"
   description = "Override the data-node instance type. Warning: Don't override for regression tests!"
+}
+
+variable "aws_profile" {
+  default = ""
 }

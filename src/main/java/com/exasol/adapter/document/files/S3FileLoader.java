@@ -10,8 +10,7 @@ import com.exasol.adapter.document.iterators.*;
 
 import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.S3ClientBuilder;
+import software.amazon.awssdk.services.s3.*;
 import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
@@ -21,6 +20,7 @@ import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 public class S3FileLoader implements FileLoader {
     private final StringFilter filePattern;
     private final S3Client s3;
+    private final S3AsyncClient s3Async;
 
     private final S3Uri s3Uri;
 
@@ -34,11 +34,17 @@ public class S3FileLoader implements FileLoader {
         this.filePattern = filePattern;
         this.s3Uri = S3Uri.fromString(filePattern.getStaticPrefix());
         final S3ClientBuilder s3ClientBuilder = S3Client.builder();
+        final S3AsyncClientBuilder s3AsyncClientBuilder = S3AsyncClient.builder();
         if (this.s3Uri.hasEndpointOverride()) {
-            s3ClientBuilder.endpointOverride(
-                    URI.create((this.s3Uri.isUseSsl() ? "https://" : "http://") + this.s3Uri.getEndpointOverride()));
+            final URI endpointOverride = URI
+                    .create((this.s3Uri.isUseSsl() ? "https://" : "http://") + this.s3Uri.getEndpointOverride());
+            s3ClientBuilder.endpointOverride(endpointOverride);
+            s3AsyncClientBuilder.endpointOverride(endpointOverride);
         }
         this.s3 = s3ClientBuilder.region(Region.of(this.s3Uri.getRegion()))//
+                .credentialsProvider(StaticCredentialsProvider.create(getCredentials(exaConnectionInformation)))//
+                .build();
+        this.s3Async = s3AsyncClientBuilder.region(Region.of(this.s3Uri.getRegion()))//
                 .credentialsProvider(StaticCredentialsProvider.create(getCredentials(exaConnectionInformation)))//
                 .build();
     }
@@ -86,6 +92,7 @@ public class S3FileLoader implements FileLoader {
     }
 
     private RemoteFile getS3Object(final S3ObjectDescription objectUri) {
-        return new S3RemoteFile(this.s3, objectUri);
+        return new RemoteFile(objectUri.getUri().toString(), objectUri.getSize(),
+                new S3RemoteFileContent(this.s3, this.s3Async, objectUri));
     }
 }

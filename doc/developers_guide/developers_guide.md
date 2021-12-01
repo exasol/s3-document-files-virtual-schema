@@ -30,3 +30,9 @@ To get debug output of the UDFs, add the following lines to your tests:
 ```java
 SETUP.getStatement().executeUpdate("ALTER SESSION SET SCRIPT_OUTPUT_ADDRESS = '127.0.0.1:3000';");
  ```
+
+## Disabling Concurrency
+
+For debugging or profiling the concurrent UDFs cause problems.
+
+You can disable them by adding `-Dtest.max_udf=1` to the test JVM options.

@@ -1,6 +1,7 @@
 package com.exasol.adapter.document.files;
 
 import java.net.URI;
+import java.util.Iterator;
 
 import com.exasol.ExaConnectionInformation;
 import com.exasol.adapter.document.documentfetcher.files.FileLoader;
@@ -11,6 +12,7 @@ import com.exasol.adapter.document.iterators.*;
 import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.*;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
@@ -77,9 +79,10 @@ public class S3FileLoader implements FileLoader {
      */
     private CloseableIterator<S3ObjectDescription> getQuickFilteredObjectKeys() {
         final String globFreeKey = this.s3Uri.getKey();
-        final ListObjectsV2Iterable listObjectsResponse = runS3Request(globFreeKey);
+        final Iterator<ListObjectsV2Response> s3Responses = runS3Request(globFreeKey).iterator();
+        final Iterator<ListObjectsV2Response> s3ResponsesWithRetry = new RequestRateRetryIterator(s3Responses);
         final CloseableIterator<S3Object> s3Objects = new FlatMapIterator<>(
-                new CloseableIteratorWrapper<>(listObjectsResponse.iterator()),
+                new CloseableIteratorWrapper<>(s3ResponsesWithRetry),
                 page -> new CloseableIteratorWrapper<>(page.contents().iterator()));
         return new TransformingIterator<>(s3Objects,
                 s3Object -> new S3ObjectDescription(new S3Uri(this.s3Uri.isUseSsl(), this.s3Uri.getBucket(),

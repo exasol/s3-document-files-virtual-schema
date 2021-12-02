@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.hadoop.io.file.tfile.ByteArray;
 import org.junit.jupiter.api.*;
 
 import com.exasol.adapter.document.documentfetcher.files.RemoteFileContent;
@@ -56,7 +55,7 @@ class RemoteFileTest {
 
     @Test
     void testGetAsync() throws ExecutionException, InterruptedException {
-        final ByteArray byteArray = remoteFileContent.loadAssync().get();
-        assertThat(byteArray.buffer(), equalTo(TEST_DATA_VALUE.getBytes(StandardCharsets.UTF_8)));
+        final byte[] byteArray = remoteFileContent.loadAssync().get();
+        assertThat(byteArray, equalTo(TEST_DATA_VALUE.getBytes(StandardCharsets.UTF_8)));
     }
 }

@@ -3,9 +3,8 @@ package com.exasol.adapter.document.files;
 import java.io.InputStream;
 import java.util.concurrent.*;
 
-import org.apache.hadoop.io.file.tfile.ByteArray;
-
 import com.exasol.adapter.document.documentfetcher.files.RemoteFileContent;
+import com.exasol.adapter.document.documentfetcher.files.TooManyRequestsException;
 import com.exasol.adapter.document.documentfetcher.files.randomaccessinputstream.RandomAccessInputStream;
 import com.exasol.adapter.document.documentfetcher.files.randomaccessinputstream.RandomAccessInputStreamCache;
 
@@ -48,8 +47,8 @@ class S3RemoteFileContent implements RemoteFileContent {
     }
 
     @Override
-    public Future<ByteArray> loadAssync() {
-        final CompletableFuture<ResponseBytes<GetObjectResponse>> responseFuture = this.s3AsyncClient
+    public Future<byte[]> loadAssync() {
+        final Future<ResponseBytes<GetObjectResponse>> responseFuture = this.s3AsyncClient
                 .getObject(
                         request -> request.bucket(this.s3ObjectToRead.getUri().getBucket())
                                 .key(this.s3ObjectToRead.getUri().getKey()).build(),
@@ -57,7 +56,7 @@ class S3RemoteFileContent implements RemoteFileContent {
         return new ContentFuture(responseFuture);
     }
 
-    private static class ContentFuture implements Future<ByteArray> {
+    private static class ContentFuture implements Future<byte[]> {
         private final Future<ResponseBytes<GetObjectResponse>> responseFuture;
 
         private ContentFuture(final Future<ResponseBytes<GetObjectResponse>> responseFuture) {
@@ -80,14 +79,30 @@ class S3RemoteFileContent implements RemoteFileContent {
         }
 
         @Override
-        public ByteArray get() throws InterruptedException, ExecutionException {
-            return new ByteArray(this.responseFuture.get().asByteArray());
+        public byte[] get() throws InterruptedException, ExecutionException {
+            try {
+                return this.responseFuture.get().asByteArray();
+            } catch (final ExecutionException exception) {
+                return wrapTooManyRequestsException(exception);
+            }
         }
 
         @Override
-        public ByteArray get(final long timeout, final TimeUnit unit)
+        public byte[] get(final long timeout, final TimeUnit unit)
                 throws InterruptedException, ExecutionException, TimeoutException {
-            return new ByteArray(this.responseFuture.get(timeout, unit).asByteArray());
+            try {
+                return this.responseFuture.get(timeout, unit).asByteArray();
+            } catch (final ExecutionException exception) {
+                return wrapTooManyRequestsException(exception);
+            }
+        }
+
+        private byte[] wrapTooManyRequestsException(final ExecutionException exception) throws ExecutionException {
+            if (exception.getCause().getMessage().contains("Please reduce your request rate.")) {
+                throw new TooManyRequestsException();
+            } else {
+                throw exception;
+            }
         }
     }
 }

@@ -47,7 +47,7 @@ class S3RemoteFileContent implements RemoteFileContent {
     }
 
     @Override
-    public Future<byte[]> loadAssync() {
+    public Future<byte[]> loadAsync() {
         final Future<ResponseBytes<GetObjectResponse>> responseFuture = this.s3AsyncClient
                 .getObject(
                         request -> request.bucket(this.s3ObjectToRead.getUri().getBucket())

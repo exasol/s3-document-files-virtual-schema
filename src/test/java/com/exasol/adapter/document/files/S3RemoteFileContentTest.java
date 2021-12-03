@@ -2,10 +2,11 @@ package com.exasol.adapter.document.files;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 
 import org.junit.jupiter.api.*;
 
@@ -18,7 +19,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
-class RemoteFileTest {
+class S3RemoteFileContentTest {
     private static final String TEST_BUCKET = "test";
     private static final String TEST_DATA_VALUE = "test content";
     private static final String TEST_DATA_KEY = "TEST_DATA";
@@ -54,8 +55,21 @@ class RemoteFileTest {
     }
 
     @Test
-    void testGetAsync() throws ExecutionException, InterruptedException {
-        final byte[] byteArray = remoteFileContent.loadAssync().get();
+    void testLoadAsync() throws ExecutionException, InterruptedException {
+        final byte[] byteArray = remoteFileContent.loadAsync().get();
         assertThat(byteArray, equalTo(TEST_DATA_VALUE.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    @Test
+    void testLoadAsyncWithTimeout() throws ExecutionException, InterruptedException, TimeoutException {
+        final byte[] byteArray = remoteFileContent.loadAsync().get(10, TimeUnit.SECONDS);
+        assertThat(byteArray, equalTo(TEST_DATA_VALUE.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    @Test
+    void testCancelAsyncLoading() {
+        final Future<byte[]> future = remoteFileContent.loadAsync();
+        future.cancel(true);
+        assertTrue(future.isCancelled());
     }
 }

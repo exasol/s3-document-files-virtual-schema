@@ -1,6 +1,10 @@
 # Virtual Schema for document data in files on AWS S3 1.6.0, released 2021-??-??
 
-Code name:
+Code name: Improved performance of small file loading
+
+## Summary
+
+By the dependency update to virtual-schema-common-document-files:4.0.0 this release improved the performance for loading small files.
 
 ## Documentation
 

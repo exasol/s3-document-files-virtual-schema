@@ -140,9 +140,10 @@ public class IntegrationTestSetup implements AutoCloseable {
     @NotNull
     private Map<String, String> getVirtualSchemaProperties(final String mapping) {
         final Map<String, String> properties = new HashMap<>(Map.of("MAPPING", mapping));
-        final String maxUdfProperty = System.getProperty("test.max_udf", "");
-        if (!maxUdfProperty.isBlank()) {
-            properties.put("MAX_PARALLEL_UDFS", maxUdfProperty);
+        final String debugProperty = System.getProperty("test.debug", "");
+        final String profileProperty = System.getProperty("test.jprofiler", "");
+        if (!debugProperty.isBlank() || !profileProperty.isBlank()) {
+            properties.put("MAX_PARALLEL_UDFS", debugProperty);
         }
         return properties;
     }

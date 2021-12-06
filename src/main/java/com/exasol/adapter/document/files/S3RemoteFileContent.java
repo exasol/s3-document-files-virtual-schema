@@ -17,6 +17,8 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 class S3RemoteFileContent implements RemoteFileContent {
+    /** Exception message used by S3 if there were too many API requests. */
+    static final String REDUCE_REQUEST_RATE_MESSAGE = "Please reduce your request rate.";
     private static final int SIZE_1_MB = 1000000;
     private final S3Client s3;
     private final S3AsyncClient s3AsyncClient;
@@ -83,7 +85,7 @@ class S3RemoteFileContent implements RemoteFileContent {
             try {
                 return this.responseFuture.get().asByteArray();
             } catch (final ExecutionException exception) {
-                return wrapTooManyRequestsException(exception);
+                throw wrapTooManyRequestsException(exception);
             }
         }
 
@@ -93,15 +95,15 @@ class S3RemoteFileContent implements RemoteFileContent {
             try {
                 return this.responseFuture.get(timeout, unit).asByteArray();
             } catch (final ExecutionException exception) {
-                return wrapTooManyRequestsException(exception);
+                throw wrapTooManyRequestsException(exception);
             }
         }
 
-        private byte[] wrapTooManyRequestsException(final ExecutionException exception) throws ExecutionException {
-            if (exception.getCause().getMessage().contains("Please reduce your request rate.")) {
+        private ExecutionException wrapTooManyRequestsException(final ExecutionException exception) {
+            if (exception.getCause().getMessage().contains(REDUCE_REQUEST_RATE_MESSAGE)) {
                 throw new TooManyRequestsException();
             } else {
-                throw exception;
+                return exception;
             }
         }
     }

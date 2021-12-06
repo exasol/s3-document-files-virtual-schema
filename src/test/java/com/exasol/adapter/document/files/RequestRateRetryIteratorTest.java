@@ -1,5 +1,6 @@
 package com.exasol.adapter.document.files;
 
+import static com.exasol.adapter.document.files.S3RemoteFileContent.REDUCE_REQUEST_RATE_MESSAGE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,7 +22,7 @@ class RequestRateRetryIteratorTest {
 
     @Test
     void testRetrying() {
-        final ThrottledIterator source = spy(new ThrottledIterator());
+        final ThrottledIterator source = spy(new ThrottledIterator(0.8f));
         final RequestRateRetryIterator iterator = new RequestRateRetryIterator(source);
         final AtomicInteger resultCounter = new AtomicInteger();
         iterator.forEachRemaining(x -> resultCounter.incrementAndGet());
@@ -40,8 +41,22 @@ class RequestRateRetryIteratorTest {
         assertThat(actualException.getMessage(), equalTo(exception.getMessage()));
     }
 
+    @Test
+    void testMaxRetryLimit() {
+        final ThrottledIterator source = spy(new ThrottledIterator(1f));
+        final RequestRateRetryIterator iterator = new RequestRateRetryIterator(source);
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, iterator::next);
+        assertThat(exception.getMessage(),
+                equalTo("E-S3VS-7: Failed to get next response from AWS after 100 retries."));
+    }
+
     private static class ThrottledIterator implements Iterator<ListObjectsV2Response> {
         private int counter = 0;
+        private final float errorLikeliness;
+
+        private ThrottledIterator(float successLikeliness) {
+            this.errorLikeliness = successLikeliness;
+        }
 
         @Override
         public boolean hasNext() {
@@ -53,8 +68,8 @@ class RequestRateRetryIteratorTest {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            if (Math.random() < 0.8) {
-                throw S3Exception.builder().message("Please reduce your request rate.").build();
+            if (Math.random() < errorLikeliness) {
+                throw S3Exception.builder().message(REDUCE_REQUEST_RATE_MESSAGE).build();
             }
             this.counter++;
             return null;

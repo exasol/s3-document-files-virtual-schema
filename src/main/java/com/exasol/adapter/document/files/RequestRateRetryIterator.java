@@ -8,7 +8,7 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
 /**
- * This iterators wraps an AWS S3 iterator and retries the next() method if it fails with a "Please reduce your request
+ * This iterator wraps an AWS S3 iterator and retries the {@code next()} method if it fails with a "Please reduce your request
  * rate".
  */
 class RequestRateRetryIterator implements Iterator<ListObjectsV2Response> {

@@ -1,6 +1,6 @@
 # Virtual Schema for document data in files on AWS S3 1.6.0, released 2021-??-??
 
-Code name: Improved performance of small file loading
+Code name: Improved performance of small files loading
 
 ## Summary
 

@@ -1,5 +1,6 @@
 provider "aws" {
   region = "eu-central-1"
+  profile = var.aws_profile
 }
 
 module "exasol_setup" {
@@ -8,7 +9,6 @@ module "exasol_setup" {
   owner = var.owner
   deputy = var.deputy
   project = var.project
-  # Don't change cluster config. It will destroy comparability to the test history.
   datanode_count = var.override_node_count
   datanode_instance_type = var.override_instance_type
 }

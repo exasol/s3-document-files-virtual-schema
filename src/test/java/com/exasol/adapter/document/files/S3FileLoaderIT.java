@@ -35,10 +35,11 @@ class S3FileLoaderIT {
     private static final String CONTENT_1 = "content-1";
     private static final String CONTENT_2 = "content-2";
     private static final String CONTENT_OTHER = "other";
+    private static S3Client s3;
 
     @BeforeAll
     static void beforeAll() {
-        final S3Client s3 = S3Client.builder().endpointOverride(LOCAL_STACK_CONTAINER.getEndpointOverride(S3))
+        s3 = S3Client.builder().endpointOverride(LOCAL_STACK_CONTAINER.getEndpointOverride(S3))
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials
                         .create(LOCAL_STACK_CONTAINER.getAccessKey(), LOCAL_STACK_CONTAINER.getSecretKey())))
                 .region(Region.of(LOCAL_STACK_CONTAINER.getRegion())).build();
@@ -60,7 +61,8 @@ class S3FileLoaderIT {
 
     private List<String> runAndGetFirstLines(final S3FileLoader s3FileLoader) {
         final List<String> result = new ArrayList<>();
-        s3FileLoader.loadFiles().forEachRemaining(file -> result.add(readFirstLine(file.getInputStream())));
+        s3FileLoader.loadFiles()
+                .forEachRemaining(file -> result.add(readFirstLine(file.getContent().getInputStream())));
         return result;
     }
 

@@ -5,6 +5,7 @@ import com.exasol.adapter.document.files.TestConfig;
 
 import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
 public class AwsS3TestSetup implements S3TestSetup {
@@ -21,6 +22,12 @@ public class AwsS3TestSetup implements S3TestSetup {
     @Override
     public S3Client getS3Client() {
         return S3Client.builder().region(Region.of(this.region)).credentialsProvider(this.credentialsProvider).build();
+    }
+
+    @Override
+    public S3AsyncClient getS3AsyncClient() {
+        return S3AsyncClient.builder().region(Region.of(this.region)).credentialsProvider(this.credentialsProvider)
+                .build();
     }
 
     @Override

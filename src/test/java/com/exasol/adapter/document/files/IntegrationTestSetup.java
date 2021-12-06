@@ -2,13 +2,13 @@ package com.exasol.adapter.document.files;
 
 import static com.exasol.adapter.document.UdfEntryPoint.*;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
-import java.util.function.Supplier;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.exasol.adapter.document.UdfEntryPoint;
 import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
@@ -124,32 +124,28 @@ public class IntegrationTestSetup implements AutoCloseable {
         return this.s3;
     }
 
-    protected VirtualSchema createVirtualSchema(final String schemaName, final Supplier<InputStream> mapping)
-            throws IOException {
-        try (final InputStream stream = mapping.get()) {
-            return createVirtualSchema(schemaName, new String(stream.readAllBytes(), StandardCharsets.UTF_8));
-        }
-    }
-
     protected VirtualSchema createVirtualSchema(final String schemaName, final String mapping) {
         return createVirtualSchema(schemaName, mapping, this.connectionDefinition);
     }
 
     protected VirtualSchema createVirtualSchema(final String schemaName, final String mapping,
             final ConnectionDefinition connection) {
-        try {
-            this.bucket.uploadStringContent(mapping, "mapping.json");
-            final VirtualSchema virtualSchema = getPreconfiguredVirtualSchemaBuilder(schemaName)
-                    .connectionDefinition(connection)//
-                    .properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json")).build();
-            this.createdObjects.add(virtualSchema);
-            return virtualSchema;
-        } catch (final BucketAccessException | TimeoutException | InterruptedException exception) {
-            if (exception instanceof InterruptedException) {
-                Thread.currentThread().interrupt();
-            }
-            throw new IllegalStateException("Failed to create Virtual Schema.", exception);
+        final VirtualSchema virtualSchema = getPreconfiguredVirtualSchemaBuilder(schemaName)
+                .connectionDefinition(connection)//
+                .properties(getVirtualSchemaProperties(mapping)).build();
+        this.createdObjects.add(virtualSchema);
+        return virtualSchema;
+    }
+
+    @NotNull
+    private Map<String, String> getVirtualSchemaProperties(final String mapping) {
+        final Map<String, String> properties = new HashMap<>(Map.of("MAPPING", mapping));
+        final String debugProperty = System.getProperty("test.debug", "");
+        final String profileProperty = System.getProperty("test.jprofiler", "");
+        if (!debugProperty.isBlank() || !profileProperty.isBlank()) {
+            properties.put("MAX_PARALLEL_UDFS", debugProperty);
         }
+        return properties;
     }
 
     public void dropCreatedObjects() {

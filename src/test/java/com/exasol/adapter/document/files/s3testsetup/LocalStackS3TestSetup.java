@@ -8,6 +8,7 @@ import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
 public class LocalStackS3TestSetup implements S3TestSetup {
@@ -21,6 +22,14 @@ public class LocalStackS3TestSetup implements S3TestSetup {
     @Override
     public S3Client getS3Client() {
         return S3Client.builder().endpointOverride(this.localStackContainer.getEndpointOverride(S3))
+                .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials
+                        .create(this.localStackContainer.getAccessKey(), this.localStackContainer.getSecretKey())))
+                .region(Region.of(this.localStackContainer.getRegion())).build();
+    }
+
+    @Override
+    public S3AsyncClient getS3AsyncClient() {
+        return S3AsyncClient.builder().endpointOverride(this.localStackContainer.getEndpointOverride(S3))
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials
                         .create(this.localStackContainer.getAccessKey(), this.localStackContainer.getSecretKey())))
                 .region(Region.of(this.localStackContainer.getRegion())).build();

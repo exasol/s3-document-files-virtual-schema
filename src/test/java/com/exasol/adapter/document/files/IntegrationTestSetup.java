@@ -25,7 +25,7 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-4.0.0-SNAPSHOT-s3-1.6.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-4.0.0-s3-1.6.0.jar";
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
             Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
@@ -143,7 +143,7 @@ public class IntegrationTestSetup implements AutoCloseable {
         final String debugProperty = System.getProperty("test.debug", "");
         final String profileProperty = System.getProperty("test.jprofiler", "");
         if (!debugProperty.isBlank() || !profileProperty.isBlank()) {
-            properties.put("MAX_PARALLEL_UDFS", debugProperty);
+            properties.put("MAX_PARALLEL_UDFS", "1");
         }
         return properties;
     }

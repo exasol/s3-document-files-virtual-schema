@@ -34,6 +34,14 @@ class S3UriTest {
         assertThat(testUri.getEndpoint(), equalTo("amazonaws.com"));
         assertThat(testUri.getKey(), equalTo("test"));
     }
+    void testBucketWithDashInBucketname() {
+        var testUri = S3Uri.fromString("https://aws-examplebucket1.s3.us-west-2.amazonaws.com/test");
+        assertThat(testUri.getBucket(),
+                equalTo("aws-examplebucket1"));
+        assertThat(testUri.getRegion(), equalTo("us-west-2"));
+        assertThat(testUri.getEndpoint(), equalTo("amazonaws.com"));
+        assertThat(testUri.getKey(), equalTo("test"));
+    }
     @CsvSource({ //
             "https://awsexamplebucket1.s3.us-west-2.amazonaws.com/photos/puppy.jpg, false,",
             "https://awsexamplebucket1.s3.us-west-2.aws.example.com/photos/puppy.jpg, true, aws.example.com", //

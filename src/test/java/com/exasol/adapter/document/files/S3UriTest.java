@@ -34,6 +34,7 @@ class S3UriTest {
         assertThat(testUri.getEndpoint(), equalTo("amazonaws.com"));
         assertThat(testUri.getKey(), equalTo("test"));
     }
+    @Test
     void testBucketWithDashInBucketname() {
         var testUri = S3Uri.fromString("https://aws-examplebucket1.s3.us-west-2.amazonaws.com/test");
         assertThat(testUri.getBucket(),

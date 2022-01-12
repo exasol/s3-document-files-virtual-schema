@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exasol</groupId>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>1.6.0</version>
+    <version>1.7.0</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema</url>
@@ -16,7 +16,7 @@
         <jacoco.version>0.8.7</jacoco.version>
         <gpg.skip>true</gpg.skip>
         <org.testcontainers.version>1.16.2</org.testcontainers.version>
-        <vs-commom-document-files.version>4.0.0</vs-commom-document-files.version>
+        <vs-commom-document-files.version>4.0.1</vs-commom-document-files.version>
         <!--
             M4 does not fail tests if beforeAll fails
             M5 fails in integration tests with a strange error
@@ -187,7 +187,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>udf-debugging-java</artifactId>
-            <version>0.4.1</version>
+            <version>0.5.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

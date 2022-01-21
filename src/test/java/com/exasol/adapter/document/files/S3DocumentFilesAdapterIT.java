@@ -101,7 +101,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         final DatabaseObjectException exception = assertThrows(DatabaseObjectException.class,
                 virtualSchemaBuilder::build);
         assertThat(exception.getCause().getMessage(), containsString(
-                "E-VSD-94: Invalid connection. The connection definition has a invalid syntax. Please check the user-guide at: 'https://github.com/exasol/s3-document-files-virtual-schema/blob/main/doc/user_guide/user_guide.md'."));
+                "E-VSD-94: Invalid connection. The connection definition has a invalid syntax. Please check the user-guide at: https://github.com/exasol/s3-document-files-virtual-schema/blob/main/doc/user_guide/user_guide.md."));
     }
 
     @Test

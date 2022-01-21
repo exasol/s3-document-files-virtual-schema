@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 class S3UriTest {
     @CsvSource({ //
@@ -27,7 +26,7 @@ class S3UriTest {
     }
 
     @CsvSource({ //
-            "https://awsexamplebucket1.s3.us-west-2.amazonaws.com/photos/puppy.jpg, false,",
+            "https://awsexamplebucket1.s3.us-west-2.amazonaws.com/photos/puppy.jpg, false, amazonaws.com",
             "https://awsexamplebucket1.s3.us-west-2.aws.example.com/photos/puppy.jpg, true, aws.example.com", //
             "https://awsexamplebucket1.s3.us-west-2.127.0.0.1:1234/photos/puppy.jpg, true, 127.0.0.1:1234"//
     })
@@ -61,14 +60,5 @@ class S3UriTest {
     @ParameterizedTest
     void testInvalidSyntax(final String invalidUrl) {
         assertThrows(IllegalArgumentException.class, () -> S3Uri.fromString(invalidUrl));
-    }
-
-    @ValueSource(strings = { //
-            "https://awsexamplebucket1.s3.us-west-2.amazonaws.com/photos/puppy.jpg, true",
-            "http://awsexamplebucket1.s3.us-west-2.amazonaws.com/photos/puppy.jpg, false"//
-    })
-    @ParameterizedTest
-    void testToString(final String uri) {
-        assertThat(S3Uri.fromString(uri).toString(), equalTo(uri));
     }
 }

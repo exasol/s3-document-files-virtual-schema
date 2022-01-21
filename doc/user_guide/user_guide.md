@@ -17,7 +17,7 @@ Next create the Adapter Script:
  ```sql
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-4.0.1-s3-1.7.0.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-5.0.0-s3-1.7.0.jar;
 /
 ```
 
@@ -30,7 +30,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   CONNECTION_NAME VARCHAR(500))
   EMITS(...) AS
     %scriptclass com.exasol.adapter.document.UdfEntryPoint;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-4.0.1-s3-1.7.0.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-5.0.0-s3-1.7.0.jar;
 /
 ```
 
@@ -40,23 +40,32 @@ Now you need to define a connection that includes the location of stored files:
 
  ```
 CREATE CONNECTION S3_CONNECTION
-    TO 'AWS URI'
-    USER 'AWS ACCESS KEY'
-    IDENTIFIED BY 'AWS SECRET KEY';
+    TO ''
+    USER ''
+    IDENTIFIED BY '{
+        "awsAccessKeyId": "<AWS ACCESS KEY ID>", 
+        "awsSecretAccessKey": "<AWS SECRET KEY ID>", 
+        "awsRegion": "<AWS REGION>", 
+        "s3Bucket": "<S3 BUCKET NAME>" 
+    }';
 ``` 
 
-The address (`TO`) must have one of these formats:
+The connection stores all connection details as JSON in the IDENTIFIED_BY part. There you can use the following keys:
 
-* `https://BUCKET.s3.REGION.amazonaws.com/`
-* `http(s)://BUCKET.s3.REGION.CUSTOM_ENDPOINT/`
+| Key                   | Default        |  Required  | Example                  |
+|-----------------------|----------------|:----------:|--------------------------|
+| `awsAccessKeyId`      |                |     ✓      | `"ABCDABCDABCDABCD1234"` |
+| `awsSecretAccessKey`  |                |     ✓      |                          |
+| `awsRegion`           |                |     ✓      | `"eu-central-1"`         |
+| `s3Bucket`            |                |     ✓      | `"my-s3-bucket"`         |
+| `awsSessionToken`     |                |     ✘      |                          |
+| `awsEndpointOverride` | _AWS endpoint_ |     ✘      | `"s3.my-company.de"`     |
+| `s3PathStyleAccess`   | `false`        |     ✘      | `true`                   |
+| `useSsl`              | `true`         |     ✘      | `false`                  |
 
-You can not use two-factor authentication (session credentials) with this adapter. Instead, you need to create a machine account without two-factor authentication.
+By setting `awsSessionToken` you can use two-factor authentication with this Virtual Schema adapter. However, please keep in mind that the token will expire withing a few hours. So usually it's better to create a machine user without two-factor authentication enabled.
 
-Please mind the trailing slash. The adapter will simply join this string with the `source` from you mapping definitions. You can also add a prefix in connection object after the trailing slash. For example:
-
-```
-https://BUCKET.s3.REGION.amazonaws.com/my-folder/
-```
+This adapter currently support S3 path-style-access. However, the feature is deprecated by AWS. In case AWS will stop supporting it in their SDK we will also stop supporting.
 
 ## Defining the Schema Mapping
 

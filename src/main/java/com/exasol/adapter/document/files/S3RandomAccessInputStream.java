@@ -15,11 +15,13 @@ class S3RandomAccessInputStream extends RandomAccessInputStream {
     private static final Logger LOGGER = Logger.getLogger(S3RandomAccessInputStream.class.getName());
     private final S3Client s3;
     private final S3ObjectDescription s3ObjectToRead;
+    private final String bucket;
     long position = 0;
 
-    S3RandomAccessInputStream(final S3Client s3, final S3ObjectDescription s3ObjectToRead) {
+    S3RandomAccessInputStream(final S3Client s3, final S3ObjectDescription s3ObjectToRead, final String bucket) {
         this.s3 = s3;
         this.s3ObjectToRead = s3ObjectToRead;
+        this.bucket = bucket;
     }
 
     @Override
@@ -44,8 +46,8 @@ class S3RandomAccessInputStream extends RandomAccessInputStream {
         if (this.position < getLength()) {
             final String range = getRange(this.position, this.position + 1);
             final GetObjectRequest request = GetObjectRequest.builder()//
-                    .bucket(this.s3ObjectToRead.getUri().getBucket())//
-                    .key(this.s3ObjectToRead.getUri().getKey())//
+                    .bucket(this.bucket)//
+                    .key(this.s3ObjectToRead.getKey())//
                     .range(range)//
                     .build();
             final ResponseBytes<GetObjectResponse> result = this.s3.getObject(request, ResponseTransformer.toBytes());
@@ -72,8 +74,8 @@ class S3RandomAccessInputStream extends RandomAccessInputStream {
         if (actualReadLength > 0) {
             final String range = getRange(this.position, this.position + actualReadLength);
             final GetObjectRequest request = GetObjectRequest.builder()//
-                    .bucket(this.s3ObjectToRead.getUri().getBucket())//
-                    .key(this.s3ObjectToRead.getUri().getKey())//
+                    .bucket(this.bucket)//
+                    .key(this.s3ObjectToRead.getKey())//
                     .range(range)//
                     .build();
             final ResponseBytes<GetObjectResponse> result = this.s3.getObject(request, ResponseTransformer.toBytes());

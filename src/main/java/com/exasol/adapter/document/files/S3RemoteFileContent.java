@@ -23,38 +23,41 @@ class S3RemoteFileContent implements RemoteFileContent {
     private final S3Client s3;
     private final S3AsyncClient s3AsyncClient;
     private final S3ObjectDescription s3ObjectToRead;
+    private final String bucket;
 
     /**
      * Create a new instance of {@link S3RemoteFileContent}.
      * 
      * @param s3             s3 client
      * @param s3ObjectToRead s3 uri
+     * @param bucket         bucket to read from
      */
     public S3RemoteFileContent(final S3Client s3, final S3AsyncClient s3AsyncClient,
-            final S3ObjectDescription s3ObjectToRead) {
+            final S3ObjectDescription s3ObjectToRead, final String bucket) {
         this.s3 = s3;
         this.s3AsyncClient = s3AsyncClient;
         this.s3ObjectToRead = s3ObjectToRead;
+        this.bucket = bucket;
     }
 
     @Override
     public InputStream getInputStream() {
-        return this.s3.getObject(GetObjectRequest.builder().bucket(this.s3ObjectToRead.getUri().getBucket())
-                .key(this.s3ObjectToRead.getUri().getKey()).build(), ResponseTransformer.toInputStream());
+        return this.s3.getObject(
+                GetObjectRequest.builder().bucket(this.bucket).key(this.s3ObjectToRead.getKey()).build(),
+                ResponseTransformer.toInputStream());
     }
 
     @Override
     public RandomAccessInputStream getRandomAccessInputStream() {
-        return new RandomAccessInputStreamCache(new S3RandomAccessInputStream(this.s3, this.s3ObjectToRead), SIZE_1_MB);
+        return new RandomAccessInputStreamCache(
+                new S3RandomAccessInputStream(this.s3, this.s3ObjectToRead, this.bucket), SIZE_1_MB);
     }
 
     @Override
     public Future<byte[]> loadAsync() {
-        final Future<ResponseBytes<GetObjectResponse>> responseFuture = this.s3AsyncClient
-                .getObject(
-                        request -> request.bucket(this.s3ObjectToRead.getUri().getBucket())
-                                .key(this.s3ObjectToRead.getUri().getKey()).build(),
-                        AsyncResponseTransformer.toBytes());
+        final Future<ResponseBytes<GetObjectResponse>> responseFuture = this.s3AsyncClient.getObject(
+                request -> request.bucket(this.bucket).key(this.s3ObjectToRead.getKey()).build(),
+                AsyncResponseTransformer.toBytes());
         return new ContentFuture(responseFuture);
     }
 

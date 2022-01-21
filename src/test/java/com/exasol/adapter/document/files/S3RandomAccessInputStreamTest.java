@@ -32,7 +32,7 @@ class S3RandomAccessInputStreamTest extends RandomAccessInputStreamTestBase {
 
     @Override
     protected RandomAccessInputStream getSeekableInputStream() {
-        return new S3RandomAccessInputStream(this.s3Client, new S3ObjectDescription(
-                new S3Uri(false, TEST_BUCKET, "eu-central-1", "", TEST_DATA_KEY), this.dataSize));
+        return new S3RandomAccessInputStream(this.s3Client, new S3ObjectDescription(TEST_DATA_KEY, this.dataSize),
+                TEST_BUCKET);
     }
 }

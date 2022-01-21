@@ -1,8 +1,9 @@
 package com.exasol.adapter.document.files;
 
-import static com.exasol.adapter.document.UdfEntryPoint.*;
+import static com.exasol.adapter.document.GenericUdfCallHandler.*;
 
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.*;
 import java.util.*;
@@ -20,12 +21,13 @@ import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
 import com.exasol.exasoltestsetup.*;
 import com.exasol.udfdebugging.UdfTestSetup;
 
+import jakarta.json.*;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-4.0.0-s3-1.6.0.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-5.0.0-s3-1.7.0.jar";
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
             Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
@@ -38,26 +40,26 @@ public class IntegrationTestSetup implements AutoCloseable {
     private final List<DatabaseObject> createdObjects = new LinkedList<>();
     private final S3TestSetup s3TestSetup;
     private final S3Client s3;
+    private final UdfTestSetup udfTestSetup;
+    private JsonWriter writer;
 
     public IntegrationTestSetup(final S3TestSetup s3TestSetup, final String s3BucketName)
-            throws SQLException, BucketAccessException, TimeoutException, FileNotFoundException {
+            throws SQLException, BucketAccessException, TimeoutException, FileNotFoundException, InterruptedException {
         this.s3TestSetup = s3TestSetup;
         this.s3BucketName = s3BucketName;
         this.connection = this.exasolTestSetup.createConnection();
         this.statement = this.connection.createStatement();
         this.statement.executeUpdate("ALTER SESSION SET QUERY_CACHE = 'OFF';");
-        final UdfTestSetup udfTestSetup = new UdfTestSetup(this.exasolTestSetup);
-        this.exasolObjectFactory = new ExasolObjectFactory(this.connection,
-                ExasolObjectConfiguration.builder().withJvmOptions(udfTestSetup.getJvmOptions()).build());
-        final ExasolSchema adapterSchema = this.exasolObjectFactory.createSchema("ADAPTER");
         this.bucket = this.exasolTestSetup.getDefaultBucket();
+        this.udfTestSetup = new UdfTestSetup(this.exasolTestSetup, this.connection);
+        final List<String> jvmOptions = new ArrayList(Arrays.asList(this.udfTestSetup.getJvmOptions()));
+        this.exasolObjectFactory = new ExasolObjectFactory(this.connection,
+                ExasolObjectConfiguration.builder().withJvmOptions(jvmOptions.toArray(String[]::new)).build());
+        final ExasolSchema adapterSchema = this.exasolObjectFactory.createSchema("ADAPTER");
         this.connectionDefinition = getConnectionDefinition();
         this.adapterScript = createAdapterScript(adapterSchema);
         createUdf(adapterSchema);
         this.s3 = this.s3TestSetup.getS3Client();
-        if (System.getProperty("test.udf-log", "false").equals("true")) {
-            getStatement().executeUpdate("ALTER SESSION SET SCRIPT_OUTPUT_ADDRESS = '127.0.0.1:3000';");
-        }
     }
 
     private static void createUdf(final ExasolSchema adapterSchema) {
@@ -69,8 +71,23 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     private ConnectionDefinition getConnectionDefinition() {
-        return this.exasolObjectFactory.createConnectionDefinition("S3_CONNECTION", getS3Address(),
-                this.s3TestSetup.getUsername(), this.s3TestSetup.getPassword());
+        final JsonObject configJson = Json.createObjectBuilder()//
+                .add("awsEndpointOverride", getInDatabaseS3Address())//
+                .add("awsRegion", this.s3TestSetup.getRegion())//
+                .add("s3Bucket", this.s3BucketName)//
+                .add("awsAccessKeyId", this.s3TestSetup.getUsername())//
+                .add("awsSecretAccessKey", this.s3TestSetup.getPassword()).build();
+        return this.exasolObjectFactory.createConnectionDefinition("S3_CONNECTION", "", "", toJson(configJson));
+    }
+
+    private String toJson(final JsonObject configJson) {
+        try (final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                final JsonWriter writer = Json.createWriter(outputStream)) {
+            writer.write(configJson);
+            return outputStream.toString(StandardCharsets.UTF_8);
+        } catch (final IOException exception) {
+            throw new UncheckedIOException("Failed to serialize connection settings", exception);
+        }
     }
 
     private String getS3Address() {
@@ -108,6 +125,7 @@ public class IntegrationTestSetup implements AutoCloseable {
     @Override
     public void close() throws Exception {
         try {
+            this.udfTestSetup.close();
             this.statement.close();
             this.connection.close();
             this.exasolTestSetup.close();
@@ -144,6 +162,10 @@ public class IntegrationTestSetup implements AutoCloseable {
         final String profileProperty = System.getProperty("test.jprofiler", "");
         if (!debugProperty.isBlank() || !profileProperty.isBlank()) {
             properties.put("MAX_PARALLEL_UDFS", "1");
+        }
+        if (System.getProperty("test.vs-logs", "false").equals("true")) {
+            properties.put("DEBUG_ADDRESS", "127.0.0.1:3001");
+            properties.put("LOG_LEVEL", "ALL");
         }
         return properties;
     }

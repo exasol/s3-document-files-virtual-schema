@@ -47,7 +47,7 @@ For the document Virtual Schemas, and by that also the S3 Virtual Schema, this i
 To install the Virtual Schema adapter, download its latest jar from the [releases](https://github.com/exasol/s3-document-files-virtual-schema/releases) and upload to BucketFS:
 
 ``` shell script
-curl -I -X PUT -T document-files-virtual-schema-dist-4.0.0-s3-1.6.0.jar http://w:writepw@<YOUR_DB_IP>:2580/default/
+curl -I -X PUT -T document-files-virtual-schema-dist-5.0.0-s3-1.7.0.jar http://w:writepw@<YOUR_DB_IP>:2580/default/
 ```
 
 (If you have never used BucketFS, you can check out [its documentation](https://docs.exasol.com/database_concepts/bucketfs/bucketfs.htm))
@@ -59,7 +59,7 @@ CREATE SCHEMA ADAPTER;
 
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-4.0.0-s3-1.6.0.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-5.0.0-s3-1.7.0.jar;
 /
 
 CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
@@ -68,7 +68,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   CONNECTION_NAME VARCHAR(500))
   EMITS(...) AS
     %scriptclass com.exasol.adapter.document.UdfEntryPoint;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-4.0.0-s3-1.6.0.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-5.0.0-s3-1.7.0.jar;
 /
 ```
 
@@ -81,19 +81,19 @@ The virtual schema needs to connect to your AWS bucket. For that it needs an AWS
 
 Now you need to store this access key-pair in your Exasol database so that the Virtual Schema can use it. For that we use a `CONNECTION` definition, that stores your keys securely.
 
- ```sql
+ ```
 CREATE CONNECTION S3_CONNECTION
-    TO 'https://YOUR_BUCKET.s3.YOUR_REGION.amazonaws.com/'
-    USER 'AWS ACCESS KEY'
-    IDENTIFIED BY 'AWS SECRET KEY';
+    TO ''
+    USER ''
+    IDENTIFIED BY '{
+        "awsAccessKeyId": "<AWS ACCESS KEY ID>", 
+        "awsSecretAccessKey": "<AWS SECRET KEY ID>", 
+        "awsRegion": "<AWS REGION>", 
+        "s3Bucket": "<S3 BUCKET NAME>" 
+    }';
 ``` 
 
-The address (`TO`) must have one of these formats:
-
-* `https://BUCKET.s3.YOUR_REGION.amazonaws.com/`
-* `http(s)://BUCKET.s3.YOUR_REGION.CUSTOM_ENDPOINT/` (for a local test version of S3)
-
-Please mind the trailing slash! For details see the [user-guide](../user_guide/user_guide.md).
+For details see the [user-guide](../user_guide/user_guide.md#user-content-creating-a-connection).
 
 ## Creating a Mapping Definition
 

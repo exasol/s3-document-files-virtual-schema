@@ -33,8 +33,8 @@ class S3RemoteFileContentTest {
         final S3AsyncClient s3AsyncClient = testSetup.getS3AsyncClient();
         s3Client.createBucket(CreateBucketRequest.builder().bucket(TEST_BUCKET).build());
         s3Client.putObject(b -> b.bucket(TEST_BUCKET).key(TEST_DATA_KEY), RequestBody.fromString(TEST_DATA_VALUE));
-        remoteFileContent = new S3RemoteFileContent(s3Client, s3AsyncClient, new S3ObjectDescription(
-                new S3Uri(false, TEST_BUCKET, "eu-central-1", "", TEST_DATA_KEY), TEST_DATA_VALUE.length()));
+        remoteFileContent = new S3RemoteFileContent(s3Client, s3AsyncClient,
+                new S3ObjectDescription(TEST_DATA_KEY, TEST_DATA_VALUE.length()), TEST_BUCKET);
     }
 
     @AfterAll

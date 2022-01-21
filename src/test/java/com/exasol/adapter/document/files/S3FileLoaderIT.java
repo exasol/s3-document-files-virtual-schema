@@ -16,7 +16,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import com.exasol.ExaConnectionInformation;
+import com.exasol.adapter.document.files.connection.S3ConnectionProperties;
 import com.exasol.adapter.document.files.stringfilter.wildcardexpression.WildcardExpression;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -36,6 +36,7 @@ class S3FileLoaderIT {
     private static final String CONTENT_2 = "content-2";
     private static final String CONTENT_OTHER = "other";
     private static S3Client s3;
+    private static S3ConnectionProperties connectionInformation;
 
     @BeforeAll
     static void beforeAll() {
@@ -48,14 +49,14 @@ class S3FileLoaderIT {
         s3.putObject(b -> b.bucket(TEST_BUCKET).key("file-1.json"), RequestBody.fromBytes(CONTENT_1.getBytes()));
         s3.putObject(b -> b.bucket(TEST_BUCKET).key("file-2.json"), RequestBody.fromBytes(CONTENT_2.getBytes()));
         s3.putObject(b -> b.bucket(TEST_BUCKET).key("other.json"), RequestBody.fromBytes(CONTENT_OTHER.getBytes()));
+        connectionInformation = new LocalStackS3ConnectionInformationFactory().getConnectionInfo(LOCAL_STACK_CONTAINER,
+                TEST_BUCKET);
     }
 
     @Test
     void testReadFile() {
-        final ExaConnectionInformation connectionInformation = new LocalStackS3ConnectionInformation(
-                LOCAL_STACK_CONTAINER, TEST_BUCKET, "file-1.json");
-        final S3FileLoader s3FileLoader = new S3FileLoader(
-                WildcardExpression.forNonWildcardString(connectionInformation.getAddress()), connectionInformation);
+        final S3FileLoader s3FileLoader = new S3FileLoader(WildcardExpression.forNonWildcardString("file-1.json"),
+                connectionInformation);
         assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1));
     }
 
@@ -73,18 +74,14 @@ class S3FileLoaderIT {
     })
     @ParameterizedTest
     void testReadFilesWithWildcard(final String fileGlob) {
-        final ExaConnectionInformation connectionInformation = new LocalStackS3ConnectionInformation(
-                LOCAL_STACK_CONTAINER, TEST_BUCKET, fileGlob);
-        final WildcardExpression filePattern = WildcardExpression.fromGlob(connectionInformation.getAddress());
+        final WildcardExpression filePattern = WildcardExpression.fromGlob(fileGlob);
         final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, connectionInformation);
         assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1, CONTENT_2));
     }
 
     @Test
     void testReadAllFiles() {
-        final ExaConnectionInformation connectionInformation = new LocalStackS3ConnectionInformation(
-                LOCAL_STACK_CONTAINER, TEST_BUCKET, "*");
-        final WildcardExpression filePattern = WildcardExpression.fromGlob(connectionInformation.getAddress());
+        final WildcardExpression filePattern = WildcardExpression.fromGlob("*");
         final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, connectionInformation);
         assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1, CONTENT_2, CONTENT_OTHER));
     }

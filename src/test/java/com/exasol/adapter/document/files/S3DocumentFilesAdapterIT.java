@@ -8,7 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
@@ -22,6 +23,7 @@ import com.exasol.adapter.document.edml.serializer.EdmlSerializer;
 import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
 import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
 import com.exasol.bucketfs.BucketAccessException;
+import com.exasol.dbbuilder.dialects.DatabaseObjectException;
 import com.exasol.dbbuilder.dialects.exasol.ConnectionDefinition;
 import com.exasol.dbbuilder.dialects.exasol.VirtualSchema;
 import com.exasol.matcher.TypeMatchMode;
@@ -88,22 +90,18 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     }
 
     @Test
-    void testEmptyConnectionString() throws BucketAccessException, TimeoutException {
+    void testInvalidConnection() throws BucketAccessException, TimeoutException {
         SETUP.getBucket().uploadInputStream(() -> getClass().getClassLoader().getResourceAsStream("simpleMapping.json"),
                 "mapping.json");
-        final ConnectionDefinition connection = SETUP.getExasolObjectFactory().createConnectionDefinition(
-                "EMPTY_S3_CONNECTION", "", SETUP.getS3TestSetup().getUsername(), SETUP.getS3TestSetup().getPassword());
-        final VirtualSchema virtualSchema = SETUP.getPreconfiguredVirtualSchemaBuilder("EMPTY_CONNECTION_SCHEMA")
-                .connectionDefinition(connection).properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json"))
-                .build();
-        try {
-            final SQLDataException exception = assertThrows(SQLDataException.class,
-                    () -> SETUP.getStatement().executeQuery("SELECT * FROM EMPTY_CONNECTION_SCHEMA.MY_TABLE"));
-            assertThat(exception.getMessage(), containsString(
-                    "E-S3VS-1: The given S3 Bucket string 'testData-' has an invalid format. Expected format: http(s)://BUCKET.s3.REGION.amazonaws.com/KEY or http(s)://BUCKET.s3.REGION.CUSTOM_ENDPOINT/KEY. Note that the address from the CONNECTION and the source are concatenated. Change the address in your CONNECTION and the source in your mapping definition."));
-        } finally {
-            virtualSchema.drop();
-        }
+        final ConnectionDefinition connection = SETUP.getExasolObjectFactory()
+                .createConnectionDefinition("EMPTY_S3_CONNECTION", "", "", "{");
+        final VirtualSchema.Builder virtualSchemaBuilder = SETUP
+                .getPreconfiguredVirtualSchemaBuilder("EMPTY_CONNECTION_SCHEMA").connectionDefinition(connection)
+                .properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json"));
+        final DatabaseObjectException exception = assertThrows(DatabaseObjectException.class,
+                virtualSchemaBuilder::build);
+        assertThat(exception.getCause().getMessage(), containsString(
+                "E-VSD-94: Invalid connection. The connection definition has a invalid syntax. Please check the user-guide at: 'https://github.com/exasol/s3-document-files-virtual-schema/blob/main/doc/user_guide/user_guide.md'."));
     }
 
     @Test

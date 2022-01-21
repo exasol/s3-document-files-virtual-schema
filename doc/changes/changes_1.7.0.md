@@ -1,4 +1,4 @@
-# Virtual Schema for document data in files on AWS S3 1.7.0, released 2022-01-21
+# Virtual Schema for document data in files on AWS S3 1.7.0, released 2022-01-??
 
 Code name: Unified Connection Definition
 

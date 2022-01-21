@@ -2,7 +2,9 @@ package com.exasol.adapter.document.files.connection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -43,5 +45,14 @@ class S3ConnectionPropertiesReaderTest {
                 () -> assertThat(properties.getAwsSessionToken(), equalTo("myToken")),
                 () -> assertThat(properties.isS3PathStyleAccess(), equalTo(true)),
                 () -> assertThat(properties.isUseSsl(), equalTo(false)));
+    }
+
+    @Test
+    void testMissingRequired() {
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> runReader("{\"awsAccessKeyId\": \"myKey\", \"awsSecretAccessKey\": \"mySecretAccessKey\", "
+                        + "\"awsRegion\": \"eu-central-1\" }"));
+        assertThat(exception.getMessage(), startsWith(
+                "E-VSD-93: Invalid connection. The connection definition does not specify the required property 's3Bucket'. Please check the user-guide at:"));
     }
 }

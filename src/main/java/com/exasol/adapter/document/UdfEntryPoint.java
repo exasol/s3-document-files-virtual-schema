@@ -20,7 +20,7 @@ public class UdfEntryPoint {
      *
      * @param exaMetadata exasol metadata
      * @param exaIterator iterator
-     * @throws Exception if data can't get loaded
+     * @throws Exception if data can't get be loaded
      */
     @SuppressWarnings({ "java:S112", "java:S1130" }) // Exception is too generic and not thrown. This signature is
                                                      // however given by the

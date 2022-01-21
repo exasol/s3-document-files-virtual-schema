@@ -50,7 +50,7 @@ CREATE CONNECTION S3_CONNECTION
     }';
 ``` 
 
-The connection stores all connection details as JSON in the IDENTIFIED_BY part. There you can use the following keys:
+The connection stores all connection details as JSON in the `IDENTIFIED BY` part. There you can use the following keys:
 
 | Key                   | Default        |  Required  | Example                  |
 |-----------------------|----------------|:----------:|--------------------------|
@@ -63,9 +63,9 @@ The connection stores all connection details as JSON in the IDENTIFIED_BY part. 
 | `s3PathStyleAccess`   | `false`        |     ✘      | `true`                   |
 | `useSsl`              | `true`         |     ✘      | `false`                  |
 
-By setting `awsSessionToken` you can use two-factor authentication with this Virtual Schema adapter. However, please keep in mind that the token will expire withing a few hours. So usually it's better to create a machine user without two-factor authentication enabled.
+By setting `awsSessionToken` you can use two-factor authentication with this Virtual Schema adapter. However, please keep in mind that the token will expire within few hours. So usually it's better to create a machine user without two-factor authentication enabled.
 
-This adapter currently support S3 path-style-access. However, the feature is deprecated by AWS. In case AWS will stop supporting it in their SDK we will also stop supporting.
+This adapter currently support S3 path-style-access. However, the feature is deprecated by AWS. In case AWS will stop supporting it in their SDK we will also stop supporting it.
 
 ## Defining the Schema Mapping
 

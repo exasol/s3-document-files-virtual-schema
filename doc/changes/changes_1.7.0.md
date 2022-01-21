@@ -4,15 +4,15 @@ Code name: Unified Connection Definition
 
 ## Summary
 
-This release changed the Syntax of the connection definition. From now on you need to provide a JSON formatted connection definition. For details about the new connection definition checkout the [user-guide](../user_guide/user_guide.md#user-content-creating-a-connection). This is a **breaking change** you need to update your connection definition in order to use this new version.
+This release changed the syntax of the connection definition. From now on you need to provide a JSON formatted connection definition. For details about the new connection definition please checkout the [user-guide](../user_guide/user_guide.md#user-content-creating-a-connection). This is a **breaking change** you need to update your connection definition in order to use this new version.
 
 The new connection definition standardizes connection definition for accessing S3 from Exasol. In the future all our products that access S3 will support this definition.
 
-The new connection definition allowed us to support all possible bucket names (before there were limitations with bucket names containing dots) and also supports S3 path-style access.
+The new connection definition allowed us to support all possible S3 bucket names (before there were limitations with bucket names containing dots) and also supports S3 path-style access.
 
 ## Features
 
-* #64: Use unified connection definition
+* #64: Used unified connection definition
 
 ## Dependency Updates
 

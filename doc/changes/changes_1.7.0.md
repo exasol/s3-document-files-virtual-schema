@@ -14,6 +14,10 @@ The new connection definition allowed us to support all possible S3 bucket names
 
 * #64: Used unified connection definition
 
+## Bug Fixes
+
+* #62: Fixed support for dots in bucket name
+
 ## Dependency Updates
 
 ### Compile Dependency Updates

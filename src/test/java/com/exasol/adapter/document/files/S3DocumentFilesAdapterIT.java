@@ -44,7 +44,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @BeforeAll
     static void beforeAll() throws Exception {
-        s3BucketName = "s3-virtual-schema-test-bucket-" + System.currentTimeMillis();
+        s3BucketName = "my.s3.virtual-schema-test-bucket-" + System.currentTimeMillis();
         AWS_S3_TEST_SETUP.getS3Client().createBucket(builder -> builder.bucket(s3BucketName));
         SETUP = new IntegrationTestSetup(AWS_S3_TEST_SETUP, s3BucketName);
         s3Cache = new S3Cache(SETUP.getS3Client(), s3BucketName, CACHE_BUCKET_NAME);

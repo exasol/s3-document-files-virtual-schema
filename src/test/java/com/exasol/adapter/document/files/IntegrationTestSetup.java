@@ -41,10 +41,9 @@ public class IntegrationTestSetup implements AutoCloseable {
     private final S3TestSetup s3TestSetup;
     private final S3Client s3;
     private final UdfTestSetup udfTestSetup;
-    private JsonWriter writer;
 
     public IntegrationTestSetup(final S3TestSetup s3TestSetup, final String s3BucketName)
-            throws SQLException, BucketAccessException, TimeoutException, FileNotFoundException, InterruptedException {
+            throws SQLException, BucketAccessException, TimeoutException, FileNotFoundException {
         this.s3TestSetup = s3TestSetup;
         this.s3BucketName = s3BucketName;
         this.connection = this.exasolTestSetup.createConnection();
@@ -56,7 +55,7 @@ public class IntegrationTestSetup implements AutoCloseable {
         this.exasolObjectFactory = new ExasolObjectFactory(this.connection,
                 ExasolObjectConfiguration.builder().withJvmOptions(jvmOptions.toArray(String[]::new)).build());
         final ExasolSchema adapterSchema = this.exasolObjectFactory.createSchema("ADAPTER");
-        this.connectionDefinition = getConnectionDefinition();
+        this.connectionDefinition = createConnectionDefinition();
         this.adapterScript = createAdapterScript(adapterSchema);
         createUdf(adapterSchema);
         this.s3 = this.s3TestSetup.getS3Client();
@@ -70,14 +69,23 @@ public class IntegrationTestSetup implements AutoCloseable {
                 .bucketFsContent(UdfEntryPoint.class.getName(), "/buckets/bfsdefault/default/" + ADAPTER_JAR).build();
     }
 
-    private ConnectionDefinition getConnectionDefinition() {
+    private ConnectionDefinition createConnectionDefinition() {
+        final JsonObject configJson = getConnectionConfig();
+        return createConnectionDefinition(configJson);
+    }
+
+    public JsonObject getConnectionConfig() {
         final JsonObject configJson = Json.createObjectBuilder()//
                 .add("awsEndpointOverride", getInDatabaseS3Address())//
                 .add("awsRegion", this.s3TestSetup.getRegion())//
                 .add("s3Bucket", this.s3BucketName)//
                 .add("awsAccessKeyId", this.s3TestSetup.getUsername())//
                 .add("awsSecretAccessKey", this.s3TestSetup.getPassword()).build();
-        return this.exasolObjectFactory.createConnectionDefinition("S3_CONNECTION", "", "", toJson(configJson));
+        return configJson;
+    }
+
+    public ConnectionDefinition createConnectionDefinition(final JsonObject details) {
+        return this.exasolObjectFactory.createConnectionDefinition("S3_CONNECTION", "", "", toJson(details));
     }
 
     private String toJson(final JsonObject configJson) {
@@ -114,11 +122,14 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     public void emptyS3Bucket() {
-        final ListObjectsV2Iterable pages = this.s3
-                .listObjectsV2Paginator(request -> request.bucket(this.s3BucketName));
+        emptyS3Bucket(this.s3BucketName);
+    }
+
+    public void emptyS3Bucket(final String bucketName) {
+        final ListObjectsV2Iterable pages = this.s3.listObjectsV2Paginator(request -> request.bucket(bucketName));
         for (final ListObjectsV2Response page : pages) {
             page.contents().forEach(
-                    s3Object -> this.s3.deleteObject(builder -> builder.bucket(this.s3BucketName).key(s3Object.key())));
+                    s3Object -> this.s3.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
         }
     }
 

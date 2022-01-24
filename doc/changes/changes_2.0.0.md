@@ -13,7 +13,7 @@ The new connection definition allowed us to support all possible S3 bucket names
 ## Features
 
 * #64: Used unified connection definition
-* #59: Added support for path-style syntax
+* #59: Added support for path-style S3 URL syntax
 
 ## Bug Fixes
 

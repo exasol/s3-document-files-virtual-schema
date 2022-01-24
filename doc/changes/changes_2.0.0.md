@@ -1,4 +1,4 @@
-# Virtual Schema for document data in files on AWS S3 1.7.0, released 2022-01-??
+# Virtual Schema for document data in files on AWS S3 2.0.0, released 2022-01-24
 
 Code name: Unified Connection Definition
 
@@ -13,6 +13,7 @@ The new connection definition allowed us to support all possible S3 bucket names
 ## Features
 
 * #64: Used unified connection definition
+* #59: Added support for path-style S3 URL syntax
 
 ## Bug Fixes
 

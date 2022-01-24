@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Tag;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -26,10 +26,12 @@ import com.exasol.bucketfs.BucketAccessException;
 import com.exasol.dbbuilder.dialects.DatabaseObjectException;
 import com.exasol.dbbuilder.dialects.exasol.ConnectionDefinition;
 import com.exasol.dbbuilder.dialects.exasol.VirtualSchema;
+import com.exasol.matcher.ResultSetStructureMatcher;
 import com.exasol.matcher.TypeMatchMode;
 import com.exasol.performancetestrecorder.PerformanceTestRecorder;
 import com.exasol.smalljsonfilesfixture.SmallJsonFilesTestSetup;
 
+import jakarta.json.JsonObjectBuilder;
 import software.amazon.awssdk.services.s3.model.*;
 
 @Tag("integration")
@@ -102,6 +104,22 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
                 virtualSchemaBuilder::build);
         assertThat(exception.getCause().getMessage(), containsString(
                 "E-VSD-94: Invalid connection. The connection definition has a invalid syntax. Please check the user-guide at: https://github.com/exasol/s3-document-files-virtual-schema/blob/main/doc/user_guide/user_guide.md."));
+    }
+
+    @Test
+    void testPathStyleAccess() throws IOException, SQLException {
+        final ConnectionDefinition originalConnection = SETUP.getConnectionDefinition();
+        final JsonObjectBuilder connectionConfig = SETUP.getConnectionConfig();
+        connectionConfig.add("s3PathStyleAccess", true);
+        final ConnectionDefinition pathStyleConnection = SETUP.createConnectionDefinition(connectionConfig);
+        SETUP.setConnectionDefinition(pathStyleConnection);
+        try {
+            this.createJsonVirtualSchema();
+            final ResultSet result = this.getStatement().executeQuery("SELECT ID FROM TEST.BOOKS ORDER BY ID ASC;");
+            MatcherAssert.assertThat(result, ResultSetStructureMatcher.table().row("book-1").row("book-2").matches());
+        } finally {
+            SETUP.setConnectionDefinition(originalConnection);
+        }
     }
 
     @Test

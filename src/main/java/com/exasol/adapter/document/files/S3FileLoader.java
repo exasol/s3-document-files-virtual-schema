@@ -1,6 +1,5 @@
 package com.exasol.adapter.document.files;
 
-import java.net.URI;
 import java.util.Iterator;
 
 import com.exasol.adapter.document.documentfetcher.files.FileLoader;
@@ -9,9 +8,8 @@ import com.exasol.adapter.document.files.connection.S3ConnectionProperties;
 import com.exasol.adapter.document.files.stringfilter.StringFilter;
 import com.exasol.adapter.document.iterators.*;
 
-import software.amazon.awssdk.auth.credentials.*;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.*;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
@@ -34,34 +32,9 @@ public class S3FileLoader implements FileLoader {
     public S3FileLoader(final StringFilter filePattern, final S3ConnectionProperties connectionProperties) {
         this.filePattern = filePattern;
         this.connectionProperties = connectionProperties;
-        final S3ClientBuilder s3ClientBuilder = S3Client.builder();
-        final S3AsyncClientBuilder s3AsyncClientBuilder = S3AsyncClient.builder();
-        if (connectionProperties.isS3PathStyleAccess()) {
-            final S3Configuration s3Configuration = S3Configuration.builder().pathStyleAccessEnabled(true).build();
-            s3ClientBuilder.serviceConfiguration(s3Configuration);
-            s3AsyncClientBuilder.serviceConfiguration(s3Configuration);
-        }
-        if (connectionProperties.hasEndpointOverride()) {
-            final URI endpointOverride = URI.create((connectionProperties.isUseSsl() ? "https://" : "http://")
-                    + connectionProperties.getAwsEndpointOverride());
-            s3ClientBuilder.endpointOverride(endpointOverride);
-            s3AsyncClientBuilder.endpointOverride(endpointOverride);
-        }
-        this.s3 = s3ClientBuilder.region(Region.of(connectionProperties.getAwsRegion()))//
-                .credentialsProvider(StaticCredentialsProvider.create(getCredentials(connectionProperties)))//
-                .build();
-        this.s3Async = s3AsyncClientBuilder.region(Region.of(connectionProperties.getAwsRegion()))//
-                .credentialsProvider(StaticCredentialsProvider.create(getCredentials(connectionProperties)))//
-                .build();
-    }
-
-    private AwsCredentials getCredentials(final S3ConnectionProperties properties) {
-        if (properties.hasAwsSessionToken()) {
-            return AwsSessionCredentials.create(properties.getAwsAccessKeyId(), properties.getAwsSecretAccessKey(),
-                    properties.getAwsSessionToken());
-        } else {
-            return AwsBasicCredentials.create(properties.getAwsAccessKeyId(), properties.getAwsSecretAccessKey());
-        }
+        final S3ClientFactory s3ClientFactory = new S3ClientFactory(connectionProperties);
+        this.s3 = s3ClientFactory.buildSyncClient();
+        this.s3Async = s3ClientFactory.buildAsyncClient();
     }
 
     @Override

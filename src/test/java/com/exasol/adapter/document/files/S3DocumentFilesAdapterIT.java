@@ -128,10 +128,9 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         final int numberOfJsonFiles = 1_000_000;
         createTestSetupWithSmallJsonFiles(numberOfJsonFiles);
         final String mapping = getMappingDefinitionForSmallJsonFiles();
-        final String bucketAddress = "https://" + SMALL_JSON_FILES_FIXTURE_BUCKET + ".s3."
-                + AWS_S3_TEST_SETUP.getRegion() + ".amazonaws.com/";
-        final ConnectionDefinition connection = SETUP.getExasolObjectFactory().createConnectionDefinition(
-                "SMALL_FILES_BUCKET", bucketAddress, AWS_S3_TEST_SETUP.getUsername(), AWS_S3_TEST_SETUP.getPassword());
+        final JsonObjectBuilder connectionConfig = SETUP.getConnectionConfig();
+        connectionConfig.add("s3Bucket", SMALL_JSON_FILES_FIXTURE_BUCKET);
+        final ConnectionDefinition connection = SETUP.createConnectionDefinition(connectionConfig);
         try {
             SETUP.createVirtualSchema("SMALL_JSON_FILES_VS", mapping, connection);
             for (int runCounter = 0; runCounter < 5; runCounter++) {

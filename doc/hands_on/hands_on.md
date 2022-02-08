@@ -17,7 +17,7 @@ You need:
 
 There also is a video version of this tutorial:
 
-[![Watch the video on YouTube](video.png)](https://youtu.be/Ot4tlVc57GA)
+[![Watch the video on YouTube](video.png)](https://www.youtube.com/watch?v=eP3MuGw0Yx8)
 
 ## What is This for?
 

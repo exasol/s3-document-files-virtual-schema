@@ -19,6 +19,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 class S3RemoteFileContent implements RemoteFileContent {
     /** Exception message used by S3 if there were too many API requests. */
     static final String REDUCE_REQUEST_RATE_MESSAGE = "Please reduce your request rate.";
+    static final String INTERNAL_ERROR_MESSAGE = "We encountered an internal error. Please try again. (Service: S3, Status Code: 500";
     private static final int SIZE_1_MB = 1000000;
     private final S3Client s3;
     private final S3AsyncClient s3AsyncClient;
@@ -103,7 +104,8 @@ class S3RemoteFileContent implements RemoteFileContent {
         }
 
         private ExecutionException wrapTooManyRequestsException(final ExecutionException exception) {
-            if (exception.getCause().getMessage().contains(REDUCE_REQUEST_RATE_MESSAGE)) {
+            final String message = exception.getCause().getMessage();
+            if (message.contains(REDUCE_REQUEST_RATE_MESSAGE) || message.contains(INTERNAL_ERROR_MESSAGE)) {
                 throw new TooManyRequestsException();
             } else {
                 return exception;

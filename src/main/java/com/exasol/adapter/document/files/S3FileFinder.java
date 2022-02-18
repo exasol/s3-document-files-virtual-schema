@@ -2,8 +2,8 @@ package com.exasol.adapter.document.files;
 
 import java.util.Iterator;
 
-import com.exasol.adapter.document.documentfetcher.files.FileLoader;
 import com.exasol.adapter.document.documentfetcher.files.RemoteFile;
+import com.exasol.adapter.document.documentfetcher.files.RemoteFileFinder;
 import com.exasol.adapter.document.files.connection.S3ConnectionProperties;
 import com.exasol.adapter.document.files.stringfilter.StringFilter;
 import com.exasol.adapter.document.iterators.*;
@@ -17,19 +17,19 @@ import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 /**
  * File loader for files on S3.
  */
-public class S3FileLoader implements FileLoader {
+public class S3FileFinder implements RemoteFileFinder {
     private final StringFilter filePattern;
     private final S3ConnectionProperties connectionProperties;
     private final S3Client s3;
     private final S3AsyncClient s3Async;
 
     /**
-     * Create a new instance of {@link S3FileLoader}.
+     * Create a new instance of {@link S3FileFinder}.
      *
      * @param filePattern          files to load
      * @param connectionProperties connection information
      */
-    public S3FileLoader(final StringFilter filePattern, final S3ConnectionProperties connectionProperties) {
+    public S3FileFinder(final StringFilter filePattern, final S3ConnectionProperties connectionProperties) {
         this.filePattern = filePattern;
         this.connectionProperties = connectionProperties;
         final S3ClientFactory s3ClientFactory = new S3ClientFactory(connectionProperties);

@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 @Tag("integration")
 @Testcontainers
-class S3FileLoaderIT {
+class S3FileFinderIT {
     @Container
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(
             DockerImageName.parse("localstack/localstack:0.12.2")).withServices(S3);
@@ -55,14 +55,14 @@ class S3FileLoaderIT {
 
     @Test
     void testReadFile() {
-        final S3FileLoader s3FileLoader = new S3FileLoader(WildcardExpression.forNonWildcardString("file-1.json"),
+        final S3FileFinder s3FileFinder = new S3FileFinder(WildcardExpression.forNonWildcardString("file-1.json"),
                 connectionInformation);
-        assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1));
+        assertThat(runAndGetFirstLines(s3FileFinder), containsInAnyOrder(CONTENT_1));
     }
 
-    private List<String> runAndGetFirstLines(final S3FileLoader s3FileLoader) {
+    private List<String> runAndGetFirstLines(final S3FileFinder s3FileFinder) {
         final List<String> result = new ArrayList<>();
-        s3FileLoader.loadFiles()
+        s3FileFinder.loadFiles()
                 .forEachRemaining(file -> result.add(readFirstLine(file.getContent().getInputStream())));
         return result;
     }
@@ -75,15 +75,15 @@ class S3FileLoaderIT {
     @ParameterizedTest
     void testReadFilesWithWildcard(final String fileGlob) {
         final WildcardExpression filePattern = WildcardExpression.fromGlob(fileGlob);
-        final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, connectionInformation);
-        assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1, CONTENT_2));
+        final S3FileFinder s3FileFinder = new S3FileFinder(filePattern, connectionInformation);
+        assertThat(runAndGetFirstLines(s3FileFinder), containsInAnyOrder(CONTENT_1, CONTENT_2));
     }
 
     @Test
     void testReadAllFiles() {
         final WildcardExpression filePattern = WildcardExpression.fromGlob("*");
-        final S3FileLoader s3FileLoader = new S3FileLoader(filePattern, connectionInformation);
-        assertThat(runAndGetFirstLines(s3FileLoader), containsInAnyOrder(CONTENT_1, CONTENT_2, CONTENT_OTHER));
+        final S3FileFinder s3FileFinder = new S3FileFinder(filePattern, connectionInformation);
+        assertThat(runAndGetFirstLines(s3FileFinder), containsInAnyOrder(CONTENT_1, CONTENT_2, CONTENT_OTHER));
     }
 
     private String readFirstLine(final InputStream stream) {

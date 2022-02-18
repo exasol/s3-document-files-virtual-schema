@@ -17,7 +17,7 @@ public class S3DocumentFilesAdapterFactory implements AdapterFactory {
 
     @Override
     public VirtualSchemaAdapter createAdapter() {
-        return new DocumentAdapter(new DocumentFilesAdapter(ADAPTER_NAME, new S3FileLoaderFactory()));
+        return new DocumentAdapter(new DocumentFilesAdapter(ADAPTER_NAME, new S3FileFinderFactory()));
     }
 
     @Override

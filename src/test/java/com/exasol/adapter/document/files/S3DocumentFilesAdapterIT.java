@@ -2,13 +2,15 @@ package com.exasol.adapter.document.files;
 
 import static com.exasol.matcher.ResultSetStructureMatcher.table;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.sql.*;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
@@ -23,9 +25,11 @@ import com.exasol.adapter.document.edml.serializer.EdmlSerializer;
 import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
 import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
 import com.exasol.bucketfs.BucketAccessException;
+import com.exasol.classlistextractor.verifier.ClassListExtractor;
+import com.exasol.classlistextractor.verifier.ClassListVerifier;
 import com.exasol.dbbuilder.dialects.DatabaseObjectException;
-import com.exasol.dbbuilder.dialects.exasol.ConnectionDefinition;
-import com.exasol.dbbuilder.dialects.exasol.VirtualSchema;
+import com.exasol.dbbuilder.dialects.exasol.*;
+import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
 import com.exasol.matcher.ResultSetStructureMatcher;
 import com.exasol.matcher.TypeMatchMode;
 import com.exasol.performancetestrecorder.PerformanceTestRecorder;
@@ -144,6 +148,37 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         } finally {
             connection.drop();
         }
+    }
+
+    protected void uploadDataFile(final String content, final String fileName) {
+        uploadDataFile(() -> new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)), fileName);
+    }
+
+    @Test
+    void testClassList() throws BucketAccessException, FileNotFoundException, TimeoutException, SQLException {
+        final ClassListExtractor classListExtractor = new ClassListExtractor(SETUP.getBucket(),
+                SETUP::makeLocalServiceAvailableInExasol);
+        final ExasolObjectFactory objectFactory = new ExasolObjectFactory(SETUP.getConnection(),
+                ExasolObjectConfiguration.builder().withJvmOptions(classListExtractor.getJvmOptions()).build());
+        final ExasolSchema schema = objectFactory.createSchema("ADAPTER_FOR_LIST");
+        final AdapterScript adapterScript = SETUP.createAdapterScript(schema);
+        final UdfScript udf = IntegrationTestSetup.createUdf(schema);
+        uploadDataFile("{ \"id\": 1, \"name\": \"tom\" }", "test-data-1.json");
+        final String mapping = getMappingDefinitionForSmallJsonFiles();
+        final VirtualSchema virtualSchema = SETUP.getPreconfiguredVirtualSchemaBuilder("VS_FOR_CLASS_LIST_EXTRACTION")
+                .adapterScript(adapterScript).properties(Map.of("MAPPING", mapping)).build();
+        final List<String> classList = classListExtractor.capture(() -> {
+            try (final ResultSet resultSet = getStatement()
+                    .executeQuery("SELECT * FROM " + virtualSchema.getFullyQualifiedName() + ".TEST;")) {
+                resultSet.next();
+                assertThat(resultSet.getInt("ID"), equalTo(1));
+            }
+        });
+        virtualSchema.drop();
+        adapterScript.drop();
+        udf.drop();
+        schema.drop();
+        new ClassListVerifier().verifyClassListFile(classList, IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
     }
 
     private String getMappingDefinitionForSmallJsonFiles() {

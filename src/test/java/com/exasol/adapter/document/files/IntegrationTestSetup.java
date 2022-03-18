@@ -3,6 +3,7 @@ package com.exasol.adapter.document.files;
 import static com.exasol.adapter.document.GenericUdfCallHandler.*;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.*;
@@ -30,10 +31,13 @@ import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 public class IntegrationTestSetup implements AutoCloseable {
     private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-6.0.1-s3-2.0.2.jar";
+    static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
             Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
+    @Getter
     private final Connection connection;
+    @Getter
     private final Statement statement;
     private final ExasolObjectFactory exasolObjectFactory;
     private final AdapterScript adapterScript;
@@ -65,12 +69,22 @@ public class IntegrationTestSetup implements AutoCloseable {
         this.s3 = this.s3TestSetup.getS3Client();
     }
 
-    private static void createUdf(final ExasolSchema adapterSchema) {
-        adapterSchema.createUdfBuilder("IMPORT_FROM_S3_DOCUMENT_FILES").language(UdfScript.Language.JAVA)
+    static UdfScript createUdf(final ExasolSchema adapterSchema) {
+        return adapterSchema.createUdfBuilder("IMPORT_FROM_S3_DOCUMENT_FILES").language(UdfScript.Language.JAVA)
                 .inputType(UdfScript.InputType.SET).parameter(PARAMETER_DOCUMENT_FETCHER, "VARCHAR(2000000)")
                 .parameter(PARAMETER_SCHEMA_MAPPING_REQUEST, "VARCHAR(2000000)")
                 .parameter(PARAMETER_CONNECTION_NAME, "VARCHAR(500)").emits()
-                .bucketFsContent(UdfEntryPoint.class.getName(), "/buckets/bfsdefault/default/" + ADAPTER_JAR).build();
+                .bucketFsContent(UdfEntryPoint.class.getName(), geAdapterJatInBucketFs()).build();
+    }
+
+    @NotNull
+    private static String geAdapterJatInBucketFs() {
+        return "/buckets/bfsdefault/default/" + ADAPTER_JAR;
+    }
+
+    public InetSocketAddress makeLocalServiceAvailableInExasol(final int port) {
+        final ServiceAddress serviceAddress = this.exasolTestSetup.makeLocalTcpServiceAccessibleFromDatabase(port);
+        return new InetSocketAddress(serviceAddress.getHostName(), serviceAddress.getPort());
     }
 
     private ConnectionDefinition createConnectionDefinition() {
@@ -117,11 +131,11 @@ public class IntegrationTestSetup implements AutoCloseable {
         }
     }
 
-    private AdapterScript createAdapterScript(final ExasolSchema adapterSchema)
+    AdapterScript createAdapterScript(final ExasolSchema adapterSchema)
             throws BucketAccessException, TimeoutException, FileNotFoundException {
-        this.bucket.uploadFile(Path.of("target", ADAPTER_JAR), ADAPTER_JAR);
+        this.bucket.uploadFile(ADAPTER_JAR_LOCAL_PATH, ADAPTER_JAR);
         return adapterSchema.createAdapterScriptBuilder("FILES_ADAPTER")
-                .bucketFsContent("com.exasol.adapter.RequestDispatcher", "/buckets/bfsdefault/default/" + ADAPTER_JAR)
+                .bucketFsContent("com.exasol.adapter.RequestDispatcher", geAdapterJatInBucketFs())
                 .language(AdapterScript.Language.JAVA).build();
     }
 
@@ -147,10 +161,6 @@ public class IntegrationTestSetup implements AutoCloseable {
         } catch (final SQLException exception) {
             // at least we tried to close it
         }
-    }
-
-    public Statement getStatement() {
-        return this.statement;
     }
 
     public S3Client getS3Client() {

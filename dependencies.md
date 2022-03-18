@@ -11,6 +11,7 @@
 | [mockito-core][6]                              | [The MIT License][7]             |
 | [SLF4J JDK14 Binding][8]                       | [MIT License][9]                 |
 | [Project Lombok][10]                           | [The MIT License][11]            |
+| Class list verifier                            |                                  |
 
 ## Test Dependencies
 

@@ -38,3 +38,4 @@ setEnv.sh
 *.md.html
 test_config.yml
 deleteLambdaResources.sh
+*.flattened-pom.xml

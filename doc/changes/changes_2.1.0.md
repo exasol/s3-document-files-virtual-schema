@@ -14,7 +14,6 @@ In this release we prepared this Virtual Schema for Java UDF startup time improv
 
 ### Compile Dependency Updates
 
-* Added `com.exasol:java-class-list-verifier:0.2.0`
 * Updated `org.mockito:mockito-core:4.1.0` to `4.4.0`
 * Updated `org.slf4j:slf4j-jdk14:1.7.32` to `1.7.36`
 * Updated `software.amazon.awssdk:s3:2.17.66` to `2.17.151`
@@ -22,6 +21,7 @@ In this release we prepared this Virtual Schema for Java UDF startup time improv
 ### Test Dependency Updates
 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.94` to `1.12.180`
+* Added `com.exasol:java-class-list-verifier:0.2.0`
 * Updated `com.exasol:test-db-builder-java:3.2.2` to `3.3.1`
 * Updated `com.exasol:udf-debugging-java:0.5.0` to `0.6.0`
 * Updated `org.testcontainers:junit-jupiter:1.16.2` to `1.16.3`

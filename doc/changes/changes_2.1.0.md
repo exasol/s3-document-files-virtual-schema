@@ -14,7 +14,7 @@ In this release we prepared this Virtual Schema for Java UDF startup time improv
 
 ### Compile Dependency Updates
 
-* Added `com.exasol:java-class-list-verifier:0.1.0`
+* Added `com.exasol:java-class-list-verifier:0.2.0`
 * Updated `org.mockito:mockito-core:4.1.0` to `4.4.0`
 * Updated `org.slf4j:slf4j-jdk14:1.7.32` to `1.7.36`
 * Updated `software.amazon.awssdk:s3:2.17.66` to `2.17.151`

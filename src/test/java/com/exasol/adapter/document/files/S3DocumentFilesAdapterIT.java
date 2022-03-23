@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
@@ -44,6 +45,8 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     private static final S3TestSetup AWS_S3_TEST_SETUP = new AwsS3TestSetup();
     private static final String CACHE_BUCKET_NAME = "persistent-s3-vs-test-file-cache";
     private static final String SMALL_JSON_FILES_FIXTURE_BUCKET = "persistent-small-json-files-test-fixture";
+    private static final List<Pattern> CLASS_LIST_IGNORES = List.of(Pattern.compile("java/util/concurrent/.*"),
+            Pattern.compile("io/netty/util/concurrent/.*"));
     private static String s3BucketName;
     private static IntegrationTestSetup SETUP;
     private static S3Cache s3Cache;
@@ -178,7 +181,8 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         adapterScript.drop();
         udf.drop();
         schema.drop();
-        new ClassListVerifier().verifyClassListFile(classList, IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
+        new ClassListVerifier(CLASS_LIST_IGNORES).verifyClassListFile(classList,
+                IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
     }
 
     private String getMappingDefinitionForSmallJsonFiles() {

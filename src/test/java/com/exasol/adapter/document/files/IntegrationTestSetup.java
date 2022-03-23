@@ -74,11 +74,11 @@ public class IntegrationTestSetup implements AutoCloseable {
                 .inputType(UdfScript.InputType.SET).parameter(PARAMETER_DOCUMENT_FETCHER, "VARCHAR(2000000)")
                 .parameter(PARAMETER_SCHEMA_MAPPING_REQUEST, "VARCHAR(2000000)")
                 .parameter(PARAMETER_CONNECTION_NAME, "VARCHAR(500)").emits()
-                .bucketFsContent(UdfEntryPoint.class.getName(), geAdapterJatInBucketFs()).build();
+                .bucketFsContent(UdfEntryPoint.class.getName(), getAdapterJarInBucketFs()).build();
     }
 
     @NotNull
-    private static String geAdapterJatInBucketFs() {
+    private static String getAdapterJarInBucketFs() {
         return "/buckets/bfsdefault/default/" + ADAPTER_JAR;
     }
 
@@ -135,7 +135,7 @@ public class IntegrationTestSetup implements AutoCloseable {
             throws BucketAccessException, TimeoutException, FileNotFoundException {
         this.bucket.uploadFile(ADAPTER_JAR_LOCAL_PATH, ADAPTER_JAR);
         return adapterSchema.createAdapterScriptBuilder("FILES_ADAPTER")
-                .bucketFsContent("com.exasol.adapter.RequestDispatcher", geAdapterJatInBucketFs())
+                .bucketFsContent("com.exasol.adapter.RequestDispatcher", getAdapterJarInBucketFs())
                 .language(AdapterScript.Language.JAVA).build();
     }
 

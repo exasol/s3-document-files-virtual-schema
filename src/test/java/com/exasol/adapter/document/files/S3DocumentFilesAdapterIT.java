@@ -185,6 +185,70 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
                 IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
     }
 
+    @Test
+    void unoptimizedTest(final TestInfo testInfo) throws Exception {
+        final String mapping = getMappingDefinitionForSmallJsonFiles();
+        final ExasolSchema schema = SETUP.getExasolObjectFactory().createSchema("MY_SCHEMA");
+        final AdapterScript adapterScript = SETUP.createAdapterScript(schema);
+        final UdfScript udf = IntegrationTestSetup.createUdf(schema);
+        final VirtualSchema virtualSchema = SETUP.getPreconfiguredVirtualSchemaBuilder("VS_FOR_CLASS_LIST_EXTRACTION")
+                .properties(Map.of("MAPPING", mapping)).adapterScript(adapterScript).build();
+        uploadDataFile("{ \"id\": 1, \"name\": \"tom\" }", "test-data-1.json");
+        for (int i = 0; i < 20; i++) {
+            PerformanceTestRecorder.getInstance().recordExecution(testInfo, () -> {
+                try (final ResultSet resultSet = getStatement()
+                        .executeQuery("SELECT * FROM " + virtualSchema.getFullyQualifiedName() + ".TEST;")) {
+                    resultSet.next();
+                    assertThat(resultSet.getInt("ID"), equalTo(1));
+                }
+            });
+        }
+    }
+
+    @Test
+    void optimizedTest(final TestInfo testInfo) throws Exception {
+        final String mapping = getMappingDefinitionForSmallJsonFiles();
+        final ExasolSchema schema = SETUP.getExasolObjectFactory().createSchema("MY_SCHEMA");
+        final AdapterScript adapterScript = SETUP.createAdapterScript(schema);
+        final UdfScript udf = IntegrationTestSetup.createUdf(schema);
+        uploadDataFile("{ \"id\": 1, \"name\": \"tom\" }", "test-data-1.json");
+        SETUP.getBucket().uploadFile(Path.of("/home/jakob/Downloads/java-udf-startup-time-improver-0.1.0.jar"),
+                "java-udf-startup-time-improver.jar");
+        getStatement().executeUpdate("CREATE JAVA SCALAR SCRIPT MY_SCHEMA.\"JAVA_UDF_STARTUP_TIME_IMPROVER_INT\" (\n"
+                + "  \"UDF_DEFINITION\" VARCHAR(2000000) UTF8, \n" + "  \"CONNECTION_NAME\" VARCHAR(200) UTF8, \n"
+                + "  \"BUCKET_FS_PORT\" DECIMAL(18,0), \n" + "  \"BUCKET_FS_SERVICE\" VARCHAR(200) UTF8, \n"
+                + "  \"BUCKET_FS_BUCKET\" VARCHAR(200) UTF8, \n" + "  \"PATH_FOR_DUMP\" VARCHAR(200) UTF8)\n"
+                + "RETURNS VARCHAR(2000) UTF8 AS\n"
+                + "%scriptclass com.exasol.udfstartuptimeimprover.UdfStartUpTimeImprover;\n"
+                + "%jar /buckets/bfsdefault/default/java-udf-startup-time-improver.jar;");
+        getStatement().executeUpdate(
+                "CREATE LUA SCRIPT MY_SCHEMA.\"JAVA_UDF_STARTUP_TIME_IMPROVER\" (UDF_SCHEMA,UDF_NAME,CONNECTION_NAME,BUCKET_FS_PORT,BUCKET_FS_SERVICE,BUCKET_FS_BUCKET,PATH_FOR_DUMP) RETURNS ROWCOUNT AS\n"
+                        + "  local updatedUdfDef = query([[SELECT MY_SCHEMA.JAVA_UDF_STARTUP_TIME_IMPROVER_INT(\n"
+                        + "    (SELECT SCRIPT_TEXT FROM SYS.EXA_ALL_SCRIPTS WHERE SCRIPT_NAME=:udfName AND SCRIPT_SCHEMA=:udfSchema),:connection, :bfsPort, :bfsService, :bfsBucket, :pathForDump) AS CMD]], { udfName = UDF_NAME, udfSchema = UDF_SCHEMA, connection = CONNECTION_NAME, bfsPort = BUCKET_FS_PORT, bfsService = BUCKET_FS_SERVICE, bfsBucket = BUCKET_FS_BUCKET, pathForDump = PATH_FOR_DUMP })\n"
+                        + "  query(updatedUdfDef[1].CMD)\n" + "/");
+        SETUP.getExasolObjectFactory().createConnectionDefinition("BFS_CONNECTION", "", "",
+                SETUP.getBucket().getWritePassword());
+        optimize(adapterScript.getName());
+        optimize(udf.getName());
+        final VirtualSchema virtualSchema = SETUP.getPreconfiguredVirtualSchemaBuilder("VS_FOR_CLASS_LIST_EXTRACTION")
+                .properties(Map.of("MAPPING", mapping)).adapterScript(adapterScript).build();
+        for (int i = 0; i < 20; i++) {
+            PerformanceTestRecorder.getInstance().recordExecution(testInfo, () -> {
+                try (final ResultSet resultSet = getStatement()
+                        .executeQuery("SELECT * FROM " + virtualSchema.getFullyQualifiedName() + ".TEST;")) {
+                    resultSet.next();
+                    assertThat(resultSet.getInt("ID"), equalTo(1));
+                }
+            });
+        }
+    }
+
+    private void optimize(final String scriptName) throws SQLException {
+        getStatement().executeUpdate("execute script MY_SCHEMA.JAVA_UDF_STARTUP_TIME_IMPROVER(\n"
+                + "    'MY_SCHEMA', \n" + "    '" + scriptName + "', \n" + "    'BFS_CONNECTION', \n" + "    2580, \n"
+                + "    'bfsdefault', \n" + "    'default', \n" + "    '" + scriptName + ".jsa')");
+    }
+
     private String getMappingDefinitionForSmallJsonFiles() {
         final EdmlDefinition edmlDefinition = EdmlDefinition.builder()
                 .schema("https://schemas.exasol.com/edml-1.3.0.json").source("test-data-*.json")

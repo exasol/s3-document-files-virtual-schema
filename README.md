@@ -18,6 +18,8 @@ This Virtual Schemas allows you to access document files stored in S3 like any r
 
 This Virtual Schema is built for and tested with the official AWS S3. Third-party S3 API compatible products are expected to work as well. It is highly recommended to thoroughly test 3rd party products used in combination with Exasol, especially regarding sufficient S3 API compatibility.
 
+This Virtual Schema is prepared for [Java UDF startup time improver](https://github.com/exasol/java-udf-startup-time-improver/).
+
 For supported document file formats: see [files Virtual Schema][files-vs]
 
 Additional Information:

@@ -10,10 +10,13 @@ import software.amazon.awssdk.auth.credentials.*;
 
 @Data
 public class TestConfig {
+    public static final String FILE_NAME = "test_config.yml";
     private static final TestConfig CONFIG = new Reader().readTestConfig();
     private String awsProfile;
     /** E-mail address of the contact-person for this project. Will be used in exa:owner tag for AWS resources. */
     private String owner;
+
+    private String s3CacheBucket;
 
     public static TestConfig instance() {
         return CONFIG;
@@ -28,9 +31,10 @@ public class TestConfig {
     }
 
     private static class Reader {
+
         public TestConfig readTestConfig() {
             final Yaml yaml = new Yaml(new Constructor(TestConfig.class));
-            try (final FileReader fileReader = new FileReader("test_config.yml")) {
+            try (final FileReader fileReader = new FileReader(FILE_NAME)) {
                 return yaml.load(fileReader);
             } catch (final FileNotFoundException exception) {
                 throw new IllegalArgumentException(

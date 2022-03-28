@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import org.hamcrest.MatcherAssert;
@@ -47,16 +48,29 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     private static final String SMALL_JSON_FILES_FIXTURE_BUCKET = "persistent-small-json-files-test-fixture";
     private static final List<Pattern> CLASS_LIST_IGNORES = List.of(Pattern.compile("java/util/concurrent/.*"),
             Pattern.compile("io/netty/util/concurrent/.*"));
+    private static final Logger LOGGER = Logger.getLogger(S3DocumentFilesAdapterIT.class.getName());
     private static String s3BucketName;
     private static IntegrationTestSetup SETUP;
-    private static S3Cache s3Cache;
+    private static S3UploadInterface s3Uploader;
 
     @BeforeAll
     static void beforeAll() throws Exception {
         s3BucketName = "my.s3.virtual-schema-test-bucket-" + System.currentTimeMillis();
         AWS_S3_TEST_SETUP.getS3Client().createBucket(builder -> builder.bucket(s3BucketName));
         SETUP = new IntegrationTestSetup(AWS_S3_TEST_SETUP, s3BucketName);
-        s3Cache = new S3Cache(SETUP.getS3Client(), s3BucketName, CACHE_BUCKET_NAME);
+        s3Uploader = getS3UploadClient();
+    }
+
+    private static S3UploadInterface getS3UploadClient() {
+        final String s3CacheBucketName = TestConfig.instance().getS3CacheBucket();
+        if (s3CacheBucketName == null || s3CacheBucketName.isBlank()) {
+            LOGGER.warning("The " + TestConfig.FILE_NAME
+                    + " does not set a s3CacheBucket. So we will upload all the test files again and again. If you run the tests more often, consider to create it and add it's name to the "
+                    + TestConfig.FILE_NAME + ".");
+            return new S3DirectUploader(SETUP.getS3Client(), s3BucketName);
+        } else {
+            return new S3Cache(SETUP.getS3Client(), s3BucketName, CACHE_BUCKET_NAME);
+        }
     }
 
     @AfterAll
@@ -90,7 +104,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @Override
     protected void uploadDataFile(final Path fileContent, final String fileName) {
-        s3Cache.uploadFile(fileContent, fileName);
+        s3Uploader.uploadFile(fileContent, fileName);
     }
 
     @Override

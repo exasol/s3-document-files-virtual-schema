@@ -40,7 +40,8 @@ jobs:
           DEPUTY: ${{ secrets.AWS_TAG_DEPUTY }}
       - name: Create test_config.yml
         run: |
-          echo "owner: ${{ secrets.AWS_TAG_OWNER }}\ns3CacheBucket: persistent-s3-vs-test-file-cache" > test_config.yml
+          echo "owner: ${{ secrets.AWS_TAG_OWNER }}" > test_config.yml
+          echo "s3CacheBucket: persistent-s3-vs-test-file-cache" >> test_config.yml
       - name: Run tests and build with Maven
         run: mvn --batch-mode --update-snapshots clean verify -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false -Derror-code-crawler.skip=true -Dmaven.javadoc.skip=true -Dproject-keeper.skip=true
         env:

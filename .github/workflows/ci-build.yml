@@ -34,7 +34,8 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
       - name: Create test_config.yml
         run: |
-          echo "owner: ${{ secrets.AWS_TAG_OWNER }}\ns3CacheBucket: persistent-s3-vs-test-file-cache" > test_config.yml
+          echo "owner: ${{ secrets.AWS_TAG_OWNER }}" > test_config.yml
+          echo "s3CacheBucket: persistent-s3-vs-test-file-cache" >> test_config.yml
       - name: Run tests and build with Maven
         run: mvn --batch-mode --update-snapshots clean verify sonar:sonar --file pom.xml -DtrimStackTrace=false -Dsonar.organization=exasol -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
         env:

@@ -19,7 +19,7 @@ import software.amazon.awssdk.services.s3.model.S3Object;
  * bucket this class copies the file from that bucket which is a lot faster than uploading from a test PC (depending on
  * your bandwidth).
  */
-public class S3Cache {
+public class S3Cache implements S3UploadInterface {
     private static final Logger LOGGER = Logger.getLogger(S3Cache.class.getName());
     private final S3Interface s3Interface;
     private final String testBucket;
@@ -35,6 +35,7 @@ public class S3Cache {
         this.cacheBucket = cacheBucket;
     }
 
+    @Override
     public void uploadFile(final Path file, final String key) {
         final String checksum = localSha512Checksum(file);
         if (isUploadRequired(checksum, getFileSize(file), file.toString())) {

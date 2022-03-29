@@ -11,6 +11,7 @@ For that reason you need to configure the test. For that create a `test_config.y
 ```yml
 awsProfile: <AWS profile>
 owner: <your email used for exa:owner tag>
+s3CacheBucket: <name of an s3 bucket that will be used for caching the test files (optional)>
 ```
 
 ## Running Regression Test

@@ -200,8 +200,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     }
 
     private String getMappingDefinitionForSmallJsonFiles() {
-        final EdmlDefinition edmlDefinition = EdmlDefinition.builder()
-                .schema("https://schemas.exasol.com/edml-1.3.0.json").source("test-data-*.json")
+        final EdmlDefinition edmlDefinition = EdmlDefinition.builder().source("test-data-*.json")
                 .destinationTable("TEST")//
                 .mapping(Fields.builder()//
                         .mapField("id", ToDecimalMapping.builder().build())//

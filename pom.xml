@@ -4,24 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exasol</groupId>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>2.1.1</version>
+    <version>2.1.2</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
-    <url>https://github.com/exasol/s3-document-files-virtual-schema</url>
+    <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
         <junit.version>5.8.2</junit.version>
-        <jacoco.version>0.8.7</jacoco.version>
-        <gpg.skip>true</gpg.skip>
-        <org.testcontainers.version>1.16.3</org.testcontainers.version>
-        <vs-commom-document-files.version>6.0.1</vs-commom-document-files.version>
-        <!--
-                M4 does not fail tests if beforeAll fails
-                M5 fails in integration tests with a strange error
-                -->
-        <surefire.and.failsafe.plugin.version>3.0.0-M3</surefire.and.failsafe.plugin.version>
+        <org.testcontainers.version>1.17.1</org.testcontainers.version>
+        <vs-commom-document-files.version>7.0.0</vs-commom-document-files.version>
     </properties>
     <licenses>
         <license>
@@ -94,6 +84,7 @@
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
+            <version>2.17.181</version>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
@@ -129,7 +120,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.4.0</version>
+            <version>4.5.1</version>
         </dependency>
         <!--Integration test dependencies-->
         <!-- Overrides Junit 4.12 which is used in test containers but contains a security issue:
@@ -155,14 +146,14 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>test-db-builder-java</artifactId>
-            <version>3.3.1</version>
+            <version>3.3.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.180</version>
+            <version>1.12.213</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -170,19 +161,6 @@
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.7.36</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>org.jacoco.agent</artifactId>
-            <version>${jacoco.version}</version>
-            <classifier>runtime</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>org.jacoco.core</artifactId>
-            <version>${jacoco.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
@@ -201,12 +179,6 @@
             <artifactId>exasol-test-setup-abstraction-java</artifactId>
             <version>0.2.2</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <artifactId>lombok</artifactId>
-            <groupId>org.projectlombok</groupId>
-            <version>1.18.22</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
@@ -230,149 +202,8 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire.and.failsafe.plugin.version}</version>
-                <configuration>
-                    <!-- Set the highest log level for coverage testing, so that we
-                                          have a chance to reach branches in the logging lambdas too. -->
-                    <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties ${argLine}</argLine>
-                    <excludes>
-                        <exclude>**IT.java</exclude>
-                    </excludes>
-                    <excludedGroups>${test.excludeTags}</excludedGroups>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${surefire.and.failsafe.plugin.version}</version>
-                <configuration>
-                    <!-- Set the highest log level for coverage testing, so that we have a chance to reach branches
-                                          <property>	                      in the logging lambdas too. -->
-                    <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties ${argLine}</argLine>
-                    <includes>
-                        <include>**IT.java</include>
-                    </includes>
-                    <failIfNoTests>true</failIfNoTests>
-                    <systemPropertyVariables>
-                        <test.coverage>true</test.coverage>
-                    </systemPropertyVariables>
-                    <excludedGroups>${test.excludeTags}</excludedGroups>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>prepare-agent-integration</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>merge-results</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>merge</goal>
-                        </goals>
-                        <configuration>
-                            <fileSets>
-                                <fileSet>
-                                    <directory>${project.build.directory}/</directory>
-                                    <includes>
-                                        <include>jacoco*.exec</include>
-                                    </includes>
-                                </fileSet>
-                            </fileSets>
-                            <destFile>${project.build.directory}/aggregate.exec</destFile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${project.build.directory}/aggregate.exec</dataFile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-jacoco</id>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <phase>compile</phase>
-                        <configuration>
-                            <includeArtifactIds>org.jacoco.agent</includeArtifactIds>
-                            <includeClassifiers>runtime</includeClassifiers>
-                            <outputDirectory>${project.build.directory}/jacoco-agent</outputDirectory>
-                            <stripVersion>true</stripVersion>
-                        </configuration>
-                    </execution>
-                </executions>
-                <groupId>org.apache.maven.plugins</groupId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>2.7</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>display-plugin-updates</goal>
-                            <goal>display-dependency-updates</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <rulesUri>file:///${project.basedir}/versionsMavenPluginRules.xml</rulesUri>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.sonatype.ossindex.maven</groupId>
                 <artifactId>ossindex-maven-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>audit</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <excludeVulnerabilityIds>
                         <!-- Ignores CVE-2020-15250, because we use Java 11 and junit 4.13.1 which contains a fix:
@@ -381,78 +212,15 @@
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M3</version>
-                <executions>
-                    <execution>
-                        <id>enforce-maven</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireMavenVersion>
-                                    <version>3.6.3</version>
-                                </requireMavenVersion>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.exasol</groupId>
-                <artifactId>artifact-reference-checker-maven-plugin</artifactId>
-                <version>0.4.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>2.2.0</version>
+                <version>2.3.2</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.exasol</groupId>
-                <artifactId>error-code-crawler-maven-plugin</artifactId>
-                <version>0.6.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <sourcePaths>
-                        <sourcePath>target/delombok/main</sourcePath>
-                        <sourcePath>target/delombok/test</sourcePath>
-                    </sourcePaths>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>io.github.zlika</groupId>
-                <artifactId>reproducible-build-maven-plugin</artifactId>
-                <version>0.13</version>
-                <executions>
-                    <execution>
-                        <id>strip-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>strip-jar</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -460,73 +228,24 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <groupId>org.apache.maven.plugins</groupId>
-                <version>3.3.0</version>
                 <configuration>
-                    <descriptors>
-                        <descriptor>src/assembly/all-dependencies.xml</descriptor>
-                    </descriptors>
                     <finalName>document-files-virtual-schema-dist-${vs-commom-document-files.version}-s3-${version}
                     </finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok-maven-plugin</artifactId>
-                <version>1.18.20.0</version>
-                <executions>
-                    <execution>
-                        <id>delombok-main</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>delombok</goal>
-                        </goals>
-                        <configuration>
-                            <addOutputDirectory>false</addOutputDirectory>
-                            <sourceDirectory>src/main/java</sourceDirectory>
-                            <outputDirectory>target/delombok/main</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>delombok-test</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>testDelombok</goal>
-                        </goals>
-                        <configuration>
-                            <addOutputDirectory>false</addOutputDirectory>
-                            <sourceDirectory>src/test/java</sourceDirectory>
-                            <outputDirectory>target/delombok/test</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
             </plugin>
         </plugins>
     </build>
     <parent>
         <artifactId>s3-document-files-virtual-schema-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>2.1.1</version>
+        <version>2.1.2</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
 </project>

@@ -696,7 +696,6 @@ java/time/format/DateTimePrintContext
 com/exasol/adapter/document/iterators/CloseableIterator
 software/amazon/awssdk/regions/servicemetadata/AutoscalingPlansServiceMetadata
 java/util/Collections$SynchronizedMap
-com/exasol/adapter/document/mapping/TruncateableMappingErrorBehaviour
 software/amazon/awssdk/http/nio/netty/internal/ResponseHandler$PublisherAdapter$1
 sun/security/rsa/RSAPrivateKeyImpl
 sun/security/x509/GeneralSubtree
@@ -1119,6 +1118,7 @@ org/reactivestreams/Publisher
 com/exasol/adapter/document/files/stringfilter/StringFilterFactory
 org/apache/http/client/utils/URIUtils$UriFlag
 java/io/OutputStreamWriter
+com/exasol/adapter/document/edml/TruncateableMappingErrorBehaviour
 jdk/internal/perf/Perf
 com/sun/tools/javac/comp/Annotate
 jdk/internal/logger/DefaultLoggerFinder
@@ -1934,8 +1934,8 @@ sun/management/RuntimeImpl
 org/apache/http/conn/EofSensorInputStream
 jdk/internal/module/ModuleBootstrap
 java/net/URI$Parser
-sun/security/pkcs11/SunPKCS11
 software/amazon/awssdk/services/s3/model/NoSuchUploadException
+sun/security/pkcs11/SunPKCS11
 javax/xml/stream/events/Namespace
 jdk/internal/module/Builder
 io/netty/handler/codec/http/EmptyHttpHeaders
@@ -1948,7 +1948,6 @@ io/netty/handler/ssl/JdkSslContext
 com/exasol/sql/expression/literal/IntegerLiteral
 java/util/OptionalDouble
 java/lang/CloneNotSupportedException
-com/exasol/adapter/document/mapping/ConvertableMappingErrorBehaviour
 jdk/internal/module/SystemModulesMap
 software/amazon/awssdk/utils/internal/SystemSettingUtilsTestBackdoor
 io/netty/handler/ssl/SslHandler$SslTasksRunner
@@ -4156,6 +4155,7 @@ sun/util/calendar/BaseCalendar$Date
 org/apache/http/impl/cookie/RFC2109DomainHandler
 java/time/chrono/ChronoLocalDate
 software/amazon/awssdk/core/retry/RetryPolicyContext$Builder
+com/exasol/adapter/document/edml/ConvertableMappingErrorBehaviour
 sun/net/www/protocol/jar/Handler
 org/antlr/v4/runtime/Recognizer$1
 javax/crypto/CryptoPolicyParser
@@ -4223,6 +4223,7 @@ software/amazon/awssdk/auth/signer/internal/SignerKey
 sun/security/util/KeyStoreDelegator
 sun/nio/ch/IOUtil$1
 java/lang/System$Logger$Level
+jakarta/json/spi/JsonProvider$LazyFactoryLoader
 java/util/Spliterators$1Adapter
 org/antlr/v4/runtime/DefaultErrorStrategy
 software/amazon/awssdk/protocols/xml/AwsS3ProtocolFactory$Builder
@@ -4255,6 +4256,7 @@ org/apache/http/HttpVersion
 software/amazon/awssdk/profiles/ProfileFile$Builder
 org/apache/http/params/HttpProtocolParams
 io/netty/handler/ssl/SslHandshakeTimeoutException
+com/exasol/adapter/document/edml/MappingErrorBehaviour
 software/amazon/awssdk/core/SdkGlobalTime
 java/util/MissingResourceException
 io/netty/util/concurrent/OrderedEventExecutor
@@ -5822,7 +5824,6 @@ java/lang/invoke/BoundMethodHandle$Species_LLLLLL
 com/sun/tools/javac/comp/ConstFold
 software/amazon/awssdk/regions/servicemetadata/PiServiceMetadata
 java/security/SecureClassLoader$CodeSourceKey
-com/exasol/adapter/document/mapping/MappingErrorBehaviour
 java/util/stream/TerminalOp
 software/amazon/awssdk/services/s3/model/PutBucketMetricsConfigurationRequest
 javax/xml/stream/events/EntityDeclaration

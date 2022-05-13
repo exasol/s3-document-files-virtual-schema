@@ -3,13 +3,34 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exasol</groupId>
     <artifactId>s3-document-files-virtual-schema-generated-parent</artifactId>
-    <version>2.1.1</version>
+    <version>2.1.2</version>
     <packaging>pom</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
+        <test.excludeTags/>
     </properties>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://github.com/exasol/s3-document-files-virtual-schema/blob/main/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Exasol</name>
+            <email>opensource@exasol.com</email>
+            <organization>Exasol AG</organization>
+            <organizationUrl>https://www.exasol.com/</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/exasol/s3-document-files-virtual-schema.git</connection>
+        <developerConnection>scm:git:https://github.com/exasol/s3-document-files-virtual-schema.git</developerConnection>
+        <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
+    </scm>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -20,13 +41,18 @@
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.agent</artifactId>
-            <version>0.8.5</version>
+            <version>0.8.8</version>
             <scope>test</scope>
             <classifier>runtime</classifier>
         </dependency>
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -117,9 +143,7 @@
                     <!-- Set the highest log level for coverage testing, so that we
           have a chance to reach branches in the logging lambdas too. -->
                     <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties ${argLine}</argLine>
-                    <excludes>
-                        <exclude>**IT.java</exclude>
-                    </excludes>
+                    <excludedGroups>${test.excludeTags}</excludedGroups>
                 </configuration>
             </plugin>
             <plugin>
@@ -244,12 +268,10 @@
                     <!-- Set the highest log level for coverage testing, so that we have a chance to reach branches
           <property>	                      in the logging lambdas too. -->
                     <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties ${argLine}</argLine>
-                    <includes>
-                        <include>**IT.java</include>
-                    </includes>
                     <systemPropertyVariables>
                         <test.coverage>true</test.coverage>
                     </systemPropertyVariables>
+                    <excludedGroups>${test.excludeTags}</excludedGroups>
                 </configuration>
                 <executions>
                     <execution>
@@ -311,7 +333,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>error-code-crawler-maven-plugin</artifactId>
-                <version>0.7.1</version>
+                <version>1.1.0</version>
                 <executions>
                     <execution>
                         <id>verify</id>

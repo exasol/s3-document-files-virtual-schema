@@ -59,9 +59,7 @@ class PerformanceIT {
     }
 
     private String getSalesPositionMapping(final String source) {
-        final EdmlDefinition edmlDefinition = EdmlDefinition.builder()
-                .schema("https://schemas.exasol.com/edml-1.3.0.json")//
-                .source(source)//
+        final EdmlDefinition edmlDefinition = EdmlDefinition.builder().source(source)//
                 .destinationTable("SALES_POSITION")//
                 .addSourceReferenceColumn(true)//
                 .mapping(buildColumnMappingForSalesPositions()).build();

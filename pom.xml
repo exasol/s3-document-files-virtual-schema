@@ -9,19 +9,9 @@
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
         <junit.version>5.8.2</junit.version>
-        <jacoco.version>0.8.8</jacoco.version>
-        <gpg.skip>true</gpg.skip>
         <org.testcontainers.version>1.17.1</org.testcontainers.version>
         <vs-commom-document-files.version>7.0.0</vs-commom-document-files.version>
-        <!--
-                M4 does not fail tests if beforeAll fails
-                M5 fails in integration tests with a strange error
-                -->
-        <surefire.and.failsafe.plugin.version>3.0.0-M3</surefire.and.failsafe.plugin.version>
     </properties>
     <licenses>
         <license>
@@ -247,7 +237,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <forkCount>0</forkCount>
+                    <useModulePath>false</useModulePath>
                 </configuration>
             </plugin>
         </plugins>

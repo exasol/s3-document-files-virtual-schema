@@ -27,7 +27,7 @@
 | [AWS Java SDK for Amazon S3][2]                 | [Apache License, Version 2.0][3]  |
 | [udf-debugging-java][30]                        | [MIT][5]                          |
 | [Matcher for SQL Result Sets][32]               | [MIT][5]                          |
-| [exasol-test-setup-abstraction-java][34]        | [MIT][5]                          |
+| [exasol-test-setup-abstraction-java][34]        | [MIT License][35]                 |
 | [SnakeYAML][36]                                 | [Apache License, Version 2.0][37] |
 | [Small Json Files Test Fixture][38]             | [MIT][5]                          |
 | [Class list verifier][40]                       | [MIT][5]                          |
@@ -69,12 +69,14 @@
 [2]: https://aws.amazon.com/sdkforjava
 [5]: https://opensource.org/licenses/MIT
 [6]: https://github.com/mockito/mockito
+[50]: https://www.mojohaus.org/flatten-maven-plugin/
 [58]: http://www.mojohaus.org/versions-maven-plugin/
 [60]: https://github.com/exasol/project-keeper/
 [13]: http://opensource.org/licenses/BSD-3-Clause
 [46]: https://maven.apache.org/plugins/maven-compiler-plugin/
 [27]: https://github.com/exasol/test-db-builder-java/blob/main/LICENSE
 [20]: http://junit.org
+[34]: https://github.com/exasol/exasol-test-setup-abstraction-java/
 [43]: https://www.eclipse.org/legal/epl-2.0/
 [45]: http://www.gnu.org/licenses/lgpl.txt
 [74]: https://www.jacoco.org/jacoco/trunk/doc/maven.html
@@ -83,17 +85,17 @@
 [11]: https://projectlombok.org/LICENSE
 [32]: https://github.com/exasol/hamcrest-resultset-matcher
 [54]: http://zlika.github.io/reproducible-build-maven-plugin
+[35]: https://github.com/exasol/exasol-test-setup-abstraction-java/blob/main/LICENSE
 [9]: http://www.opensource.org/licenses/mit-license.php
 [44]: http://sonarsource.github.io/sonar-scanner-maven/
+[30]: https://github.com/exasol/udf-debugging-java/
 [16]: https://junit.org/junit5/
 [36]: https://bitbucket.org/snakeyaml/snakeyaml
-[50]: https://www.mojohaus.org/flatten-maven-plugin/flatten-maven-plugin
 [0]: https://github.com/exasol/virtual-schema-common-document-files/
 [12]: http://hamcrest.org/JavaHamcrest/
 [8]: http://www.slf4j.org
 [80]: http://maven.apache.org/plugins/maven-resources-plugin/
 [66]: https://github.com/exasol/artifact-reference-checker-maven-plugin
-[34]: https://github.com/exasol/exasol-test-setup-abstraction-java
 [40]: https://github.com/exasol/java-class-list-extractor
 [64]: https://maven.apache.org/plugins/maven-jar-plugin/
 [26]: https://github.com/exasol/test-db-builder-java/
@@ -111,7 +113,6 @@
 [52]: https://sonatype.github.io/ossindex-maven/maven-plugin/
 [1]: https://github.com/exasol/virtual-schema-common-document-files/blob/main/LICENSE
 [22]: https://testcontainers.org
-[30]: https://github.com/exasol/udf-debugging-java
 [84]: http://maven.apache.org/plugins/maven-deploy-plugin/
 [86]: http://maven.apache.org/plugins/maven-site-plugin/
 [76]: https://github.com/exasol/error-code-crawler-maven-plugin

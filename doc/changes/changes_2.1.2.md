@@ -22,6 +22,7 @@ This release upgrades dependencies and adapts the collection of regression tests
 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.213` to `1.12.236`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:0.2.2` to `0.3.2`
+* Added `com.exasol:performance-test-recorder-java:0.1.0`
 * Updated `com.exasol:udf-debugging-java:0.6.0` to `0.6.1`
 * Updated `com.exasol:virtual-schema-common-document-files:7.0.0` to `7.0.2`
 * Removed `junit:junit:4.13.2`

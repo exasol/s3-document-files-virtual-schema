@@ -1,7 +1,8 @@
 #!/bin/bash
+set -euo pipefail
 
-numRetries=3
-retryDelay=1
+readonly numRetries=3
+readonly retryDelay=1
 
 NUM=$numRetries
 until "$@"

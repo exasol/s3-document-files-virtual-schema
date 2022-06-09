@@ -4,6 +4,8 @@ Code name: Upgrade dependencies on 2.1.1
 
 ## Summary
 
+This release upgrades dependencies and adapts the collection of regression tests results.
+
 ## Refactoring
 
 * #81: Adapted to new regression test result database
@@ -12,8 +14,8 @@ Code name: Upgrade dependencies on 2.1.1
 
 ### Compile Dependency Updates
 
-* Updated `com.exasol:virtual-schema-common-document-files:7.0.0` to `7.0.1`
-* Updated `org.mockito:mockito-core:4.5.1` to `4.6.1`
+* Updated `com.exasol:virtual-schema-common-document-files:7.0.0` to `7.0.2`
+* Removed `org.mockito:mockito-core:4.5.1`
 * Updated `software.amazon.awssdk:s3:2.17.181` to `2.17.207`
 
 ### Test Dependency Updates
@@ -21,7 +23,9 @@ Code name: Upgrade dependencies on 2.1.1
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.213` to `1.12.236`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:0.2.2` to `0.3.2`
 * Updated `com.exasol:udf-debugging-java:0.6.0` to `0.6.1`
-* Updated `com.exasol:virtual-schema-common-document-files:7.0.0` to `7.0.1`
+* Updated `com.exasol:virtual-schema-common-document-files:7.0.0` to `7.0.2`
+* Removed `junit:junit:4.13.2`
+* Added `org.mockito:mockito-core:4.6.1`
 * Updated `org.testcontainers:junit-jupiter:1.17.1` to `1.17.2`
 * Updated `org.testcontainers:localstack:1.17.1` to `1.17.2`
 

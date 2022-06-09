@@ -10,23 +10,8 @@
     <properties>
         <junit.version>5.8.2</junit.version>
         <org.testcontainers.version>1.17.2</org.testcontainers.version>
-        <vs-commom-document-files.version>7.0.1</vs-commom-document-files.version>
+        <vs-commom-document-files.version>7.0.2</vs-commom-document-files.version>
     </properties>
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>https://opensource.org/licenses/MIT</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <name>Exasol</name>
-            <email>opensource@exasol.com</email>
-            <organization>Exasol AG</organization>
-            <organizationUrl>https://www.exasol.com/</organizationUrl>
-        </developer>
-    </developers>
     <profiles>
         <profile>
             <id>default</id>
@@ -197,6 +182,12 @@
                 <artifactId>ossindex-maven-plugin</artifactId>
                 <configuration>
                     <excludeVulnerabilityIds>
+                        <!-- com.google.guava:guava: https://ossindex.sonatype.org/vulnerability/sonatype-2020-0926
+                        Excluded because we assume that the attacker does not have access to the machine. -->
+                        <exclude>sonatype-2020-0926</exclude>
+                        <!-- io.netty:netty-handler: https://ossindex.sonatype.org/vulnerability/sonatype-2020-0026
+                        Not a vulnerability in netty but how it is configured by the client software.amazon.awssdk:netty-nio-client. -->
+                        <exclude>sonatype-2020-0026</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>

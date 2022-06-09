@@ -13,20 +13,15 @@ jobs:
       - name: Print tag name
         run: echo ${{ github.event.release.tag_name }}
       - name: Checkout the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: 11
-      - name: Cache local Maven repository
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          cache: 'maven'
       - name: Create AWS test setup
         run: |
           echo "owner = \"$OWNER\"" > cloudSetup/terraform.tfvars
@@ -43,7 +38,9 @@ jobs:
           echo "owner: ${{ secrets.AWS_TAG_OWNER }}" > test_config.yml
           echo "s3CacheBucket: persistent-s3-vs-test-file-cache" >> test_config.yml
       - name: Run tests and build with Maven
-        run: mvn --batch-mode --update-snapshots clean verify -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false -Derror-code-crawler.skip=true -Dmaven.javadoc.skip=true -Dproject-keeper.skip=true
+        run: mvn --batch-mode --update-snapshots clean verify \
+               -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false \
+               -Derror-code-crawler.skip=true -Dmaven.javadoc.skip=true -Dproject-keeper.skip=true
         env:
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -56,7 +53,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload regression test result
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: performance-test-results
           path: target/performanceLog-*.csv

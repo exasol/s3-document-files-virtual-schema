@@ -35,5 +35,5 @@ sed "s/\$/,\"$RELEASE_NAME\"/" "$performance_log_file" > "$performance_log_file_
   "$jdbc_client_dir"/exajload \
     -c demodb.exasol.com \
     -u "$REGRESSION_TEST_RESULT_SUBMIT_USER" \
-    -P "$REGRESSION_TEST_RESULT_SUBMIT_PASS" \
+    -P "$REGRESSION_TEST_RESULT_SUBMIT_PASSWORD" \
     -sql "IMPORT INTO EXASOL_INTEGRATION_TEAM_MONITORING.REGRESSION_TEST_RESULTS FROM LOCAL CSV FILE '$performance_log_file_with_release_name' COLUMN SEPARATOR = ',' SKIP = 1;"

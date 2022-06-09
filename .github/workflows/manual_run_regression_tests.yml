@@ -65,7 +65,7 @@ jobs:
         env:
           RELEASE_NAME: "${{ github.event.release.tag_name }}"
           REGRESSION_TEST_RESULT_SUBMIT_USER: "${{ secrets.REGRESSION_TEST_RESULT_SUBMIT_USER }}"
-          REGRESSION_TEST_RESULT_SUBMIT_PASS: "${{ secrets.REGRESSION_TEST_RESULT_SUBMIT_PASS }}"
+          REGRESSION_TEST_RESULT_SUBMIT_PASSWORD: "${{ secrets.REGRESSION_TEST_RESULT_SUBMIT_PASSWORD }}"
       - name: Destroy cluster
         run: terraform -chdir=cloudSetup/ destroy -auto-approve
         if: always() # also run if tests failed

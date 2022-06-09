@@ -11,6 +11,8 @@ import com.exasol.adapter.document.files.stringfilter.StringFilter;
  */
 public class S3FileFinderFactory implements FileFinderFactory {
 
+    private static final long serialVersionUID = 6701264611866170553L;
+
     @Override
     public RemoteFileFinder getFinder(final StringFilter filePattern,
             final ConnectionPropertiesReader connectionInformation) {

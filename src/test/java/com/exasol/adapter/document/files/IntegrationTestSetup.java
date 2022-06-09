@@ -30,7 +30,7 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.0.0-s3-2.1.1.jar";
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.0.2-s3-2.1.2.jar";
     static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
@@ -59,7 +59,7 @@ public class IntegrationTestSetup implements AutoCloseable {
         this.statement.executeUpdate("ALTER SESSION SET QUERY_CACHE = 'OFF';");
         this.bucket = this.exasolTestSetup.getDefaultBucket();
         this.udfTestSetup = new UdfTestSetup(this.exasolTestSetup, this.connection);
-        final List<String> jvmOptions = new ArrayList(Arrays.asList(this.udfTestSetup.getJvmOptions()));
+        final List<String> jvmOptions = new ArrayList<>(Arrays.asList(this.udfTestSetup.getJvmOptions()));
         this.exasolObjectFactory = new ExasolObjectFactory(this.connection,
                 ExasolObjectConfiguration.builder().withJvmOptions(jvmOptions.toArray(String[]::new)).build());
         final ExasolSchema adapterSchema = this.exasolObjectFactory.createSchema("ADAPTER");
@@ -114,11 +114,6 @@ public class IntegrationTestSetup implements AutoCloseable {
         } catch (final IOException exception) {
             throw new UncheckedIOException("Failed to serialize connection settings", exception);
         }
-    }
-
-    private String getS3Address() {
-        final String inDatabaseAddress = getInDatabaseS3Address();
-        return "http://" + this.s3BucketName + ".s3." + this.s3TestSetup.getRegion() + "." + inDatabaseAddress + "/";
     }
 
     private String getInDatabaseS3Address() {

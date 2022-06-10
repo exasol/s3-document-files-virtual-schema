@@ -1,4 +1,4 @@
-# Virtual Schema for document data in files on AWS S3 2.1.2, released 2022-06-??
+# Virtual Schema for document data in files on AWS S3 2.1.2, released 2022-06-10
 
 Code name: Upgrade dependencies on 2.1.1
 

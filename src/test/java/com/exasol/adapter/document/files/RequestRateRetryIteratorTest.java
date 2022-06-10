@@ -33,6 +33,7 @@ class RequestRateRetryIteratorTest {
     @Test
     void testOtherExceptionsPass() {
         final AwsServiceException exception = S3Exception.builder().message("Something else went wrong").build();
+        @SuppressWarnings("unchecked")
         final Iterator<ListObjectsV2Response> source = mock(Iterator.class);
         when(source.hasNext()).thenReturn(true);
         when(source.next()).thenThrow(exception);
@@ -54,7 +55,7 @@ class RequestRateRetryIteratorTest {
         private int counter = 0;
         private final float errorLikeliness;
 
-        private ThrottledIterator(float successLikeliness) {
+        private ThrottledIterator(final float successLikeliness) {
             this.errorLikeliness = successLikeliness;
         }
 

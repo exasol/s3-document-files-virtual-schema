@@ -42,7 +42,8 @@ jobs:
           echo "owner: ${{ secrets.AWS_TAG_OWNER }}" > test_config.yml
           echo "s3CacheBucket: persistent-s3-vs-test-file-cache" >> test_config.yml
       - name: Run tests and build with Maven
-        run: mvn --batch-mode --update-snapshots verify \
+        run: |
+          mvn --batch-mode --update-snapshots verify \
                -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false \
                -Derror-code-crawler.skip=true -Dmaven.javadoc.skip=true -Dproject-keeper.skip=true
         env:

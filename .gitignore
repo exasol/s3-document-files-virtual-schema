@@ -18,6 +18,11 @@ src/test/resources/integration/driver/hive/*.jar
 src/test/resources/integration/driver/oracle/*.jar
 src/test/resources/integration/driver/oracle/*.zip
 
+# Extension
+extension/node_modules/
+extension/dist/
+extension/coverage/
+
 # Others
 .DS_Store
 *.swp

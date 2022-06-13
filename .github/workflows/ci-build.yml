@@ -20,6 +20,10 @@ jobs:
           distribution: 'temurin'
           java-version: 11
           cache: 'maven'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -31,14 +35,24 @@ jobs:
           echo "owner: ${{ secrets.AWS_TAG_OWNER }}" > test_config.yml
           echo "s3CacheBucket: persistent-s3-vs-test-file-cache" >> test_config.yml
       - name: Run tests and build with Maven
-        run: mvn --batch-mode --update-snapshots clean verify sonar:sonar --file pom.xml -DtrimStackTrace=false -Dsonar.organization=exasol -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+        run: mvn --batch-mode --update-snapshots clean verify -DtrimStackTrace=false
         env:
-          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "eu-central-1"
+
+      - name: Build extension
+        run: |
+          cd extension
+          npm ci
+          npm run build
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Upload generated class list to artifacts
         uses: actions/upload-artifact@v3
         with:

@@ -1,0 +1,22 @@
+{
+    "name": "s3-document-files-virtual-schema-extension",
+    "version": "0.1.0",
+    "main": "dist/extension.js",
+    "description": "Extension for s3 virtual schemas",
+    "license": "MIT",
+    "scripts": {
+        "build": "tsc --build",
+        "clean": "tsc --build --clean",
+        "test": "jest"
+    },
+    "dependencies": {
+        "@exasol/extension-manager-interface": "0.1.2"
+    },
+    "devDependencies": {
+        "@types/jest": "^28.1.1",
+        "jest": "28.1.1",
+        "ts-jest": "^28.0.4",
+        "ts-node": "^10.8.1",
+        "typescript": "4.6.3"
+    }
+}

@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
+          cache-dependency-path: extension/package-lock.json
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:

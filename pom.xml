@@ -11,6 +11,12 @@
         <junit.version>5.8.2</junit.version>
         <org.testcontainers.version>1.17.2</org.testcontainers.version>
         <vs-commom-document-files.version>7.0.2</vs-commom-document-files.version>
+        <!-- Additional sonar configuration for analyzing TypeScript extension -->
+        <sonar.sources>src/main/,extension/src/</sonar.sources>
+        <sonar.exclusions>extension/src/*.test.ts</sonar.exclusions>
+        <sonar.tests>src/test/,extension/src</sonar.tests>
+        <sonar.test.inclusions>src/test/,*.test.ts</sonar.test.inclusions>
+        <sonar.javascript.lcov.reportPaths>extension/coverage/lcov.info</sonar.javascript.lcov.reportPaths>
     </properties>
     <profiles>
         <profile>
@@ -222,6 +228,78 @@
                 <configuration>
                     <useModulePath>false</useModulePath>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>extension/coverage</directory>
+                            <includes>
+                                <include>**</include>
+                            </includes>
+                        </fileset>
+                        <fileset>
+                            <directory>extension/dist</directory>
+                            <includes>
+                                <include>**</include>
+                            </includes>
+                        </fileset>
+                        <fileset>
+                            <directory>extension/node_modules</directory>
+                            <includes>
+                                <include>**</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>npm-install</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>extension/</workingDirectory>
+                            <executable>npm</executable>
+                            <useMavenLogger>true</useMavenLogger>
+                            <commandlineArgs>ci</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>compile-extension</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>extension/</workingDirectory>
+                            <executable>npm</executable>
+                            <useMavenLogger>true</useMavenLogger>
+                            <commandlineArgs>run build</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unit-test-extension</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>extension/</workingDirectory>
+                            <executable>npm</executable>
+                            <useMavenLogger>true</useMavenLogger>
+                            <commandlineArgs>test</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

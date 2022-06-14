@@ -10,7 +10,7 @@
         "test": "jest"
     },
     "dependencies": {
-        "@exasol/extension-manager-interface": "0.1.2"
+        "@exasol/extension-manager-interface": "0.1.5"
     },
     "devDependencies": {
         "@types/jest": "^28.1.1",

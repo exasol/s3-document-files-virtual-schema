@@ -5,8 +5,10 @@
     "description": "Extension for s3 virtual schemas",
     "license": "MIT",
     "scripts": {
-        "build": "tsc --build",
-        "clean": "tsc --build --clean",
+        "build": "npm run generate && npm run compile",
+        "compile": "tsc --build && esbuild dist/extension.js --bundle --outfile=dist/s3-vs-extension.js --target=es6",
+        "generate": "bash generate-config.sh",
+        "clean": "rm -rf dist/",
         "test": "jest"
     },
     "dependencies": {
@@ -14,6 +16,7 @@
     },
     "devDependencies": {
         "@types/jest": "^28.1.1",
+        "esbuild": "^0.14.43",
         "jest": "28.1.1",
         "ts-jest": "^28.0.4",
         "ts-node": "^10.8.1",

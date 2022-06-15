@@ -186,6 +186,44 @@
             <version>0.1.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>maven-project-version-getter</artifactId>
+            <version>1.1.0</version>
+            <scope>test</scope>
+          </dependency>
+        <!-- Dependencies for generated extension-manager client -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+            <scope>test</scope>
+          </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.6.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>2.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>2.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.gsonfire</groupId>
+            <artifactId>gson-fire</artifactId>
+            <version>1.8.5</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -274,19 +312,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>compile-extension</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <workingDirectory>extension/</workingDirectory>
-                            <executable>npm</executable>
-                            <useMavenLogger>true</useMavenLogger>
-                            <commandlineArgs>run build</commandlineArgs>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>unit-test-extension</id>
                         <phase>test</phase>
                         <goals>
@@ -297,6 +322,71 @@
                             <executable>npm</executable>
                             <useMavenLogger>true</useMavenLogger>
                             <commandlineArgs>test</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>build-extension</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>extension/</workingDirectory>
+                            <executable>npm</executable>
+                            <useMavenLogger>true</useMavenLogger>
+                            <commandlineArgs>run build</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>2.4.27</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/test/resources/extension-manager-swagger.yaml</inputSpec>
+                            <language>java</language>
+                            <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <apiPackage>com.exasol.extensionmanager.client.api</apiPackage>
+                            <modelPackage>com.exasol.extensionmanager.client.model</modelPackage>
+                            <invokerPackage>com.exasol.extensionmanager.client.invoker</invokerPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <configHelp>false</configHelp>
+                            <configOptions>
+                                <sourceFolder>extension-manager-client</sourceFolder>
+                                <dateLibrary>java11</dateLibrary>
+                                <java11>true</java11>
+                                <checkDuplicatedModelName>true</checkDuplicatedModelName>
+                                <useRuntimeException>true</useRuntimeException>
+                                <library>okhttp-gson</library>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>add-generated-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/swagger/extension-manager-client/</source>
+                            </sources>
                         </configuration>
                     </execution>
                 </executions>

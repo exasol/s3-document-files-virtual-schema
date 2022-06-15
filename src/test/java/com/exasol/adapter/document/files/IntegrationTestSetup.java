@@ -31,7 +31,7 @@ import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 public class IntegrationTestSetup implements AutoCloseable {
     private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.0.2-s3-2.2.0.jar";
-    static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
+    public static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
             Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();

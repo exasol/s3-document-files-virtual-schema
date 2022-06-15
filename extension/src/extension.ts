@@ -6,19 +6,21 @@ import {
     registerExtension,
     SqlClient
 } from "@exasol/extension-manager-interface";
+import { CONFIG } from "./extension-config";
 
 export function createExtension(): ExasolExtension {
-    const version = "2.2.0";
-    const documentFilesVsVersion = "7.0.2";
-    const bucketFsFilename = "document-files-virtual-schema-dist-" + documentFilesVsVersion + "-s3-" + version + ".jar";
-    const fileSize = 123;
-    const downloadUrl = "https://github.com/exasol/s3-document-files-virtual-schema/releases/download/" + version + "/" + bucketFsFilename;
+    const version = CONFIG.version;
+    const documentFilesVsVersion = CONFIG.documentFilesVsVersion;
+    const filename = CONFIG.fileName;
+    const fileSize = CONFIG.fileSizeBytes;
+    const repoBaseUrl = "https://github.com/exasol/s3-document-files-virtual-schema"
+    const downloadUrl = `${repoBaseUrl}/releases/download/${version}/${filename}`;
     return {
-        name: "S3 Document Files Virtual Schema",
+        name: "S3 Virtual Schema",
         description: "Virtual Schema for document files on AWS S3",
         installableVersions: [version],
-        bucketFsUploads: [{ bucketFsFilename, downloadUrl, fileSize, name: "S3 VS Jar file", licenseUrl: "", licenseAgreementRequired: false }],
-        install(sqlClient) {
+        bucketFsUploads: [{ bucketFsFilename: filename, downloadUrl, fileSize, name: "S3 VS Jar file", licenseUrl: `${repoBaseUrl}/blob/main/LICENSE`, licenseAgreementRequired: false }],
+        install: (sqlClient: SqlClient) {
             sqlClient.runQuery("CREATE ADAPTER SCRIPT ...")
         },
         addInstance(_installation: Installation, _params: ParameterValues, _sql: SqlClient): Instance {

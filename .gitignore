@@ -22,6 +22,7 @@ src/test/resources/integration/driver/oracle/*.zip
 extension/node_modules/
 extension/dist/
 extension/coverage/
+extension/src/extension-config.ts
 
 # Others
 .DS_Store
@@ -44,3 +45,4 @@ setEnv.sh
 test_config.yml
 deleteLambdaResources.sh
 *.flattened-pom.xml
+/.apt_generated/

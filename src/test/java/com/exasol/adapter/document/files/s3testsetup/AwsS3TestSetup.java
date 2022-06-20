@@ -8,6 +8,8 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
+import java.util.Optional;
+
 public class AwsS3TestSetup implements S3TestSetup {
     private final AwsCredentials awsCredentials;
     private final String region;
@@ -42,11 +44,16 @@ public class AwsS3TestSetup implements S3TestSetup {
 
     @Override
     public String getPassword() {
+        return this.awsCredentials.secretAccessKey();
+    }
+
+    @Override
+    public Optional<String> getMfaToken() {
         if (this.awsCredentials instanceof AwsSessionCredentials) {
             final AwsSessionCredentials sessionCredentials = (AwsSessionCredentials) this.awsCredentials;
-            return sessionCredentials.secretAccessKey() + "##TOKEN##" + sessionCredentials.sessionToken();
+            return Optional.of(sessionCredentials.sessionToken());
         } else {
-            return this.awsCredentials.secretAccessKey();
+            return Optional.empty();
         }
     }
 

@@ -11,6 +11,8 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
+import java.util.Optional;
+
 public class LocalStackS3TestSetup implements S3TestSetup {
     private final LocalStackContainer localStackContainer = new LocalStackContainer(
             DockerImageName.parse("localstack/localstack:0.12.2")).withServices(S3);
@@ -48,6 +50,11 @@ public class LocalStackS3TestSetup implements S3TestSetup {
     @Override
     public String getPassword() {
         return this.localStackContainer.getSecretKey();
+    }
+
+    @Override
+    public Optional<String> getMfaToken() {
+        return Optional.empty();
     }
 
     @Override

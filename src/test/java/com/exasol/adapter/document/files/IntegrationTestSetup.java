@@ -93,12 +93,15 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     public JsonObjectBuilder getConnectionConfig() {
-        return Json.createObjectBuilder()//
+        Optional<String> mfaToken = this.s3TestSetup.getMfaToken();
+        JsonObjectBuilder builder = Json.createObjectBuilder()//
                 .add("awsEndpointOverride", getInDatabaseS3Address())//
                 .add("awsRegion", this.s3TestSetup.getRegion())//
                 .add("s3Bucket", this.s3BucketName)//
                 .add("awsAccessKeyId", this.s3TestSetup.getUsername())//
                 .add("awsSecretAccessKey", this.s3TestSetup.getPassword());
+        mfaToken.ifPresent(s -> builder.add("awsSessionToken", s));
+        return builder;
     }
 
     public ConnectionDefinition createConnectionDefinition(final JsonObjectBuilder details) {

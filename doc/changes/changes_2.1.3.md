@@ -4,6 +4,10 @@ Code name:
 
 ## Summary
 
+## Features
+
+* #70: Added validation that awsEndpointOverride starts without protocol
+
 ## Bug Fixes
 
 * #85: Fixed MFA-support in integration tests 

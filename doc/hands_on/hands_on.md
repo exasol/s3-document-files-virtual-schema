@@ -108,7 +108,7 @@ CREATE CONNECTION S3_CONNECTION
     }';
 ```
 
-For details see the [user-guide](../user_guide/user_guide.md#user-content-creating-a-connection).
+For details see the [user-guide](../user_guide/user_guide.md#creating-a-connection).
 
 ## Creating a Mapping Definition
 

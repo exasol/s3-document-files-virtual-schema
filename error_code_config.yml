@@ -2,4 +2,4 @@ error-tags:
   S3VS:
     packages:
       - com.exasol.adapter.document.files
-    highest-index: 7
+    highest-index: 8

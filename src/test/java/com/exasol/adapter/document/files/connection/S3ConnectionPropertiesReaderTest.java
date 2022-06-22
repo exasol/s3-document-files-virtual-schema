@@ -26,10 +26,6 @@ class S3ConnectionPropertiesReaderTest {
                 () -> assertThat(properties.isUseSsl(), equalTo(true)));
     }
 
-    private S3ConnectionProperties runReader(final String json) {
-        return new S3ConnectionPropertiesReader().read(new ConnectionPropertiesReader(json, ""));
-    }
-
     @Test
     void testReadAll() {
         final S3ConnectionProperties properties = runReader(
@@ -52,7 +48,23 @@ class S3ConnectionPropertiesReaderTest {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> runReader("{\"awsAccessKeyId\": \"myKey\", \"awsSecretAccessKey\": \"mySecretAccessKey\", "
                         + "\"awsRegion\": \"eu-central-1\" }"));
-        assertThat(exception.getMessage(), startsWith(
-                "E-VSD-93: Invalid connection. The connection definition does not specify the required property 's3Bucket'. Please check the user-guide at:"));
+        assertThat(exception.getMessage(),
+                startsWith("E-VSD-93: Invalid connection."
+                        + " The connection definition does not specify the required property 's3Bucket'."
+                        + " Please check the user-guide at:"));
+    }
+
+    @Test
+    void testAwsEndpointOverrideWithProtocol() {
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> runReader("{\"awsAccessKeyId\": \"myKey\", " + "\"awsSecretAccessKey\": \"mySecretAccessKey\", "
+                        + "\"awsRegion\": \"eu-central-1\", " + "\"awsEndpointOverride\": \"https://aws.com\" }"));
+        assertThat(exception.getMessage(),
+                startsWith("E-S3VS-8: " + "Property 'awsEndpointOverride' has invalid value 'https://aws.com'."
+                        + " Value must not contain a protocol." + " Please remove prefix 'https://'."));
+    }
+
+    private S3ConnectionProperties runReader(final String json) {
+        return new S3ConnectionPropertiesReader().read(new ConnectionPropertiesReader(json, ""));
     }
 }

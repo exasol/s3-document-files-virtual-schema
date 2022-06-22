@@ -13,11 +13,10 @@ public class S3ConnectionPropertiesReader {
     public static final String AWS_ENDPOINT_OVERRIDE = "awsEndpointOverride";
 
     private Optional<String> readAwsEndpointOverride(final ConnectionPropertiesReader reader) {
-        final Optional<String> optional = reader.readString(AWS_ENDPOINT_OVERRIDE);
-        if (optional.isEmpty()) {
-            return optional;
-        }
-        final String input = optional.get();
+        return reader.readString(AWS_ENDPOINT_OVERRIDE).map(this::ensureNoProtocol);
+    }
+
+    private String ensureNoProtocol(final String input) {
         final Matcher matcher = PROTOCOLS.matcher(input);
         if (matcher.find()) {
             throw new IllegalArgumentException(ExaError.messageBuilder("E-S3VS-8")
@@ -25,7 +24,7 @@ public class S3ConnectionPropertiesReader {
                             + " Value must not contain a protocol.", AWS_ENDPOINT_OVERRIDE, input)
                     .mitigation("Please remove prefix {{prefix}}.", matcher.group(0)).toString());
         } else {
-            return optional;
+            return input;
         }
     }
 

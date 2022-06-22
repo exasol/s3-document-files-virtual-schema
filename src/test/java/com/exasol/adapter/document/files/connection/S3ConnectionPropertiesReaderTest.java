@@ -1,13 +1,14 @@
 package com.exasol.adapter.document.files.connection;
 
-import com.exasol.adapter.document.connection.ConnectionPropertiesReader;
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+
+import com.exasol.adapter.document.connection.ConnectionPropertiesReader;
 
 class S3ConnectionPropertiesReaderTest {
     @Test
@@ -47,22 +48,20 @@ class S3ConnectionPropertiesReaderTest {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> runReader("{\"awsAccessKeyId\": \"myKey\", \"awsSecretAccessKey\": \"mySecretAccessKey\", "
                         + "\"awsRegion\": \"eu-central-1\" }"));
-        assertThat(exception.getMessage(), startsWith("E-VSD-93: Invalid connection."
-                + " The connection definition does not specify the required property 's3Bucket'."
-                + " Please check the user-guide at:"));
+        assertThat(exception.getMessage(),
+                startsWith("E-VSD-93: Invalid connection."
+                        + " The connection definition does not specify the required property 's3Bucket'."
+                        + " Please check the user-guide at:"));
     }
 
     @Test
     void testAwsEndpointOverrideWithProtocol() {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> runReader("{\"awsAccessKeyId\": \"myKey\", "
-                        + "\"awsSecretAccessKey\": \"mySecretAccessKey\", "
-                        + "\"awsRegion\": \"eu-central-1\", "
-                        + "\"awsEndpointOverride\": \"https://aws.com\" }"));
-        assertThat(exception.getMessage(), startsWith("E-S3VS-8: "
-                + "Property 'awsEndpointOverride' has invalid value 'https://aws.com'."
-                + " Value must not contain a protocol."
-                + " Please remove prefix 'https://'."));
+                () -> runReader("{\"awsAccessKeyId\": \"myKey\", " + "\"awsSecretAccessKey\": \"mySecretAccessKey\", "
+                        + "\"awsRegion\": \"eu-central-1\", " + "\"awsEndpointOverride\": \"https://aws.com\" }"));
+        assertThat(exception.getMessage(),
+                startsWith("E-S3VS-8: " + "Property 'awsEndpointOverride' has invalid value 'https://aws.com'."
+                        + " Value must not contain a protocol." + " Please remove prefix 'https://'."));
     }
 
     private S3ConnectionProperties runReader(final String json) {

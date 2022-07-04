@@ -29,7 +29,6 @@ public class ExtensionManagerSetup implements AutoCloseable {
                 Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
         final ExtensionManagerInstaller installer = ExtensionManagerInstaller.forVersion("latest");
         final Path extensionManagerExecutable = installer.install();
-        // extensionManagerExecutable = Paths.get("../extension-manager/extension-manager");
         final ExtensionManagerProcess extensionManager = ExtensionManagerProcess.start(extensionManagerExecutable,
                 extensionFolder);
         uploadToBucketFs(exasolTestSetup.getDefaultBucket());

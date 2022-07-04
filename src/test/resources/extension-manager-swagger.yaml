@@ -1,4 +1,6 @@
 basePath: /
+consumes:
+- application/json
 definitions:
   restAPI.ExtensionsResponse:
     properties:
@@ -49,6 +51,7 @@ paths:
   /extensions:
     get:
       description: Get a list of all available extensions.
+      operationId: getExtensions
       parameters:
       - description: Hostname of the Exasol DB to manage
         in: query
@@ -87,6 +90,7 @@ paths:
       description: Get a list of all installations. Installation means, that an extension
         is installed in the database (e.g. JAR files added to BucketFS, Adapter Script
         created).
+      operationId: getInstallations
       parameters:
       - description: Hostname of the Exasol DB to manage
         in: query
@@ -120,4 +124,6 @@ paths:
           schema:
             type: string
       summary: Get all installations
+produces:
+- application/json
 swagger: "2.0"

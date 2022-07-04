@@ -18,11 +18,11 @@ public class ExtensionManagerClient {
     }
 
     public List<RestAPIExtensionsResponseExtension> getExtensions() {
-        return this.apiClient.extensionsGet(getDbHost(), getDbPort(), getDbUser(), getDbPassword()).getExtensions();
+        return this.apiClient.getExtensions(getDbHost(), getDbPort(), getDbUser(), getDbPassword()).getExtensions();
     }
 
     public List<RestAPIInstallationsResponseInstallation> getInstallations() {
-        return this.apiClient.installationsGet(getDbHost(), getDbPort(), getDbUser(), getDbPassword())
+        return this.apiClient.getInstallations(getDbHost(), getDbPort(), getDbUser(), getDbPassword())
                 .getInstallations();
     }
 

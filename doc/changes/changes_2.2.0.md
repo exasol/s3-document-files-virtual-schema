@@ -19,20 +19,29 @@ This release allows installing an S3 Virtual Schema using the [extension manager
 
 ### Compile Dependency Updates
 
-* Added `com.google.code.gson:gson:2.9.0`
-* Added `com.squareup.okhttp:logging-interceptor:2.7.5`
-* Added `com.squareup.okhttp:okhttp:2.7.5`
-* Added `io.gsonfire:gson-fire:1.8.5`
-* Added `io.swagger:swagger-annotations:1.6.6`
+* Added `com.brsanthu:migbase64:2.2`
+* Added `com.fasterxml.jackson.core:jackson-annotations:2.13.3`
+* Added `com.fasterxml.jackson.core:jackson-core:2.13.3`
+* Added `com.fasterxml.jackson.core:jackson-databind:2.13.3`
+* Added `io.swagger.core.v3:swagger-annotations:2.2.1`
+* Added `org.glassfish.jersey.core:jersey-client:2.36`
+* Added `org.glassfish.jersey.inject:jersey-hk2:2.36`
+* Added `org.glassfish.jersey.media:jersey-media-json-jackson:2.36`
+* Added `org.glassfish.jersey.media:jersey-media-multipart:2.36`
+* Updated `software.amazon.awssdk:s3:2.17.207` to `2.17.224`
 
 ### Test Dependency Updates
 
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.236` to `1.12.253`
 * Added `com.exasol:maven-project-version-getter:1.1.0`
-* Added `javax.annotation:javax.annotation-api:1.3.2`
+* Updated `com.exasol:test-db-builder-java:3.3.2` to `3.3.3`
+* Updated `com.exasol:udf-debugging-java:0.6.1` to `0.6.4`
+* Updated `org.testcontainers:junit-jupiter:1.17.2` to `1.17.3`
+* Updated `org.testcontainers:localstack:1.17.2` to `1.17.3`
 
 ### Plugin Dependency Updates
 
-* Added `io.swagger:swagger-codegen-maven-plugin:2.4.27`
+* Added `io.swagger.codegen.v3:swagger-codegen-maven-plugin:3.0.34`
 * Updated `org.apache.maven.plugins:maven-clean-plugin:2.5` to `3.2.0`
 * Added `org.codehaus.mojo:build-helper-maven-plugin:3.3.0`
 * Added `org.codehaus.mojo:exec-maven-plugin:3.0.0`

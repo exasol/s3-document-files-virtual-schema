@@ -15,7 +15,6 @@ import com.exasol.extensionmanager.client.model.RestAPIInstallationsResponseInst
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
 class ExtensionIT {
-
     private static ExtensionManagerSetup extensionManagerSetup;
 
     @TempDir
@@ -28,7 +27,9 @@ class ExtensionIT {
 
     @AfterAll
     static void teardown() {
-        extensionManagerSetup.close();
+        if (extensionManagerSetup != null) {
+            extensionManagerSetup.close();
+        }
     }
 
     @Test

@@ -3,23 +3,23 @@ package com.exasol.adapter.document.files.extension;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.exasol.adapter.document.files.extension.ServerProcess.StreamConsumer;
+import com.exasol.adapter.document.files.extension.process.*;
 import com.google.re2j.Matcher;
 import com.google.re2j.Pattern;
 
 public class ExtensionManagerProcess implements AutoCloseable {
     private static final Logger LOGGER = Logger.getLogger(ExtensionManagerProcess.class.getName());
     private static final Duration SERVER_START_TIMEOUT = Duration.ofSeconds(10);
-    private final ServerProcess process;
+    private final SimpleProcess process;
     private final int serverPort;
 
-    private ExtensionManagerProcess(final ServerProcess process, final int serverPort) {
+    private ExtensionManagerProcess(final SimpleProcess process, final int serverPort) {
         this.process = process;
         this.serverPort = serverPort;
     }
@@ -31,9 +31,14 @@ public class ExtensionManagerProcess implements AutoCloseable {
                 extensionFolder.toString());
         final ServerOutputConsumer stdOutConsumer = new ServerOutputConsumer(StreamType.STD_OUT);
         final ServerOutputConsumer stdErrorConsumer = new ServerOutputConsumer(StreamType.STD_ERR);
-        final ServerProcess process = ServerProcess.start(command, stdOutConsumer, stdErrorConsumer);
-        final int port = stdErrorConsumer.waitUntilStartupFinished();
-        return new ExtensionManagerProcess(process, port);
+        final SimpleProcess process = SimpleProcess.start(command, stdOutConsumer, stdErrorConsumer);
+        final Optional<Integer> port = stdErrorConsumer.getServerPort();
+        if (port.isEmpty()) {
+            process.stop();
+            throw new IllegalStateException(
+                    "Extension manager did not server log port. Check log output for error messages.");
+        }
+        return new ExtensionManagerProcess(process, port.get());
     }
 
     @Override
@@ -46,23 +51,9 @@ public class ExtensionManagerProcess implements AutoCloseable {
         return "http://localhost:" + this.serverPort;
     }
 
-    private enum StreamType {
-        STD_OUT("out"), STD_ERR("err");
+    private static class ServerOutputConsumer implements ProcessStreamConsumer {
 
-        private String typeName;
-
-        private StreamType(final String name) {
-            this.typeName = name;
-        }
-
-        @Override
-        public String toString() {
-            return this.typeName;
-        }
-    }
-
-    private static class ServerOutputConsumer implements StreamConsumer {
-
+        private static final Pattern PORT_LOG_LINE = Pattern.compile(".*Starting server on port (\\d+).*");
         private final CountDownLatch startupFinished = new CountDownLatch(1);
         private Integer serverPort = null;
         private final StreamType type;
@@ -76,23 +67,30 @@ public class ExtensionManagerProcess implements AutoCloseable {
             LOGGER.fine(() -> "Server " + this.type + "> " + line);
             final Optional<Integer> port = extractPort(line);
             if (port.isPresent()) {
-                readingFinished();
+                this.startupFinished.countDown();
                 this.serverPort = port.get();
             }
         }
 
-        public int waitUntilStartupFinished() {
+        Optional<Integer> getServerPort() {
+            final boolean success = awaitStartupFinished();
+            if (!success || (this.serverPort == null)) {
+                return Optional.empty();
+            }
+            return Optional.of(this.serverPort);
+        }
+
+        private boolean awaitStartupFinished() {
             try {
-                this.startupFinished.await(SERVER_START_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+                return this.startupFinished.await(SERVER_START_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
             } catch (final InterruptedException exception) {
                 Thread.currentThread().interrupt();
                 throw new IllegalStateException("Interrupted while waiting for startup to finish", exception);
             }
-            return Objects.requireNonNull(this.serverPort, "server port");
         }
 
         private Optional<Integer> extractPort(final String line) {
-            final Matcher matcher = Pattern.compile(".*Starting server on port (\\d+).*").matcher(line);
+            final Matcher matcher = PORT_LOG_LINE.matcher(line);
             if (matcher.matches()) {
                 return Optional.of(Integer.parseInt(matcher.group(1)));
             }
@@ -101,17 +99,12 @@ public class ExtensionManagerProcess implements AutoCloseable {
 
         @Override
         public void readFinished() {
-            readingFinished();
+            // Ignore
         }
 
         @Override
         public void readFailed(final IOException exception) {
-            LOGGER.log(Level.WARNING, "Failed to read from stream", exception);
-            readingFinished();
-        }
-
-        private void readingFinished() {
-            this.startupFinished.countDown();
+            // Ignore
         }
     }
 }

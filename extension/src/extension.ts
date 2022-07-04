@@ -20,7 +20,7 @@ export function createExtension(): ExasolExtension {
         description: "Virtual Schema for document files on AWS S3",
         installableVersions: [version],
         bucketFsUploads: [{ bucketFsFilename: filename, downloadUrl, fileSize, name: "S3 VS Jar file", licenseUrl: `${repoBaseUrl}/blob/main/LICENSE`, licenseAgreementRequired: false }],
-        install: (sqlClient: SqlClient) {
+        install(sqlClient: SqlClient) {
             sqlClient.runQuery("CREATE ADAPTER SCRIPT ...")
         },
         addInstance(_installation: Installation, _params: ParameterValues, _sql: SqlClient): Instance {

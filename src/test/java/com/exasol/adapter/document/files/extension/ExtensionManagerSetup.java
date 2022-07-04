@@ -37,7 +37,7 @@ public class ExtensionManagerSetup implements AutoCloseable {
         final Path extension = Paths.get("extension/dist/s3-vs-extension.js").toAbsolutePath();
         if (!Files.exists(extension)) {
             throw new IllegalStateException("Extension file " + extension + " not found. Build it by executing: cd "
-                    + extension.getParent().getParent() + " && npm run build");
+                    + extension.getParent().getParent() + " && npm install && npm run build");
         }
         copy(extension, extensionFolder.resolve(extension.getFileName()));
     }

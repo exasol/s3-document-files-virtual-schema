@@ -418,6 +418,17 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.exasol</groupId>
+                <artifactId>error-code-crawler-maven-plugin</artifactId>
+                <configuration>
+                    <sourcePaths>
+                        <sourcePath>target/delombok/main</sourcePath>
+                        <sourcePath>target/delombok/test</sourcePath>
+                        <sourcePath>target/generated-sources/swagger/extension-manager-client/</sourcePath>
+                    </sourcePaths>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <parent>

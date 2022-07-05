@@ -9,8 +9,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.exasol.errorreporting.ExaError;
-
 /**
  * This is a convenient wrapper for {@link ProcessBuilder} and {@link Process} that simplifies starting a process,
  * waiting for it to finish and getting its stdout.
@@ -83,10 +81,8 @@ public class SimpleProcess {
             new AsyncStreamReader().startCollectingConsumer(process.getErrorStream(), errorStreamConsumer);
             return new SimpleProcess(process, command, startTime);
         } catch (final IOException exception) {
-            throw new IllegalStateException(ExaError.messageBuilder("E-PK-CORE-125")
-                    .message("Error executing command {{command}}.", String.join(" ", command))
-                    .mitigation("Verify that the {{executable name}} executable is on the PATH.", command.get(0))
-                    .toString(), exception);
+            throw new IllegalStateException("Error executing command '" + String.join(" ", command)
+                    + "'. Verify that the executable is on the PATH.", exception);
         }
     }
 

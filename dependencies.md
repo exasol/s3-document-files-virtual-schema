@@ -74,8 +74,8 @@
 | [Maven Site Plugin 3][141]                               | [The Apache Software License, Version 2.0][48] |
 
 [91]: https://www.eclemma.org/jacoco/index.html
+[131]: https://github.com/swagger-api/swagger-codegen/tree/master/modules/swagger-codegen-maven-plugin
 [4]: https://github.com/exasol/error-reporting-java
-[8]: https://github.com/swagger-api/swagger-core/modules/swagger-annotations
 [48]: http://www.apache.org/licenses/LICENSE-2.0.txt
 [55]: https://projectlombok.org
 [105]: https://maven.apache.org/surefire/maven-surefire-plugin/
@@ -110,12 +110,12 @@
 [7]: http://www.opensource.org/licenses/mit-license.php
 [11]: http://www.eclipse.org/legal/epl-2.0
 [93]: http://sonarsource.github.io/sonar-scanner-maven/
+[8]: https://github.com/swagger-api/swagger-core/tree/master/modules/swagger-annotations
 [10]: https://projects.eclipse.org/projects/ee4j.jersey/jersey-client
 [75]: https://github.com/exasol/udf-debugging-java/
 [61]: https://junit.org/junit5/
 [81]: https://bitbucket.org/snakeyaml/snakeyaml
 [21]: https://projects.eclipse.org/projects/ee4j.jersey/project/jersey-media-multipart
-[18]: jquery.org/license
 [0]: https://github.com/exasol/virtual-schema-common-document-files/
 [17]: https://asm.ow2.io/license.html
 [57]: http://hamcrest.org/JavaHamcrest/
@@ -130,10 +130,10 @@
 [9]: http://www.apache.org/licenses/LICENSE-2.0.html
 [121]: https://maven.apache.org/surefire/maven-failsafe-plugin/
 [87]: https://github.com/exasol/performance-test-recorder-java
+[18]: https://jquery.org/license/
 [119]: http://anthonywhitford.com/lombok.maven/lombok-maven-plugin/
 [68]: http://opensource.org/licenses/MIT
 [83]: https://github.com/exasol/small-json-files-test-fixture
-[131]: https://github.com/swagger-api/swagger-codegen/modules/swagger-codegen-maven-plugin
 [110]: https://github.com/exasol/project-keeper/blob/main/LICENSE
 [117]: https://maven.apache.org/plugins/maven-dependency-plugin/
 [134]: https://opensource.org/licenses/mit-license.php

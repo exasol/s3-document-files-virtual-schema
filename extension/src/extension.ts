@@ -10,7 +10,6 @@ import { CONFIG } from "./extension-config";
 
 export function createExtension(): ExasolExtension {
     const version = CONFIG.version;
-    const documentFilesVsVersion = CONFIG.documentFilesVsVersion;
     const filename = CONFIG.fileName;
     const fileSize = CONFIG.fileSizeBytes;
     const repoBaseUrl = "https://github.com/exasol/s3-document-files-virtual-schema"

@@ -63,18 +63,18 @@
 | [Lombok Maven Plugin][119]                               | [The MIT License][5]                           |
 | [Maven Failsafe Plugin][121]                             | [Apache License, Version 2.0][96]              |
 | [JaCoCo :: Maven Plugin][123]                            | [Eclipse Public License 2.0][92]               |
-| [error-code-crawler-maven-plugin][125]                   | [MIT][5]                                       |
-| [Apache Maven Clean Plugin][127]                         | [Apache License, Version 2.0][96]              |
-| [Exec Maven Plugin][129]                                 | [Apache License 2][48]                         |
-| [swagger-codegen (maven-plugin)][131]                    | [Apache License 2.0][9]                        |
-| [Build Helper Maven Plugin][133]                         | [The MIT License][134]                         |
+| [Apache Maven Clean Plugin][125]                         | [Apache License, Version 2.0][96]              |
+| [Exec Maven Plugin][127]                                 | [Apache License 2][48]                         |
+| [swagger-codegen (maven-plugin)][129]                    | [Apache License 2.0][9]                        |
+| [Build Helper Maven Plugin][131]                         | [The MIT License][132]                         |
+| [error-code-crawler-maven-plugin][133]                   | [MIT][5]                                       |
 | [Maven Resources Plugin][135]                            | [The Apache Software License, Version 2.0][48] |
 | [Maven Install Plugin][137]                              | [The Apache Software License, Version 2.0][48] |
 | [Maven Deploy Plugin][139]                               | [The Apache Software License, Version 2.0][48] |
 | [Maven Site Plugin 3][141]                               | [The Apache Software License, Version 2.0][48] |
 
 [91]: https://www.eclemma.org/jacoco/index.html
-[131]: https://github.com/swagger-api/swagger-codegen/tree/master/modules/swagger-codegen-maven-plugin
+[129]: https://github.com/swagger-api/swagger-codegen/tree/master/modules/swagger-codegen-maven-plugin
 [4]: https://github.com/exasol/error-reporting-java
 [48]: http://www.apache.org/licenses/LICENSE-2.0.txt
 [55]: https://projectlombok.org
@@ -85,14 +85,14 @@
 [65]: https://github.com/mockito/mockito
 [99]: https://www.mojohaus.org/flatten-maven-plugin/
 [89]: https://github.com/exasol/maven-project-version-getter
-[129]: http://www.mojohaus.org/exec-maven-plugin
+[127]: http://www.mojohaus.org/exec-maven-plugin
 [107]: http://www.mojohaus.org/versions-maven-plugin/
 [109]: https://github.com/exasol/project-keeper/
 [58]: http://opensource.org/licenses/BSD-3-Clause
 [95]: https://maven.apache.org/plugins/maven-compiler-plugin/
 [72]: https://github.com/exasol/test-db-builder-java/blob/main/LICENSE
 [20]: https://www.w3.org/Consortium/Legal/copyright-documents-19990405
-[127]: https://maven.apache.org/plugins/maven-clean-plugin/
+[125]: https://maven.apache.org/plugins/maven-clean-plugin/
 [79]: https://github.com/exasol/exasol-test-setup-abstraction-java/
 [92]: https://www.eclipse.org/legal/epl-2.0/
 [49]: http://github.com/FasterXML/jackson
@@ -136,7 +136,7 @@
 [83]: https://github.com/exasol/small-json-files-test-fixture
 [110]: https://github.com/exasol/project-keeper/blob/main/LICENSE
 [117]: https://maven.apache.org/plugins/maven-dependency-plugin/
-[134]: https://opensource.org/licenses/mit-license.php
+[132]: https://opensource.org/licenses/mit-license.php
 [14]: https://opensource.org/licenses/BSD-2-Clause
 [13]: http://www.eclipse.org/org/documents/edl-v10.php
 [96]: https://www.apache.org/licenses/LICENSE-2.0.txt
@@ -146,9 +146,9 @@
 [101]: https://sonatype.github.io/ossindex-maven/maven-plugin/
 [1]: https://github.com/exasol/virtual-schema-common-document-files/blob/main/LICENSE
 [67]: https://testcontainers.org
-[133]: http://www.mojohaus.org/build-helper-maven-plugin/
+[131]: http://www.mojohaus.org/build-helper-maven-plugin/
 [16]: https://creativecommons.org/publicdomain/zero/1.0/
 [139]: http://maven.apache.org/plugins/maven-deploy-plugin/
 [141]: http://maven.apache.org/plugins/maven-site-plugin/
-[125]: https://github.com/exasol/error-code-crawler-maven-plugin
+[133]: https://github.com/exasol/error-code-crawler-maven-plugin
 [111]: https://maven.apache.org/plugins/maven-assembly-plugin/

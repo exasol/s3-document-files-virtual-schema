@@ -26,6 +26,23 @@ jobs:
           node-version: 16
           cache: 'npm'
           cache-dependency-path: extension/package-lock.json
+      - name: Print versions
+        run: |
+          go version
+          npm --version
+          node --version
+          java -version
+          mvn --version
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          # Using pom.xml indirectly defines the version of extension manager to install
+          key: ${{ runner.os }}-go-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:

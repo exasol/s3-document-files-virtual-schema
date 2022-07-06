@@ -5,11 +5,11 @@ import static java.util.Arrays.asList;
 import java.io.IOException;
 import java.util.List;
 
-class DelegatingStreamConsumer implements ProcessStreamConsumer {
+public class DelegatingStreamConsumer implements ProcessStreamConsumer {
 
     private final List<ProcessStreamConsumer> delegates;
 
-    DelegatingStreamConsumer(final ProcessStreamConsumer... delegates){
+    public DelegatingStreamConsumer(final ProcessStreamConsumer... delegates){
         this.delegates = asList(delegates);
     }
 

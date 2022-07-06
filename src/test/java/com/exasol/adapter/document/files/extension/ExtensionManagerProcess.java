@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.exasol.adapter.document.files.extension.process.*;
@@ -15,7 +16,7 @@ import com.google.re2j.Pattern;
 
 public class ExtensionManagerProcess implements AutoCloseable {
     private static final Logger LOGGER = Logger.getLogger(ExtensionManagerProcess.class.getName());
-    private static final Duration SERVER_START_TIMEOUT = Duration.ofSeconds(10);
+    private static final Duration SERVER_STARTUP_TIMEOUT = Duration.ofSeconds(5);
     private final SimpleProcess process;
     private final int serverPort;
 
@@ -29,21 +30,24 @@ public class ExtensionManagerProcess implements AutoCloseable {
                 + extensionFolder + "...");
         final List<String> command = List.of(extensionManagerBinary.toString(), "-pathToExtensionFolder",
                 extensionFolder.toString());
-        final ServerOutputConsumer stdOutConsumer = new ServerOutputConsumer(StreamType.STD_OUT);
-        final ServerOutputConsumer stdErrorConsumer = new ServerOutputConsumer(StreamType.STD_ERR);
-        final SimpleProcess process = SimpleProcess.start(command, stdOutConsumer, stdErrorConsumer);
-        final Optional<Integer> port = stdErrorConsumer.getServerPort();
+
+        final ServerPortConsumer serverPortConsumer = new ServerPortConsumer();
+        final SimpleProcess process = SimpleProcess.start(command,
+                new DelegatingStreamConsumer(new LoggingStreamConsumer("server stdout>", Level.INFO)),
+                new DelegatingStreamConsumer(new LoggingStreamConsumer("server stderr>", Level.INFO),
+                        serverPortConsumer));
+        final Optional<Integer> port = serverPortConsumer.getServerPort(SERVER_STARTUP_TIMEOUT);
         if (port.isEmpty()) {
             process.stop();
-            throw new IllegalStateException(
-                    "Extension manager did not server log port. Check log output for error messages.");
+            throw new IllegalStateException("Extension manager did not log server port after " + SERVER_STARTUP_TIMEOUT
+                    + ". Check log output for error messages.");
         }
         return new ExtensionManagerProcess(process, port.get());
     }
 
     @Override
     public void close() {
-        LOGGER.info(() -> "Stopping extension manager process");
+        LOGGER.fine("Stopping extension manager process");
         this.process.stop();
     }
 
@@ -51,38 +55,32 @@ public class ExtensionManagerProcess implements AutoCloseable {
         return "http://localhost:" + this.serverPort;
     }
 
-    private static class ServerOutputConsumer implements ProcessStreamConsumer {
-
+    private static class ServerPortConsumer implements ProcessStreamConsumer {
         private static final Pattern PORT_LOG_LINE = Pattern.compile(".*Starting server on port (\\d+).*");
         private final CountDownLatch startupFinished = new CountDownLatch(1);
         private Integer serverPort = null;
-        private final StreamType type;
-
-        private ServerOutputConsumer(final StreamType type) {
-            this.type = type;
-        }
 
         @Override
         public void accept(final String line) {
-            LOGGER.fine(() -> "Server " + this.type + "> " + line);
             final Optional<Integer> port = extractPort(line);
             if (port.isPresent()) {
+                LOGGER.info(() -> "Found server port " + port.get() + " in line '" + line + "'");
                 this.startupFinished.countDown();
                 this.serverPort = port.get();
             }
         }
 
-        Optional<Integer> getServerPort() {
-            final boolean success = awaitStartupFinished();
+        Optional<Integer> getServerPort(final Duration timeout) {
+            final boolean success = awaitStartupFinished(timeout);
             if (!success || (this.serverPort == null)) {
                 return Optional.empty();
             }
             return Optional.of(this.serverPort);
         }
 
-        private boolean awaitStartupFinished() {
+        private boolean awaitStartupFinished(final Duration timeout) {
             try {
-                return this.startupFinished.await(SERVER_START_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS);
+                return this.startupFinished.await(timeout.toMillis(), TimeUnit.MILLISECONDS);
             } catch (final InterruptedException exception) {
                 Thread.currentThread().interrupt();
                 throw new IllegalStateException("Interrupted while waiting for startup to finish", exception);

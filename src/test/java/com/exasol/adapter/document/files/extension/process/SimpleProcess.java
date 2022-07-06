@@ -44,8 +44,8 @@ public class SimpleProcess {
                 new DelegatingStreamConsumer(collectingStreamConsumer, new LoggingStreamConsumer("stderr>", Level.INFO),
                         stderrStreamClosed));
         process.waitUntilTerminatedSuccessfully(executionTimeout);
-        stdoutStreamClosed.waitUntilStreamClosed(Duration.ofSeconds(5));
-        stderrStreamClosed.waitUntilStreamClosed(Duration.ofSeconds(5));
+        stdoutStreamClosed.waitUntilStreamClosed(Duration.ofMillis(100));
+        stderrStreamClosed.waitUntilStreamClosed(Duration.ofMillis(100));
         return stringBuilder.toString();
     }
 

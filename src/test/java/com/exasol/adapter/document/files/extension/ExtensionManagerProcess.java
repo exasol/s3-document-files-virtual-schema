@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,24 +59,26 @@ public class ExtensionManagerProcess implements AutoCloseable {
     private static class ServerPortConsumer implements ProcessStreamConsumer {
         private static final Pattern PORT_LOG_LINE = Pattern.compile(".*Starting server on port (\\d+).*");
         private final CountDownLatch startupFinished = new CountDownLatch(1);
-        private Integer serverPort = null;
+        private final AtomicInteger serverPort = new AtomicInteger(-1);
 
         @Override
         public void accept(final String line) {
             final Optional<Integer> port = extractPort(line);
             if (port.isPresent()) {
-                LOGGER.info(() -> "Found server port " + port.get() + " in line '" + line + "'");
+                this.serverPort.set(port.get());
                 this.startupFinished.countDown();
-                this.serverPort = port.get();
+                LOGGER.info(() -> "Found server port " + this.serverPort + " in line '" + line + "', countdown latch = "
+                        + this.startupFinished.getCount());
             }
         }
 
         Optional<Integer> getServerPort(final Duration timeout) {
             final boolean success = awaitStartupFinished(timeout);
-            if (!success || (this.serverPort == null)) {
+            if (this.serverPort.get() < 0) {
+                LOGGER.warning("Server port not found in log output after " + timeout + ". Success flag: " + success);
                 return Optional.empty();
             }
-            return Optional.of(this.serverPort);
+            return Optional.of(this.serverPort.get());
         }
 
         private boolean awaitStartupFinished(final Duration timeout) {

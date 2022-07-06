@@ -1,50 +1,22 @@
 package com.exasol.adapter.document.files.extension;
 
-
 import java.util.Locale;
 
 /**
  * Helper class to check the operating system this Java VM runs in.
- *
- * Please keep the notes below as a pseudo-license:
- *
- * http://stackoverflow.com/questions/228477/how-do-i-programmatically-determine-operating-system-in-java compare to
- * http://svn.terracotta.org/svn/tc/dso/tags/2.6.4/code/base/common/src/com/tc/util/runtime/Os.java
- * http://www.docjar.com/html/api/org/apache/commons/lang/SystemUtils.java.html
  */
 public class OsCheck {
     /**
-     * Types of Operating Systems
-     */
-    public enum OSType {
-        /** Windows operating system */
-        WINDOWS,
-        /** macOS operating system */
-        MACOS,
-        /** Linux operating system */
-        LINUX,
-        /** Unknown operating system */
-        OTHER
-    }
-
-    /**
-     * Detect the operating system from the {@code os.name} System property.
+     * Get the suffix of native executables for the current operating system.
      * 
-     * @return the operating system detected
+     * @return the suffix of native executables
      */
-    public OSType getOperatingSystemType() {
-        return detectOperatingSystemType();
-    }
-
-    private static OSType detectOperatingSystemType() {
+    public static String getExecutableSuffix() {
         final String os = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
-        if ((os.indexOf("mac") >= 0) || (os.indexOf("darwin") >= 0)) {
-            return OSType.MACOS;
-        } else if (os.indexOf("win") >= 0) {
-            return OSType.WINDOWS;
-        } else if (os.indexOf("linux") >= 0) {
-            return OSType.LINUX;
+        if (os.indexOf("win") >= 0) {
+            return ".exe";
+        } else {
+            return "";
         }
-        return OSType.OTHER;
     }
 }

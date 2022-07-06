@@ -27,7 +27,7 @@ public class SimpleProcess {
     }
 
     /**
-     * Starts a new process using the working directory of the current Java process and wait until it finishes.
+     * Starts a new process using the working directory of the current Java process and waits until it terminates successfully.
      *
      * @param command          the command to execute
      * @param executionTimeout the execution timeout for the process
@@ -43,7 +43,7 @@ public class SimpleProcess {
                         stdoutStreamClosed),
                 new DelegatingStreamConsumer(collectingStreamConsumer, new LoggingStreamConsumer("stderr>", Level.INFO),
                         stderrStreamClosed));
-        process.waitForExecutionFinished(executionTimeout);
+        process.waitUntilTerminatedSuccessfully(executionTimeout);
         stdoutStreamClosed.waitUntilStreamClosed(Duration.ofSeconds(5));
         stderrStreamClosed.waitUntilStreamClosed(Duration.ofSeconds(5));
         return stringBuilder.toString();
@@ -87,18 +87,19 @@ public class SimpleProcess {
     }
 
     /**
-     * Wait for the process to finish.
+     * Wait for the process to terminate successfully.
      *
      * @param executionTimeout the maximum time to wait until the process finishes
-     * @throws IllegalStateException if the process did not finish within the given timeout
+     * @throws IllegalStateException if the process did not finish within the given timeout or returned an exit code
+     *                               other than 0
      */
-    public void waitUntilFinished(final Duration executionTimeout) {
-        waitForExecutionFinished(executionTimeout);
+    public void waitUntilTerminatedSuccessfully(final Duration executionTimeout) {
+        waitForProcessTerminated(executionTimeout);
         final Duration duration = Duration.between(this.startTime, Instant.now());
         final int exitCode = this.process.exitValue();
         if (exitCode != 0) {
             throw new IllegalStateException(
-                    "Failed to run command " + formatCommand() + ", exit code " + exitCode + " after " + duration);
+                    "Command " + formatCommand() + " failed with exit code " + exitCode + " after " + duration);
         }
         LOGGER.fine(() -> "Command '" + formatCommand() + "' finished successfully after " + duration);
     }
@@ -111,7 +112,7 @@ public class SimpleProcess {
         this.process.destroy();
     }
 
-    private void waitForExecutionFinished(final Duration executionTimeout) {
+    private void waitForProcessTerminated(final Duration executionTimeout) {
         try {
             if (!this.process.waitFor(executionTimeout.toMillis(), TimeUnit.MILLISECONDS)) {
                 throw new IllegalStateException(

@@ -5,7 +5,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.exasol.adapter.document.files.extension.OsCheck.OSType;
 import com.exasol.adapter.document.files.extension.process.SimpleProcess;
 
 class ExtensionManagerInstaller {
@@ -38,13 +37,12 @@ class ExtensionManagerInstaller {
     }
 
     private Path getExtensionManagerExecutable() {
-        final OSType osType = new OsCheck().getOperatingSystemType();
-        final String suffix = osType == OSType.WINDOWS ? ".exe" : "";
-        final Path executable = getGoPath().resolve("bin").resolve("extension-manager" + suffix);
-        if (!Files.exists(executable)) {
-            throw new IllegalStateException("Executable was not installed at '" + executable + "'");
+        final String executableName = "extension-manager" + OsCheck.getExecutableSuffix();
+        final Path executablePath = getGoPath().resolve("bin").resolve(executableName);
+        if (!Files.exists(executablePath)) {
+            throw new IllegalStateException("Executable was not installed at '" + executablePath + "'");
         }
-        return executable;
+        return executablePath;
     }
 
     private Path getGoPath() {

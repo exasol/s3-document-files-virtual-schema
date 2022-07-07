@@ -3,6 +3,7 @@
 # Eclipse and Maven
 .classpath
 .project
+.settings/org.eclipse.core.resources.prefs
 # .settings : we need Eclipse settings for code formatter and clean-up rules
 target
 .cache
@@ -17,6 +18,12 @@ dependency-reduced-pom.xml
 src/test/resources/integration/driver/hive/*.jar
 src/test/resources/integration/driver/oracle/*.jar
 src/test/resources/integration/driver/oracle/*.zip
+
+# Extension
+extension/node_modules/
+extension/dist/
+extension/coverage/
+extension/src/extension-config.ts
 
 # Others
 .DS_Store
@@ -39,3 +46,4 @@ setEnv.sh
 test_config.yml
 deleteLambdaResources.sh
 *.flattened-pom.xml
+/.apt_generated/

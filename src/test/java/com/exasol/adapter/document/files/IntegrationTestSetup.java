@@ -30,8 +30,8 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.0.2-s3-2.1.3.jar";
-    static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
+    private static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.0.2-s3-2.2.0.jar";
+    public static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
             Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
@@ -93,8 +93,8 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     public JsonObjectBuilder getConnectionConfig() {
-        Optional<String> mfaToken = this.s3TestSetup.getMfaToken();
-        JsonObjectBuilder builder = Json.createObjectBuilder()//
+        final Optional<String> mfaToken = this.s3TestSetup.getMfaToken();
+        final JsonObjectBuilder builder = Json.createObjectBuilder()//
                 .add("awsEndpointOverride", getInDatabaseS3Address())//
                 .add("awsRegion", this.s3TestSetup.getRegion())//
                 .add("s3Bucket", this.s3BucketName)//

@@ -26,7 +26,7 @@ class S3RandomAccessInputStream extends RandomAccessInputStream {
 
     @Override
     public void seek(final long position) {
-        LOGGER.log(Level.FINEST, "Seeked to position {}", position);
+        LOGGER.log(Level.FINEST, "Seeked to position {0}", position);
         this.position = position;
     }
 
@@ -65,7 +65,7 @@ class S3RandomAccessInputStream extends RandomAccessInputStream {
 
     @Override
     public int read(final byte[] targetBuffer, final int offset, final int length) {
-        LOGGER.log(Level.FINEST, "read length: {}", length);
+        LOGGER.log(Level.FINEST, "read length: {0}", length);
         if (length == 0) {
             return 0;
         }

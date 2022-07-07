@@ -1,0 +1,129 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  restAPI.ExtensionsResponse:
+    properties:
+      extensions:
+        items:
+          $ref: '#/definitions/restAPI.ExtensionsResponseExtension'
+        type: array
+    type: object
+  restAPI.ExtensionsResponseExtension:
+    properties:
+      description:
+        type: string
+      installableVersions:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+    type: object
+  restAPI.InstallationsResponse:
+    properties:
+      installations:
+        items:
+          $ref: '#/definitions/restAPI.InstallationsResponseInstallation'
+        type: array
+    type: object
+  restAPI.InstallationsResponseInstallation:
+    properties:
+      instanceParameters:
+        items: {}
+        type: array
+      name:
+        type: string
+      version:
+        type: string
+    type: object
+info:
+  contact:
+    email: opensource@exasol.com
+    name: Exasol Integration team
+  description: This is a REST API for managing extensions in an Exasol database.
+  license:
+    name: MIT
+    url: https://github.com/exasol/extension-manager/blob/main/LICENSE
+  title: Exasol extension manager REST API
+  version: 0.1.0
+paths:
+  /extensions:
+    get:
+      description: Get a list of all available extensions.
+      operationId: getExtensions
+      parameters:
+      - description: Hostname of the Exasol DB to manage
+        in: query
+        name: dbHost
+        required: true
+        type: string
+      - description: port number of the Exasol DB to manage
+        in: query
+        name: dbPort
+        required: true
+        type: integer
+      - description: username of the Exasol DB to manage
+        in: query
+        name: dbUser
+        required: true
+        type: string
+      - description: password of the Exasol DB to manage
+        in: query
+        name: dbPass
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restAPI.ExtensionsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all extensions
+  /installations:
+    get:
+      description: Get a list of all installations. Installation means, that an extension
+        is installed in the database (e.g. JAR files added to BucketFS, Adapter Script
+        created).
+      operationId: getInstallations
+      parameters:
+      - description: Hostname of the Exasol DB to manage
+        in: query
+        name: dbHost
+        required: true
+        type: string
+      - description: port number of the Exasol DB to manage
+        in: query
+        name: dbPort
+        required: true
+        type: integer
+      - description: username of the Exasol DB to manage
+        in: query
+        name: dbUser
+        required: true
+        type: string
+      - description: password of the Exasol DB to manage
+        in: query
+        name: dbPass
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restAPI.InstallationsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all installations
+produces:
+- application/json
+swagger: "2.0"

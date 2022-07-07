@@ -23,6 +23,8 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - name: Enable testcontainer reuse
+        run: echo 'testcontainers.reuse.enable=true' > "$HOME/.testcontainers.properties"
       - name: Create test_config.yml
         run: |
           echo "owner: ${{ secrets.AWS_TAG_OWNER }}" > test_config.yml

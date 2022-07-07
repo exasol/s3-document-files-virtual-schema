@@ -44,7 +44,6 @@ import software.amazon.awssdk.services.s3.model.*;
 @Testcontainers
 class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     private static final S3TestSetup AWS_S3_TEST_SETUP = new AwsS3TestSetup();
-    private static final String CACHE_BUCKET_NAME = "persistent-s3-vs-test-file-cache";
     private static final String SMALL_JSON_FILES_FIXTURE_BUCKET = "persistent-small-json-files-test-fixture";
     private static final List<Pattern> CLASS_LIST_IGNORES = List.of(Pattern.compile("java/util/concurrent/.*"),
             Pattern.compile("io/netty/util/concurrent/.*"));
@@ -69,7 +68,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
                     + TestConfig.FILE_NAME + ".");
             return new S3DirectUploader(SETUP.getS3Client(), s3BucketName);
         } else {
-            return new S3Cache(SETUP.getS3Client(), s3BucketName, CACHE_BUCKET_NAME);
+            return new S3Cache(SETUP.getS3Client(), s3BucketName, s3CacheBucketName);
         }
     }
 

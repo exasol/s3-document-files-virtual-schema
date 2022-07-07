@@ -1,12 +1,14 @@
 import {
-    ExaAllScripts,
+    ExaMetadata,
     ExasolExtension,
     Installation,
     Instance, ParameterValues,
     registerExtension,
     SqlClient
 } from "@exasol/extension-manager-interface";
+import { ExaAllScriptsRow } from "@exasol/extension-manager-interface/dist/exasolSchema";
 import { CONFIG } from "./extension-config";
+
 
 export function createExtension(): ExasolExtension {
     const version = CONFIG.version;
@@ -14,6 +16,9 @@ export function createExtension(): ExasolExtension {
     const fileSize = CONFIG.fileSizeBytes;
     const repoBaseUrl = "https://github.com/exasol/s3-document-files-virtual-schema"
     const downloadUrl = `${repoBaseUrl}/releases/download/${version}/${filename}`;
+    function scriptMatches(script: ExaAllScriptsRow): boolean {
+        return true;
+    }
     return {
         name: "S3 Virtual Schema",
         description: "Virtual Schema for document files on AWS S3",
@@ -25,8 +30,9 @@ export function createExtension(): ExasolExtension {
         addInstance(_installation: Installation, _params: ParameterValues, _sql: SqlClient): Instance {
             return undefined;
         },
-        findInstallations(_sqlClient: SqlClient, _exaAllScripts: ExaAllScripts): Installation[] {
-            return [];
+        findInstallations(_sqlClient: SqlClient, metadata: ExaMetadata): Installation[] {
+            const scripts = metadata.allScripts.rows.filter(scriptMatches)
+            return scripts.map(script => { return { name: `${script.schema}.${script.name}`, version: version, instanceParameters: [] } })
         },
         findInstances(_installation: Installation, _sql: SqlClient): Instance[] {
             return [];

@@ -37,3 +37,19 @@ SETUP.getStatement().executeUpdate("ALTER SESSION SET SCRIPT_OUTPUT_ADDRESS = '1
 You can use a remote debugger and profiler for this project's integration tests. To do so, use the system properties from [UDF debugging Java](https://github.com/exasol/udf-debugging-java/).
 
 When you enable debugging or profiling, this project's test will set the UDF concurrency to 1. Debugging concurrent UDFs is currently not possible due to reverse connection.
+
+## Working With the Extension
+
+### Running Tests
+
+```shell
+cd extension
+npm install
+npm run build && npm test
+```
+
+### Using a Local Extension Interface
+
+To use a local, non-published version of the extension interface, edit [extension/package.json](../../extension/package.json) and replace the version of `"@exasol/extension-manager-interface"` with the path to your local clone of [extension-manager-interface](https://github.com/exasol/extension-manager-interface).
+
+Then run `npm install` and restart your IDE.

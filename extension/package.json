@@ -9,10 +9,11 @@
         "compile": "tsc --build && esbuild dist/extension.js --bundle --outfile=dist/s3-vs-extension.js --target=es6",
         "generate": "bash generate-config.sh",
         "clean": "rm -rf dist/",
-        "test": "jest"
+        "test": "jest",
+        "test-watch": "jest --watch"
     },
     "dependencies": {
-        "@exasol/extension-manager-interface": "0.1.5"
+        "@exasol/extension-manager-interface": "0.1.7"
     },
     "devDependencies": {
         "@types/jest": "^28.1.1",

@@ -16,7 +16,7 @@ export function createExtension(): ExasolExtension {
     const fileSize = CONFIG.fileSizeBytes;
     const repoBaseUrl = "https://github.com/exasol/s3-document-files-virtual-schema"
     const downloadUrl = `${repoBaseUrl}/releases/download/${version}/${filename}`;
-    function scriptMatches(script: ExaAllScriptsRow): boolean {
+    function scriptMatches(_script: ExaAllScriptsRow): boolean {
         return true;
     }
     return {

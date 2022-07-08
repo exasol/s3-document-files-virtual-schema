@@ -48,6 +48,12 @@ npm install
 npm run build && npm test
 ```
 
+To run tests continuously when saving files, start the following command:
+
+```shell
+npm run test-watch
+```
+
 #### Testing With a Local Extension Manager
 
 To use a local, non-published version of the extension manager during integration tests, first checkout the [extension-manager](https://github.com/exasol/extension-manager). Then create file `extension-test.properties` in this project directory with the following content:

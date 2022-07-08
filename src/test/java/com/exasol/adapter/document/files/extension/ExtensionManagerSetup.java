@@ -22,7 +22,7 @@ import com.exasol.extensionmanager.client.invoker.ApiClient;
 import com.exasol.udfdebugging.UdfTestSetup;
 
 public class ExtensionManagerSetup implements AutoCloseable {
-
+    public static final String EXTENSION_SCHEMA_NAME = "EXA_EXTENSIONS";
     private final List<DatabaseObject> createdObjects = new LinkedList<>();
     private final ExtensionManagerProcess extensionManager;
     private final ExasolTestSetup exasolTestSetup;
@@ -45,12 +45,11 @@ public class ExtensionManagerSetup implements AutoCloseable {
     }
 
     public static ExtensionManagerSetup create(final Path extensionFolder) {
+        final ExtensionTestConfig config = ExtensionTestConfig.read();
         prepareExtension(extensionFolder);
         final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
                 Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
-        // final ExtensionManagerInstaller installer = ExtensionManagerInstaller.forVersion("latest");
-        final ExtensionManagerInstaller installer = ExtensionManagerInstaller
-                .forLocalPath(Paths.get("../extension-manager/extension-manager").toAbsolutePath());
+        final ExtensionManagerInstaller installer = ExtensionManagerInstaller.forConfig(config);
         final Path extensionManagerExecutable = installer.install();
         final ExtensionManagerProcess extensionManager = ExtensionManagerProcess.start(extensionManagerExecutable,
                 extensionFolder);
@@ -95,8 +94,8 @@ public class ExtensionManagerSetup implements AutoCloseable {
         return "/buckets/bfsdefault/default/" + IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH.getFileName().toString();
     }
 
-    public ExasolSchema createSchema(final String name) {
-        final ExasolSchema schema = exasolObjectFactory.createSchema(name);
+    public ExasolSchema createExtensionSchema() {
+        final ExasolSchema schema = exasolObjectFactory.createSchema(EXTENSION_SCHEMA_NAME);
         createdObjects.add(schema);
         return schema;
     }

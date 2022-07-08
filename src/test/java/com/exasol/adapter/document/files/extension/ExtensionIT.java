@@ -11,7 +11,6 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 
 import com.exasol.dbbuilder.dialects.exasol.AdapterScript.Language;
-import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
 import com.exasol.extensionmanager.client.model.RestAPIExtensionsResponseExtension;
 import com.exasol.extensionmanager.client.model.RestAPIInstallationsResponseInstallation;
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
@@ -60,18 +59,20 @@ class ExtensionIT {
     @Test
     void listInstallations_findsOtherInstallation() {
         final String currentProjectVersion = MavenProjectVersionGetter.getCurrentProjectVersion();
-        createAdapter("my_schema", "script_name");
+        createAdapter("script_name");
         final List<RestAPIInstallationsResponseInstallation> installations = extensionManagerSetup.client()
                 .getInstallations();
         assertAll(() -> assertThat(installations, hasSize(1)), //
-                () -> assertThat(installations.get(0).getName(), equalTo("my_schema.script_name")),
+                () -> assertThat(installations.get(0).getName(),
+                        equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".script_name")),
                 () -> assertThat(installations.get(0).getVersion(), equalTo(currentProjectVersion)),
                 () -> assertThat(installations.get(0).getInstanceParameters(), hasSize(0)));
     }
 
-    private void createAdapter(final String schemaName, final String scriptName) {
-        final ExasolSchema schema = extensionManagerSetup.createSchema(schemaName);
-        schema.createAdapterScriptBuilder(scriptName).bucketFsContent("com.exasol.adapter.RequestDispatcher",
-                extensionManagerSetup.getAdapterJarInBucketFs()).language(Language.JAVA).build();
+    private void createAdapter(final String scriptName) {
+        extensionManagerSetup.createExtensionSchema() //
+                .createAdapterScriptBuilder(scriptName).bucketFsContent("com.exasol.adapter.RequestDispatcher",
+                        extensionManagerSetup.getAdapterJarInBucketFs())
+                .language(Language.JAVA).build();
     }
 }

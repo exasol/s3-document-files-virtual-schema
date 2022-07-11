@@ -47,15 +47,16 @@ public class SimpleProcess {
      * @param executionTimeout the execution timeout for the process
      * @return the combined stdout and stderr from the process
      */
-    public static String start(final Path workingDirectory, final List<String> command, final Duration executionTimeout) {
+    public static String start(final Path workingDirectory, final List<String> command,
+            final Duration executionTimeout) {
         final StringBuilder stringBuilder = new StringBuilder();
         final CollectingStreamConsumer collectingStreamConsumer = new CollectingStreamConsumer(stringBuilder);
         final StreamClosedConsumer stdoutStreamClosed = new StreamClosedConsumer();
         final StreamClosedConsumer stderrStreamClosed = new StreamClosedConsumer();
         final SimpleProcess process = start(workingDirectory, command,
-                new DelegatingStreamConsumer(collectingStreamConsumer, new LoggingStreamConsumer("stdout>", Level.INFO),
+                new DelegatingStreamConsumer(collectingStreamConsumer, new LoggingStreamConsumer("stdout>", Level.FINE),
                         stdoutStreamClosed),
-                new DelegatingStreamConsumer(collectingStreamConsumer, new LoggingStreamConsumer("stderr>", Level.INFO),
+                new DelegatingStreamConsumer(collectingStreamConsumer, new LoggingStreamConsumer("stderr>", Level.FINE),
                         stderrStreamClosed));
         process.waitUntilTerminatedSuccessfully(executionTimeout);
         stdoutStreamClosed.waitUntilStreamClosed(Duration.ofMillis(100));

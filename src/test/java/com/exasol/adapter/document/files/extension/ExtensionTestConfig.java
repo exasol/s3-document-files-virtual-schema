@@ -36,7 +36,7 @@ public class ExtensionTestConfig {
     }
 
     public Optional<Path> getLocalExtensionManagerProject() {
-        return getOptionalValue("useLocalExtensionManager") //
+        return getOptionalValue("localExtensionManager") //
                 .map(path -> Paths.get(path).toAbsolutePath()) //
                 .map(path -> {
                     if (!Files.exists(path) || !Files.isDirectory(path)) {

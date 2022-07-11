@@ -40,7 +40,7 @@ When you enable debugging or profiling, this project's test will set the UDF con
 
 ## Working With the Extension
 
-### Running Tests
+### Running Unit Tests
 
 ```shell
 cd extension
@@ -48,7 +48,7 @@ npm install
 npm run build && npm test
 ```
 
-To run tests continuously when saving files, start the following command:
+To run tests continuously each time a file is changed on disk (useful during development), start the following command:
 
 ```shell
 npm run test-watch
@@ -59,7 +59,7 @@ npm run test-watch
 To use a local, non-published version of the extension manager during integration tests, first checkout the [extension-manager](https://github.com/exasol/extension-manager). Then create file `extension-test.properties` in this project directory with the following content:
 
 ```properties
-useLocalExtensionManager = /path/to/extension-manager
+localExtensionManager = /path/to/extension-manager
 ```
 
 This will build the extension manager from source and use the built executable for the integration tests.

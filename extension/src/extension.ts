@@ -6,24 +6,22 @@ import {
     registerExtension,
     SqlClient
 } from "@exasol/extension-manager-interface";
-import { ExaAllScriptsRow } from "@exasol/extension-manager-interface/dist/exasolSchema";
+import { Context } from "./common";
 import { CONFIG } from "./extension-config";
-
+import { findInstallations } from "./implementation";
 
 export function createExtension(): ExasolExtension {
     const version = CONFIG.version;
-    const filename = CONFIG.fileName;
+    const fileName = CONFIG.fileName;
     const fileSize = CONFIG.fileSizeBytes;
     const repoBaseUrl = "https://github.com/exasol/s3-document-files-virtual-schema"
-    const downloadUrl = `${repoBaseUrl}/releases/download/${version}/${filename}`;
-    function scriptMatches(_script: ExaAllScriptsRow): boolean {
-        return true;
-    }
+    const downloadUrl = `${repoBaseUrl}/releases/download/${version}/${fileName}`;
+    const context: Context = { version, fileName }
     return {
         name: "S3 Virtual Schema",
         description: "Virtual Schema for document files on AWS S3",
         installableVersions: [version],
-        bucketFsUploads: [{ bucketFsFilename: filename, downloadUrl, fileSize, name: "S3 VS Jar file", licenseUrl: `${repoBaseUrl}/blob/main/LICENSE`, licenseAgreementRequired: false }],
+        bucketFsUploads: [{ bucketFsFilename: fileName, downloadUrl, fileSize, name: "S3 VS Jar file", licenseUrl: `${repoBaseUrl}/blob/main/LICENSE`, licenseAgreementRequired: false }],
         install(sqlClient: SqlClient) {
             sqlClient.runQuery("CREATE ADAPTER SCRIPT ...")
         },
@@ -31,8 +29,7 @@ export function createExtension(): ExasolExtension {
             return undefined;
         },
         findInstallations(_sqlClient: SqlClient, metadata: ExaMetadata): Installation[] {
-            const scripts = metadata.allScripts.rows.filter(scriptMatches)
-            return scripts.map(script => { return { name: `${script.schema}.${script.name}`, version: version, instanceParameters: [] } })
+            return findInstallations(metadata.allScripts.rows, context);
         },
         findInstances(_installation: Installation, _sql: SqlClient): Instance[] {
             return [];

@@ -14,16 +14,12 @@ dependency-reduced-pom.xml
 # Intellij recommends to share iml files, however, better don't share files which might be outdated
 *.iml
 
-# Integration tests
-src/test/resources/integration/driver/hive/*.jar
-src/test/resources/integration/driver/oracle/*.jar
-src/test/resources/integration/driver/oracle/*.zip
-
 # Extension
-extension/node_modules/
-extension/dist/
-extension/coverage/
-extension/src/extension-config.ts
+/extension/node_modules/
+/extension/dist/
+/extension/coverage/
+/extension/src/extension-config.ts
+/extension-test.properties
 
 # Others
 .DS_Store

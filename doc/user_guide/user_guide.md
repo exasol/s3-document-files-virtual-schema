@@ -115,9 +115,9 @@ When you get the following error when executing the `CREATE VIRTUAL SCHEMA` stat
 VM error: F-UDF-CL-LIB-1125: F-UDF-CL-SL-JAVA-1000: F-UDF-CL-SL-JAVA-1038: End of %scriptclass statement not found
 ```
 
-then probably your SQL client interpreted the semicolon ";" to end the current SQL statement.
+then probably your SQL client interpreted the semicolon `;` to end the current SQL statement.
 To avoid this, simply change your SQL statement to ensure the SQL client runs the complete statement for creating the adapter script by 
-* prepending a line `--/' 
+* prepending a line `--/`
 * and appending `/`
 
 In DbVisualizer use exactly this command:

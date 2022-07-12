@@ -2,32 +2,55 @@ package com.exasol.adapter.document.files.extension;
 
 import java.io.*;
 import java.nio.file.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.Duration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import com.exasol.adapter.document.files.IntegrationTestSetup;
+import com.exasol.adapter.document.files.extension.installer.ExtensionManagerInstaller;
+import com.exasol.adapter.document.files.extension.process.SimpleProcess;
 import com.exasol.bucketfs.Bucket;
 import com.exasol.bucketfs.BucketAccessException;
+import com.exasol.dbbuilder.dialects.DatabaseObject;
+import com.exasol.dbbuilder.dialects.exasol.*;
 import com.exasol.exasoltestsetup.ExasolTestSetup;
 import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
 import com.exasol.extensionmanager.client.api.DefaultApi;
 import com.exasol.extensionmanager.client.invoker.ApiClient;
+import com.exasol.udfdebugging.UdfTestSetup;
 
 public class ExtensionManagerSetup implements AutoCloseable {
-
+    public static final String EXTENSION_SCHEMA_NAME = "EXA_EXTENSIONS";
+    private final List<DatabaseObject> createdObjects = new LinkedList<>();
     private final ExtensionManagerProcess extensionManager;
     private final ExasolTestSetup exasolTestSetup;
+    private final ExasolObjectFactory exasolObjectFactory;
+    private final Connection connection;
+    private final UdfTestSetup udfTestSetup;
 
     private ExtensionManagerSetup(final ExtensionManagerProcess extensionManager,
             final ExasolTestSetup exasolTestSetup) {
         this.extensionManager = extensionManager;
         this.exasolTestSetup = exasolTestSetup;
+        try {
+            this.connection = this.exasolTestSetup.createConnection();
+        } catch (final SQLException exception) {
+            throw new AssertionError("Failed to create db connection", exception);
+        }
+        this.udfTestSetup = new UdfTestSetup(this.exasolTestSetup, this.connection);
+        this.exasolObjectFactory = new ExasolObjectFactory(this.connection,
+                ExasolObjectConfiguration.builder().withJvmOptions(this.udfTestSetup.getJvmOptions()).build());
     }
 
     public static ExtensionManagerSetup create(final Path extensionFolder) {
+        final ExtensionTestConfig config = ExtensionTestConfig.read();
         prepareExtension(extensionFolder);
         final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
                 Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
-        final ExtensionManagerInstaller installer = ExtensionManagerInstaller.forVersion("latest");
+        final ExtensionManagerInstaller installer = ExtensionManagerInstaller.forConfig(config);
         final Path extensionManagerExecutable = installer.install();
         final ExtensionManagerProcess extensionManager = ExtensionManagerProcess.start(extensionManagerExecutable,
                 extensionFolder);
@@ -36,6 +59,7 @@ public class ExtensionManagerSetup implements AutoCloseable {
     }
 
     private static void prepareExtension(final Path extensionFolder) {
+        SimpleProcess.start(Paths.get("extension"), List.of("npm", "run", "build"), Duration.ofSeconds(30));
         final Path extension = Paths.get("extension/dist/s3-vs-extension.js").toAbsolutePath();
         if (!Files.exists(extension)) {
             throw new IllegalStateException("Extension file " + extension + " not found. Build it by executing: cd "
@@ -65,6 +89,23 @@ public class ExtensionManagerSetup implements AutoCloseable {
         final DefaultApi apiClient = new DefaultApi(
                 new ApiClient().setBasePath(this.extensionManager.getServerBasePath()));
         return new ExtensionManagerClient(apiClient, this.exasolTestSetup.getConnectionInfo());
+    }
+
+    public String getAdapterJarInBucketFs() {
+        return "/buckets/bfsdefault/default/" + IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH.getFileName().toString();
+    }
+
+    public ExasolSchema createExtensionSchema() {
+        final ExasolSchema schema = exasolObjectFactory.createSchema(EXTENSION_SCHEMA_NAME);
+        createdObjects.add(schema);
+        return schema;
+    }
+
+    public void dropCreatedObjects() {
+        for (final DatabaseObject createdObject : this.createdObjects) {
+            createdObject.drop();
+        }
+        this.createdObjects.clear();
     }
 
     @Override

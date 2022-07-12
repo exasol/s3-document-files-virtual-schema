@@ -34,8 +34,8 @@ public class ExtensionManagerProcess implements AutoCloseable {
 
         final ServerPortConsumer serverPortConsumer = new ServerPortConsumer();
         final SimpleProcess process = SimpleProcess.start(command,
-                new DelegatingStreamConsumer(new LoggingStreamConsumer("server stdout>", Level.INFO)),
-                new DelegatingStreamConsumer(new LoggingStreamConsumer("server stderr>", Level.INFO),
+                new DelegatingStreamConsumer(new LoggingStreamConsumer("server stdout>", Level.FINE)),
+                new DelegatingStreamConsumer(new LoggingStreamConsumer("server stderr>", Level.FINE),
                         serverPortConsumer));
         final Optional<Integer> port = serverPortConsumer.getServerPort(SERVER_STARTUP_TIMEOUT);
         if (port.isEmpty()) {

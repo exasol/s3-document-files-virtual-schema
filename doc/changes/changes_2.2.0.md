@@ -4,7 +4,7 @@ Code name: 2.2.0: Support for Extension Manager
 
 ## Summary
 
-This release allows installing an S3 Virtual Schema using the [extension manager](https://github.com/exasol/extension-manager).
+This release allows installing an S3 Virtual Schema using the [extension manager](https://github.com/exasol/extension-manager). It also upgrades dependencies to fix CVE-2022-2047.
 
 ## Features
 
@@ -19,11 +19,12 @@ This release allows installing an S3 Virtual Schema using the [extension manager
 
 ### Compile Dependency Updates
 
-* Updated `software.amazon.awssdk:s3:2.17.207` to `2.17.224`
+* Added `org.eclipse.jetty:jetty-client:9.4.48.v20220622`
+* Updated `software.amazon.awssdk:s3:2.17.207` to `2.17.229`
 
 ### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.236` to `1.12.253`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.236` to `1.12.258`
 * Added `com.brsanthu:migbase64:2.2`
 * Added `com.exasol:maven-project-version-getter:1.1.0`
 * Updated `com.exasol:test-db-builder-java:3.3.2` to `3.3.3`

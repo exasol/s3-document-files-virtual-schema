@@ -27,21 +27,36 @@ public class SimpleProcess {
     }
 
     /**
-     * Starts a new process using the working directory of the current Java process and waits until it terminates successfully.
+     * Starts a new process using the working directory of the current Java process and waits until it terminates
+     * successfully.
      *
      * @param command          the command to execute
      * @param executionTimeout the execution timeout for the process
      * @return the combined stdout and stderr from the process
      */
     public static String start(final List<String> command, final Duration executionTimeout) {
+        return start(null, command, executionTimeout);
+    }
+
+    /**
+     * Starts a new process using the given working directory and waits until it terminates successfully.
+     *
+     * @param workingDirectory the directory in which to start the process. Use the working directory of the current
+     *                         Java process if {@code null}.
+     * @param command          the command to execute
+     * @param executionTimeout the execution timeout for the process
+     * @return the combined stdout and stderr from the process
+     */
+    public static String start(final Path workingDirectory, final List<String> command,
+            final Duration executionTimeout) {
         final StringBuilder stringBuilder = new StringBuilder();
         final CollectingStreamConsumer collectingStreamConsumer = new CollectingStreamConsumer(stringBuilder);
         final StreamClosedConsumer stdoutStreamClosed = new StreamClosedConsumer();
         final StreamClosedConsumer stderrStreamClosed = new StreamClosedConsumer();
-        final SimpleProcess process = start(command,
-                new DelegatingStreamConsumer(collectingStreamConsumer, new LoggingStreamConsumer("stdout>", Level.INFO),
+        final SimpleProcess process = start(workingDirectory, command,
+                new DelegatingStreamConsumer(collectingStreamConsumer, new LoggingStreamConsumer("stdout>", Level.FINE),
                         stdoutStreamClosed),
-                new DelegatingStreamConsumer(collectingStreamConsumer, new LoggingStreamConsumer("stderr>", Level.INFO),
+                new DelegatingStreamConsumer(collectingStreamConsumer, new LoggingStreamConsumer("stderr>", Level.FINE),
                         stderrStreamClosed));
         process.waitUntilTerminatedSuccessfully(executionTimeout);
         stdoutStreamClosed.waitUntilStreamClosed(Duration.ofMillis(100));

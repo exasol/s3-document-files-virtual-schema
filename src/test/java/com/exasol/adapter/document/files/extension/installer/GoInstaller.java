@@ -1,31 +1,23 @@
-package com.exasol.adapter.document.files.extension;
+package com.exasol.adapter.document.files.extension.installer;
 
 import java.nio.file.*;
 import java.time.Duration;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.exasol.adapter.document.files.extension.OsCheck;
 import com.exasol.adapter.document.files.extension.process.SimpleProcess;
 
-class ExtensionManagerInstaller {
-    private static final Logger LOGGER = Logger.getLogger(ExtensionManagerInstaller.class.getName());
-
+class GoInstaller implements ExtensionManagerInstaller {
+    private static final Logger LOGGER = Logger.getLogger(GoInstaller.class.getName());
     private final String version;
 
-    private ExtensionManagerInstaller(final String version) {
+    GoInstaller(final String version) {
         this.version = version;
     }
 
-    static ExtensionManagerInstaller forVersion(final String version) {
-        return new ExtensionManagerInstaller(version);
-    }
-
-    /**
-     * Install the extension manager in the given version.
-     * 
-     * @return the path of the executable.
-     */
-    Path install() {
+    @Override
+    public Path install() {
         runGoInstall();
         return getExtensionManagerExecutable();
     }

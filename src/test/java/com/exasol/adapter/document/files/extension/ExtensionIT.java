@@ -78,14 +78,13 @@ class ExtensionIT {
 
     @Test
     void listInstallations_findsMatchingScripts() {
-        final String currentProjectVersion = MavenProjectVersionGetter.getCurrentProjectVersion();
         createAdapter("S3_FILES_ADAPTER", "IMPORT_FROM_S3_DOCUMENT_FILES");
         final List<RestAPIInstallationsResponseInstallation> installations = extensionManagerSetup.client()
                 .getInstallations();
         assertAll(() -> assertThat(installations, hasSize(1)), //
                 () -> assertThat(installations.get(0).getName(),
                         equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
-                () -> assertThat(installations.get(0).getVersion(), equalTo(currentProjectVersion)),
+                () -> assertThat(installations.get(0).getVersion(), equalTo("(unknown)")),
                 () -> assertThat(installations.get(0).getInstanceParameters(), hasSize(0)));
     }
 

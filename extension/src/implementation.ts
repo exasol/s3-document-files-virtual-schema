@@ -1,17 +1,17 @@
 import { Installation } from "@exasol/extension-manager-interface";
 import { ExaAllScriptsRow } from "@exasol/extension-manager-interface/dist/exasolSchema";
-import { ADAPTER_SCRIPT_NAME, Context, IMPORT_SCRIPT_NAME } from "./common";
+import { ADAPTER_SCRIPT_NAME, IMPORT_SCRIPT_NAME } from "./common";
 
 function findScriptByName(scripts: ExaAllScriptsRow[], name: string): ExaAllScriptsRow | undefined {
     return scripts.find(script => script.name === name);
 }
 
-export function findInstallations(scripts: ExaAllScriptsRow[], context: Context): Installation[] {
+export function findInstallations(scripts: ExaAllScriptsRow[]): Installation[] {
     const importScript = findScriptByName(scripts, IMPORT_SCRIPT_NAME);
     const adapterScript = findScriptByName(scripts, ADAPTER_SCRIPT_NAME);
     if (isValidImportScript(importScript) && isValidAdapterScript(adapterScript)) {
         return [{
-            name: `${adapterScript.schema}.${adapterScript.name}`, version: context.version, instanceParameters: []
+            name: `${adapterScript.schema}.${adapterScript.name}`, version: "(unknown)", instanceParameters: []
         }];
     } else {
         return [];

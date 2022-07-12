@@ -2,7 +2,6 @@ import { ExaMetadata, Installation, SqlClient } from '@exasol/extension-manager-
 import { ExaAllScriptsRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
 import { describe, expect, it } from '@jest/globals';
 import { createExtension } from "./extension";
-import { CONFIG } from './extension-config';
 
 function getInstalledExtension(): any {
   return (global as any).installedExtension
@@ -53,7 +52,7 @@ describe("S3 VS Extension", () => {
     })
 
     describe("returns expected installations", () => {
-      function installation({ name = "schema.S3_FILES_ADAPTER", version = CONFIG.version }: Partial<Installation>): Installation {
+      function installation({ name = "schema.S3_FILES_ADAPTER", version = "(unknown)" }: Partial<Installation>): Installation {
         return { name, version, instanceParameters: [] }
       }
       function script({ schema = "schema", name = "name", inputType, resultType, type = "", text = "", comment }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {

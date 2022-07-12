@@ -10,19 +10,22 @@ import { Context } from "./common";
 import { CONFIG } from "./extension-config";
 import { findInstallations } from "./implementation";
 
-export function createExtension(): ExasolExtension {
+function createContext(): Context {
     const version = CONFIG.version;
     const fileName = CONFIG.fileName;
-    const fileSize = CONFIG.fileSizeBytes;
+    return { version, fileName };
+}
+
+export function createExtension(): ExasolExtension {
+    const context = createContext()
     const repoBaseUrl = "https://github.com/exasol/s3-document-files-virtual-schema"
-    const downloadUrl = `${repoBaseUrl}/releases/download/${version}/${fileName}`;
+    const downloadUrl = `${repoBaseUrl}/releases/download/${context.version}/${context.fileName}`;
     const licenseUrl = `${repoBaseUrl}/blob/main/LICENSE`;
-    const context: Context = { version, fileName }
     return {
         name: "S3 Virtual Schema",
         description: "Virtual Schema for document files on AWS S3",
-        installableVersions: [version],
-        bucketFsUploads: [{ bucketFsFilename: fileName, downloadUrl, fileSize, name: "S3 VS Jar file", licenseUrl, licenseAgreementRequired: false }],
+        installableVersions: [context.version],
+        bucketFsUploads: [{ bucketFsFilename: context.fileName, downloadUrl, fileSize: CONFIG.fileSizeBytes, name: "S3 VS Jar file", licenseUrl, licenseAgreementRequired: false }],
         install(sqlClient: SqlClient) {
             sqlClient.runQuery("CREATE ADAPTER SCRIPT ...")
         },
@@ -30,7 +33,7 @@ export function createExtension(): ExasolExtension {
             return undefined;
         },
         findInstallations(_sqlClient: SqlClient, metadata: ExaMetadata): Installation[] {
-            return findInstallations(metadata.allScripts.rows, context);
+            return findInstallations(metadata.allScripts.rows);
         },
         findInstances(_installation: Installation, _sql: SqlClient): Instance[] {
             return [];

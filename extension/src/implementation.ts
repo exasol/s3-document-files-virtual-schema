@@ -9,20 +9,22 @@ function findScriptByName(scripts: ExaAllScriptsRow[], name: string): ExaAllScri
 export function findInstallations(scripts: ExaAllScriptsRow[]): Installation[] {
     const importScript = findScriptByName(scripts, IMPORT_SCRIPT_NAME);
     const adapterScript = findScriptByName(scripts, ADAPTER_SCRIPT_NAME);
-    if (isValidImportScript(importScript) && isValidAdapterScript(adapterScript)) {
-        return [{
-            name: `${adapterScript.schema}.${adapterScript.name}`, version: "(unknown)", instanceParameters: []
-        }];
-    } else {
+    if (!importScript && !adapterScript) {
         return [];
     }
+    if (!importScript || !adapterScript) {
+        console.log(`Either import script or adapter script not found`);
+        return [];
+    }
+    if (!isValidImportScript(importScript) || !isValidAdapterScript(adapterScript)) {
+        return [];
+    }
+    return [{
+        name: `${adapterScript.schema}.${adapterScript.name}`, version: "(unknown)", instanceParameters: []
+    }];
 }
 
 function isValidAdapterScript(script: ExaAllScriptsRow): script is ExaAllScriptsRow {
-    if (!script) {
-        console.log(`Adapter script ${ADAPTER_SCRIPT_NAME} not found`)
-        return false;
-    }
     if (script.type !== "ADAPTER") {
         console.log(`Invalid type for adapter script: ${script.type}`)
         return false;
@@ -31,10 +33,6 @@ function isValidAdapterScript(script: ExaAllScriptsRow): script is ExaAllScripts
 }
 
 function isValidImportScript(script: ExaAllScriptsRow): script is ExaAllScriptsRow {
-    if (!script) {
-        console.log(`Importer script ${IMPORT_SCRIPT_NAME} not found`)
-        return false;
-    }
     if (script.type !== "UDF") {
         console.log(`Invalid type for importer script: ${script.type}`)
         return false;

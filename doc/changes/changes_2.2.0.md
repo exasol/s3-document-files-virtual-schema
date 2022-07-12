@@ -42,7 +42,6 @@ This release allows installing an S3 Virtual Schema using the [extension manager
 
 ### Plugin Dependency Updates
 
-* Updated `com.exasol:project-keeper-maven-plugin:2.4.6` to `2.5.0`
 * Added `io.swagger.codegen.v3:swagger-codegen-maven-plugin:3.0.34`
 * Updated `org.apache.maven.plugins:maven-clean-plugin:2.5` to `3.2.0`
 * Added `org.codehaus.mojo:build-helper-maven-plugin:3.3.0`

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import com.exasol.adapter.document.files.IntegrationTestSetup;
+import com.exasol.adapter.document.files.extension.installer.ExtensionManagerInstaller;
 import com.exasol.adapter.document.files.extension.process.SimpleProcess;
 import com.exasol.bucketfs.Bucket;
 import com.exasol.bucketfs.BucketAccessException;

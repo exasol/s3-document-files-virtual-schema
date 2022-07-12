@@ -70,8 +70,7 @@ class ExtensionIT {
 
     @Test
     void listInstallations_ignoresWrongScriptNames() {
-        final String currentProjectVersion = MavenProjectVersionGetter.getCurrentProjectVersion();
-        createAdapter("wrong_adapater_name", "wrong_import_script_name");
+        createAdapter("wrong_adapter_name", "wrong_import_script_name");
         final List<RestAPIInstallationsResponseInstallation> installations = extensionManagerSetup.client()
                 .getInstallations();
         assertThat(installations, hasSize(0));

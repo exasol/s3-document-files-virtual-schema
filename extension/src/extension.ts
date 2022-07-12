@@ -16,12 +16,13 @@ export function createExtension(): ExasolExtension {
     const fileSize = CONFIG.fileSizeBytes;
     const repoBaseUrl = "https://github.com/exasol/s3-document-files-virtual-schema"
     const downloadUrl = `${repoBaseUrl}/releases/download/${version}/${fileName}`;
+    const licenseUrl = `${repoBaseUrl}/blob/main/LICENSE`;
     const context: Context = { version, fileName }
     return {
         name: "S3 Virtual Schema",
         description: "Virtual Schema for document files on AWS S3",
         installableVersions: [version],
-        bucketFsUploads: [{ bucketFsFilename: fileName, downloadUrl, fileSize, name: "S3 VS Jar file", licenseUrl: `${repoBaseUrl}/blob/main/LICENSE`, licenseAgreementRequired: false }],
+        bucketFsUploads: [{ bucketFsFilename: fileName, downloadUrl, fileSize, name: "S3 VS Jar file", licenseUrl, licenseAgreementRequired: false }],
         install(sqlClient: SqlClient) {
             sqlClient.runQuery("CREATE ADAPTER SCRIPT ...")
         },

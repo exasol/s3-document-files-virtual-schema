@@ -14,11 +14,11 @@ Code name: CSV Support
 
 * Updated `com.exasol:virtual-schema-common-document-files:7.0.2` to `7.1.0`
 * Added `org.eclipse.jetty:jetty-client:9.4.48.v20220622`
-* Updated `software.amazon.awssdk:s3:2.17.207` to `2.17.229`
+* Updated `software.amazon.awssdk:s3:2.17.207` to `2.17.238`
 
 ### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.236` to `1.12.258`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.236` to `1.12.267`
 * Added `com.brsanthu:migbase64:2.2`
 * Added `com.exasol:maven-project-version-getter:1.1.0`
 * Updated `com.exasol:test-db-builder-java:3.3.2` to `3.3.3`

@@ -89,6 +89,17 @@ class ExtensionIT {
     @Test
     void install_createsScripts() {
         setup.client().installCurrentExtension();
+        assertScriptsExist();
+    }
+
+    @Test
+    void install_worksIfCalledTwice() {
+        setup.client().installCurrentExtension();
+        setup.client().installCurrentExtension();
+        assertScriptsExist();
+    }
+
+    private void assertScriptsExist() {
         final String jarDirective = "%jar /buckets/bfsdefault/default/" + IntegrationTestSetup.ADAPTER_JAR + ";";
         setup.exasolMetadata()
                 .assertScript(ResultSetStructureMatcher.table()

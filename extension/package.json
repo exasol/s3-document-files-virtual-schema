@@ -5,7 +5,7 @@
     "description": "Extension for s3 virtual schemas",
     "license": "MIT",
     "scripts": {
-        "build": "npm run generate && npm run compile && npm run lint",
+        "build": "npm run generate && npm run compile",
         "compile": "tsc --build && esbuild dist/extension.js --bundle --outfile=dist/s3-vs-extension.js --target=es6",
         "generate": "bash generate-config.sh",
         "lint": "eslint .",

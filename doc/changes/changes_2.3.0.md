@@ -1,4 +1,4 @@
-# Virtual Schema for document data in files on AWS S3 2.3.0, released 2022-07-25
+# Virtual Schema for document data in files on AWS S3 2.3.0, released 2022-07-27
 
 Code name: CSV Support
 

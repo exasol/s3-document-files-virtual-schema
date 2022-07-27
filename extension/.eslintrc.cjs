@@ -7,5 +7,5 @@ module.exports = {
     },
     plugins: ['@typescript-eslint'],
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:@typescript-eslint/recommended-requiring-type-checking'],
-    ignorePatterns: ["coverage/**", "dist/**", "jest.config.ts", "src/**/*.test.ts"],
+    ignorePatterns: ["src/**/*.test.ts"],
 };

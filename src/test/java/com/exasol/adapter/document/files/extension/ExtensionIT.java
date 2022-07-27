@@ -98,8 +98,8 @@ class ExtensionIT {
 
     @Test
     void install_failsForUnsupportedVersion() {
-        final ApiException exception = assertThrows(ApiException.class,
-                () -> setup.client().installExtension("unsupported"));
+        final ExtensionManagerClient client = setup.client();
+        final ApiException exception = assertThrows(ApiException.class, () -> client.installExtension("unsupported"));
         assertThat(exception.getMessage(), equalTo("Internal error."));
         assertScriptsDoNotExist();
     }

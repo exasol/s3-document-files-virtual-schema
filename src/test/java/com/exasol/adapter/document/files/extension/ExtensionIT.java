@@ -43,11 +43,6 @@ class ExtensionIT {
         }
     }
 
-    @BeforeEach
-    void createSchema() {
-
-    }
-
     @AfterEach
     void cleanup() {
         setup.dropExtensionSchema();
@@ -138,5 +133,4 @@ class ExtensionIT {
                 .parameter(GenericUdfCallHandler.PARAMETER_CONNECTION_NAME, "VARCHAR(500)").emits()
                 .bucketFsContent(UdfEntryPoint.class.getName(), setup.getAdapterJarInBucketFs()).build();
     }
-
 }

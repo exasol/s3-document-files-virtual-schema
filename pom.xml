@@ -349,8 +349,8 @@
                         <configuration>
                             <workingDirectory>extension/</workingDirectory>
                             <executable>npm</executable>
-                            <useMavenLogger>false</useMavenLogger>
                             <commandlineArgs>ci</commandlineArgs>
+                            <useMavenLogger>false</useMavenLogger>
                         </configuration>
                     </execution>
                     <execution>
@@ -362,8 +362,8 @@
                         <configuration>
                             <workingDirectory>extension/</workingDirectory>
                             <executable>npm</executable>
-                            <useMavenLogger>false</useMavenLogger>
                             <commandlineArgs>test</commandlineArgs>
+                            <useMavenLogger>false</useMavenLogger>
                         </configuration>
                     </execution>
                     <execution>
@@ -375,8 +375,8 @@
                         <configuration>
                             <workingDirectory>extension/</workingDirectory>
                             <executable>npm</executable>
-                            <useMavenLogger>false</useMavenLogger>
                             <commandlineArgs>run build</commandlineArgs>
+                            <useMavenLogger>false</useMavenLogger>
                         </configuration>
                     </execution>
                 </executions>

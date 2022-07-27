@@ -47,7 +47,7 @@ public class ExtensionTestConfig {
     }
 
     public String getExtensionManagerVersion() {
-        return "latest";
+        return getOptionalValue("extensionManagerVersion").orElse("latest");
     }
 
     public boolean buildExtension() {

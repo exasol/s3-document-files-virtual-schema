@@ -5,24 +5,30 @@ import java.time.Duration;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.exasol.adapter.document.files.extension.ExtensionTestConfig;
 import com.exasol.adapter.document.files.extension.OsCheck;
 import com.exasol.adapter.document.files.extension.process.SimpleProcess;
 
 class GoInstaller implements ExtensionManagerInstaller {
     private static final Logger LOGGER = Logger.getLogger(GoInstaller.class.getName());
-    private final String version;
+    private final ExtensionTestConfig config;
 
-    GoInstaller(final String version) {
-        this.version = version;
+    GoInstaller(final ExtensionTestConfig config) {
+        this.config = config;
     }
 
     @Override
     public Path install() {
-        runGoInstall();
+        if (config.buildExtensionManager()) {
+            runGoInstall();
+        } else {
+            LOGGER.warning("Skipping installation of extension manager");
+        }
         return getExtensionManagerExecutable();
     }
 
     private void runGoInstall() {
+        final String version = config.getExtensionManagerVersion();
         LOGGER.info(() -> "Installing extension manager version '" + version + "'...");
         SimpleProcess.start(List.of("go", "install", "github.com/exasol/extension-manager@" + version),
                 Duration.ofSeconds(60));

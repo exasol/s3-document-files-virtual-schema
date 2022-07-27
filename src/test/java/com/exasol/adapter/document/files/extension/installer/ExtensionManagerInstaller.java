@@ -8,9 +8,9 @@ public interface ExtensionManagerInstaller {
 
     public static ExtensionManagerInstaller forConfig(final ExtensionTestConfig config) {
         if (config.getLocalExtensionManagerProject().isPresent()) {
-            return new LocalProjectDirInstaller(config.getLocalExtensionManagerProject().get());
+            return new LocalProjectDirInstaller(config);
         }
-        return new GoInstaller(config.getExtensionManagerVersion());
+        return new GoInstaller(config);
     }
 
     /**

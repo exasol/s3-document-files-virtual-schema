@@ -30,11 +30,13 @@ public class ExtensionManagerSetup implements AutoCloseable {
     private final ExasolObjectFactory exasolObjectFactory;
     private final Connection connection;
     private final UdfTestSetup udfTestSetup;
+    private final ExtensionTestConfig config;
 
-    private ExtensionManagerSetup(final ExtensionManagerProcess extensionManager,
-            final ExasolTestSetup exasolTestSetup) {
+    private ExtensionManagerSetup(final ExtensionManagerProcess extensionManager, final ExasolTestSetup exasolTestSetup,
+            final ExtensionTestConfig config) {
         this.extensionManager = extensionManager;
         this.exasolTestSetup = exasolTestSetup;
+        this.config = config;
         try {
             this.connection = this.exasolTestSetup.createConnection();
         } catch (final SQLException exception) {
@@ -47,7 +49,7 @@ public class ExtensionManagerSetup implements AutoCloseable {
 
     public static ExtensionManagerSetup create(final Path extensionFolder) {
         final ExtensionTestConfig config = ExtensionTestConfig.read();
-        prepareExtension(extensionFolder);
+        prepareExtension(config, extensionFolder);
         final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(
                 Path.of("cloudSetup/generated/testConfig.json")).getTestSetup();
         final ExtensionManagerInstaller installer = ExtensionManagerInstaller.forConfig(config);
@@ -55,11 +57,15 @@ public class ExtensionManagerSetup implements AutoCloseable {
         final ExtensionManagerProcess extensionManager = ExtensionManagerProcess.start(extensionManagerExecutable,
                 extensionFolder);
         uploadToBucketFs(exasolTestSetup.getDefaultBucket());
-        return new ExtensionManagerSetup(extensionManager, exasolTestSetup);
+        return new ExtensionManagerSetup(extensionManager, exasolTestSetup, config);
     }
 
-    private static void prepareExtension(final Path extensionFolder) {
-        SimpleProcess.start(Paths.get("extension"), List.of("npm", "run", "build"), Duration.ofSeconds(30));
+    private static void prepareExtension(final ExtensionTestConfig config, final Path extensionFolder) {
+        if (config.buildExtension()) {
+            SimpleProcess.start(Paths.get("extension"), List.of("npm", "run", "build"), Duration.ofSeconds(30));
+        } else {
+            LOGGER.warning("Skip building extension");
+        }
         final Path extension = Paths.get("extension/dist/s3-vs-extension.js").toAbsolutePath();
         if (!Files.exists(extension)) {
             throw new IllegalStateException("Extension file " + extension + " not found. Build it by executing: cd "

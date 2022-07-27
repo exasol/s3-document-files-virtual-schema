@@ -50,7 +50,16 @@ public class ExtensionTestConfig {
         return "latest";
     }
 
+    public boolean buildExtension() {
+        return getOptionalValue("buildExtension").map(Boolean::valueOf).orElse(true);
+    }
+
+    public boolean buildExtensionManager() {
+        return getOptionalValue("buildExtensionManager").map(Boolean::valueOf).orElse(true);
+    }
+
     private Optional<String> getOptionalValue(final String param) {
         return Optional.ofNullable(this.properties.getProperty(param));
     }
+
 }

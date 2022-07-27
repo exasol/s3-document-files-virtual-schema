@@ -1,7 +1,9 @@
 import { ADAPTER_SCRIPT_NAME, CombinedContext, IMPORT_SCRIPT_NAME } from "./common";
 
-export function installExtension(context: CombinedContext): void {
-
+export function installExtension(context: CombinedContext, versionToInstall: string): void {
+    if (context.local.version !== versionToInstall) {
+        throw new Error(`Installing version '${versionToInstall}' not supported, try '${context.local.version}'.`)
+    }
     const jarPath = context.global.bucketFs.resolvePath(context.local.fileName)
 
     context.global.sqlClient.runQuery(`
@@ -15,6 +17,5 @@ export function installExtension(context: CombinedContext): void {
         EMITS(...) AS
             %scriptclass com.exasol.adapter.document.UdfEntryPoint;
             %jar ${jarPath};`)
-
     context.global.sqlClient.runQuery("COMMIT")
 }

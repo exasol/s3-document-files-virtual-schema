@@ -3,6 +3,7 @@ package com.exasol.adapter.document.files.extension;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.exasol.dbbuilder.dialects.exasol.AdapterScript.Language;
 import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript.InputType;
+import com.exasol.extensionmanager.client.invoker.ApiException;
 import com.exasol.extensionmanager.client.model.RestAPIExtensionsResponseExtension;
 import com.exasol.extensionmanager.client.model.RestAPIInstallationsResponseInstallation;
 import com.exasol.matcher.ResultSetStructureMatcher;
@@ -88,15 +90,23 @@ class ExtensionIT {
 
     @Test
     void install_createsScripts() {
-        setup.client().installCurrentExtension();
+        setup.client().installExtension();
         assertScriptsExist();
     }
 
     @Test
     void install_worksIfCalledTwice() {
-        setup.client().installCurrentExtension();
-        setup.client().installCurrentExtension();
+        setup.client().installExtension();
+        setup.client().installExtension();
         assertScriptsExist();
+    }
+
+    @Test
+    void install_failsForUnsupportedVersion() {
+        final ApiException exception = assertThrows(ApiException.class,
+                () -> setup.client().installExtension("unsupported"));
+        assertThat(exception.getMessage(), equalTo("Internal error."));
+        assertScriptsDoNotExist();
     }
 
     private void assertScriptsExist() {
@@ -110,6 +120,11 @@ class ExtensionIT {
                                 allOf(containsString("%scriptclass " + RequestDispatcher.class.getName() + ";"), //
                                         containsString(jarDirective))) //
                         .matches());
+    }
+
+    private void assertScriptsDoNotExist() {
+        setup.exasolMetadata().assertScript(
+                ResultSetStructureMatcher.table("VARCHAR", "VARCHAR", "VARCHAR", "VARCHAR", "VARCHAR").matches());
     }
 
     private void createAdapter(final String adapterScriptName, final String importScriptName) {

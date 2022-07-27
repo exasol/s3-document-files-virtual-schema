@@ -36,7 +36,17 @@ public class ExtensionManagerClient {
                 .getInstallations();
     }
 
-    public void installCurrentExtension() {
+    public void installExtension(final String version) {
+        final RestAPIExtensionsResponseExtension extension = getSingleExtension();
+        if (extension.getInstallableVersions().isEmpty()) {
+            throw new IllegalStateException(
+                    "Expected at least one installable version for extensions " + extension.getId());
+        }
+        LOGGER.fine(() -> "Installing extension " + extension.getId() + " in version " + version);
+        install(extension.getId(), version);
+    }
+
+    public void installExtension() {
         final RestAPIExtensionsResponseExtension extension = getSingleExtension();
         if (extension.getInstallableVersions().isEmpty()) {
             throw new IllegalStateException(

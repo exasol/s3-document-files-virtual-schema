@@ -29,8 +29,8 @@ export function createExtension(): ExasolExtension {
         description: "Virtual Schema for document files on AWS S3",
         installableVersions: [localContext.version],
         bucketFsUploads: [{ bucketFsFilename: localContext.fileName, downloadUrl, fileSize: CONFIG.fileSizeBytes, name: "S3 VS Jar file", licenseUrl, licenseAgreementRequired: false }],
-        install(context: Context) {
-            installExtension(combineContext(context))
+        install(context: Context, version: string) {
+            installExtension(combineContext(context), version)
         },
         addInstance(_context: Context, _installation: Installation, _params: ParameterValues): Instance {
             return undefined;
@@ -38,16 +38,16 @@ export function createExtension(): ExasolExtension {
         findInstallations(_context: Context, metadata: ExaMetadata): Installation[] {
             return findInstallations(metadata.allScripts.rows);
         },
-        findInstances(context: Context, _installation: Installation): Instance[] {
+        findInstances(_context: Context, _installation: Installation): Instance[] {
             return [];
         },
-        uninstall(context: Context, _installation: Installation): void {
+        uninstall(_context: Context, _installation: Installation): void {
             //empty on purpose
         },
-        deleteInstance(context: Context, _instance: Instance): void {
+        deleteInstance(_context: Context, _instance: Instance): void {
             //empty on purpose
         },
-        readInstanceParameters(context: Context, _installation: Installation, _instance: Instance): ParameterValues {
+        readInstanceParameters(_context: Context, _installation: Installation, _instance: Instance): ParameterValues {
             return undefined;
         }
     }

@@ -137,6 +137,7 @@ software/amazon/awssdk/services/s3/model/GetBucketLifecycleConfigurationRequest
 io/netty/channel/ChannelProgressivePromise
 software/amazon/awssdk/core/internal/http/pipeline/stages/AsyncSigningStage
 java/lang/ref/Finalizer
+software/amazon/awssdk/regions/servicemetadata/DevopsGuruServiceMetadata
 sun/security/ssl/SSLHandshake$HandshakeMessage
 software/amazon/awssdk/http/nio/netty/NettyNioAsyncHttpClient$DefaultBuilder
 jdk/internal/jimage/ImageReader$SharedImageReader
@@ -1014,6 +1015,7 @@ java/nio/channels/ReadableByteChannel
 sun/security/ssl/SSLExtension$ClientExtensions
 javax/xml/stream/events/StartDocument
 io/netty/channel/$Proxy4
+software/amazon/awssdk/regions/servicemetadata/SsoServiceMetadata
 io/netty/util/concurrent/GenericProgressiveFutureListener
 java/nio/file/CopyOption
 java/lang/invoke/BoundMethodHandle$Species_LLLLLLLLLLL
@@ -1557,6 +1559,7 @@ org/apache/http/impl/BHttpConnectionBase
 io/netty/util/internal/ThrowableUtil
 java/security/interfaces/DSAKey
 com/ctc/wstx/util/EmptyNamespaceContext
+com/exasol/adapter/document/documentfetcher/files/csv/CsvDocumentFetcher
 software/amazon/awssdk/services/s3/model/PutPublicAccessBlockRequest
 org/apache/http/Consts
 software/amazon/awssdk/awscore/endpoint/DefaultServiceEndpointBuilder
@@ -2204,6 +2207,7 @@ com/exasol/adapter/metadata/ColumnMetadata
 org/logicng/formulas/FormulaFactory
 io/netty/handler/codec/http/HttpObject
 software/amazon/awssdk/utils/Logger
+software/amazon/awssdk/regions/servicemetadata/AppconfigServiceMetadata
 sun/security/ssl/SignatureAlgorithmsExtension$CHSignatureSchemesConsumer
 software/amazon/awssdk/http/nio/netty/internal/AwaitCloseChannelPoolMap
 java/util/stream/ForEachOps$ForEachOp
@@ -2463,6 +2467,7 @@ java/util/concurrent/atomic/Striped64
 io/netty/util/internal/LongAdderCounter
 io/netty/util/concurrent/Promise
 jdk/internal/module/SystemModuleFinders$SystemImage
+com/exasol/adapter/document/files/CsvFilesDocumentFetcherFactory
 java/lang/reflect/TypeVariable
 software/amazon/awssdk/core/internal/http/HttpClientDependencies$Builder
 io/netty/handler/codec/DefaultHeaders
@@ -3535,6 +3540,7 @@ software/amazon/awssdk/services/s3/model/DeleteBucketLifecycleRequest
 org/logicng/io/parsers/LogicNGPseudoBooleanParser$DisjContext
 org/apache/http/io/HttpMessageWriterFactory
 java/lang/module/ModuleDescriptor$Modifier
+software/amazon/awssdk/regions/servicemetadata/EdgeSagemakerServiceMetadata
 io/netty/handler/codec/Headers
 software/amazon/awssdk/services/s3/model/PutBucketLifecycleConfigurationRequest
 scala/collection/Iterable
@@ -5083,6 +5089,7 @@ software/amazon/awssdk/regions/servicemetadata/IvschatServiceMetadata
 org/apache/commons/logging/LogFactory$6
 sun/security/util/DisabledAlgorithmConstraints$KeySizeConstraint
 software/amazon/awssdk/regions/servicemetadata/ElasticmapreduceServiceMetadata
+software/amazon/awssdk/regions/servicemetadata/DlmServiceMetadata
 java/lang/invoke/LambdaFormEditor
 jdk/internal/loader/BuiltinClassLoader$2
 org/logicng/handlers/Handler

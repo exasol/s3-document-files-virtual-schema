@@ -5,16 +5,15 @@ import java.nio.file.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Logger;
 
 import com.exasol.adapter.document.files.IntegrationTestSetup;
 import com.exasol.adapter.document.files.extension.installer.ExtensionManagerInstaller;
 import com.exasol.adapter.document.files.extension.process.SimpleProcess;
 import com.exasol.bucketfs.Bucket;
 import com.exasol.bucketfs.BucketAccessException;
-import com.exasol.dbbuilder.dialects.DatabaseObject;
 import com.exasol.dbbuilder.dialects.exasol.*;
 import com.exasol.exasoltestsetup.ExasolTestSetup;
 import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
@@ -23,8 +22,8 @@ import com.exasol.extensionmanager.client.invoker.ApiClient;
 import com.exasol.udfdebugging.UdfTestSetup;
 
 public class ExtensionManagerSetup implements AutoCloseable {
+    private static final Logger LOGGER = Logger.getLogger(ExtensionManagerSetup.class.getName());
     public static final String EXTENSION_SCHEMA_NAME = "EXA_EXTENSIONS";
-    private final List<DatabaseObject> createdObjects = new LinkedList<>();
     private final ExtensionManagerProcess extensionManager;
     private final ExasolTestSetup exasolTestSetup;
     private final ExasolObjectFactory exasolObjectFactory;
@@ -97,25 +96,29 @@ public class ExtensionManagerSetup implements AutoCloseable {
         return new ExtensionManagerClient(apiClient, this.exasolTestSetup.getConnectionInfo());
     }
 
+    public ExasolMetadata exasolMetadata() {
+        return new ExasolMetadata(connection, EXTENSION_SCHEMA_NAME);
+    }
+
     public String getAdapterJarInBucketFs() {
         return "/buckets/bfsdefault/default/" + IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH.getFileName().toString();
     }
 
     public ExasolSchema createExtensionSchema() {
-        final ExasolSchema schema = exasolObjectFactory.createSchema(EXTENSION_SCHEMA_NAME);
-        createdObjects.add(schema);
-        return schema;
+        return exasolObjectFactory.createSchema(EXTENSION_SCHEMA_NAME);
     }
 
-    public void dropCreatedObjects() {
-        for (final DatabaseObject createdObject : this.createdObjects) {
-            createdObject.drop();
+    public void dropExtensionSchema() {
+        try {
+            connection.createStatement().execute("DROP SCHEMA IF EXISTS \"" + EXTENSION_SCHEMA_NAME + "\" CASCADE");
+        } catch (final SQLException exception) {
+            throw new IllegalStateException("Failed to delete extension schema " + EXTENSION_SCHEMA_NAME, exception);
         }
-        this.createdObjects.clear();
     }
 
     @Override
     public void close() {
+        dropExtensionSchema();
         this.extensionManager.close();
         try {
             this.exasolTestSetup.close();

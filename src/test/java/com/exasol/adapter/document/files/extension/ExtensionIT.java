@@ -84,7 +84,7 @@ class ExtensionIT {
     }
 
     @Test
-    void listInstallations_findsOnwInstallation() {
+    void listInstallations_findsOwnInstallation() {
         setup.client().installExtension();
         final List<RestAPIInstallationsResponseInstallation> installations = setup.client().getInstallations();
         assertAll(() -> assertThat(installations, hasSize(1)), //

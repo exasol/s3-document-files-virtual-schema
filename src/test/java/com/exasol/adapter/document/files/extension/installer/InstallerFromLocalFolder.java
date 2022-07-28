@@ -9,12 +9,12 @@ import java.util.logging.Logger;
 import com.exasol.adapter.document.files.extension.ExtensionTestConfig;
 import com.exasol.adapter.document.files.extension.process.SimpleProcess;
 
-class LocalProjectDirInstaller implements ExtensionManagerInstaller {
-    private static final Logger LOGGER = Logger.getLogger(LocalProjectDirInstaller.class.getName());
+class InstallerFromLocalFolder implements ExtensionManagerInstaller {
+    private static final Logger LOGGER = Logger.getLogger(InstallerFromLocalFolder.class.getName());
     private static final String EXECUTABLE_NAME = "extension-manager";
     private final ExtensionTestConfig config;
 
-    LocalProjectDirInstaller(final ExtensionTestConfig config) {
+    InstallerFromLocalFolder(final ExtensionTestConfig config) {
         this.config = config;
     }
 

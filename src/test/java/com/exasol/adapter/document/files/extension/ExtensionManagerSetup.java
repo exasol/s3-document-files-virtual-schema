@@ -29,13 +29,11 @@ public class ExtensionManagerSetup implements AutoCloseable {
     private final ExasolObjectFactory exasolObjectFactory;
     private final Connection connection;
     private final UdfTestSetup udfTestSetup;
-    private final ExtensionTestConfig config;
 
     private ExtensionManagerSetup(final ExtensionManagerProcess extensionManager, final ExasolTestSetup exasolTestSetup,
             final ExtensionTestConfig config) {
         this.extensionManager = extensionManager;
         this.exasolTestSetup = exasolTestSetup;
-        this.config = config;
         try {
             this.connection = this.exasolTestSetup.createConnection();
         } catch (final SQLException exception) {

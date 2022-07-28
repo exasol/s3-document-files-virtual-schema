@@ -3,6 +3,7 @@ consumes:
 - application/json
 definitions:
   restAPI.ExtensionsResponse:
+    description: Response containing all available extensions
     properties:
       extensions:
         items:
@@ -10,14 +11,22 @@ definitions:
         type: array
     type: object
   restAPI.ExtensionsResponseExtension:
+    description: Extension information
     properties:
       description:
+        description: The description of the extension to be displayed to the user.
+        type: string
+      id:
+        description: ID of the extension. Don't store this as it may change in the
+          future.
         type: string
       installableVersions:
+        description: A list of versions of this extension available for installation.
         items:
           type: string
         type: array
       name:
+        description: The name of the extension to be displayed to the user.
         type: string
     type: object
   restAPI.InstallationsResponse:
@@ -41,7 +50,7 @@ info:
   contact:
     email: opensource@exasol.com
     name: Exasol Integration team
-  description: This is a REST API for managing extensions in an Exasol database.
+  description: Extension information
   license:
     name: MIT
     url: https://github.com/exasol/extension-manager/blob/main/LICENSE
@@ -124,6 +133,58 @@ paths:
           schema:
             type: string
       summary: Get all installations
+    put:
+      description: This installs an extension
+      operationId: installExtension
+      parameters:
+      - description: Hostname of the Exasol DB to manage
+        in: query
+        name: dbHost
+        required: true
+        type: string
+      - description: port number of the Exasol DB to manage
+        in: query
+        name: dbPort
+        required: true
+        type: integer
+      - description: username of the Exasol DB to manage
+        in: query
+        name: dbUser
+        required: true
+        type: string
+      - description: password of the Exasol DB to manage
+        in: query
+        name: dbPass
+        required: true
+        type: string
+      - description: id of the extension to install
+        in: query
+        name: extensionId
+        required: true
+        type: string
+      - description: version of the extension to install
+        in: query
+        name: extensionVersion
+        required: true
+        type: string
+      - default: ""
+        description: dummy body
+        in: body
+        name: dummy
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Install an extension
 produces:
 - application/json
 swagger: "2.0"

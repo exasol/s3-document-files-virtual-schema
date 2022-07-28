@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.exasol</groupId>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>2.3.0</version>
+    <version>2.4.0</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
-        <junit.version>5.8.2</junit.version>
+        <junit.version>5.9.0</junit.version>
         <org.testcontainers.version>1.17.3</org.testcontainers.version>
         <vs-common-document-files.version>7.1.0</vs-common-document-files.version>
         <!-- Additional sonar configuration for analyzing TypeScript extension -->
@@ -18,7 +18,7 @@
         <sonar.test.inclusions>src/test/,*.test.ts</sonar.test.inclusions>
         <sonar.javascript.lcov.reportPaths>extension/coverage/lcov.info</sonar.javascript.lcov.reportPaths>
         <!-- Generated code dependencies -->
-        <swagger-core-version>2.2.1</swagger-core-version>
+        <swagger-core-version>2.2.2</swagger-core-version>
         <jersey-version>2.36</jersey-version>
         <jackson-version>2.13.3</jackson-version>
     </properties>
@@ -54,7 +54,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.17.238</version>
+                <version>2.17.240</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -145,7 +145,7 @@
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.267</version>
+            <version>1.12.269</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -349,21 +349,8 @@
                         <configuration>
                             <workingDirectory>extension/</workingDirectory>
                             <executable>npm</executable>
-                            <useMavenLogger>false</useMavenLogger>
                             <commandlineArgs>ci</commandlineArgs>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>unit-test-extension</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <workingDirectory>extension/</workingDirectory>
-                            <executable>npm</executable>
                             <useMavenLogger>false</useMavenLogger>
-                            <commandlineArgs>test</commandlineArgs>
                         </configuration>
                     </execution>
                     <execution>
@@ -375,8 +362,34 @@
                         <configuration>
                             <workingDirectory>extension/</workingDirectory>
                             <executable>npm</executable>
-                            <useMavenLogger>false</useMavenLogger>
                             <commandlineArgs>run build</commandlineArgs>
+                            <useMavenLogger>false</useMavenLogger>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unit-test-extension</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>extension/</workingDirectory>
+                            <executable>npm</executable>
+                            <commandlineArgs>test</commandlineArgs>
+                            <useMavenLogger>false</useMavenLogger>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>lint-extension</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>extension/</workingDirectory>
+                            <executable>npm</executable>
+                            <commandlineArgs>run lint</commandlineArgs>
+                            <useMavenLogger>false</useMavenLogger>
                         </configuration>
                     </execution>
                 </executions>
@@ -449,7 +462,7 @@
     <parent>
         <artifactId>s3-document-files-virtual-schema-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>2.3.0</version>
+        <version>2.4.0</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
 </project>

@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      EXTENSION_MANAGER_VERSION: v0.0.0-20220727133520-7aace439f7a1
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -26,21 +28,15 @@ jobs:
           node-version: 16
           cache: 'npm'
           cache-dependency-path: extension/package-lock.json
-      - name: Print versions
-        run: |
-          go version
-          npm --version
-          node --version
-          java -version
-          mvn --version
+      - name: Configure extension manager version ${{ env.EXTENSION_MANAGER_VERSION }}
+        run: echo "extensionManagerVersion = $EXTENSION_MANAGER_VERSION" > extension-test.properties
       - name: Cache Go modules
         uses: actions/cache@v3
         with:
           path: |
             ~/.cache/go-build
             ~/go/pkg/mod
-          # Using pom.xml indirectly defines the version of extension manager to install
-          key: ${{ runner.os }}-go-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-go-${{ hashFiles('extension-test.properties') }}
           restore-keys: |
             ${{ runner.os }}-go-
       - name: Cache SonarCloud packages

@@ -5,8 +5,7 @@ import java.util.logging.Logger;
 
 import com.exasol.exasoltestsetup.SqlConnectionInfo;
 import com.exasol.extensionmanager.client.api.DefaultApi;
-import com.exasol.extensionmanager.client.model.RestAPIExtensionsResponseExtension;
-import com.exasol.extensionmanager.client.model.RestAPIInstallationsResponseInstallation;
+import com.exasol.extensionmanager.client.model.*;
 
 public class ExtensionManagerClient {
     private static final Logger LOGGER = Logger.getLogger(ExtensionManagerClient.class.getName());
@@ -60,6 +59,25 @@ public class ExtensionManagerClient {
     public void install(final String extensionId, final String extensionVersion) {
         this.apiClient.installExtension(getDbHost(), getDbPort(), getDbUser(), getDbPassword(), extensionId,
                 extensionVersion, "dummyBody");
+    }
+
+    public String createInstance(final List<RestAPIParameterValue> parameterValues) {
+        final RestAPIExtensionsResponseExtension extension = getSingleExtension();
+        if (extension.getInstallableVersions().isEmpty()) {
+            throw new IllegalStateException(
+                    "Expected at least one installable version for extensions " + extension.getId());
+        }
+        return createInstance(extension.getId(), extension.getInstallableVersions().get(0), parameterValues)
+                .getInstanceName();
+    }
+
+    private RestAPICreateInstanceResponse createInstance(final String extensionId, final String extensionVersion,
+            final List<RestAPIParameterValue> parameterValues) {
+        return this.apiClient
+                .createInstance(
+                        new RestAPICreateInstanceRequest().extensionId(extensionId).extensionVersion(extensionVersion)
+                                .parameterValues(parameterValues),
+                        getDbHost(), getDbPort(), getDbUser(), getDbPassword());
     }
 
     private String getDbHost() {

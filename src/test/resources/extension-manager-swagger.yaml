@@ -2,10 +2,33 @@ basePath: /
 consumes:
 - application/json
 definitions:
+  restAPI.CreateInstanceRequest:
+    description: Request data for creating a new instance of an extension.
+    properties:
+      extensionId:
+        description: The ID of the extension
+        type: string
+      extensionVersion:
+        description: The version of the extension
+        type: string
+      parameterValues:
+        description: The parameters for the new instance
+        items:
+          $ref: '#/definitions/restAPI.ParameterValue'
+        type: array
+    type: object
+  restAPI.CreateInstanceResponse:
+    description: Response data for creating a new instance of an extension.
+    properties:
+      instanceName:
+        description: The name of the newly created instance
+        type: string
+    type: object
   restAPI.ExtensionsResponse:
     description: Response containing all available extensions
     properties:
       extensions:
+        description: All available extensions.
         items:
           $ref: '#/definitions/restAPI.ExtensionsResponseExtension'
         type: array
@@ -46,11 +69,21 @@ definitions:
       version:
         type: string
     type: object
+  restAPI.ParameterValue:
+    description: Parameter values for creating a new instance.
+    properties:
+      name:
+        description: The name of the parameter
+        type: string
+      value:
+        description: The value of the parameter
+        type: string
+    type: object
 info:
   contact:
     email: opensource@exasol.com
     name: Exasol Integration team
-  description: Extension information
+  description: Response data for creating a new instance of an extension.
   license:
     name: MIT
     url: https://github.com/exasol/extension-manager/blob/main/LICENSE
@@ -67,17 +100,17 @@ paths:
         name: dbHost
         required: true
         type: string
-      - description: port number of the Exasol DB to manage
+      - description: Port number of the Exasol DB to manage
         in: query
         name: dbPort
         required: true
         type: integer
-      - description: username of the Exasol DB to manage
+      - description: Username of the Exasol DB to manage
         in: query
         name: dbUser
         required: true
         type: string
-      - description: password of the Exasol DB to manage
+      - description: Password of the Exasol DB to manage
         in: query
         name: dbPass
         required: true
@@ -106,17 +139,17 @@ paths:
         name: dbHost
         required: true
         type: string
-      - description: port number of the Exasol DB to manage
+      - description: Port number of the Exasol DB to manage
         in: query
         name: dbPort
         required: true
         type: integer
-      - description: username of the Exasol DB to manage
+      - description: Username of the Exasol DB to manage
         in: query
         name: dbUser
         required: true
         type: string
-      - description: password of the Exasol DB to manage
+      - description: Password of the Exasol DB to manage
         in: query
         name: dbPass
         required: true
@@ -132,9 +165,9 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Get all installations
+      summary: Get all installations.
     put:
-      description: This installs an extension
+      description: This installs an extension in a given version.
       operationId: installExtension
       parameters:
       - description: Hostname of the Exasol DB to manage
@@ -142,27 +175,27 @@ paths:
         name: dbHost
         required: true
         type: string
-      - description: port number of the Exasol DB to manage
+      - description: Port number of the Exasol DB to manage
         in: query
         name: dbPort
         required: true
         type: integer
-      - description: username of the Exasol DB to manage
+      - description: Username of the Exasol DB to manage
         in: query
         name: dbUser
         required: true
         type: string
-      - description: password of the Exasol DB to manage
+      - description: Password of the Exasol DB to manage
         in: query
         name: dbPass
         required: true
         type: string
-      - description: id of the extension to install
+      - description: ID of the extension to install
         in: query
         name: extensionId
         required: true
         type: string
-      - description: version of the extension to install
+      - description: Version of the extension to install
         in: query
         name: extensionVersion
         required: true
@@ -184,7 +217,50 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Install an extension
+      summary: Install an extension.
+  /instances:
+    put:
+      description: This creates an instance of an extension, e.g. a virtual schema.
+      operationId: createInstance
+      parameters:
+      - description: Hostname of the Exasol DB to manage
+        in: query
+        name: dbHost
+        required: true
+        type: string
+      - description: Port number of the Exasol DB to manage
+        in: query
+        name: dbPort
+        required: true
+        type: integer
+      - description: Username of the Exasol DB to manage
+        in: query
+        name: dbUser
+        required: true
+        type: string
+      - description: Password of the Exasol DB to manage
+        in: query
+        name: dbPass
+        required: true
+        type: string
+      - description: Request data for creating an instance
+        in: body
+        name: createInstanceRequest
+        required: true
+        schema:
+          $ref: '#/definitions/restAPI.CreateInstanceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restAPI.CreateInstanceResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create an instance of an extension.
 produces:
 - application/json
 swagger: "2.0"

@@ -30,7 +30,7 @@ export function createExtension(): ExasolExtension {
         install(context: Context, version: string) {
             installExtension(context, extensionInfo, version)
         },
-        addInstance(_context: Context, _installation: Installation, _params: ParameterValues): Instance {
+        addInstance(_context: Context, _version: string, _params: ParameterValues): Instance {
             return undefined;
         },
         findInstallations(_context: Context, metadata: ExaMetadata): Installation[] {

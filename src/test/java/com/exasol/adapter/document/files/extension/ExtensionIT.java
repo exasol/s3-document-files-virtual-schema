@@ -115,6 +115,14 @@ class ExtensionIT {
         assertScriptsDoNotExist();
     }
 
+    @Test
+    void createInstance() {
+        final ExtensionManagerClient client = setup.client();
+        client.installExtension();
+        final String instanceName = client.createInstance(List.of());
+        assertThat(instanceName, equalTo("my new instance"));
+    }
+
     private void assertScriptsExist() {
         final String jarDirective = "%jar /buckets/bfsdefault/default/" + IntegrationTestSetup.ADAPTER_JAR + ";";
         setup.exasolMetadata()

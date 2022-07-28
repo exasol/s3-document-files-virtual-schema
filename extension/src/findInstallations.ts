@@ -20,8 +20,27 @@ export function findInstallations(scripts: ExaAllScriptsRow[]): Installation[] {
         return [];
     }
     return [{
-        name: `${adapterScript.schema}.${adapterScript.name}`, version: "(unknown)", instanceParameters: []
+        name: `${adapterScript.schema}.${adapterScript.name}`, version: extractVersion(adapterScript.text), instanceParameters: []
     }];
+}
+
+const unknownVersion = "(unknown)"
+const adapterScriptFileNamePattern = /.*%jar\s+[\w-/]+\/([^/]+.jar)\s*;.*/
+const jarNameVersionPattern = /document-files-virtual-schema-dist-[\d.]+-s3-(\d+\.\d+\.\d+).jar/
+
+function extractVersion(adapterScriptText: string): string {
+    const jarNameMatch = adapterScriptFileNamePattern.exec(adapterScriptText)
+    if (!jarNameMatch) {
+        console.log(`WARN: Could not find jar filename in adapter script "${adapterScriptText}"`)
+        return unknownVersion
+    }
+    const jarFileName = jarNameMatch[1];
+    const versionMatch = jarNameVersionPattern.exec(jarFileName)
+    if (!versionMatch) {
+        console.log(`WARN: Could not find version in jar file name "${jarFileName}"`)
+        return unknownVersion
+    }
+    return versionMatch[1]
 }
 
 function isValidAdapterScript(script: ExaAllScriptsRow): script is ExaAllScriptsRow {

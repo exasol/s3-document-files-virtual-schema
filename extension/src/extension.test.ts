@@ -69,8 +69,8 @@ describe("S3 VS Extension", () => {
       function script({ schema = "schema", name = "name", inputType, resultType, type = "", text = "", comment }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {
         return { schema, name, inputType, resultType, type, text, comment }
       }
-      function adapterScript({ name = "S3_FILES_ADAPTER", type = "ADAPTER" }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {
-        return script({ name, type })
+      function adapterScript({ name = "S3_FILES_ADAPTER", type = "ADAPTER", text = "adapter script" }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {
+        return script({ name, type, text })
       }
       function importScript({ name = "IMPORT_FROM_S3_DOCUMENT_FILES", type = "UDF", inputType = "SET", resultType = "EMITS" }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {
         return script({ name, type, inputType, resultType })
@@ -86,6 +86,9 @@ describe("S3 VS Extension", () => {
         { name: "importer has wrong name", scripts: [adapterScript({}), importScript({ name: "wrong" })], expected: undefined },
         { name: "importer missing", scripts: [adapterScript({})], expected: undefined },
         { name: "adapter and importer missing", scripts: [], expected: undefined },
+        { name: "version found in filename", scripts: [adapterScript({ text: "CREATE ... %jar /path/to/document-files-virtual-schema-dist-0.0.0-s3-1.2.3.jar; more text" }), importScript({})], expected: installation({ version: "1.2.3" }) },
+        { name: "version not found in filename", scripts: [adapterScript({ text: "CREATE ... %jar /path/to/invalid-file-name-dist-0.0.0-s3-1.2.3.jar;" }), importScript({})], expected: installation({ version: "(unknown)" }) },
+        { name: "filename not found in script", scripts: [adapterScript({ text: "CREATE ... %wrong /path/to/document-files-virtual-schema-dist-0.0.0-s3-1.2.3.jar;" }), importScript({})], expected: installation({ version: "(unknown)" }) },
       ]
       tests.forEach(test => {
         it(test.name, () => {

@@ -120,7 +120,7 @@ class ExtensionIT {
         final ExtensionManagerClient client = setup.client();
         client.installExtension();
         final String instanceName = client.createInstance(List.of());
-        assertThat(instanceName, equalTo("my new instance"));
+        assertThat(instanceName, equalTo("NEW_S3_VS"));
     }
 
     private void assertScriptsExist() {

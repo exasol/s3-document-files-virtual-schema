@@ -31,7 +31,7 @@ export function createExtension(): ExasolExtension {
             installExtension(context, extensionInfo, version)
         },
         addInstance(_context: Context, _version: string, _params: ParameterValues): Instance {
-            return undefined;
+            return { name: "NEW_S3_VS" };
         },
         findInstallations(_context: Context, metadata: ExaMetadata): Installation[] {
             return findInstallations(metadata.allScripts.rows);

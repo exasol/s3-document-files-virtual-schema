@@ -84,6 +84,17 @@ class ExtensionIT {
     }
 
     @Test
+    void listInstallations_findsOnwInstallation() {
+        setup.client().installExtension();
+        final List<RestAPIInstallationsResponseInstallation> installations = setup.client().getInstallations();
+        assertAll(() -> assertThat(installations, hasSize(1)), //
+                () -> assertThat(installations.get(0).getName(),
+                        equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
+                () -> assertThat(installations.get(0).getVersion(), equalTo("(unknown)")),
+                () -> assertThat(installations.get(0).getInstanceParameters(), hasSize(0)));
+    }
+
+    @Test
     void install_createsScripts() {
         setup.client().installExtension();
         assertScriptsExist();

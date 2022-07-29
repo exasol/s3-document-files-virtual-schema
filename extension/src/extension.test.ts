@@ -1,4 +1,4 @@
-import { ExaMetadata, Installation } from '@exasol/extension-manager-interface';
+import { ExaMetadata, Installation, ParameterValue } from '@exasol/extension-manager-interface';
 import { ExaAllScriptsRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
 import { describe, expect, it } from '@jest/globals';
 import * as jestMock from "jest-mock";
@@ -95,12 +95,21 @@ describe("S3 VS Extension", () => {
           const actual = findInstallations(test.scripts)
           if (test.expected) {
             expect(actual).toHaveLength(1)
-            expect(actual[0]).toStrictEqual(test.expected)
+            expect(actual[0].name).toStrictEqual(test.expected.name)
+            expect(actual[0].version).toStrictEqual(test.expected.version)
           } else {
             expect(actual).toHaveLength(0)
           }
         })
       });
+      it("returns expected parameters", () => {
+        const actual = findInstallations([adapterScript({}), importScript({})])
+        expect(actual).toHaveLength(1)
+        expect(actual[0].instanceParameters).toHaveLength(8)
+        expect(actual[0].instanceParameters[0]).toStrictEqual({
+          id: "awsAccessKeyId", name: "AWS Access Key Id", required: true, type: "string",
+        })
+      })
     })
   })
 
@@ -120,6 +129,41 @@ describe("S3 VS Extension", () => {
     it("fails for wrong version", () => {
       expect(() => { createExtension().install(createMockContext(), "wrongVersion") })
         .toThrow(`Installing version 'wrongVersion' not supported, try '${CONFIG.version}'.`)
+    })
+  })
+
+
+  describe("addInstance()", () => {
+    describe("connection parameters converted", () => {
+      type TestCase = { name: string, paramValues: ParameterValue[], expected: string }
+      function booleanMapped(value: string, expected: string): TestCase {
+        return { name: `boolean parameter '${value}' mapped to ${expected}`, paramValues: [{ name: "useSsl", value: value }], expected: `{"useSsl":${expected}}` };
+      }
+      const tests: TestCase[] = [
+        { name: "no parameters", paramValues: [], expected: '{}' },
+        { name: "unknown parameter", paramValues: [{ name: "unknown", value: "ignore" }], expected: '{}' },
+        { name: "parameter with single quote", paramValues: [{ name: "awsAccessKeyId", value: "abc'123''xyz" }], expected: `{"awsAccessKeyId":"abc''123''''xyz"}` },
+        { name: "parameter with double quote", paramValues: [{ name: "awsAccessKeyId", value: 'abc"123""xyz' }], expected: `{"awsAccessKeyId":"abc\\"123\\"\\"xyz"}` },
+        { name: "multiple parameters", paramValues: [{ name: "awsAccessKeyId", value: 'id' }, { name: "awsSecretAccessKey", value: "key" }], expected: `{"awsAccessKeyId":"id","awsSecretAccessKey":"key"}` },
+        { name: "mixed parameters", paramValues: [{ name: "awsAccessKeyId", value: 'id' }, { name: "unknown", value: "ignored" }], expected: `{"awsAccessKeyId":"id"}` },
+        booleanMapped("true", "true"),
+        booleanMapped("TRUE", "false"),
+        booleanMapped("false", "false"),
+        booleanMapped("FALSE", "false"),
+        booleanMapped("invalid", "false"),
+      ];
+      for (const test of tests) {
+        it(test.name, () => {
+          const context = createMockContext();
+          const instance = createExtension().addInstance(context, CONFIG.version, { values: test.paramValues });
+          expect(instance.name).toBe("NEW_S3_VS")
+          expect(context.runQueryMock.calls[0][0]).toBe(`CREATE CONNECTION "ext-schema"."mys3conn" TO '' USER '' IDENTIFIED BY '${test.expected}'`)
+        })
+      }
+    })
+    it("fails for wrong version", () => {
+      expect(() => { createExtension().addInstance(createMockContext(), "wrongVersion", { values: [] }) })
+        .toThrow(`Version 'wrongVersion' not supported, can only use ${CONFIG.version}.`)
     })
   })
 })

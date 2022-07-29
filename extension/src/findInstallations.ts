@@ -1,5 +1,6 @@
 import { Installation } from "@exasol/extension-manager-interface";
 import { ExaAllScriptsRow } from "@exasol/extension-manager-interface/dist/exasolSchema";
+import { createInstanceParameters } from "./addInstance";
 import { ADAPTER_SCRIPT_NAME, IMPORT_SCRIPT_NAME } from "./common";
 
 function findScriptByName(scripts: ExaAllScriptsRow[], name: string): ExaAllScriptsRow | undefined {
@@ -20,7 +21,9 @@ export function findInstallations(scripts: ExaAllScriptsRow[]): Installation[] {
         return [];
     }
     return [{
-        name: `${adapterScript.schema}.${adapterScript.name}`, version: extractVersion(adapterScript.text), instanceParameters: []
+        name: `${adapterScript.schema}.${adapterScript.name}`,
+        version: extractVersion(adapterScript.text),
+        instanceParameters: createInstanceParameters()
     }];
 }
 

@@ -15,18 +15,26 @@ import com.exasol.adapter.RequestDispatcher;
 import com.exasol.adapter.document.GenericUdfCallHandler;
 import com.exasol.adapter.document.UdfEntryPoint;
 import com.exasol.adapter.document.files.IntegrationTestSetup;
+import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
+import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
 import com.exasol.dbbuilder.dialects.exasol.AdapterScript.Language;
 import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript.InputType;
+import com.exasol.exasoltestsetup.ServiceAddress;
 import com.exasol.extensionmanager.client.invoker.ApiException;
-import com.exasol.extensionmanager.client.model.RestAPIExtensionsResponseExtension;
-import com.exasol.extensionmanager.client.model.RestAPIInstallationsResponseInstallation;
+import com.exasol.extensionmanager.client.model.*;
 import com.exasol.matcher.ResultSetStructureMatcher;
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
+import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
+
 class ExtensionIT {
+
+    private static final int EXPECTED_PARAMETER_COUNT = 9;
     private static ExtensionManagerSetup setup;
+    private static S3TestSetup s3TestSetup;
+    private static String s3BucketName;
 
     @TempDir
     static Path extensionFolder;
@@ -34,10 +42,14 @@ class ExtensionIT {
     @BeforeAll
     static void setup() {
         setup = ExtensionManagerSetup.create(extensionFolder);
+        s3TestSetup = new AwsS3TestSetup();
+        s3BucketName = "extension-test.s3.virtual-schema-test-bucket-" + System.currentTimeMillis();
+        s3TestSetup.getS3Client().createBucket(builder -> builder.bucket(s3BucketName));
     }
 
     @AfterAll
     static void teardown() {
+        s3TestSetup.getS3Client().deleteBucket(DeleteBucketRequest.builder().bucket(s3BucketName).build());
         if (setup != null) {
             setup.close();
         }
@@ -79,8 +91,8 @@ class ExtensionIT {
         assertAll(() -> assertThat(installations, hasSize(1)), //
                 () -> assertThat(installations.get(0).getName(),
                         equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
-                () -> assertThat(installations.get(0).getVersion(), equalTo("(unknown)")),
-                () -> assertThat(installations.get(0).getInstanceParameters(), hasSize(0)));
+                () -> assertThat(installations.get(0).getVersion(), equalTo(setup.getCurrentProjectVersion())),
+                () -> assertThat(installations.get(0).getInstanceParameters(), hasSize(EXPECTED_PARAMETER_COUNT)));
     }
 
     @Test
@@ -90,8 +102,8 @@ class ExtensionIT {
         assertAll(() -> assertThat(installations, hasSize(1)), //
                 () -> assertThat(installations.get(0).getName(),
                         equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
-                () -> assertThat(installations.get(0).getVersion(), equalTo("(unknown)")),
-                () -> assertThat(installations.get(0).getInstanceParameters(), hasSize(0)));
+                () -> assertThat(installations.get(0).getVersion(), equalTo(setup.getCurrentProjectVersion())),
+                () -> assertThat(installations.get(0).getInstanceParameters(), hasSize(EXPECTED_PARAMETER_COUNT)));
     }
 
     @Test
@@ -111,16 +123,51 @@ class ExtensionIT {
     void install_failsForUnsupportedVersion() {
         final ExtensionManagerClient client = setup.client();
         final ApiException exception = assertThrows(ApiException.class, () -> client.installExtension("unsupported"));
-        assertThat(exception.getMessage(), equalTo("Internal error."));
+        assertThat(exception.getMessage(),
+                allOf(containsString("Request failed: error installing extension: failed to install extension"),
+                        containsString("Error: Installing version 'unsupported' not supported, try '"
+                                + setup.getCurrentProjectVersion() + "'")));
         assertScriptsDoNotExist();
+    }
+
+    @Test
+    void createInstanceFailsWithoutRequiredParameters() {
+        final ExtensionManagerClient client = setup.client();
+        client.installExtension();
+        final List<RestAPIParameterValue> emptyParameters = List.of();
+        final ApiException exception = assertThrows(ApiException.class, () -> client.createInstance(emptyParameters));
+        assertThat(exception.getMessage(), equalTo(
+                "Request failed: error installing extension: invalid parameters: Failed to validate parameter \"Name of the new virtual schema\": This is a required field., Failed to validate parameter \"AWS Access Key Id\": This is a required field., Failed to validate parameter \"AWS Secret AccessKey\": This is a required field., Failed to validate parameter \"AWS Region\": This is a required field., Failed to validate parameter \"S3 Bucket\": This is a required field."));
     }
 
     @Test
     void createInstance() {
         final ExtensionManagerClient client = setup.client();
         client.installExtension();
-        final String instanceName = client.createInstance(List.of());
-        assertThat(instanceName, equalTo("NEW_S3_VS"));
+        final String instanceName = client.createInstance(createValidParameters("my_s3_vs"));
+        assertThat(instanceName, equalTo("my_s3_vs"));
+        setup.exasolMetadata().assertConnection(ResultSetStructureMatcher.table()
+                .row("MY_S3_VS_CONNECTION", "Created by extension manager for S3 virtual schema my_s3_vs").matches());
+    }
+
+    private List<RestAPIParameterValue> createValidParameters(final String virtualSchemaName) {
+        return List.of(param("virtualSchemaName", virtualSchemaName),
+                param("awsEndpointOverride", getInDatabaseS3Address()), param("awsRegion", s3TestSetup.getRegion()),
+                param("s3Bucket", "s3BucketName"), param("awsAccessKeyId", s3TestSetup.getUsername()),
+                param("awsSecretAccessKey", s3TestSetup.getPassword()));
+    }
+
+    private String getInDatabaseS3Address() {
+        final String s3Entrypoint = s3TestSetup.getEntrypoint();
+        if (s3Entrypoint.contains(":")) {
+            return setup.makeTcpServiceAccessibleFromDatabase(ServiceAddress.parse(s3Entrypoint)).toString();
+        } else {
+            return s3Entrypoint;
+        }
+    }
+
+    private RestAPIParameterValue param(final String name, final String value) {
+        return new RestAPIParameterValue().name(name).value(value);
     }
 
     private void assertScriptsExist() {

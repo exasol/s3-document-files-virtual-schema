@@ -29,4 +29,14 @@ public class ExasolMetadata {
             throw new IllegalStateException(exception);
         }
     }
+
+    public void assertConnection(final Matcher<ResultSet> matcher) {
+        try {
+            final PreparedStatement statement = connection.prepareStatement(
+                    "SELECT CONNECTION_NAME, CONNECTION_COMMENT FROM EXA_ALL_CONNECTIONS ORDER BY CONNECTION_NAME");
+            assertThat(statement.executeQuery(), matcher);
+        } catch (final SQLException exception) {
+            throw new IllegalStateException(exception);
+        }
+    }
 }

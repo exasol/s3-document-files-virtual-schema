@@ -15,10 +15,10 @@ import com.exasol.adapter.document.files.extension.process.SimpleProcess;
 import com.exasol.bucketfs.Bucket;
 import com.exasol.bucketfs.BucketAccessException;
 import com.exasol.dbbuilder.dialects.exasol.*;
-import com.exasol.exasoltestsetup.ExasolTestSetup;
-import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
+import com.exasol.exasoltestsetup.*;
 import com.exasol.extensionmanager.client.api.DefaultApi;
 import com.exasol.extensionmanager.client.invoker.ApiClient;
+import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 import com.exasol.udfdebugging.UdfTestSetup;
 
 public class ExtensionManagerSetup implements AutoCloseable {
@@ -29,6 +29,7 @@ public class ExtensionManagerSetup implements AutoCloseable {
     private final ExasolObjectFactory exasolObjectFactory;
     private final Connection connection;
     private final UdfTestSetup udfTestSetup;
+    private final String currentProjectVersion;
 
     private ExtensionManagerSetup(final ExtensionManagerProcess extensionManager, final ExasolTestSetup exasolTestSetup,
             final ExtensionTestConfig config) {
@@ -42,6 +43,7 @@ public class ExtensionManagerSetup implements AutoCloseable {
         this.udfTestSetup = new UdfTestSetup(this.exasolTestSetup, this.connection);
         this.exasolObjectFactory = new ExasolObjectFactory(this.connection,
                 ExasolObjectConfiguration.builder().withJvmOptions(this.udfTestSetup.getJvmOptions()).build());
+        this.currentProjectVersion = MavenProjectVersionGetter.getCurrentProjectVersion();
     }
 
     public static ExtensionManagerSetup create(final Path extensionFolder) {
@@ -114,6 +116,10 @@ public class ExtensionManagerSetup implements AutoCloseable {
         }
     }
 
+    public String getCurrentProjectVersion() {
+        return currentProjectVersion;
+    }
+
     @Override
     public void close() {
         dropExtensionSchema();
@@ -123,5 +129,9 @@ public class ExtensionManagerSetup implements AutoCloseable {
         } catch (final Exception exception) {
             throw new IllegalStateException("Error closing exasol test setup", exception);
         }
+    }
+
+    public ServiceAddress makeTcpServiceAccessibleFromDatabase(final ServiceAddress serviceAddress) {
+        return exasolTestSetup.makeTcpServiceAccessibleFromDatabase(serviceAddress);
     }
 }

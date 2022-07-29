@@ -3,6 +3,7 @@ import { Parameter } from "@exasol/extension-manager-interface/dist/parameters";
 import { ExtensionInfo } from "./common";
 
 const allParams = {
+    virtualSchemaName: <Parameter>{ id: "virtualSchemaName", name: "Name of the new virtual schema", type: "string", required: true },
     awsAccessKeyId: <Parameter>{ id: "awsAccessKeyId", name: "AWS Access Key Id", type: "string", required: true },
     awsSecretAccessKey: <Parameter>{ id: "awsSecretAccessKey", name: "AWS Secret AccessKey", type: "string", required: true, secret: true },
     awsRegion: <Parameter>{ id: "awsRegion", name: "AWS Region", type: "string", required: true },
@@ -14,6 +15,7 @@ const allParams = {
 };
 export function createInstanceParameters(): Parameter[] {
     return [
+        allParams.virtualSchemaName,
         allParams.awsAccessKeyId,
         allParams.awsSecretAccessKey,
         allParams.awsRegion,
@@ -29,15 +31,28 @@ export function addInstance(context: Context, extensionInfo: ExtensionInfo, vers
     if (extensionInfo.version !== versionToInstall) {
         throw new Error(`Version '${versionToInstall}' not supported, can only use ${extensionInfo.version}.`)
     }
-    const connectionName = "mys3conn"
-    context.sqlClient.runQuery(createConnectionStatement(context.extensionSchemaName, connectionName, paramValues));
-    return { name: "NEW_S3_VS" }
+
+    const virtualSchemaName = getParameterValue(paramValues, allParams.virtualSchemaName)
+    const connectionName = `${virtualSchemaName}_CONNECTION`
+    context.sqlClient.runQuery(createConnectionStatement(connectionName, paramValues));
+    context.sqlClient.runQuery(`COMMENT ON CONNECTION "${connectionName}" IS 'Created by extension manager for S3 virtual schema ${virtualSchemaName}'`);
+    context.sqlClient.runQuery("COMMIT");
+    return { name: virtualSchemaName }
 }
 
-function createConnectionStatement(schemaName: string, connectionName: string, paramValues: ParameterValues): string {
+function getParameterValue(paramValues: ParameterValues, definition: Parameter): string {
+    for (const value of paramValues.values) {
+        if (value.name === definition.id) {
+            return value.value
+        }
+    }
+    throw new Error(`Missing parameter "${definition.id}"`)
+}
+
+function createConnectionStatement(connectionName: string, paramValues: ParameterValues): string {
     let jsonArgs = JSON.stringify(convertParamValues(paramValues))
     jsonArgs = escapeSingleQuotes(jsonArgs)
-    return `CREATE CONNECTION "${schemaName}"."${connectionName}" TO '' USER '' IDENTIFIED BY '${jsonArgs}'`;
+    return `CREATE OR REPLACE CONNECTION "${connectionName}" TO '' USER '' IDENTIFIED BY '${jsonArgs}'`;
 }
 
 function escapeSingleQuotes(value: string): string {

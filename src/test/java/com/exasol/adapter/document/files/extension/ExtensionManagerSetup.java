@@ -5,6 +5,7 @@ import java.nio.file.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
@@ -16,8 +17,6 @@ import com.exasol.bucketfs.Bucket;
 import com.exasol.bucketfs.BucketAccessException;
 import com.exasol.dbbuilder.dialects.exasol.*;
 import com.exasol.exasoltestsetup.*;
-import com.exasol.extensionmanager.client.api.DefaultApi;
-import com.exasol.extensionmanager.client.invoker.ApiClient;
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 import com.exasol.udfdebugging.UdfTestSetup;
 
@@ -30,11 +29,14 @@ public class ExtensionManagerSetup implements AutoCloseable {
     private final Connection connection;
     private final UdfTestSetup udfTestSetup;
     private final String currentProjectVersion;
+    private final List<Runnable> cleanupCallbacks = new ArrayList<>();
+    private final ExtensionManagerClient client;
 
     private ExtensionManagerSetup(final ExtensionManagerProcess extensionManager, final ExasolTestSetup exasolTestSetup,
-            final ExtensionTestConfig config) {
+            final ExtensionManagerClient client, final ExtensionTestConfig config) {
         this.extensionManager = extensionManager;
         this.exasolTestSetup = exasolTestSetup;
+        this.client = client;
         try {
             this.connection = this.exasolTestSetup.createConnection();
         } catch (final SQLException exception) {
@@ -56,7 +58,9 @@ public class ExtensionManagerSetup implements AutoCloseable {
         final ExtensionManagerProcess extensionManager = ExtensionManagerProcess.start(extensionManagerExecutable,
                 extensionFolder);
         uploadToBucketFs(exasolTestSetup.getDefaultBucket());
-        return new ExtensionManagerSetup(extensionManager, exasolTestSetup, config);
+        final ExtensionManagerClient client = ExtensionManagerClient.create(extensionManager.getServerBasePath(),
+                exasolTestSetup.getConnectionInfo());
+        return new ExtensionManagerSetup(extensionManager, exasolTestSetup, client, config);
     }
 
     private static void prepareExtension(final ExtensionTestConfig config, final Path extensionFolder) {
@@ -91,9 +95,7 @@ public class ExtensionManagerSetup implements AutoCloseable {
     }
 
     public ExtensionManagerClient client() {
-        final DefaultApi apiClient = new DefaultApi(
-                new ApiClient().setBasePath(this.extensionManager.getServerBasePath()));
-        return new ExtensionManagerClient(apiClient, this.exasolTestSetup.getConnectionInfo());
+        return this.client;
     }
 
     public ExasolMetadata exasolMetadata() {
@@ -109,11 +111,41 @@ public class ExtensionManagerSetup implements AutoCloseable {
     }
 
     public void dropExtensionSchema() {
+        cleanupCallbacks.forEach(Runnable::run);
+        cleanupCallbacks.clear();
         try {
             connection.createStatement().execute("DROP SCHEMA IF EXISTS \"" + EXTENSION_SCHEMA_NAME + "\" CASCADE");
         } catch (final SQLException exception) {
             throw new IllegalStateException("Failed to delete extension schema " + EXTENSION_SCHEMA_NAME, exception);
         }
+    }
+
+    public void addVirtualSchemaToDrop(final String name) {
+        cleanupCallbacks.add(dropVirtualSchema(name));
+    }
+
+    public void addConnectionToDrop(final String name) {
+        cleanupCallbacks.add(dropConnection(name));
+    }
+
+    private Runnable dropVirtualSchema(final String name) {
+        return () -> {
+            try {
+                connection.createStatement().execute("DROP VIRTUAL SCHEMA IF EXISTS \"" + name + "\" CASCADE");
+            } catch (final SQLException exception) {
+                throw new IllegalStateException("Failed to drop virtual schema " + name, exception);
+            }
+        };
+    }
+
+    private Runnable dropConnection(final String name) {
+        return () -> {
+            try {
+                connection.createStatement().execute("DROP CONNECTION IF EXISTS \"" + name + "\"");
+            } catch (final SQLException exception) {
+                throw new IllegalStateException("Failed to drop connection " + name, exception);
+            }
+        };
     }
 
     public String getCurrentProjectVersion() {

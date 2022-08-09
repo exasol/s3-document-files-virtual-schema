@@ -19,7 +19,7 @@ public class ExasolMetadata {
     public void assertScript(final Matcher<ResultSet> matcher) {
         try {
             final PreparedStatement statement = connection.prepareStatement(
-                    "SELECT SCRIPT_NAME, SCRIPT_TYPE, SCRIPT_INPUT_TYPE, SCRIPT_RESULT_TYPE, SCRIPT_TEXT "
+                    "SELECT SCRIPT_NAME, SCRIPT_TYPE, SCRIPT_INPUT_TYPE, SCRIPT_RESULT_TYPE, SCRIPT_TEXT, SCRIPT_COMMENT "
                             + " FROM SYS.EXA_ALL_SCRIPTS " //
                             + " WHERE SCRIPT_SCHEMA=?" //
                             + " ORDER BY SCRIPT_NAME");
@@ -31,9 +31,19 @@ public class ExasolMetadata {
     }
 
     public void assertConnection(final Matcher<ResultSet> matcher) {
+        assertResult("SELECT CONNECTION_NAME, CONNECTION_COMMENT FROM EXA_ALL_CONNECTIONS ORDER BY CONNECTION_NAME ASC",
+                matcher);
+    }
+
+    public void assertVirtualSchema(final Matcher<ResultSet> matcher) {
+        assertResult(
+                "SELECT SCHEMA_NAME, SCHEMA_OWNER, ADAPTER_SCRIPT, ADAPTER_NOTES FROM SYS.EXA_ALL_VIRTUAL_SCHEMAS ORDER BY SCHEMA_NAME ASC",
+                matcher);
+    }
+
+    private void assertResult(final String sql, final Matcher<ResultSet> matcher) {
         try {
-            final PreparedStatement statement = connection.prepareStatement(
-                    "SELECT CONNECTION_NAME, CONNECTION_COMMENT FROM EXA_ALL_CONNECTIONS ORDER BY CONNECTION_NAME");
+            final PreparedStatement statement = connection.prepareStatement(sql);
             assertThat(statement.executeQuery(), matcher);
         } catch (final SQLException exception) {
             throw new IllegalStateException(exception);

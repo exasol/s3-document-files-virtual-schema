@@ -1,6 +1,8 @@
 package com.exasol.adapter.document.files.extension;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.ServerSocket;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
@@ -15,18 +17,20 @@ import com.google.re2j.Pattern;
 public class ExtensionManagerProcess implements AutoCloseable {
     private static final Logger LOGGER = Logger.getLogger(ExtensionManagerProcess.class.getName());
     private static final Duration SERVER_STARTUP_TIMEOUT = Duration.ofSeconds(5);
-    private static final int PORT = 8080;
     private final SimpleProcess process;
+    private final int port;
 
-    private ExtensionManagerProcess(final SimpleProcess process) {
+    private ExtensionManagerProcess(final SimpleProcess process, final int port) {
         this.process = process;
+        this.port = port;
     }
 
     public static ExtensionManagerProcess start(final Path extensionManagerBinary, final Path extensionFolder) {
-        LOGGER.info(() -> "Starting extension manager " + extensionManagerBinary + " with extension folder "
-                + extensionFolder + "...");
+        final int port = findOpenPort();
+        LOGGER.info(() -> "Starting extension manager " + extensionManagerBinary + " on port " + port
+                + " with extension folder " + extensionFolder + "...");
         final List<String> command = List.of(extensionManagerBinary.toString(), "-pathToExtensionFolder",
-                extensionFolder.toString(), "-serverAddress", "localhost:" + PORT);
+                extensionFolder.toString(), "-serverAddress", "localhost:" + port);
 
         final ServerPortConsumer serverPortConsumer = new ServerPortConsumer();
         final SimpleProcess process = SimpleProcess.start(command,
@@ -38,7 +42,15 @@ public class ExtensionManagerProcess implements AutoCloseable {
             throw new IllegalStateException("Extension manager did not log server port after " + SERVER_STARTUP_TIMEOUT
                     + ". Check log output for error messages.");
         }
-        return new ExtensionManagerProcess(process);
+        return new ExtensionManagerProcess(process, port);
+    }
+
+    private static int findOpenPort() {
+        try (ServerSocket socket = new ServerSocket(0)) {
+            return socket.getLocalPort();
+        } catch (final IOException exception) {
+            throw new UncheckedIOException("Failed to find an open port", exception);
+        }
     }
 
     @Override
@@ -48,11 +60,11 @@ public class ExtensionManagerProcess implements AutoCloseable {
     }
 
     public String getServerBasePath() {
-        return "http://localhost:" + PORT;
+        return "http://localhost:" + this.port;
     }
 
     private static class ServerPortConsumer implements ProcessStreamConsumer {
-        private static final Pattern STARTUP_FINISHED = Pattern.compile(".*Starting server on localhost:8080.*");
+        private static final Pattern STARTUP_FINISHED = Pattern.compile(".*Starting server on localhost:\\d+.*");
         private final CountDownLatch startupFinishedLatch = new CountDownLatch(1);
 
         @Override

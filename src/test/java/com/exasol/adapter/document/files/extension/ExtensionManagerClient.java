@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import com.exasol.exasoltestsetup.SqlConnectionInfo;
 import com.exasol.extensionmanager.client.api.DefaultApi;
+import com.exasol.extensionmanager.client.invoker.ApiClient;
 import com.exasol.extensionmanager.client.model.*;
 
 public class ExtensionManagerClient {
@@ -12,9 +13,14 @@ public class ExtensionManagerClient {
     private final DefaultApi apiClient;
     private final SqlConnectionInfo dbConnectionInfo;
 
-    ExtensionManagerClient(final DefaultApi apiClient, final SqlConnectionInfo dbConnectionInfo) {
+    private ExtensionManagerClient(final DefaultApi apiClient, final SqlConnectionInfo dbConnectionInfo) {
         this.apiClient = apiClient;
         this.dbConnectionInfo = dbConnectionInfo;
+    }
+
+    static ExtensionManagerClient create(final String serverBasePath, final SqlConnectionInfo connectionInfo) {
+        final DefaultApi apiClient = new DefaultApi(new ApiClient().setBasePath(serverBasePath));
+        return new ExtensionManagerClient(apiClient, connectionInfo);
     }
 
     public List<RestAPIExtensionsResponseExtension> getExtensions() {

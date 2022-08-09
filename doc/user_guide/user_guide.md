@@ -8,13 +8,13 @@ Upload the latest available [release of this adapter](https://github.com/exasol/
 
 Then create a schema to hold the adapter script.
 
-```
+```sql
 CREATE SCHEMA ADAPTER;
 ```
 
 Next create the Adapter Script:
 
- ```sql
+```sql
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
     %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.1.0-s3-2.4.0.jar;
@@ -38,7 +38,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
 
 Now you need to define a connection that includes the location of stored files:
 
- ```
+```sql
 CREATE CONNECTION S3_CONNECTION
     TO ''
     USER ''

@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.Tag;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.exasol.adapter.document.edml.*;
@@ -38,7 +37,9 @@ import com.exasol.performancetestrecorder.PerformanceTestRecorder;
 import com.exasol.smalljsonfilesfixture.SmallJsonFilesTestSetup;
 
 import jakarta.json.JsonObjectBuilder;
-import software.amazon.awssdk.services.s3.model.*;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.model.BucketAlreadyExistsException;
+import software.amazon.awssdk.services.s3.model.BucketAlreadyOwnedByYouException;
 
 @Tag("integration")
 @Testcontainers
@@ -55,14 +56,14 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     @BeforeAll
     static void beforeAll() throws Exception {
         s3BucketName = "my.s3.virtual-schema-test-bucket-" + System.currentTimeMillis();
-        AWS_S3_TEST_SETUP.getS3Client().createBucket(builder -> builder.bucket(s3BucketName));
+        AWS_S3_TEST_SETUP.createBucket(s3BucketName);
         SETUP = new IntegrationTestSetup(AWS_S3_TEST_SETUP, s3BucketName);
         s3Uploader = getS3UploadClient();
     }
 
     private static S3UploadInterface getS3UploadClient() {
         final String s3CacheBucketName = TestConfig.instance().getS3CacheBucket();
-        if (s3CacheBucketName == null || s3CacheBucketName.isBlank()) {
+        if ((s3CacheBucketName == null) || s3CacheBucketName.isBlank()) {
             LOGGER.warning("The " + TestConfig.FILE_NAME
                     + " does not set a s3CacheBucket. So we will upload all the test files again and again. If you run the tests more often, consider to create it and add it's name to the "
                     + TestConfig.FILE_NAME + ".");
@@ -74,7 +75,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @AfterAll
     static void afterAll() throws Exception {
-        AWS_S3_TEST_SETUP.getS3Client().deleteBucket(DeleteBucketRequest.builder().bucket(s3BucketName).build());
+        AWS_S3_TEST_SETUP.deleteBucket(s3BucketName);
         SETUP.close();
     }
 
@@ -179,7 +180,8 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         final ExasolSchema schema = objectFactory.createSchema("ADAPTER_FOR_LIST");
         final AdapterScript adapterScript = SETUP.createAdapterScript(schema);
         final UdfScript udf = IntegrationTestSetup.createUdf(schema);
-        uploadDataFile("{ \"id\": 1, \"name\": \"tom\" }", "test-data-1.json");
+        AWS_S3_TEST_SETUP.upload(s3BucketName, "test-data-1.json",
+                RequestBody.fromString("{ \"id\": 1, \"name\": \"tom\" }"));
         final String mapping = getMappingDefinitionForSmallJsonFiles();
         final VirtualSchema virtualSchema = SETUP.getPreconfiguredVirtualSchemaBuilder("VS_FOR_CLASS_LIST_EXTRACTION")
                 .adapterScript(adapterScript).properties(Map.of("MAPPING", mapping)).build();

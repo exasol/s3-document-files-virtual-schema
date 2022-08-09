@@ -1,5 +1,7 @@
 package com.exasol.adapter.document.files.s3testsetup;
 
+import java.util.Optional;
+
 import com.amazonaws.regions.DefaultAwsRegionProviderChain;
 import com.exasol.adapter.document.files.TestConfig;
 
@@ -8,12 +10,12 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
-import java.util.Optional;
-
 public class AwsS3TestSetup implements S3TestSetup {
     private final AwsCredentials awsCredentials;
     private final String region;
     private final AwsCredentialsProvider credentialsProvider;
+    private S3Client client;
+    private S3AsyncClient asyncClient;
 
     public AwsS3TestSetup() {
         this.region = new DefaultAwsRegionProviderChain().getRegion();
@@ -23,13 +25,20 @@ public class AwsS3TestSetup implements S3TestSetup {
 
     @Override
     public S3Client getS3Client() {
-        return S3Client.builder().region(Region.of(this.region)).credentialsProvider(this.credentialsProvider).build();
+        if (this.client == null) {
+            this.client = S3Client.builder().region(Region.of(this.region))
+                    .credentialsProvider(this.credentialsProvider).build();
+        }
+        return this.client;
     }
 
     @Override
     public S3AsyncClient getS3AsyncClient() {
-        return S3AsyncClient.builder().region(Region.of(this.region)).credentialsProvider(this.credentialsProvider)
-                .build();
+        if (this.asyncClient == null) {
+            this.asyncClient = S3AsyncClient.builder().region(Region.of(this.region))
+                    .credentialsProvider(this.credentialsProvider).build();
+        }
+        return this.asyncClient;
     }
 
     @Override

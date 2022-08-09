@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.*;
@@ -29,7 +32,7 @@ import com.exasol.extensionmanager.client.invoker.ApiException;
 import com.exasol.extensionmanager.client.model.*;
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
-import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
+import software.amazon.awssdk.core.sync.RequestBody;
 
 class ExtensionIT {
     private static final int EXPECTED_PARAMETER_COUNT = 10;
@@ -46,13 +49,14 @@ class ExtensionIT {
         setup = ExtensionManagerSetup.create(extensionFolder);
         s3TestSetup = new AwsS3TestSetup();
         s3BucketName = "extension-test.s3.virtual-schema-test-bucket-" + System.currentTimeMillis();
-        s3TestSetup.getS3Client().createBucket(builder -> builder.bucket(s3BucketName));
+        s3TestSetup.createBucket(s3BucketName);
         projectVersion = MavenProjectVersionGetter.getCurrentProjectVersion();
     }
 
     @AfterAll
     static void teardown() {
-        s3TestSetup.getS3Client().deleteBucket(DeleteBucketRequest.builder().bucket(s3BucketName).build());
+        s3TestSetup.emptyS3Bucket(s3BucketName);
+        s3TestSetup.deleteBucket(s3BucketName);
         if (setup != null) {
             setup.close();
         }
@@ -143,9 +147,26 @@ class ExtensionIT {
     }
 
     @Test
-    void createInstance() {
+    void virtualSchemaWorks() throws SQLException {
         setup.client().installExtension();
-        createInstanceWithName("my_virtual_SCHEMA");
+        final String prefix = "vs-works-test-" + System.currentTimeMillis() + "/";
+        upload(prefix + "test-data-1.json", "{\"id\": 1, \"name\": \"abc\" }");
+        upload(prefix + "test-data-2.json", "{\"id\": 2, \"name\": \"xyz\" }");
+        createInstance("MY_VS", getMappingDefinition(prefix + "test-data-*.json"));
+        try (final ResultSet result = setup.createStatement()
+                .executeQuery("SELECT ID, NAME FROM MY_VS.TEST ORDER BY ID ASC")) {
+            assertThat(result, table().row(1L, "abc").row(2L, "xyz").matches());
+        }
+    }
+
+    private void upload(final String key, final String content) {
+        s3TestSetup.upload(s3BucketName, key, RequestBody.fromString(content));
+    }
+
+    @Test
+    void createInstanceCreatesDbObjects() {
+        setup.client().installExtension();
+        createInstance("my_virtual_SCHEMA");
 
         setup.exasolMetadata().assertConnection(table().row("MY_VIRTUAL_SCHEMA_CONNECTION",
                 "Created by extension manager for S3 virtual schema my_virtual_SCHEMA").matches());
@@ -158,8 +179,8 @@ class ExtensionIT {
     @Test
     void createTwoInstances() {
         setup.client().installExtension();
-        createInstanceWithName("vs1");
-        createInstanceWithName("vs2");
+        createInstance("vs1");
+        createInstance("vs2");
 
         setup.exasolMetadata()
                 .assertConnection(table()
@@ -174,7 +195,7 @@ class ExtensionIT {
     @Test
     void createInstanceWithSingleQuote() {
         setup.client().installExtension();
-        createInstanceWithName("Quoted'schema");
+        createInstance("Quoted'schema");
         setup.exasolMetadata().assertConnection(table()
                 .row("QUOTED'SCHEMA_CONNECTION", "Created by extension manager for S3 virtual schema Quoted'schema")
                 .matches());
@@ -182,34 +203,40 @@ class ExtensionIT {
                 .row("Quoted'schema", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString())).matches());
     }
 
-    private void createInstanceWithName(final String virtualSchemaName) {
+    private void createInstance(final String virtualSchemaName) {
+        createInstance(virtualSchemaName, getMappingDefinition("test-data-*.json"));
+    }
+
+    private void createInstance(final String virtualSchemaName, final EdmlDefinition mapping) {
         setup.addVirtualSchemaToDrop(virtualSchemaName);
         setup.addConnectionToDrop(virtualSchemaName.toUpperCase() + "_CONNECTION");
-        final String instanceName = setup.client().createInstance(createValidParameters(virtualSchemaName));
+        final String instanceName = setup.client().createInstance(createValidParameters(virtualSchemaName, mapping));
         assertThat(instanceName, equalTo(virtualSchemaName));
-
     }
 
-    private List<RestAPIParameterValue> createValidParameters(final String virtualSchemaName) {
-        return List.of(param("virtualSchemaName", virtualSchemaName),
-                param("awsEndpointOverride", getInDatabaseS3Address()), //
+    private List<RestAPIParameterValue> createValidParameters(final String virtualSchemaName,
+            final EdmlDefinition mapping) {
+        final List<RestAPIParameterValue> parameters = new ArrayList<>(List.of(
+                param("virtualSchemaName", virtualSchemaName), param("awsEndpointOverride", getInDatabaseS3Address()), //
                 param("awsRegion", s3TestSetup.getRegion()), //
-                param("s3Bucket", "s3BucketName"), //
+                param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
                 param("awsSecretAccessKey", s3TestSetup.getPassword()), //
-                param("mapping", getMappingDefinition()));
+                param("mapping", new EdmlSerializer().serialize(mapping))));
+        if (s3TestSetup.getMfaToken().isPresent()) {
+            parameters.add(param("awsSessionToken", s3TestSetup.getMfaToken().get()));
+        }
+        return parameters;
     }
 
-    private String getMappingDefinition() {
-        final EdmlDefinition edmlDefinition = EdmlDefinition.builder().source("test-data-*.json")
-                .destinationTable("TEST") //
+    private EdmlDefinition getMappingDefinition(final String source) {
+        return EdmlDefinition.builder().source(source).destinationTable("TEST") //
                 .mapping(Fields.builder() //
                         .mapField("id", ToDecimalMapping.builder().build()) //
                         .mapField("name", ToVarcharMapping.builder().varcharColumnSize(200).build()) //
                         .mapField("fieldWith'Quote", ToVarcharMapping.builder().varcharColumnSize(200).build()) //
                         .build())
                 .build();
-        return new EdmlSerializer().serialize(edmlDefinition);
     }
 
     private String getInDatabaseS3Address() {

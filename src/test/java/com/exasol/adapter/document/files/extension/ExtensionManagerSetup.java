@@ -2,8 +2,7 @@ package com.exasol.adapter.document.files.extension;
 
 import java.io.*;
 import java.nio.file.*;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +113,7 @@ public class ExtensionManagerSetup implements AutoCloseable {
         cleanupCallbacks.forEach(Runnable::run);
         cleanupCallbacks.clear();
         try {
-            connection.createStatement().execute("DROP SCHEMA IF EXISTS \"" + EXTENSION_SCHEMA_NAME + "\" CASCADE");
+            createStatement().execute("DROP SCHEMA IF EXISTS \"" + EXTENSION_SCHEMA_NAME + "\" CASCADE");
         } catch (final SQLException exception) {
             throw new IllegalStateException("Failed to delete extension schema " + EXTENSION_SCHEMA_NAME, exception);
         }
@@ -131,7 +130,7 @@ public class ExtensionManagerSetup implements AutoCloseable {
     private Runnable dropVirtualSchema(final String name) {
         return () -> {
             try {
-                connection.createStatement().execute("DROP VIRTUAL SCHEMA IF EXISTS \"" + name + "\" CASCADE");
+                createStatement().execute("DROP VIRTUAL SCHEMA IF EXISTS \"" + name + "\" CASCADE");
             } catch (final SQLException exception) {
                 throw new IllegalStateException("Failed to drop virtual schema " + name, exception);
             }
@@ -141,11 +140,15 @@ public class ExtensionManagerSetup implements AutoCloseable {
     private Runnable dropConnection(final String name) {
         return () -> {
             try {
-                connection.createStatement().execute("DROP CONNECTION IF EXISTS \"" + name + "\"");
+                createStatement().execute("DROP CONNECTION IF EXISTS \"" + name + "\"");
             } catch (final SQLException exception) {
                 throw new IllegalStateException("Failed to drop connection " + name, exception);
             }
         };
+    }
+
+    public Statement createStatement() throws SQLException {
+        return connection.createStatement();
     }
 
     public String getCurrentProjectVersion() {

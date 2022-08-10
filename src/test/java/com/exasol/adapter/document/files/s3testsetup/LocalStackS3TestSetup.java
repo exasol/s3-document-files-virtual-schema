@@ -2,6 +2,8 @@ package com.exasol.adapter.document.files.s3testsetup;
 
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 
+import java.util.Optional;
+
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -11,11 +13,9 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
-import java.util.Optional;
-
 public class LocalStackS3TestSetup implements S3TestSetup {
     private final LocalStackContainer localStackContainer = new LocalStackContainer(
-            DockerImageName.parse("localstack/localstack:0.12.2")).withServices(S3);
+            DockerImageName.parse("localstack/localstack:1.0.3")).withServices(S3);
 
     public LocalStackS3TestSetup() {
         this.localStackContainer.start();

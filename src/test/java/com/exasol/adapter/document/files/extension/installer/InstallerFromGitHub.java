@@ -9,11 +9,11 @@ import com.exasol.adapter.document.files.extension.ExtensionTestConfig;
 import com.exasol.adapter.document.files.extension.OsCheck;
 import com.exasol.adapter.document.files.extension.process.SimpleProcess;
 
-class GoInstaller implements ExtensionManagerInstaller {
-    private static final Logger LOGGER = Logger.getLogger(GoInstaller.class.getName());
+class InstallerFromGitHub implements ExtensionManagerInstaller {
+    private static final Logger LOGGER = Logger.getLogger(InstallerFromGitHub.class.getName());
     private final ExtensionTestConfig config;
 
-    GoInstaller(final ExtensionTestConfig config) {
+    InstallerFromGitHub(final ExtensionTestConfig config) {
         this.config = config;
     }
 

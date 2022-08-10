@@ -26,8 +26,6 @@ import jakarta.json.*;
 import lombok.Getter;
 import lombok.Setter;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
-import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 public class IntegrationTestSetup implements AutoCloseable {
     public static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.1.0-s3-2.4.0.jar";
@@ -47,7 +45,6 @@ public class IntegrationTestSetup implements AutoCloseable {
     private final Bucket bucket;
     private final List<DatabaseObject> createdObjects = new LinkedList<>();
     private final S3TestSetup s3TestSetup;
-    private final S3Client s3;
     private final UdfTestSetup udfTestSetup;
 
     public IntegrationTestSetup(final S3TestSetup s3TestSetup, final String s3BucketName)
@@ -66,7 +63,6 @@ public class IntegrationTestSetup implements AutoCloseable {
         this.connectionDefinition = createConnectionDefinition();
         this.adapterScript = createAdapterScript(adapterSchema);
         createUdf(adapterSchema);
-        this.s3 = this.s3TestSetup.getS3Client();
     }
 
     static UdfScript createUdf(final ExasolSchema adapterSchema) {
@@ -142,11 +138,7 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     public void emptyS3Bucket(final String bucketName) {
-        final ListObjectsV2Iterable pages = this.s3.listObjectsV2Paginator(request -> request.bucket(bucketName));
-        for (final ListObjectsV2Response page : pages) {
-            page.contents().forEach(
-                    s3Object -> this.s3.deleteObject(builder -> builder.bucket(bucketName).key(s3Object.key())));
-        }
+        this.s3TestSetup.emptyS3Bucket(bucketName);
     }
 
     @Override
@@ -162,7 +154,7 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     public S3Client getS3Client() {
-        return this.s3;
+        return this.s3TestSetup.getS3Client();
     }
 
     protected VirtualSchema createVirtualSchema(final String schemaName, final String mapping) {

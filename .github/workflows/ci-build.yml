@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      EXTENSION_MANAGER_VERSION: v0.0.0-20220727133520-7aace439f7a1
+      EXTENSION_MANAGER_VERSION: latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3

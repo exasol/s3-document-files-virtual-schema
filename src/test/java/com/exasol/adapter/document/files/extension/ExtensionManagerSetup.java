@@ -2,9 +2,9 @@ package com.exasol.adapter.document.files.extension;
 
 import java.io.*;
 import java.nio.file.*;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
@@ -15,10 +15,8 @@ import com.exasol.adapter.document.files.extension.process.SimpleProcess;
 import com.exasol.bucketfs.Bucket;
 import com.exasol.bucketfs.BucketAccessException;
 import com.exasol.dbbuilder.dialects.exasol.*;
-import com.exasol.exasoltestsetup.ExasolTestSetup;
-import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
-import com.exasol.extensionmanager.client.api.DefaultApi;
-import com.exasol.extensionmanager.client.invoker.ApiClient;
+import com.exasol.exasoltestsetup.*;
+import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 import com.exasol.udfdebugging.UdfTestSetup;
 
 public class ExtensionManagerSetup implements AutoCloseable {
@@ -29,13 +27,15 @@ public class ExtensionManagerSetup implements AutoCloseable {
     private final ExasolObjectFactory exasolObjectFactory;
     private final Connection connection;
     private final UdfTestSetup udfTestSetup;
-    private final ExtensionTestConfig config;
+    private final String currentProjectVersion;
+    private final List<Runnable> cleanupCallbacks = new ArrayList<>();
+    private final ExtensionManagerClient client;
 
     private ExtensionManagerSetup(final ExtensionManagerProcess extensionManager, final ExasolTestSetup exasolTestSetup,
-            final ExtensionTestConfig config) {
+            final ExtensionManagerClient client, final ExtensionTestConfig config) {
         this.extensionManager = extensionManager;
         this.exasolTestSetup = exasolTestSetup;
-        this.config = config;
+        this.client = client;
         try {
             this.connection = this.exasolTestSetup.createConnection();
         } catch (final SQLException exception) {
@@ -44,6 +44,7 @@ public class ExtensionManagerSetup implements AutoCloseable {
         this.udfTestSetup = new UdfTestSetup(this.exasolTestSetup, this.connection);
         this.exasolObjectFactory = new ExasolObjectFactory(this.connection,
                 ExasolObjectConfiguration.builder().withJvmOptions(this.udfTestSetup.getJvmOptions()).build());
+        this.currentProjectVersion = MavenProjectVersionGetter.getCurrentProjectVersion();
     }
 
     public static ExtensionManagerSetup create(final Path extensionFolder) {
@@ -56,7 +57,9 @@ public class ExtensionManagerSetup implements AutoCloseable {
         final ExtensionManagerProcess extensionManager = ExtensionManagerProcess.start(extensionManagerExecutable,
                 extensionFolder);
         uploadToBucketFs(exasolTestSetup.getDefaultBucket());
-        return new ExtensionManagerSetup(extensionManager, exasolTestSetup, config);
+        final ExtensionManagerClient client = ExtensionManagerClient.create(extensionManager.getServerBasePath(),
+                exasolTestSetup.getConnectionInfo());
+        return new ExtensionManagerSetup(extensionManager, exasolTestSetup, client, config);
     }
 
     private static void prepareExtension(final ExtensionTestConfig config, final Path extensionFolder) {
@@ -91,9 +94,7 @@ public class ExtensionManagerSetup implements AutoCloseable {
     }
 
     public ExtensionManagerClient client() {
-        final DefaultApi apiClient = new DefaultApi(
-                new ApiClient().setBasePath(this.extensionManager.getServerBasePath()));
-        return new ExtensionManagerClient(apiClient, this.exasolTestSetup.getConnectionInfo());
+        return this.client;
     }
 
     public ExasolMetadata exasolMetadata() {
@@ -109,11 +110,49 @@ public class ExtensionManagerSetup implements AutoCloseable {
     }
 
     public void dropExtensionSchema() {
+        cleanupCallbacks.forEach(Runnable::run);
+        cleanupCallbacks.clear();
         try {
-            connection.createStatement().execute("DROP SCHEMA IF EXISTS \"" + EXTENSION_SCHEMA_NAME + "\" CASCADE");
+            createStatement().execute("DROP SCHEMA IF EXISTS \"" + EXTENSION_SCHEMA_NAME + "\" CASCADE");
         } catch (final SQLException exception) {
             throw new IllegalStateException("Failed to delete extension schema " + EXTENSION_SCHEMA_NAME, exception);
         }
+    }
+
+    public void addVirtualSchemaToDrop(final String name) {
+        cleanupCallbacks.add(dropVirtualSchema(name));
+    }
+
+    public void addConnectionToDrop(final String name) {
+        cleanupCallbacks.add(dropConnection(name));
+    }
+
+    private Runnable dropVirtualSchema(final String name) {
+        return () -> {
+            try {
+                createStatement().execute("DROP VIRTUAL SCHEMA IF EXISTS \"" + name + "\" CASCADE");
+            } catch (final SQLException exception) {
+                throw new IllegalStateException("Failed to drop virtual schema " + name, exception);
+            }
+        };
+    }
+
+    private Runnable dropConnection(final String name) {
+        return () -> {
+            try {
+                createStatement().execute("DROP CONNECTION IF EXISTS \"" + name + "\"");
+            } catch (final SQLException exception) {
+                throw new IllegalStateException("Failed to drop connection " + name, exception);
+            }
+        };
+    }
+
+    public Statement createStatement() throws SQLException {
+        return connection.createStatement();
+    }
+
+    public String getCurrentProjectVersion() {
+        return currentProjectVersion;
     }
 
     @Override
@@ -125,5 +164,9 @@ public class ExtensionManagerSetup implements AutoCloseable {
         } catch (final Exception exception) {
             throw new IllegalStateException("Error closing exasol test setup", exception);
         }
+    }
+
+    public ServiceAddress makeTcpServiceAccessibleFromDatabase(final ServiceAddress serviceAddress) {
+        return exasolTestSetup.makeTcpServiceAccessibleFromDatabase(serviceAddress);
     }
 }

@@ -6,6 +6,7 @@ import {
     Instance, ParameterValues,
     registerExtension
 } from "@exasol/extension-manager-interface";
+import { addInstance } from "./addInstance";
 import { ExtensionInfo } from "./common";
 import { CONFIG } from "./extension-config";
 import { findInstallations } from "./findInstallations";
@@ -30,8 +31,8 @@ export function createExtension(): ExasolExtension {
         install(context: Context, version: string) {
             installExtension(context, extensionInfo, version)
         },
-        addInstance(_context: Context, _installation: Installation, _params: ParameterValues): Instance {
-            return undefined;
+        addInstance(context: Context, version: string, params: ParameterValues): Instance {
+            return addInstance(context, extensionInfo, version, params);
         },
         findInstallations(_context: Context, metadata: ExaMetadata): Installation[] {
             return findInstallations(metadata.allScripts.rows);

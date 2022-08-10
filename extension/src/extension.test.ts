@@ -175,10 +175,10 @@ describe("S3 VS Extension", () => {
       expect(instance.name).toBe("NEW_S3_VS")
       expect(context.runQueryMock.calls.length).toBe(5)
       expect(context.runQueryMock.calls[0][0]).toBe(`CREATE OR REPLACE CONNECTION "NEW_S3_VS_CONNECTION" TO '' USER '' IDENTIFIED BY '{"awsAccessKeyId":"id"}'`)
-      expect(context.runQueryMock.calls[1][0]).toBe(`CREATE OR REPLACE VIRTUAL SCHEMA "NEW_S3_VS" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'NEW_S3_VS_CONNECTION' MAPPING = 'my mapping';`)
+      expect(context.runQueryMock.calls[1][0]).toBe(`CREATE VIRTUAL SCHEMA "NEW_S3_VS" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'NEW_S3_VS_CONNECTION' MAPPING = 'my mapping';`)
       const comment = `Created by extension manager for S3 virtual schema NEW_S3_VS`
       expect(context.runQueryMock.calls[2][0]).toBe(`COMMENT ON CONNECTION \"NEW_S3_VS_CONNECTION\" IS '${comment}'`)
-      expect(context.runQueryMock.calls[3][0]).toBe(`COMMENT ON VIRTUAL SCHEMA \"NEW_S3_VS\" IS '${comment}'`)
+      expect(context.runQueryMock.calls[3][0]).toBe(`COMMENT ON SCHEMA \"NEW_S3_VS\" IS '${comment}'`)
       expect(context.runQueryMock.calls[4][0]).toBe(`COMMIT`)
     })
 
@@ -187,10 +187,10 @@ describe("S3 VS Extension", () => {
       const parameters = [{ name: "virtualSchemaName", value: "vs'name" }, { name: "mapping", value: "mapping'with''quotes" }, { name: "awsAccessKeyId", value: "access'key" }]
       const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
       expect(context.runQueryMock.calls[0][0]).toBe(`CREATE OR REPLACE CONNECTION "vs'name_CONNECTION" TO '' USER '' IDENTIFIED BY '{"awsAccessKeyId":"access''key"}'`)
-      expect(context.runQueryMock.calls[1][0]).toBe(`CREATE OR REPLACE VIRTUAL SCHEMA "vs'name" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'vs''name_CONNECTION' MAPPING = 'mapping''with''''quotes';`)
+      expect(context.runQueryMock.calls[1][0]).toBe(`CREATE VIRTUAL SCHEMA "vs'name" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'vs''name_CONNECTION' MAPPING = 'mapping''with''''quotes';`)
       const comment = `Created by extension manager for S3 virtual schema vs''name`
       expect(context.runQueryMock.calls[2][0]).toBe(`COMMENT ON CONNECTION \"vs'name_CONNECTION\" IS '${comment}'`)
-      expect(context.runQueryMock.calls[3][0]).toBe(`COMMENT ON VIRTUAL SCHEMA \"vs'name\" IS '${comment}'`)
+      expect(context.runQueryMock.calls[3][0]).toBe(`COMMENT ON SCHEMA \"vs'name\" IS '${comment}'`)
     })
 
     it("fails for wrong version", () => {

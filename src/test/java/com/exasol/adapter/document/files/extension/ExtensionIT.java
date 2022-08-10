@@ -55,8 +55,10 @@ class ExtensionIT {
 
     @AfterAll
     static void teardown() {
-        s3TestSetup.emptyS3Bucket(s3BucketName);
-        s3TestSetup.deleteBucket(s3BucketName);
+        if (s3TestSetup != null) {
+            s3TestSetup.emptyS3Bucket(s3BucketName);
+            s3TestSetup.deleteBucket(s3BucketName);
+        }
         if (setup != null) {
             setup.close();
         }

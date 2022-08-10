@@ -82,8 +82,8 @@ function findParam(id: string): ScopedParameter | undefined {
     return allParams[id]
 }
 
-function convertConnectionParameters(paramValues: ParameterValues): any {
-    const result: any = {}
+function convertConnectionParameters(paramValues: ParameterValues) {
+    const result: { [key: string]: string | boolean } = {}
     for (const paramValue of paramValues.values) {
         const param = findParam(paramValue.name);
         if (param && param.scope == "connection") {
@@ -101,6 +101,6 @@ function convertParamValue(value: string, definition: Parameter): string | boole
         case "boolean":
             return value === 'true';
         default:
-            throw Error(`Unsupported parameter type ${definition}`);
+            throw Error("Unsupported parameter type");
     }
 }

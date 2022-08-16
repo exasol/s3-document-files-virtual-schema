@@ -87,6 +87,8 @@ describe("S3 VS Extension", () => {
         { name: "importer missing", scripts: [adapterScript({})], expected: undefined },
         { name: "adapter and importer missing", scripts: [], expected: undefined },
         { name: "version found in filename", scripts: [adapterScript({ text: "CREATE ... %jar /path/to/document-files-virtual-schema-dist-0.0.0-s3-1.2.3.jar; more text" }), importScript({})], expected: installation({ version: "1.2.3" }) },
+        { name: "script contains LF", scripts: [adapterScript({ text: "CREATE ...\n %jar /path/to/document-files-virtual-schema-dist-0.0.0-s3-1.2.3.jar; more text" }), importScript({})], expected: installation({ version: "1.2.3" }) },
+        { name: "script contains CRLF", scripts: [adapterScript({ text: "CREATE ...\r\n %jar /path/to/document-files-virtual-schema-dist-0.0.0-s3-1.2.3.jar; more text" }), importScript({})], expected: installation({ version: "1.2.3" }) },
         { name: "version not found in filename", scripts: [adapterScript({ text: "CREATE ... %jar /path/to/invalid-file-name-dist-0.0.0-s3-1.2.3.jar;" }), importScript({})], expected: installation({ version: "(unknown)" }) },
         { name: "filename not found in script", scripts: [adapterScript({ text: "CREATE ... %wrong /path/to/document-files-virtual-schema-dist-0.0.0-s3-1.2.3.jar;" }), importScript({})], expected: installation({ version: "(unknown)" }) },
       ]

@@ -20,5 +20,4 @@ export function installExtension(context: Context, extension: ExtensionInfo, ver
             %jar ${jarPath};`)
     context.sqlClient.runQuery(`COMMENT ON SCRIPT "${context.extensionSchemaName}"."${IMPORT_SCRIPT_NAME}" IS 'Created by extension manager for S3 virtual schema extension ${extension.version}'`);
     context.sqlClient.runQuery(`COMMENT ON SCRIPT "${context.extensionSchemaName}"."${ADAPTER_SCRIPT_NAME}" IS 'Created by extension manager for S3 virtual schema extension ${extension.version}'`);
-    context.sqlClient.runQuery("COMMIT")
 }

@@ -4,7 +4,6 @@ import static com.exasol.matcher.ResultSetStructureMatcher.table;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
 import java.sql.ResultSet;
@@ -28,7 +27,6 @@ import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript.InputType;
 import com.exasol.exasoltestsetup.ServiceAddress;
-import com.exasol.extensionmanager.client.invoker.ApiException;
 import com.exasol.extensionmanager.client.model.*;
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
@@ -71,7 +69,7 @@ class ExtensionIT {
 
     @Test
     void listExtensions() {
-        final List<RestAPIExtensionsResponseExtension> extensions = setup.client().getExtensions();
+        final List<ExtensionsResponseExtension> extensions = setup.client().getExtensions();
         assertAll(() -> assertThat(extensions, hasSize(1)), //
                 () -> assertThat(extensions.get(0).getName(), equalTo("S3 Virtual Schema")),
                 () -> assertThat(extensions.get(0).getInstallableVersions(), contains(projectVersion)),
@@ -81,21 +79,21 @@ class ExtensionIT {
 
     @Test
     void listInstallationsEmpty() {
-        final List<RestAPIInstallationsResponseInstallation> installations = setup.client().getInstallations();
+        final List<InstallationsResponseInstallation> installations = setup.client().getInstallations();
         assertThat(installations, hasSize(0));
     }
 
     @Test
     void listInstallations_ignoresWrongScriptNames() {
         createAdapter("wrong_adapter_name", "wrong_import_script_name");
-        final List<RestAPIInstallationsResponseInstallation> installations = setup.client().getInstallations();
+        final List<InstallationsResponseInstallation> installations = setup.client().getInstallations();
         assertThat(installations, hasSize(0));
     }
 
     @Test
     void listInstallations_findsMatchingScripts() {
         createAdapter("S3_FILES_ADAPTER", "IMPORT_FROM_S3_DOCUMENT_FILES");
-        final List<RestAPIInstallationsResponseInstallation> installations = setup.client().getInstallations();
+        final List<InstallationsResponseInstallation> installations = setup.client().getInstallations();
         assertAll(() -> assertThat(installations, hasSize(1)), //
                 () -> assertThat(installations.get(0).getName(),
                         equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
@@ -106,7 +104,7 @@ class ExtensionIT {
     @Test
     void listInstallations_findsOwnInstallation() {
         setup.client().installExtension();
-        final List<RestAPIInstallationsResponseInstallation> installations = setup.client().getInstallations();
+        final List<InstallationsResponseInstallation> installations = setup.client().getInstallations();
         assertAll(() -> assertThat(installations, hasSize(1)), //
                 () -> assertThat(installations.get(0).getName(),
                         equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
@@ -130,11 +128,9 @@ class ExtensionIT {
     @Test
     void install_failsForUnsupportedVersion() {
         final ExtensionManagerClient client = setup.client();
-        final ApiException exception = assertThrows(ApiException.class, () -> client.installExtension("unsupported"));
-        assertThat(exception.getMessage(),
-                allOf(containsString("Request failed: error installing extension: failed to install extension"),
-                        containsString("Error: Installing version 'unsupported' not supported, try '"
-                                + setup.getCurrentProjectVersion() + "'")));
+        client.assertRequestFails(() -> client.installExtension("unsupported"), equalTo(
+                "Installing version 'unsupported' not supported, try '" + setup.getCurrentProjectVersion() + "'."),
+                equalTo(400));
         assertScriptsDoNotExist();
     }
 
@@ -142,10 +138,9 @@ class ExtensionIT {
     void createInstanceFailsWithoutRequiredParameters() {
         final ExtensionManagerClient client = setup.client();
         client.installExtension();
-        final List<RestAPIParameterValue> emptyParameters = List.of();
-        final ApiException exception = assertThrows(ApiException.class, () -> client.createInstance(emptyParameters));
-        assertThat(exception.getMessage(), startsWith(
-                "Request failed: error installing extension: invalid parameters: Failed to validate parameter \"Name of the new virtual schema\": This is a required parameter."));
+        client.assertRequestFails(() -> client.createInstance(List.of()), startsWith(
+                "invalid parameters: Failed to validate parameter 'Name of the new virtual schema': This is a required parameter."),
+                equalTo(400));
     }
 
     @Test
@@ -216,10 +211,9 @@ class ExtensionIT {
         assertThat(instanceName, equalTo(virtualSchemaName));
     }
 
-    private List<RestAPIParameterValue> createValidParameters(final String virtualSchemaName,
-            final EdmlDefinition mapping) {
-        final List<RestAPIParameterValue> parameters = new ArrayList<>(List.of(
-                param("virtualSchemaName", virtualSchemaName), param("awsEndpointOverride", getInDatabaseS3Address()), //
+    private List<ParameterValue> createValidParameters(final String virtualSchemaName, final EdmlDefinition mapping) {
+        final List<ParameterValue> parameters = new ArrayList<>(List.of(param("virtualSchemaName", virtualSchemaName),
+                param("awsEndpointOverride", getInDatabaseS3Address()), //
                 param("awsRegion", s3TestSetup.getRegion()), //
                 param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
@@ -250,8 +244,8 @@ class ExtensionIT {
         }
     }
 
-    private RestAPIParameterValue param(final String name, final String value) {
-        return new RestAPIParameterValue().name(name).value(value);
+    private ParameterValue param(final String name, final String value) {
+        return new ParameterValue().name(name).value(value);
     }
 
     private void assertScriptsExist() {

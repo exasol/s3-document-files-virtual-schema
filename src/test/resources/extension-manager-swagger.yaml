@@ -1,266 +1,557 @@
-basePath: /
-consumes:
-- application/json
-definitions:
-  restAPI.CreateInstanceRequest:
-    description: Request data for creating a new instance of an extension.
-    properties:
-      extensionId:
-        description: The ID of the extension
-        type: string
-      extensionVersion:
-        description: The version of the extension
-        type: string
-      parameterValues:
-        description: The parameters for the new instance
-        items:
-          $ref: '#/definitions/restAPI.ParameterValue'
-        type: array
-    type: object
-  restAPI.CreateInstanceResponse:
-    description: Response data for creating a new instance of an extension.
-    properties:
-      instanceName:
-        description: The name of the newly created instance
-        type: string
-    type: object
-  restAPI.ExtensionsResponse:
-    description: Response containing all available extensions
-    properties:
-      extensions:
-        description: All available extensions.
-        items:
-          $ref: '#/definitions/restAPI.ExtensionsResponseExtension'
-        type: array
-    type: object
-  restAPI.ExtensionsResponseExtension:
-    description: Extension information
-    properties:
-      description:
-        description: The description of the extension to be displayed to the user.
-        type: string
-      id:
-        description: ID of the extension. Don't store this as it may change in the
-          future.
-        type: string
-      installableVersions:
-        description: A list of versions of this extension available for installation.
-        items:
-          type: string
-        type: array
-      name:
-        description: The name of the extension to be displayed to the user.
-        type: string
-    type: object
-  restAPI.InstallationsResponse:
-    properties:
-      installations:
-        items:
-          $ref: '#/definitions/restAPI.InstallationsResponseInstallation'
-        type: array
-    type: object
-  restAPI.InstallationsResponseInstallation:
-    properties:
-      instanceParameters:
-        items: {}
-        type: array
-      name:
-        type: string
-      version:
-        type: string
-    type: object
-  restAPI.ParameterValue:
-    description: Parameter values for creating a new instance.
-    properties:
-      name:
-        description: The name of the parameter
-        type: string
-      value:
-        description: The value of the parameter
-        type: string
-    type: object
-info:
-  contact:
-    email: opensource@exasol.com
-    name: Exasol Integration team
-  description: Response data for creating a new instance of an extension.
-  license:
-    name: MIT
-    url: https://github.com/exasol/extension-manager/blob/main/LICENSE
-  title: Exasol extension manager REST API
-  version: 0.1.0
-paths:
-  /extensions:
-    get:
-      description: Get a list of all available extensions.
-      operationId: getExtensions
-      parameters:
-      - description: Hostname of the Exasol DB to manage
-        in: query
-        name: dbHost
-        required: true
-        type: string
-      - description: Port number of the Exasol DB to manage
-        in: query
-        name: dbPort
-        required: true
-        type: integer
-      - description: Username of the Exasol DB to manage
-        in: query
-        name: dbUser
-        required: true
-        type: string
-      - description: Password of the Exasol DB to manage
-        in: query
-        name: dbPass
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/restAPI.ExtensionsResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Get all extensions
-  /installations:
-    get:
-      description: Get a list of all installations. Installation means, that an extension
-        is installed in the database (e.g. JAR files added to BucketFS, Adapter Script
-        created).
-      operationId: getInstallations
-      parameters:
-      - description: Hostname of the Exasol DB to manage
-        in: query
-        name: dbHost
-        required: true
-        type: string
-      - description: Port number of the Exasol DB to manage
-        in: query
-        name: dbPort
-        required: true
-        type: integer
-      - description: Username of the Exasol DB to manage
-        in: query
-        name: dbUser
-        required: true
-        type: string
-      - description: Password of the Exasol DB to manage
-        in: query
-        name: dbPass
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/restAPI.InstallationsResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Get all installations.
-    put:
-      description: This installs an extension in a given version.
-      operationId: installExtension
-      parameters:
-      - description: Hostname of the Exasol DB to manage
-        in: query
-        name: dbHost
-        required: true
-        type: string
-      - description: Port number of the Exasol DB to manage
-        in: query
-        name: dbPort
-        required: true
-        type: integer
-      - description: Username of the Exasol DB to manage
-        in: query
-        name: dbUser
-        required: true
-        type: string
-      - description: Password of the Exasol DB to manage
-        in: query
-        name: dbPass
-        required: true
-        type: string
-      - description: ID of the extension to install
-        in: query
-        name: extensionId
-        required: true
-        type: string
-      - description: Version of the extension to install
-        in: query
-        name: extensionVersion
-        required: true
-        type: string
-      - default: ""
-        description: dummy body
-        in: body
-        name: dummy
-        schema:
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Install an extension.
-  /instances:
-    put:
-      description: This creates an instance of an extension, e.g. a virtual schema.
-      operationId: createInstance
-      parameters:
-      - description: Hostname of the Exasol DB to manage
-        in: query
-        name: dbHost
-        required: true
-        type: string
-      - description: Port number of the Exasol DB to manage
-        in: query
-        name: dbPort
-        required: true
-        type: integer
-      - description: Username of the Exasol DB to manage
-        in: query
-        name: dbUser
-        required: true
-        type: string
-      - description: Password of the Exasol DB to manage
-        in: query
-        name: dbPass
-        required: true
-        type: string
-      - description: Request data for creating an instance
-        in: body
-        name: createInstanceRequest
-        required: true
-        schema:
-          $ref: '#/definitions/restAPI.CreateInstanceRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/restAPI.CreateInstanceResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Create an instance of an extension.
-produces:
-- application/json
-swagger: "2.0"
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Exasol Extension Manager REST-API",
+        "description": "Managed extensions and instances of extensions",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/v1/extensions": {
+            "summary": "List available extensions",
+            "description": "Get a list of all available extensions, i.e. extensions that can be installed.",
+            "get": {
+                "tags": [
+                    "Extension"
+                ],
+                "summary": "List available extensions",
+                "description": "Get a list of all available extensions, i.e. extensions that can be installed.",
+                "operationId": "ListAvailableExtensions",
+                "responses": {
+                    "200": {
+                        "description": "List of extensions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/ExtensionsResponse"
+                                },
+                                "example": {
+                                    "extensions": [
+                                        {
+                                            "id": "s3-vs",
+                                            "name": "S3 Virtual Schema",
+                                            "description": "...",
+                                            "installableVersions": [
+                                                "1.0.0",
+                                                "1.2.0"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Default error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/APIError"
+                                },
+                                "example": {
+                                    "code": 500,
+                                    "message": "Something went wrong.",
+                                    "requestID": "Rn3x8gcEInnHt205B4c7QZ",
+                                    "timestamp": "2021-01-02T15:04:05Z07:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "DbUsernamePassword": []
+                    },
+                    {
+                        "DbAccessToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "dbHost",
+                        "in": "query",
+                        "description": "Exasol database hostname",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dbPort",
+                        "in": "query",
+                        "description": "Exasol database port number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            }
+        },
+        "/api/v1/installations": {
+            "summary": "List installed extensions",
+            "description": "Get a list of all installed extensions.",
+            "get": {
+                "tags": [
+                    "Extension"
+                ],
+                "summary": "List installed extensions",
+                "description": "Get a list of all installed extensions.",
+                "operationId": "ListInstalledExtensions",
+                "responses": {
+                    "200": {
+                        "description": "List of extensions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/InstallationsResponse"
+                                },
+                                "example": {
+                                    "installations": [
+                                        {
+                                            "name": "s3-vs",
+                                            "version": "1.0.0",
+                                            "instanceParameters": null
+                                        },
+                                        {
+                                            "name": "s3-vs",
+                                            "version": "1.1.0",
+                                            "instanceParameters": null
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Default error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/APIError"
+                                },
+                                "example": {
+                                    "code": 500,
+                                    "message": "Something went wrong.",
+                                    "requestID": "Rn3x8gcEInnHt205B4c7QZ",
+                                    "timestamp": "2021-01-02T15:04:05Z07:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "DbUsernamePassword": []
+                    },
+                    {
+                        "DbAccessToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "dbHost",
+                        "in": "query",
+                        "description": "Exasol database hostname",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dbPort",
+                        "in": "query",
+                        "description": "Exasol database port number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Extension"
+                ],
+                "summary": "Install an extension.",
+                "description": "This installs an extension in a given version, e.g. by creating Adapter Scripts.",
+                "operationId": "InstallExtension",
+                "responses": {
+                    "204": {
+                        "description": "OK"
+                    },
+                    "default": {
+                        "description": "Default error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/APIError"
+                                },
+                                "example": {
+                                    "code": 500,
+                                    "message": "Something went wrong.",
+                                    "requestID": "Rn3x8gcEInnHt205B4c7QZ",
+                                    "timestamp": "2021-01-02T15:04:05Z07:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "DbAccessToken": []
+                    },
+                    {
+                        "DbUsernamePassword": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InstallExtensionRequest"
+                            },
+                            "example": {
+                                "ExtensionId": "",
+                                "ExtensionVersion": ""
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "dbHost",
+                        "in": "query",
+                        "description": "Exasol database hostname",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dbPort",
+                        "in": "query",
+                        "description": "Exasol database port number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            }
+        },
+        "/api/v1/instances": {
+            "summary": "Create an instance of an extension.",
+            "description": "This creates a new instance of an extension, e.g. a virtual schema.",
+            "put": {
+                "tags": [
+                    "Instance"
+                ],
+                "summary": "Create an instance of an extension.",
+                "description": "This creates a new instance of an extension, e.g. a virtual schema.",
+                "operationId": "CreateInstance",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/CreateInstanceResponse"
+                                },
+                                "example": {
+                                    "instanceName": "new-instance-name"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Failure 403",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/CreateInstanceResponse"
+                                },
+                                "example": {
+                                    "instanceName": "new-instance-name"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Default error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/APIError"
+                                },
+                                "example": {
+                                    "code": 500,
+                                    "message": "Something went wrong.",
+                                    "requestID": "Rn3x8gcEInnHt205B4c7QZ",
+                                    "timestamp": "2021-01-02T15:04:05Z07:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "DbUsernamePassword": []
+                    },
+                    {
+                        "DbAccessToken": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateInstanceRequest"
+                            },
+                            "example": {
+                                "extensionId": "s3-vs",
+                                "extensionVersion": "1.1.0",
+                                "parameterValues": [
+                                    {
+                                        "name": "param1",
+                                        "value": "value1"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "dbHost",
+                        "in": "query",
+                        "description": "Exasol database hostname",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dbPort",
+                        "in": "query",
+                        "description": "Exasol database port number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "DbAccessToken": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            },
+            "DbUsernamePassword": {
+                "type": "http",
+                "scheme": "basic"
+            }
+        },
+        "schemas": {
+            "APIError": {
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "requestID": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "apiID": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            },
+            "CreateInstanceRequest": {
+                "required": [
+                    "extensionId",
+                    "extensionVersion",
+                    "parameterValues"
+                ],
+                "properties": {
+                    "extensionId": {
+                        "type": "string"
+                    },
+                    "extensionVersion": {
+                        "type": "string"
+                    },
+                    "parameterValues": {
+                        "items": {
+                            
+                            "$ref": "#/components/schemas/ParameterValue"
+                        },
+                        "type": "array"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            },
+            "CreateInstanceResponse": {
+                "required": [
+                    "instanceName"
+                ],
+                "properties": {
+                    "instanceName": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            },
+            "ExtensionsResponse": {
+                "required": [
+                    "extensions"
+                ],
+                "properties": {
+                    "extensions": {
+                        "items": {
+                            
+                            "$ref": "#/components/schemas/ExtensionsResponseExtension"
+                        },
+                        "type": "array"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            },
+            "ExtensionsResponseExtension": {
+                "required": [
+                    "id",
+                    "name",
+                    "description",
+                    "installableVersions"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "installableVersions": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            },
+            "InstallExtensionRequest": {
+                "required": [
+                    "ExtensionId",
+                    "ExtensionVersion"
+                ],
+                "properties": {
+                    "ExtensionId": {
+                        "type": "string"
+                    },
+                    "ExtensionVersion": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            },
+            "InstallationsResponse": {
+                "required": [
+                    "installations"
+                ],
+                "properties": {
+                    "installations": {
+                        "items": {
+                            
+                            "$ref": "#/components/schemas/InstallationsResponseInstallation"
+                        },
+                        "type": "array"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            },
+            "InstallationsResponseInstallation": {
+                "required": [
+                    "name",
+                    "version",
+                    "instanceParameters"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "string"
+                    },
+                    "instanceParameters": {
+                        "items": {
+                            "additionalProperties": true
+                        },
+                        "type": "array"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            },
+            "ParameterValue": {
+                "required": [
+                    "name",
+                    "value"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Extension",
+            "description": "Calls to list, install and uninstall extensions"
+        },
+        {
+            "name": "Instance",
+            "description": "Calls to list, create and remove instances of an extension"
+        }
+    ]
+}

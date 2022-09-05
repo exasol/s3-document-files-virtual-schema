@@ -32,8 +32,8 @@ class InstallerFromLocalFolder implements ExtensionManagerInstaller {
     private void buildExtensionManager(final Path extensionManagerProjectDir) {
         if (config.buildExtensionManager()) {
             LOGGER.info(() -> "Building extension manager in " + extensionManagerProjectDir);
-            SimpleProcess.start(extensionManagerProjectDir, List.of("go", "build", "-o", EXECUTABLE_NAME, "main.go"),
-                    Duration.ofSeconds(30));
+            SimpleProcess.start(extensionManagerProjectDir,
+                    List.of("go", "build", "-o", EXECUTABLE_NAME, "cmd/main.go"), Duration.ofSeconds(30));
         } else {
             LOGGER.warning("Skipping installation of extension manager");
         }

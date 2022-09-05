@@ -27,3 +27,9 @@ This release allows installing an S3 Virtual Schema using the [extension manager
 * Updated `io.swagger.core.v3:swagger-annotations:2.2.1` to `2.2.2`
 * Updated `org.junit.jupiter:junit-jupiter-engine:5.8.2` to `5.9.0`
 * Updated `org.junit.jupiter:junit-jupiter-params:5.8.2` to `5.9.0`
+
+### Plugin Dependency Updates
+
+* Updated `com.exasol:error-code-crawler-maven-plugin:1.1.1` to `1.1.2`
+* Updated `com.exasol:project-keeper-maven-plugin:2.4.6` to `2.7.0`
+* Updated `org.apache.maven.plugins:maven-enforcer-plugin:3.0.0` to `3.1.0`

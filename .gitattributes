@@ -1,1 +1,7 @@
 *.sh text eol=lf
+
+.github/workflows/broken_links_checker.yml          linguist-generated=true
+.github/workflows/project-keeper.sh                 linguist-generated=true
+dependencies.md                                     linguist-generated=true
+doc/changes/changelog.md                            linguist-generated=true
+src/test/resources/extension-manager-swagger.yaml   linguist-generated=true

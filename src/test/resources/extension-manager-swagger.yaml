@@ -145,10 +145,10 @@
                 },
                 "security": [
                     {
-                        "DbUsernamePassword": []
+                        "DbAccessToken": []
                     },
                     {
-                        "DbAccessToken": []
+                        "DbUsernamePassword": []
                     }
                 ],
                 "parameters": [
@@ -203,10 +203,10 @@
                 },
                 "security": [
                     {
-                        "DbAccessToken": []
+                        "DbUsernamePassword": []
                     },
                     {
-                        "DbUsernamePassword": []
+                        "DbAccessToken": []
                     }
                 ],
                 "requestBody": {
@@ -258,20 +258,6 @@
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    
-                                    "$ref": "#/components/schemas/CreateInstanceResponse"
-                                },
-                                "example": {
-                                    "instanceName": "new-instance-name"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Failure 403",
                         "content": {
                             "application/json": {
                                 "schema": {

@@ -394,8 +394,8 @@ org/apache/http/config/SocketConfig
 java/util/stream/MatchOps$MatchKind
 software/amazon/awssdk/core/internal/util/HttpChecksumResolver
 com/exasol/adapter/document/files/stringfilter/wildcardexpression/fragments/RegularCharacter
-org/jcp/xml/dsig/internal/dom/XMLDSigRI$ProviderService
 software/amazon/awssdk/awscore/client/handler/AwsAsyncClientHandler
+org/jcp/xml/dsig/internal/dom/XMLDSigRI$ProviderService
 sun/security/ssl/SSLContextImpl$AbstractTLSContext
 java/time/ZonedDateTime
 software/amazon/awssdk/utils/FunctionalUtils$UnsafeRunnable
@@ -3315,9 +3315,9 @@ sun/management/RuntimeImpl
 org/apache/http/conn/EofSensorInputStream
 jdk/internal/module/ModuleBootstrap
 java/net/URI$Parser
-sun/security/pkcs11/SunPKCS11
 software/amazon/awssdk/services/s3/model/NoSuchUploadException
 software/amazon/awssdk/core/internal/handler/BaseAsyncClientHandler
+sun/security/pkcs11/SunPKCS11
 io/netty/util/internal/SocketUtils
 software/amazon/awssdk/core/exception/SdkInterruptedException
 javax/xml/stream/events/Namespace
@@ -3924,6 +3924,7 @@ com/exasol/adapter/document/documentfetcher/files/RemoteFileContent
 org/antlr/v4/runtime/atn/SetTransition
 com/exasol/sql/dql/select/SelectVisitor
 software/amazon/awssdk/regions/servicemetadata/SmsVoiceServiceMetadata
+java/util/concurrent/CompletableFuture$ThreadPerTaskExecutor
 java/util/logging/Formatter
 java/lang/invoke/VarHandleGuards
 java/lang/ReflectiveOperationException
@@ -5055,6 +5056,7 @@ java/util/stream/SortedOps$AbstractRefSortingSink
 java/util/ServiceLoader$3
 java/util/ServiceLoader$2
 org/apache/http/protocol/HTTP
+software/amazon/awssdk/auth/credentials/AwsBasicCredentials
 com/exasol/sql/expression/ValueExpression
 software/amazon/awssdk/http/apache/internal/net/DelegateSslSocket
 java/nio/channels/Channel

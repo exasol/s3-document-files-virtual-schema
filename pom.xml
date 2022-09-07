@@ -280,6 +280,9 @@
                         <!-- io.netty:netty-handler: https://ossindex.sonatype.org/vulnerability/sonatype-2020-0026
                         Not a vulnerability in netty but how it is configured by the client software.amazon.awssdk:netty-nio-client. -->
                         <exclude>sonatype-2020-0026</exclude>
+                        <!-- org.yaml:snakeyaml: https://ossindex.sonatype.org/vulnerability/CVE-2022-38752
+                        Used only for using test config file, not parsing untrusted input. -->
+                        <exclude>CVE-2022-38752</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>

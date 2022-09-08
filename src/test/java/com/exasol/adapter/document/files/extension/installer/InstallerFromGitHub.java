@@ -30,12 +30,12 @@ class InstallerFromGitHub implements ExtensionManagerInstaller {
     private void runGoInstall() {
         final String version = config.getExtensionManagerVersion();
         LOGGER.info(() -> "Installing extension manager version '" + version + "'...");
-        SimpleProcess.start(List.of("go", "install", "github.com/exasol/extension-manager@" + version),
+        SimpleProcess.start(List.of("go", "install", "github.com/exasol/extension-manager/cmd@" + version),
                 Duration.ofSeconds(60));
     }
 
     private Path getExtensionManagerExecutable() {
-        final String executableName = "extension-manager" + OsCheck.getExecutableSuffix();
+        final String executableName = "cmd" + OsCheck.getExecutableSuffix();
         final Path executablePath = getGoPath().resolve("bin").resolve(executableName);
         if (!Files.exists(executablePath)) {
             throw new IllegalStateException("Executable was not installed at '" + executablePath + "'");

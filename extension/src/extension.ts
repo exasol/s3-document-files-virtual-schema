@@ -47,7 +47,7 @@ export function createExtension(): ExasolExtension {
             //empty on purpose
         },
         readInstanceParameters(_context: Context, _installation: Installation, _instance: Instance): ParameterValues {
-            return undefined;
+            return { values: [] };
         }
     }
 }

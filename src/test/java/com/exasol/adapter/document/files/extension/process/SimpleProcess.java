@@ -113,8 +113,8 @@ public class SimpleProcess {
         final Duration duration = Duration.between(this.startTime, Instant.now());
         final int exitCode = this.process.exitValue();
         if (exitCode != 0) {
-            throw new IllegalStateException(
-                    "Command " + formatCommand() + " failed with exit code " + exitCode + " after " + duration);
+            throw new IllegalStateException("Command " + formatCommand() + " failed with exit code " + exitCode
+                    + " after " + duration + ". See log output for details.");
         }
         LOGGER.fine(() -> "Command '" + formatCommand() + "' finished successfully after " + duration);
     }

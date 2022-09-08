@@ -60,11 +60,11 @@ function isValidImportScript(script: ExaAllScriptsRow): script is ExaAllScriptsR
         return false;
     }
     if (script.inputType !== "SET") {
-        console.log(`Invalid input type for importer script: ${script.inputType}`)
+        console.log(`Invalid input type for importer script: ${script.inputType ? script.inputType : '<undefined>'}`)
         return false;
     }
     if (script.resultType !== "EMITS") {
-        console.log(`Invalid result type for importer script: ${script.resultType}`)
+        console.log(`Invalid result type for importer script: ${script.resultType ? script.resultType : '<undefined>'}`)
         return false;
     }
     return true;

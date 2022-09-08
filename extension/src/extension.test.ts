@@ -1,5 +1,5 @@
 import { ExaMetadata, Installation, Instance, ParameterValue } from '@exasol/extension-manager-interface';
-import { ExaAllScriptsRow, ExaAllVirtualSchemasRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
+import { ExaScriptsRow, ExaVirtualSchemasRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
 import { describe, expect, it } from '@jest/globals';
 import * as jestMock from "jest-mock";
 import { createExtension } from "./extension";
@@ -50,7 +50,7 @@ describe("S3 VS Extension", () => {
   })
 
   describe("findInstallations()", () => {
-    function findInstallations(allScripts: ExaAllScriptsRow[]): Installation[] {
+    function findInstallations(allScripts: ExaScriptsRow[]): Installation[] {
       const metadata: ExaMetadata = {
         allScripts: { rows: allScripts },
         virtualSchemaProperties: { rows: [] },
@@ -69,16 +69,16 @@ describe("S3 VS Extension", () => {
       function installation({ name = "schema.S3_FILES_ADAPTER", version = "(unknown)" }: Partial<Installation>): Installation {
         return { name, version, instanceParameters: [] }
       }
-      function script({ schema = "schema", name = "name", inputType, resultType, type = "", text = "", comment }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {
+      function script({ schema = "schema", name = "name", inputType, resultType, type = "", text = "", comment }: Partial<ExaScriptsRow>): ExaScriptsRow {
         return { schema, name, inputType, resultType, type, text, comment }
       }
-      function adapterScript({ name = "S3_FILES_ADAPTER", type = "ADAPTER", text = "adapter script" }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {
+      function adapterScript({ name = "S3_FILES_ADAPTER", type = "ADAPTER", text = "adapter script" }: Partial<ExaScriptsRow>): ExaScriptsRow {
         return script({ name, type, text })
       }
-      function importScript({ name = "IMPORT_FROM_S3_DOCUMENT_FILES", type = "UDF", inputType = "SET", resultType = "EMITS" }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {
+      function importScript({ name = "IMPORT_FROM_S3_DOCUMENT_FILES", type = "UDF", inputType = "SET", resultType = "EMITS" }: Partial<ExaScriptsRow>): ExaScriptsRow {
         return script({ name, type, inputType, resultType })
       }
-      const tests: { name: string; scripts: ExaAllScriptsRow[], expected?: Installation }[] = [
+      const tests: { name: string; scripts: ExaScriptsRow[], expected?: Installation }[] = [
         { name: "all values match", scripts: [adapterScript({}), importScript({})], expected: installation({}) },
         { name: "adapter has wrong type", scripts: [adapterScript({ type: "wrong" }), importScript({})], expected: undefined },
         { name: "adapter has wrong name", scripts: [adapterScript({ name: "wrong" }), importScript({})], expected: undefined },
@@ -210,7 +210,7 @@ describe("S3 VS Extension", () => {
   })
 
   describe("findInstances", () => {
-    function findInstances(metadataVirtualSchemas: ExaAllVirtualSchemasRow[]): Instance[] {
+    function findInstances(metadataVirtualSchemas: ExaVirtualSchemasRow[]): Instance[] {
       const context = createMockContext();
       const metadata: ExaMetadata = {
         allScripts: { rows: [] },
@@ -223,7 +223,8 @@ describe("S3 VS Extension", () => {
       expect(findInstances([])).toEqual([])
     })
     it("returns instances", () => {
-      expect(findInstances([])).toEqual([])
+      expect(findInstances([{ name: "s3_vs", adapterScriptSchema: "schema", adapterScriptName: "adapterScript", owner: "owner", adapterNotes: "notes" }]))
+        .toEqual([{ id: "s3_vs", name: "s3_vs" }])
     })
   })
 })

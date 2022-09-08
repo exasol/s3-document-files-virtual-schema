@@ -1,5 +1,5 @@
-import { ExaMetadata, Installation, ParameterValue } from '@exasol/extension-manager-interface';
-import { ExaAllScriptsRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
+import { ExaMetadata, Installation, Instance, ParameterValue } from '@exasol/extension-manager-interface';
+import { ExaAllScriptsRow, ExaAllVirtualSchemasRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
 import { describe, expect, it } from '@jest/globals';
 import * as jestMock from "jest-mock";
 import { createExtension } from "./extension";
@@ -28,22 +28,25 @@ function createMockContext() {
 }
 
 describe("S3 VS Extension", () => {
-  it("creates an extension", () => {
-    const ext = createExtension();
-    expect(ext).not.toBeNull()
-  })
 
-  it("creates a new object for every call", () => {
-    const ext1 = createExtension();
-    const ext2 = createExtension();
-    expect(ext1).not.toBe(ext2)
-  })
+  describe("extension registration", () => {
+    it("creates an extension", () => {
+      const ext = createExtension();
+      expect(ext).not.toBeNull()
+    })
 
-  it("registers when loaded", () => {
-    const installedExtension = getInstalledExtension();
-    expect(installedExtension.extension).not.toBeNull()
-    expect(typeof installedExtension.apiVersion).toBe('string');
-    expect(installedExtension.apiVersion).not.toBe('');
+    it("creates a new object for every call", () => {
+      const ext1 = createExtension();
+      const ext2 = createExtension();
+      expect(ext1).not.toBe(ext2)
+    })
+
+    it("registers when loaded", () => {
+      const installedExtension = getInstalledExtension();
+      expect(installedExtension.extension).not.toBeNull()
+      expect(typeof installedExtension.apiVersion).toBe('string');
+      expect(installedExtension.apiVersion).not.toBe('');
+    })
   })
 
   describe("findInstallations()", () => {
@@ -182,6 +185,13 @@ describe("S3 VS Extension", () => {
       expect(context.runQueryMock.calls[3][0]).toBe(`COMMENT ON SCHEMA \"NEW_S3_VS\" IS '${comment}'`)
     })
 
+    it("returns id and name", () => {
+      const context = createMockContext();
+      const parameters = [{ name: "virtualSchemaName", value: "NEW_S3_VS" }, { name: "mapping", value: "my mapping" }, { name: "awsAccessKeyId", value: "id" }]
+      const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
+      expect(instance).toStrictEqual({ id: "NEW_S3_VS", name: "NEW_S3_VS" })
+    })
+
     it("escapes single quotes", () => {
       const context = createMockContext();
       const parameters = [{ name: "virtualSchemaName", value: "vs'name" }, { name: "mapping", value: "mapping'with''quotes" }, { name: "awsAccessKeyId", value: "access'key" }]
@@ -196,6 +206,24 @@ describe("S3 VS Extension", () => {
     it("fails for wrong version", () => {
       expect(() => { createExtension().addInstance(createMockContext(), "wrongVersion", { values: [] }) })
         .toThrow(`Version 'wrongVersion' not supported, can only use ${CONFIG.version}.`)
+    })
+  })
+
+  describe("findInstances", () => {
+    function findInstances(metadataVirtualSchemas: ExaAllVirtualSchemasRow[]): Instance[] {
+      const context = createMockContext();
+      const metadata: ExaMetadata = {
+        allScripts: { rows: [] },
+        virtualSchemaProperties: { rows: [] },
+        virtualSchemas: { rows: metadataVirtualSchemas }
+      }
+      return createExtension().findInstances(context, metadata, "version")
+    }
+    it("returns empty list for empty metadata", () => {
+      expect(findInstances([])).toEqual([])
+    })
+    it("returns instances", () => {
+      expect(findInstances([])).toEqual([])
     })
   })
 })

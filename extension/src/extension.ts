@@ -10,6 +10,7 @@ import { addInstance } from "./addInstance";
 import { ExtensionInfo } from "./common";
 import { CONFIG } from "./extension-config";
 import { findInstallations } from "./findInstallations";
+import { findInstances } from "./findInstances";
 import { installExtension } from "./installExtension";
 
 function createExtensionInfo(): ExtensionInfo {
@@ -37,16 +38,16 @@ export function createExtension(): ExasolExtension {
         findInstallations(_context: Context, metadata: ExaMetadata): Installation[] {
             return findInstallations(metadata.allScripts.rows);
         },
-        findInstances(_context: Context, _installation: Installation): Instance[] {
-            return [];
+        findInstances(context: Context, metadata: ExaMetadata, version: string): Instance[] {
+            return findInstances(metadata);
         },
         uninstall(_context: Context, _installation: Installation): void {
             //empty on purpose
         },
-        deleteInstance(_context: Context, _instance: Instance): void {
+        deleteInstance(context: Context, instanceId: string): void {
             //empty on purpose
         },
-        readInstanceParameters(_context: Context, _installation: Installation, _instance: Instance): ParameterValues {
+        readInstanceParameters(_context: Context, _metadata: ExaMetadata, _instanceId: string): ParameterValues {
             return { values: [] };
         }
     }

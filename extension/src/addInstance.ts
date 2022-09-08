@@ -49,7 +49,7 @@ export function addInstance(context: Context, extensionInfo: ExtensionInfo, vers
     const comment = `Created by extension manager for S3 virtual schema ${escapeSingleQuotes(virtualSchemaName)}`;
     context.sqlClient.runQuery(`COMMENT ON CONNECTION "${connectionName}" IS '${comment}'`);
     context.sqlClient.runQuery(`COMMENT ON SCHEMA "${virtualSchemaName}" IS '${comment}'`);
-    return { name: virtualSchemaName }
+    return { id: virtualSchemaName, name: virtualSchemaName }
 }
 
 function getParameterValue(paramValues: ParameterValues, definition: Parameter): string {

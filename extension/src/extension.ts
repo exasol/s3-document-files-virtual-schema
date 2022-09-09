@@ -38,8 +38,8 @@ export function createExtension(): ExasolExtension {
         findInstallations(_context: Context, metadata: ExaMetadata): Installation[] {
             return findInstallations(metadata.allScripts.rows);
         },
-        findInstances(context: Context, metadata: ExaMetadata, version: string): Instance[] {
-            return findInstances(metadata);
+        findInstances(context: Context, version: string): Instance[] {
+            return findInstances(context);
         },
         uninstall(_context: Context, _installation: Installation): void {
             //empty on purpose

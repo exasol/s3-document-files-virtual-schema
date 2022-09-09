@@ -43,12 +43,12 @@ export function addInstance(context: Context, extensionInfo: ExtensionInfo, vers
     const virtualSchemaName = getParameterValue(paramValues, allParams.virtualSchemaName)
     const mapping = getParameterValue(paramValues, allParams.mapping);
     const connectionName = `${virtualSchemaName}_CONNECTION`
-    context.sqlClient.runQuery(createConnectionStatement(connectionName, paramValues));
-    context.sqlClient.runQuery(createVirtualSchemaStatement(virtualSchemaName, context.extensionSchemaName, connectionName, mapping));
+    context.sqlClient.execute(createConnectionStatement(connectionName, paramValues));
+    context.sqlClient.execute(createVirtualSchemaStatement(virtualSchemaName, context.extensionSchemaName, connectionName, mapping));
 
     const comment = `Created by extension manager for S3 virtual schema ${escapeSingleQuotes(virtualSchemaName)}`;
-    context.sqlClient.runQuery(`COMMENT ON CONNECTION "${connectionName}" IS '${comment}'`);
-    context.sqlClient.runQuery(`COMMENT ON SCHEMA "${virtualSchemaName}" IS '${comment}'`);
+    context.sqlClient.execute(`COMMENT ON CONNECTION "${connectionName}" IS '${comment}'`);
+    context.sqlClient.execute(`COMMENT ON SCHEMA "${virtualSchemaName}" IS '${comment}'`);
     return { id: virtualSchemaName, name: virtualSchemaName }
 }
 

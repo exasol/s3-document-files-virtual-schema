@@ -156,6 +156,11 @@ class ExtensionIT {
         }
     }
 
+    @Test
+    void listingInstancesNoVSExists() throws SQLException {
+        assertThat(setup.client().listInstances(), hasSize(0));
+    }
+
     private void upload(final String key, final String content) {
         s3TestSetup.upload(s3BucketName, key, RequestBody.fromString(content));
     }
@@ -163,7 +168,8 @@ class ExtensionIT {
     @Test
     void createInstanceCreatesDbObjects() {
         setup.client().installExtension();
-        createInstance("my_virtual_SCHEMA");
+        final String name = "my_virtual_SCHEMA";
+        createInstance(name);
 
         setup.exasolMetadata().assertConnection(table().row("MY_VIRTUAL_SCHEMA_CONNECTION",
                 "Created by extension manager for S3 virtual schema my_virtual_SCHEMA").matches());
@@ -171,6 +177,8 @@ class ExtensionIT {
                 .assertVirtualSchema(table()
                         .row("my_virtual_SCHEMA", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString()))
                         .matches());
+        assertThat(setup.client().listInstances(),
+                allOf(hasSize(1), equalTo(List.of(new Instance().id(name).name(name)))));
     }
 
     @Test
@@ -187,6 +195,9 @@ class ExtensionIT {
                 .assertVirtualSchema(table()
                         .row("vs1", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString()))
                         .row("vs2", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString())).matches());
+
+        assertThat(setup.client().listInstances(), allOf(hasSize(2),
+                equalTo(List.of(new Instance().id("vs1").name("vs1"), new Instance().id("vs2").name("vs2")))));
     }
 
     @Test

@@ -101,6 +101,15 @@ public class ExtensionManagerClient {
                 .getInstanceName();
     }
 
+    public List<Instance> listInstances() {
+        final ExtensionsResponseExtension extension = getSingleExtension();
+        return listInstances(extension.getId(), extension.getInstallableVersions().get(0)).getInstances();
+    }
+
+    private ListInstancesResponse listInstances(final String extensionId, final String extensionVersion) {
+        return this.instanceClient.listInstances(extensionId, extensionVersion, getDbHost(), getDbPort());
+    }
+
     public void assertRequestFails(final Executable executable, final Matcher<String> messageMatcher,
             final Matcher<Integer> statusMatcher) {
         final ApiException exception = assertThrows(ApiException.class, executable);

@@ -11,7 +11,6 @@ function getInstalledExtension(): any {
   return (global as any).installedExtension
 }
 
-
 function createMockContext() {
   const execute = jestMock.fn<(query: string, ...args: any) => void>()
   const query = jestMock.fn<(query: string, ...args: any) => QueryResult>()
@@ -219,7 +218,7 @@ describe("S3 VS Extension", () => {
     })
   })
 
-  describe("findInstances", () => {
+  describe("findInstances()", () => {
     function findInstances(rows: Row[]): Instance[] {
       const context = createMockContext();
       context.queryMock.mockReturnValue({ columns: [], rows });
@@ -235,6 +234,17 @@ describe("S3 VS Extension", () => {
     it("returns multiple instance", () => {
       expect(findInstances([["vs1"], ["vs2"], ["vs3"]]))
         .toEqual([{ id: "vs1", name: "vs1" }, { id: "vs2", name: "vs2" }, { id: "vs3", name: "vs3" }])
+    })
+  })
+
+  describe("deleteInstance()", () => {
+    it("drops connection and virtual schema", () => {
+      const context = createMockContext();
+      createExtension().deleteInstance(context, "instId")
+      const executeCalls = context.executeMock.mock.calls
+      expect(executeCalls.length).toEqual(2)
+      expect(executeCalls[0][0]).toEqual("DROP VIRTUAL SCHEMA IF EXISTS \"instId\" CASCADE")
+      expect(executeCalls[1][0]).toEqual("DROP CONNECTION IF EXISTS \"instId_CONNECTION\"")
     })
   })
 })

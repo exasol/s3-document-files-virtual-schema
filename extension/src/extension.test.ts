@@ -235,6 +235,16 @@ describe("S3 VS Extension", () => {
       expect(findInstances([["vs1"], ["vs2"], ["vs3"]]))
         .toEqual([{ id: "vs1", name: "vs1" }, { id: "vs2", name: "vs2" }, { id: "vs3", name: "vs3" }])
     })
+    it("filters by schema and script name", () => {
+      const context = createMockContext();
+      context.queryMock.mockReturnValue({ columns: [], rows: [] });
+      createExtension().findInstances(context, "version")
+      const queryCalls = context.queryMock.mock.calls
+      expect(queryCalls.length).toEqual(1)
+      expect(queryCalls[0][0]).toEqual("SELECT SCHEMA_NAME FROM SYS.EXA_ALL_VIRTUAL_SCHEMAS WHERE ADAPTER_SCRIPT = ?||'.'||?  ORDER BY SCHEMA_NAME")
+      expect(queryCalls[0][1]).toEqual("ext-schema")
+      expect(queryCalls[0][2]).toEqual("S3_FILES_ADAPTER")
+    })
   })
 
   describe("deleteInstance()", () => {

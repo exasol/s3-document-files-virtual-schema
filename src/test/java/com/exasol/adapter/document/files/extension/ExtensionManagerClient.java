@@ -62,9 +62,7 @@ public class ExtensionManagerClient {
     }
 
     public void installExtension() {
-        final ExtensionInfo extension = getExtensionInfo();
-        LOGGER.fine(() -> "Installing extension " + extension.getId() + " in version " + extension.getCurrentVersion());
-        install(extension.getId(), extension.getCurrentVersion());
+        installExtension(extension.getCurrentVersion());
     }
 
     public void install(final String extensionId, final String extensionVersion) {

@@ -56,13 +56,13 @@ public class ExtensionManagerClient {
     }
 
     public void installExtension(final String version) {
-        final ExtensionInfo extension = getExtensionInfo();
+        final Extension extension = getExtension();
         LOGGER.fine(() -> "Installing extension " + extension.getId() + " in version " + version);
         install(extension.getId(), version);
     }
 
     public void installExtension() {
-        installExtension(extension.getCurrentVersion());
+        installExtension(getExtension().getCurrentVersion());
     }
 
     public void install(final String extensionId, final String extensionVersion) {
@@ -72,17 +72,17 @@ public class ExtensionManagerClient {
     }
 
     public String createInstance(final List<ParameterValue> parameterValues) {
-        final ExtensionInfo extension = getExtensionInfo();
+        final Extension extension = getExtension();
         return createInstance(extension.getId(), extension.getCurrentVersion(), parameterValues).getInstanceName();
     }
 
     public List<Instance> listInstances() {
-        final ExtensionInfo extension = getExtensionInfo();
+        final Extension extension = getExtension();
         return listInstances(extension.getCurrentVersion());
     }
 
     public List<Instance> listInstances(final String version) {
-        final ExtensionInfo extension = getExtensionInfo();
+        final Extension extension = getExtension();
         return listInstances(extension.getId(), version).getInstances();
     }
 
@@ -91,7 +91,7 @@ public class ExtensionManagerClient {
     }
 
     public void deleteInstance(final String instanceId) {
-        deleteInstance(getExtensionInfo().getId(), instanceId);
+        deleteInstance(getExtension().getId(), instanceId);
     }
 
     private void deleteInstance(final String extensionId, final String instanceId) {
@@ -122,20 +122,20 @@ public class ExtensionManagerClient {
         return extensions.get(0);
     }
 
-    private ExtensionInfo getExtensionInfo() {
+    private Extension getExtension() {
         final ExtensionsResponseExtension extension = getSingleExtension();
         if (extension.getInstallableVersions().size() != 1) {
             throw new IllegalStateException("Expected at exactly one installable version for extensions "
                     + extension.getId() + " but got " + extension.getInstallableVersions());
         }
-        return new ExtensionInfo(extension.getId(), extension.getInstallableVersions().get(0));
+        return new Extension(extension.getId(), extension.getInstallableVersions().get(0));
     }
 
-    private static class ExtensionInfo {
+    private static class Extension {
         private final String id;
         private final String currentVersion;
 
-        private ExtensionInfo(final String id, final String currentVersion) {
+        private Extension(final String id, final String currentVersion) {
             this.id = id;
             this.currentVersion = currentVersion;
         }

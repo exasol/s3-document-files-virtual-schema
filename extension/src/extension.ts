@@ -47,7 +47,7 @@ export function createExtension(): ExasolExtension {
         deleteInstance(context: Context, instanceId: string): void {
             //empty on purpose
         },
-        readInstanceParameters(_context: Context, _metadata: ExaMetadata, _instanceId: string): ParameterValues {
+        readInstanceParameters(_context: Context, _instanceId: string): ParameterValues {
             return { values: [] };
         }
     }

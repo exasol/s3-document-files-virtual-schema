@@ -80,7 +80,12 @@ public class ExtensionManagerClient {
 
     public List<Instance> listInstances() {
         final ExtensionInfo extension = getExtensionInfo();
-        return listInstances(extension.getId(), extension.getCurrentVersion()).getInstances();
+        return listInstances(extension.getCurrentVersion());
+    }
+
+    public List<Instance> listInstances(final String version) {
+        final ExtensionInfo extension = getExtensionInfo();
+        return listInstances(extension.getId(), version).getInstances();
     }
 
     private ListInstancesResponse listInstances(final String extensionId, final String extensionVersion) {

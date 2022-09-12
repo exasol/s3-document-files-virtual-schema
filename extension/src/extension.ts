@@ -8,6 +8,7 @@ import {
 } from "@exasol/extension-manager-interface";
 import { addInstance } from "./addInstance";
 import { ExtensionInfo } from "./common";
+import { deleteInstance } from "./deleteInstance";
 import { CONFIG } from "./extension-config";
 import { findInstallations } from "./findInstallations";
 import { findInstances } from "./findInstances";
@@ -45,7 +46,7 @@ export function createExtension(): ExasolExtension {
             //empty on purpose
         },
         deleteInstance(context: Context, instanceId: string): void {
-            //empty on purpose
+            deleteInstance(context, instanceId);
         },
         readInstanceParameters(_context: Context, _instanceId: string): ParameterValues {
             return { values: [] };

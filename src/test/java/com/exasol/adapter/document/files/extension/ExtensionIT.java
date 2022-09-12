@@ -4,6 +4,7 @@ import static com.exasol.matcher.ResultSetStructureMatcher.table;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.nio.file.Path;
 import java.sql.ResultSet;
@@ -131,7 +132,7 @@ class ExtensionIT {
         client.assertRequestFails(() -> client.installExtension("unsupported"), equalTo(
                 "Installing version 'unsupported' not supported, try '" + setup.getCurrentProjectVersion() + "'."),
                 equalTo(400));
-        assertScriptsDoNotExist();
+        setup.exasolMetadata().assertNoScripts();
     }
 
     @Test
@@ -163,6 +164,15 @@ class ExtensionIT {
 
     private void upload(final String key, final String content) {
         s3TestSetup.upload(s3BucketName, key, RequestBody.fromString(content));
+    }
+
+    @Test
+    void listingInstancesIgnoresVersion() {
+        setup.client().installExtension();
+        final String name = "my_virtual_SCHEMA";
+        createInstance(name);
+        assertThat(setup.client().listInstances("unknownVersion"),
+                allOf(hasSize(1), equalTo(List.of(new Instance().id(name).name(name)))));
     }
 
     @Test
@@ -209,6 +219,23 @@ class ExtensionIT {
                 .matches());
         setup.exasolMetadata().assertVirtualSchema(table()
                 .row("Quoted'schema", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString())).matches());
+    }
+
+    @Test
+    void deleteNonExistingInstance() {
+        assertDoesNotThrow(() -> setup.client().deleteInstance("no-such-instance"));
+    }
+
+    @Test
+    void deleteExistingInstance() {
+        setup.client().installExtension();
+        createInstance("vs1");
+        final List<Instance> instances = setup.client().listInstances();
+        assertThat(instances, hasSize(1));
+        setup.client().deleteInstance(instances.get(0).getId());
+        assertThat(setup.client().listInstances(), is(empty()));
+        assertAll(() -> setup.exasolMetadata().assertNoConnections(),
+                () -> setup.exasolMetadata().assertNoVirtualSchema());
     }
 
     private void createInstance(final String virtualSchemaName) {
@@ -273,11 +300,6 @@ class ExtensionIT {
                                         containsString(jarDirective)),
                                 comment) //
                         .matches());
-    }
-
-    private void assertScriptsDoNotExist() {
-        setup.exasolMetadata()
-                .assertScript(table("VARCHAR", "VARCHAR", "VARCHAR", "VARCHAR", "VARCHAR", "VARCHAR").matches());
     }
 
     private void createAdapter(final String adapterScriptName, final String importScriptName) {

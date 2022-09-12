@@ -6,7 +6,7 @@ export function findInstances(context: Context): Instance[] {
         + " WHERE ADAPTER_SCRIPT = ?||'.'||? "
         + " ORDER BY SCHEMA_NAME", context.extensionSchemaName, ADAPTER_SCRIPT_NAME)
     return result.rows.map(row => {
-        const schemaName = row[0];
+        const schemaName = <string>row[0];
         return { id: schemaName, name: schemaName }
     })
 }

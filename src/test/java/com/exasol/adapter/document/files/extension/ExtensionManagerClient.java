@@ -51,38 +51,20 @@ public class ExtensionManagerClient {
         return this.extensionClient.listAvailableExtensions(getDbHost(), getDbPort()).getExtensions();
     }
 
-    public ExtensionsResponseExtension getSingleExtension() {
-        final List<ExtensionsResponseExtension> extensions = this.getExtensions();
-        if (extensions.size() != 1) {
-            throw new IllegalStateException(
-                    "Expected exactly one extension but found " + extensions.size() + ": " + extensions);
-        }
-        return extensions.get(0);
-    }
-
     public List<InstallationsResponseInstallation> getInstallations() {
         return this.extensionClient.listInstalledExtensions(getDbHost(), getDbPort()).getInstallations();
     }
 
     public void installExtension(final String version) {
-        final ExtensionsResponseExtension extension = getSingleExtension();
-        if (extension.getInstallableVersions().isEmpty()) {
-            throw new IllegalStateException(
-                    "Expected at least one installable version for extensions " + extension.getId());
-        }
+        final ExtensionInfo extension = getExtensionInfo();
         LOGGER.fine(() -> "Installing extension " + extension.getId() + " in version " + version);
         install(extension.getId(), version);
     }
 
     public void installExtension() {
-        final ExtensionsResponseExtension extension = getSingleExtension();
-        if (extension.getInstallableVersions().isEmpty()) {
-            throw new IllegalStateException(
-                    "Expected at least one installable version for extensions " + extension.getId());
-        }
-        final String version = extension.getInstallableVersions().get(0);
-        LOGGER.fine(() -> "Installing extension " + extension.getId() + " in version " + version);
-        install(extension.getId(), version);
+        final ExtensionInfo extension = getExtensionInfo();
+        LOGGER.fine(() -> "Installing extension " + extension.getId() + " in version " + extension.getCurrentVersion());
+        install(extension.getId(), extension.getCurrentVersion());
     }
 
     public void install(final String extensionId, final String extensionVersion) {
@@ -92,22 +74,25 @@ public class ExtensionManagerClient {
     }
 
     public String createInstance(final List<ParameterValue> parameterValues) {
-        final ExtensionsResponseExtension extension = getSingleExtension();
-        if (extension.getInstallableVersions().isEmpty()) {
-            throw new IllegalStateException(
-                    "Expected at least one installable version for extensions " + extension.getId());
-        }
-        return createInstance(extension.getId(), extension.getInstallableVersions().get(0), parameterValues)
-                .getInstanceName();
+        final ExtensionInfo extension = getExtensionInfo();
+        return createInstance(extension.getId(), extension.getCurrentVersion(), parameterValues).getInstanceName();
     }
 
     public List<Instance> listInstances() {
-        final ExtensionsResponseExtension extension = getSingleExtension();
-        return listInstances(extension.getId(), extension.getInstallableVersions().get(0)).getInstances();
+        final ExtensionInfo extension = getExtensionInfo();
+        return listInstances(extension.getId(), extension.getCurrentVersion()).getInstances();
     }
 
     private ListInstancesResponse listInstances(final String extensionId, final String extensionVersion) {
         return this.instanceClient.listInstances(extensionId, extensionVersion, getDbHost(), getDbPort());
+    }
+
+    public void deleteInstance(final String instanceId) {
+        deleteInstance(getExtensionInfo().getId(), instanceId);
+    }
+
+    private void deleteInstance(final String extensionId, final String instanceId) {
+        this.instanceClient.deleteInstance(extensionId, instanceId, getDbHost(), getDbPort());
     }
 
     public void assertRequestFails(final Executable executable, final Matcher<String> messageMatcher,
@@ -123,6 +108,42 @@ public class ExtensionManagerClient {
         final CreateInstanceRequest request = new CreateInstanceRequest().extensionId(extensionId)
                 .extensionVersion(extensionVersion).parameterValues(parameterValues);
         return this.instanceClient.createInstance(request, getDbHost(), getDbPort());
+    }
+
+    private ExtensionsResponseExtension getSingleExtension() {
+        final List<ExtensionsResponseExtension> extensions = this.getExtensions();
+        if (extensions.size() != 1) {
+            throw new IllegalStateException(
+                    "Expected exactly one extension but found " + extensions.size() + ": " + extensions);
+        }
+        return extensions.get(0);
+    }
+
+    private ExtensionInfo getExtensionInfo() {
+        final ExtensionsResponseExtension extension = getSingleExtension();
+        if (extension.getInstallableVersions().size() != 1) {
+            throw new IllegalStateException("Expected at exactly one installable version for extensions "
+                    + extension.getId() + " but got " + extension.getInstallableVersions());
+        }
+        return new ExtensionInfo(extension.getId(), extension.getInstallableVersions().get(0));
+    }
+
+    private static class ExtensionInfo {
+        private final String id;
+        private final String currentVersion;
+
+        private ExtensionInfo(final String id, final String currentVersion) {
+            this.id = id;
+            this.currentVersion = currentVersion;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getCurrentVersion() {
+            return currentVersion;
+        }
     }
 
     private String getDbHost() {

@@ -6,6 +6,182 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/v1/extension/{extensionId}/instance/{instanceId}": {
+            "summary": "Delete an instances of an extension.",
+            "description": "This deletes a single instances of an extension, e.g. a virtual schema.",
+            "delete": {
+                "tags": [
+                    "Instance"
+                ],
+                "summary": "Delete an instances of an extension.",
+                "description": "This deletes a single instances of an extension, e.g. a virtual schema.",
+                "operationId": "DeleteInstance",
+                "responses": {
+                    "204": {
+                        "description": "OK"
+                    },
+                    "default": {
+                        "description": "Default error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/APIError"
+                                },
+                                "example": {
+                                    "code": 500,
+                                    "message": "Something went wrong.",
+                                    "requestID": "Rn3x8gcEInnHt205B4c7QZ",
+                                    "timestamp": "2021-01-02T15:04:05Z07:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "DbUsernamePassword": []
+                    },
+                    {
+                        "DbAccessToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "extensionId",
+                        "in": "path",
+                        "description": "The ID of the extension for which to delete an instance",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "instanceId",
+                        "in": "path",
+                        "description": "The ID of the instance to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dbHost",
+                        "in": "query",
+                        "description": "Exasol database hostname",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dbPort",
+                        "in": "query",
+                        "description": "Exasol database port number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            }
+        },
+        "/api/v1/extension/{extensionId}/{extensionVersion}/instances": {
+            "summary": "List all instances of an extension.",
+            "description": "This lists all instances of an extension, e.g. virtual schema.",
+            "get": {
+                "tags": [
+                    "Instance"
+                ],
+                "summary": "List all instances of an extension.",
+                "description": "This lists all instances of an extension, e.g. virtual schema.",
+                "operationId": "ListInstances",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/ListInstancesResponse"
+                                },
+                                "example": {
+                                    "instances": [
+                                        {
+                                            "id": "s3-vs-1",
+                                            "name": "SALES_S3_VS"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Default error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/APIError"
+                                },
+                                "example": {
+                                    "code": 500,
+                                    "message": "Something went wrong.",
+                                    "requestID": "Rn3x8gcEInnHt205B4c7QZ",
+                                    "timestamp": "2021-01-02T15:04:05Z07:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "DbUsernamePassword": []
+                    },
+                    {
+                        "DbAccessToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "extensionId",
+                        "in": "path",
+                        "description": "The ID of the extension for which to get the instances",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "extensionVersion",
+                        "in": "path",
+                        "description": "The version of the extension for which to get the instances",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dbHost",
+                        "in": "query",
+                        "description": "Exasol database hostname",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dbPort",
+                        "in": "query",
+                        "description": "Exasol database port number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            }
+        },
         "/api/v1/extensions": {
             "summary": "List available extensions",
             "description": "Get a list of all available extensions, i.e. extensions that can be installed.",
@@ -145,10 +321,10 @@
                 },
                 "security": [
                     {
-                        "DbAccessToken": []
+                        "DbUsernamePassword": []
                     },
                     {
-                        "DbUsernamePassword": []
+                        "DbAccessToken": []
                     }
                 ],
                 "parameters": [
@@ -265,6 +441,7 @@
                                     "$ref": "#/components/schemas/CreateInstanceResponse"
                                 },
                                 "example": {
+                                    "instanceId": "id",
                                     "instanceName": "new-instance-name"
                                 }
                             }
@@ -404,9 +581,13 @@
             },
             "CreateInstanceResponse": {
                 "required": [
+                    "instanceId",
                     "instanceName"
                 ],
                 "properties": {
+                    "instanceId": {
+                        "type": "string"
+                    },
                     "instanceName": {
                         "type": "string"
                     }
@@ -505,6 +686,38 @@
                     "instanceParameters": {
                         "items": {
                             "additionalProperties": true
+                        },
+                        "type": "array"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            },
+            "Instance": {
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false,
+                "type": "object"
+            },
+            "ListInstancesResponse": {
+                "required": [
+                    "instances"
+                ],
+                "properties": {
+                    "instances": {
+                        "items": {
+                            
+                            "$ref": "#/components/schemas/Instance"
                         },
                         "type": "array"
                     }

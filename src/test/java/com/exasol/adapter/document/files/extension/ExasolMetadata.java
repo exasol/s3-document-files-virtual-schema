@@ -6,6 +6,8 @@ import java.sql.*;
 
 import org.hamcrest.Matcher;
 
+import com.exasol.matcher.ResultSetStructureMatcher;
+
 public class ExasolMetadata {
 
     private final Connection connection;
@@ -30,15 +32,28 @@ public class ExasolMetadata {
         }
     }
 
+    public void assertNoScripts() {
+        assertScript(ResultSetStructureMatcher.table("VARCHAR", "VARCHAR", "VARCHAR", "VARCHAR", "VARCHAR", "VARCHAR")
+                .matches());
+    }
+
     public void assertConnection(final Matcher<ResultSet> matcher) {
         assertResult("SELECT CONNECTION_NAME, CONNECTION_COMMENT FROM EXA_ALL_CONNECTIONS ORDER BY CONNECTION_NAME ASC",
                 matcher);
+    }
+
+    public void assertNoConnections() {
+        assertConnection(ResultSetStructureMatcher.table("VARCHAR", "VARCHAR").matches());
     }
 
     public void assertVirtualSchema(final Matcher<ResultSet> matcher) {
         assertResult(
                 "SELECT SCHEMA_NAME, SCHEMA_OWNER, ADAPTER_SCRIPT, ADAPTER_NOTES FROM SYS.EXA_ALL_VIRTUAL_SCHEMAS ORDER BY SCHEMA_NAME ASC",
                 matcher);
+    }
+
+    public void assertNoVirtualSchema() {
+        assertVirtualSchema(ResultSetStructureMatcher.table("VARCHAR", "VARCHAR", "VARCHAR", "VARCHAR").matches());
     }
 
     private void assertResult(final String sql, final Matcher<ResultSet> matcher) {

@@ -6,3 +6,14 @@ export interface ExtensionInfo {
     version: string;
     fileName: string;
 }
+
+export function getConnectionName(virtualSchemaName: string): string {
+    return `${virtualSchemaName}_CONNECTION`;
+}
+
+function identity(arg: string): string {
+    return arg;
+}
+
+export const convertInstanceIdToSchemaName = identity
+export const convertSchemaNameToInstanceId = identity

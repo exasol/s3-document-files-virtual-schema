@@ -1,13 +1,12 @@
-import { Installation } from "@exasol/extension-manager-interface";
-import { ExaAllScriptsRow } from "@exasol/extension-manager-interface/dist/exasolSchema";
+import { ExaScriptsRow, Installation } from "@exasol/extension-manager-interface";
 import { createInstanceParameters } from "./addInstance";
 import { ADAPTER_SCRIPT_NAME, IMPORT_SCRIPT_NAME } from "./common";
 
-function findScriptByName(scripts: ExaAllScriptsRow[], name: string): ExaAllScriptsRow | undefined {
+function findScriptByName(scripts: ExaScriptsRow[], name: string): ExaScriptsRow | undefined {
     return scripts.find(script => script.name === name);
 }
 
-export function findInstallations(scripts: ExaAllScriptsRow[]): Installation[] {
+export function findInstallations(scripts: ExaScriptsRow[]): Installation[] {
     const importScript = findScriptByName(scripts, IMPORT_SCRIPT_NAME);
     const adapterScript = findScriptByName(scripts, ADAPTER_SCRIPT_NAME);
     if (!importScript && !adapterScript) {
@@ -46,7 +45,7 @@ function extractVersion(adapterScriptText: string): string {
     return versionMatch[1]
 }
 
-function isValidAdapterScript(script: ExaAllScriptsRow): script is ExaAllScriptsRow {
+function isValidAdapterScript(script: ExaScriptsRow): script is ExaScriptsRow {
     if (script.type !== "ADAPTER") {
         console.log(`Invalid type for adapter script: ${script.type}`)
         return false;
@@ -54,7 +53,7 @@ function isValidAdapterScript(script: ExaAllScriptsRow): script is ExaAllScripts
     return true;
 }
 
-function isValidImportScript(script: ExaAllScriptsRow): script is ExaAllScriptsRow {
+function isValidImportScript(script: ExaScriptsRow): script is ExaScriptsRow {
     if (script.type !== "UDF") {
         console.log(`Invalid type for importer script: ${script.type}`)
         return false;

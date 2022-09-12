@@ -8,8 +8,10 @@ import {
 } from "@exasol/extension-manager-interface";
 import { addInstance } from "./addInstance";
 import { ExtensionInfo } from "./common";
+import { deleteInstance } from "./deleteInstance";
 import { CONFIG } from "./extension-config";
 import { findInstallations } from "./findInstallations";
+import { findInstances } from "./findInstances";
 import { installExtension } from "./installExtension";
 
 function createExtensionInfo(): ExtensionInfo {
@@ -37,16 +39,16 @@ export function createExtension(): ExasolExtension {
         findInstallations(_context: Context, metadata: ExaMetadata): Installation[] {
             return findInstallations(metadata.allScripts.rows);
         },
-        findInstances(_context: Context, _installation: Installation): Instance[] {
-            return [];
+        findInstances(context: Context, version: string): Instance[] {
+            return findInstances(context);
         },
         uninstall(_context: Context, _installation: Installation): void {
             //empty on purpose
         },
-        deleteInstance(_context: Context, _instance: Instance): void {
-            //empty on purpose
+        deleteInstance(context: Context, instanceId: string): void {
+            deleteInstance(context, instanceId);
         },
-        readInstanceParameters(_context: Context, _installation: Installation, _instance: Instance): ParameterValues {
+        readInstanceParameters(_context: Context, _instanceId: string): ParameterValues {
             return { values: [] };
         }
     }

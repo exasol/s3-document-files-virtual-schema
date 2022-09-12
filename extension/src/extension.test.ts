@@ -1,5 +1,5 @@
-import { ExaMetadata, Installation, ParameterValue } from '@exasol/extension-manager-interface';
-import { ExaAllScriptsRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
+import { ExaMetadata, Installation, Instance, ParameterValue, QueryResult, Row, SqlClient } from '@exasol/extension-manager-interface';
+import { ExaScriptsRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
 import { describe, expect, it } from '@jest/globals';
 import * as jestMock from "jest-mock";
 import { createExtension } from "./extension";
@@ -12,42 +12,51 @@ function getInstalledExtension(): any {
 }
 
 function createMockContext() {
-  const runQuery = jestMock.fn()
+  const execute = jestMock.fn<(query: string, ...args: any) => void>()
+  const query = jestMock.fn<(query: string, ...args: any) => QueryResult>()
+
+  const sqlClient: SqlClient = {
+    execute: execute,
+    query: query
+  }
+
   return {
     extensionSchemaName: EXTENSION_SCHEMA_NAME,
-    sqlClient: {
-      runQuery: runQuery
-    },
+    sqlClient,
     bucketFs: {
       resolvePath(fileName: string) {
         return "/bucketfs/" + fileName;
       },
     },
-    runQueryMock: runQuery.mock
+    executeMock: execute,
+    queryMock: query
   }
 }
 
 describe("S3 VS Extension", () => {
-  it("creates an extension", () => {
-    const ext = createExtension();
-    expect(ext).not.toBeNull()
-  })
 
-  it("creates a new object for every call", () => {
-    const ext1 = createExtension();
-    const ext2 = createExtension();
-    expect(ext1).not.toBe(ext2)
-  })
+  describe("extension registration", () => {
+    it("creates an extension", () => {
+      const ext = createExtension();
+      expect(ext).not.toBeNull()
+    })
 
-  it("registers when loaded", () => {
-    const installedExtension = getInstalledExtension();
-    expect(installedExtension.extension).not.toBeNull()
-    expect(typeof installedExtension.apiVersion).toBe('string');
-    expect(installedExtension.apiVersion).not.toBe('');
+    it("creates a new object for every call", () => {
+      const ext1 = createExtension();
+      const ext2 = createExtension();
+      expect(ext1).not.toBe(ext2)
+    })
+
+    it("registers when loaded", () => {
+      const installedExtension = getInstalledExtension();
+      expect(installedExtension.extension).not.toBeNull()
+      expect(typeof installedExtension.apiVersion).toBe('string');
+      expect(installedExtension.apiVersion).not.toBe('');
+    })
   })
 
   describe("findInstallations()", () => {
-    function findInstallations(allScripts: ExaAllScriptsRow[]): Installation[] {
+    function findInstallations(allScripts: ExaScriptsRow[]): Installation[] {
       const metadata: ExaMetadata = {
         allScripts: { rows: allScripts },
         virtualSchemaProperties: { rows: [] },
@@ -66,16 +75,16 @@ describe("S3 VS Extension", () => {
       function installation({ name = "schema.S3_FILES_ADAPTER", version = "(unknown)" }: Partial<Installation>): Installation {
         return { name, version, instanceParameters: [] }
       }
-      function script({ schema = "schema", name = "name", inputType, resultType, type = "", text = "", comment }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {
+      function script({ schema = "schema", name = "name", inputType, resultType, type = "", text = "", comment }: Partial<ExaScriptsRow>): ExaScriptsRow {
         return { schema, name, inputType, resultType, type, text, comment }
       }
-      function adapterScript({ name = "S3_FILES_ADAPTER", type = "ADAPTER", text = "adapter script" }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {
+      function adapterScript({ name = "S3_FILES_ADAPTER", type = "ADAPTER", text = "adapter script" }: Partial<ExaScriptsRow>): ExaScriptsRow {
         return script({ name, type, text })
       }
-      function importScript({ name = "IMPORT_FROM_S3_DOCUMENT_FILES", type = "UDF", inputType = "SET", resultType = "EMITS" }: Partial<ExaAllScriptsRow>): ExaAllScriptsRow {
+      function importScript({ name = "IMPORT_FROM_S3_DOCUMENT_FILES", type = "UDF", inputType = "SET", resultType = "EMITS" }: Partial<ExaScriptsRow>): ExaScriptsRow {
         return script({ name, type, inputType, resultType })
       }
-      const tests: { name: string; scripts: ExaAllScriptsRow[], expected?: Installation }[] = [
+      const tests: { name: string; scripts: ExaScriptsRow[], expected?: Installation }[] = [
         { name: "all values match", scripts: [adapterScript({}), importScript({})], expected: installation({}) },
         { name: "adapter has wrong type", scripts: [adapterScript({ type: "wrong" }), importScript({})], expected: undefined },
         { name: "adapter has wrong name", scripts: [adapterScript({ name: "wrong" }), importScript({})], expected: undefined },
@@ -122,16 +131,17 @@ describe("S3 VS Extension", () => {
     it("executes expected statements", () => {
       const context = createMockContext();
       createExtension().install(context, CONFIG.version);
-      expect(context.runQueryMock.calls.length).toBe(4)
-      const adapterScript = context.runQueryMock.calls[0][0]
-      const setScript = context.runQueryMock.calls[1][0]
+      const executeCalls = context.executeMock.mock.calls
+      expect(executeCalls.length).toBe(4)
+      const adapterScript = executeCalls[0][0]
+      const setScript = executeCalls[1][0]
       expect(adapterScript).toContain(`CREATE OR REPLACE JAVA ADAPTER SCRIPT "ext-schema"."S3_FILES_ADAPTER" AS`)
       expect(adapterScript).toContain(`%jar /bucketfs/${CONFIG.fileName};`)
       expect(setScript).toContain(`CREATE OR REPLACE JAVA SET SCRIPT "ext-schema"."IMPORT_FROM_S3_DOCUMENT_FILES"`)
       expect(setScript).toContain(`%jar /bucketfs/${CONFIG.fileName};`)
       const expectedComment = `Created by extension manager for S3 virtual schema extension ${CONFIG.version}`
-      expect(context.runQueryMock.calls[2][0]).toBe(`COMMENT ON SCRIPT "ext-schema"."IMPORT_FROM_S3_DOCUMENT_FILES" IS '${expectedComment}'`)
-      expect(context.runQueryMock.calls[3][0]).toBe(`COMMENT ON SCRIPT "ext-schema"."S3_FILES_ADAPTER\" IS '${expectedComment}'`)
+      expect(executeCalls[2][0]).toBe(`COMMENT ON SCRIPT "ext-schema"."IMPORT_FROM_S3_DOCUMENT_FILES" IS '${expectedComment}'`)
+      expect(executeCalls[3][0]).toBe(`COMMENT ON SCRIPT "ext-schema"."S3_FILES_ADAPTER\" IS '${expectedComment}'`)
     })
     it("fails for wrong version", () => {
       expect(() => { createExtension().install(createMockContext(), "wrongVersion") })
@@ -165,7 +175,7 @@ describe("S3 VS Extension", () => {
           const parameters = test.paramValues.concat([{ name: "virtualSchemaName", value: "NEW_S3_VS" }, { name: "mapping", value: "my mapping" }])
           const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
           expect(instance.name).toBe("NEW_S3_VS")
-          expect(context.runQueryMock.calls[0][0]).toBe(`CREATE OR REPLACE CONNECTION "NEW_S3_VS_CONNECTION" TO '' USER '' IDENTIFIED BY '${test.expected}'`)
+          expect(context.executeMock.mock.calls[0][0]).toBe(`CREATE OR REPLACE CONNECTION "NEW_S3_VS_CONNECTION" TO '' USER '' IDENTIFIED BY '${test.expected}'`)
         })
       }
     })
@@ -174,28 +184,77 @@ describe("S3 VS Extension", () => {
       const parameters = [{ name: "virtualSchemaName", value: "NEW_S3_VS" }, { name: "mapping", value: "my mapping" }, { name: "awsAccessKeyId", value: "id" }]
       const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
       expect(instance.name).toBe("NEW_S3_VS")
-      expect(context.runQueryMock.calls.length).toBe(4)
-      expect(context.runQueryMock.calls[0][0]).toBe(`CREATE OR REPLACE CONNECTION "NEW_S3_VS_CONNECTION" TO '' USER '' IDENTIFIED BY '{"awsAccessKeyId":"id"}'`)
-      expect(context.runQueryMock.calls[1][0]).toBe(`CREATE VIRTUAL SCHEMA "NEW_S3_VS" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'NEW_S3_VS_CONNECTION' MAPPING = 'my mapping';`)
+      const calls = context.executeMock.mock.calls
+      expect(calls.length).toBe(4)
+      expect(calls[0][0]).toBe(`CREATE OR REPLACE CONNECTION "NEW_S3_VS_CONNECTION" TO '' USER '' IDENTIFIED BY '{"awsAccessKeyId":"id"}'`)
+      expect(calls[1][0]).toBe(`CREATE VIRTUAL SCHEMA "NEW_S3_VS" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'NEW_S3_VS_CONNECTION' MAPPING = 'my mapping';`)
       const comment = `Created by extension manager for S3 virtual schema NEW_S3_VS`
-      expect(context.runQueryMock.calls[2][0]).toBe(`COMMENT ON CONNECTION \"NEW_S3_VS_CONNECTION\" IS '${comment}'`)
-      expect(context.runQueryMock.calls[3][0]).toBe(`COMMENT ON SCHEMA \"NEW_S3_VS\" IS '${comment}'`)
+      expect(calls[2][0]).toBe(`COMMENT ON CONNECTION \"NEW_S3_VS_CONNECTION\" IS '${comment}'`)
+      expect(calls[3][0]).toBe(`COMMENT ON SCHEMA \"NEW_S3_VS\" IS '${comment}'`)
+    })
+
+    it("returns id and name", () => {
+      const context = createMockContext();
+      const parameters = [{ name: "virtualSchemaName", value: "NEW_S3_VS" }, { name: "mapping", value: "my mapping" }, { name: "awsAccessKeyId", value: "id" }]
+      const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
+      expect(instance).toStrictEqual({ id: "NEW_S3_VS", name: "NEW_S3_VS" })
     })
 
     it("escapes single quotes", () => {
       const context = createMockContext();
       const parameters = [{ name: "virtualSchemaName", value: "vs'name" }, { name: "mapping", value: "mapping'with''quotes" }, { name: "awsAccessKeyId", value: "access'key" }]
       const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
-      expect(context.runQueryMock.calls[0][0]).toBe(`CREATE OR REPLACE CONNECTION "vs'name_CONNECTION" TO '' USER '' IDENTIFIED BY '{"awsAccessKeyId":"access''key"}'`)
-      expect(context.runQueryMock.calls[1][0]).toBe(`CREATE VIRTUAL SCHEMA "vs'name" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'vs''name_CONNECTION' MAPPING = 'mapping''with''''quotes';`)
+      const calls = context.executeMock.mock.calls
+      expect(calls[0][0]).toBe(`CREATE OR REPLACE CONNECTION "vs'name_CONNECTION" TO '' USER '' IDENTIFIED BY '{"awsAccessKeyId":"access''key"}'`)
+      expect(calls[1][0]).toBe(`CREATE VIRTUAL SCHEMA "vs'name" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'vs''name_CONNECTION' MAPPING = 'mapping''with''''quotes';`)
       const comment = `Created by extension manager for S3 virtual schema vs''name`
-      expect(context.runQueryMock.calls[2][0]).toBe(`COMMENT ON CONNECTION \"vs'name_CONNECTION\" IS '${comment}'`)
-      expect(context.runQueryMock.calls[3][0]).toBe(`COMMENT ON SCHEMA \"vs'name\" IS '${comment}'`)
+      expect(calls[2][0]).toBe(`COMMENT ON CONNECTION \"vs'name_CONNECTION\" IS '${comment}'`)
+      expect(calls[3][0]).toBe(`COMMENT ON SCHEMA \"vs'name\" IS '${comment}'`)
     })
 
     it("fails for wrong version", () => {
       expect(() => { createExtension().addInstance(createMockContext(), "wrongVersion", { values: [] }) })
         .toThrow(`Version 'wrongVersion' not supported, can only use ${CONFIG.version}.`)
+    })
+  })
+
+  describe("findInstances()", () => {
+    function findInstances(rows: Row[]): Instance[] {
+      const context = createMockContext();
+      context.queryMock.mockReturnValue({ columns: [], rows });
+      return createExtension().findInstances(context, "version")
+    }
+    it("returns empty list for empty metadata", () => {
+      expect(findInstances([])).toEqual([])
+    })
+    it("returns single instance", () => {
+      expect(findInstances([["s3_vs"]]))
+        .toEqual([{ id: "s3_vs", name: "s3_vs" }])
+    })
+    it("returns multiple instance", () => {
+      expect(findInstances([["vs1"], ["vs2"], ["vs3"]]))
+        .toEqual([{ id: "vs1", name: "vs1" }, { id: "vs2", name: "vs2" }, { id: "vs3", name: "vs3" }])
+    })
+    it("filters by schema and script name", () => {
+      const context = createMockContext();
+      context.queryMock.mockReturnValue({ columns: [], rows: [] });
+      createExtension().findInstances(context, "version")
+      const queryCalls = context.queryMock.mock.calls
+      expect(queryCalls.length).toEqual(1)
+      expect(queryCalls[0][0]).toEqual("SELECT SCHEMA_NAME FROM SYS.EXA_ALL_VIRTUAL_SCHEMAS WHERE ADAPTER_SCRIPT = ?||'.'||?  ORDER BY SCHEMA_NAME")
+      expect(queryCalls[0][1]).toEqual("ext-schema")
+      expect(queryCalls[0][2]).toEqual("S3_FILES_ADAPTER")
+    })
+  })
+
+  describe("deleteInstance()", () => {
+    it("drops connection and virtual schema", () => {
+      const context = createMockContext();
+      createExtension().deleteInstance(context, "instId")
+      const executeCalls = context.executeMock.mock.calls
+      expect(executeCalls.length).toEqual(2)
+      expect(executeCalls[0][0]).toEqual("DROP VIRTUAL SCHEMA IF EXISTS \"instId\" CASCADE")
+      expect(executeCalls[1][0]).toEqual("DROP CONNECTION IF EXISTS \"instId_CONNECTION\"")
     })
   })
 })

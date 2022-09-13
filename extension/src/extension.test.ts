@@ -149,6 +149,35 @@ describe("S3 VS Extension", () => {
     })
   })
 
+  describe("uninstall()", () => {
+    it("executes query to check if schema exists", () => {
+      const context = createMockContext()
+      context.queryMock.mockReturnValue({ columns: [], rows: [] });
+      createExtension().uninstall(context, CONFIG.version)
+      const calls = context.queryMock.mock.calls
+      expect(calls.length).toEqual(1)
+      expect(calls[0]).toEqual(["SELECT 1 FROM SYS.EXA_ALL_SCHEMAS WHERE SCHEMA_NAME=?", "ext-schema"])
+    })
+    it("skips drop statements when schema does not exist", () => {
+      const context = createMockContext()
+      context.queryMock.mockReturnValue({ columns: [], rows: [] });
+      createExtension().uninstall(context, CONFIG.version)
+      expect(context.executeMock.mock.calls.length).toEqual(0)
+    })
+    it("executes expected statements", () => {
+      const context = createMockContext()
+      context.queryMock.mockReturnValue({ columns: [], rows: [[1]] });
+      createExtension().uninstall(context, CONFIG.version)
+      const calls = context.executeMock.mock.calls
+      expect(calls.length).toEqual(2)
+      expect(calls[0]).toEqual(['DROP ADAPTER SCRIPT "ext-schema"."S3_FILES_ADAPTER"'])
+      expect(calls[1]).toEqual(['DROP SCRIPT "ext-schema"."IMPORT_FROM_S3_DOCUMENT_FILES"'])
+    })
+    it("fails for wrong version", () => {
+      expect(() => { createExtension().uninstall(createMockContext(), "wrongVersion") })
+        .toThrow(`Uninstalling version 'wrongVersion' not supported, try '${CONFIG.version}'.`)
+    })
+  })
 
   describe("addInstance()", () => {
     describe("connection parameters converted", () => {

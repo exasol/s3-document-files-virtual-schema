@@ -44,7 +44,7 @@ export function createExtension(): ExasolExtension {
             return findInstances(context);
         },
         uninstall(context: Context, version: string): void {
-            uninstall(context, version)
+            uninstall(context, extensionInfo, version)
         },
         deleteInstance(context: Context, instanceId: string): void {
             deleteInstance(context, instanceId);

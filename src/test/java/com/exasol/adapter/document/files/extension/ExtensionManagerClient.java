@@ -71,6 +71,19 @@ public class ExtensionManagerClient {
         this.extensionClient.installExtension(request, getDbHost(), getDbPort());
     }
 
+    public void uninstallExtension() {
+        final Extension extension = getExtension();
+        this.uninstall(extension.getId(), extension.getCurrentVersion());
+    }
+
+    public void uninstallExtension(final String extensionVersion) {
+        this.uninstall(getExtension().getId(), extensionVersion);
+    }
+
+    private void uninstall(final String extensionId, final String extensionVersion) {
+        this.extensionClient.uninstallExtension(extensionId, extensionVersion, getDbHost(), getDbPort());
+    }
+
     public String createInstance(final List<ParameterValue> parameterValues) {
         final Extension extension = getExtension();
         return createInstance(extension.getId(), extension.getCurrentVersion(), parameterValues).getInstanceName();

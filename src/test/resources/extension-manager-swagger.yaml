@@ -86,6 +86,86 @@
                 ]
             }
         },
+        "/api/v1/extension/{extensionId}/version/{version}": {
+            "summary": "Uninstall an extension.",
+            "description": "This uninstalls an extension in a given version, e.g. by removing Adapter Scripts.",
+            "delete": {
+                "tags": [
+                    "Extension"
+                ],
+                "summary": "Uninstall an extension.",
+                "description": "This uninstalls an extension in a given version, e.g. by removing Adapter Scripts.",
+                "operationId": "UninstallExtension",
+                "responses": {
+                    "204": {
+                        "description": "OK"
+                    },
+                    "default": {
+                        "description": "Default error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    
+                                    "$ref": "#/components/schemas/APIError"
+                                },
+                                "example": {
+                                    "code": 500,
+                                    "message": "Something went wrong.",
+                                    "requestID": "Rn3x8gcEInnHt205B4c7QZ",
+                                    "timestamp": "2021-01-02T15:04:05Z07:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "DbUsernamePassword": []
+                    },
+                    {
+                        "DbAccessToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "extensionId",
+                        "in": "path",
+                        "description": "The ID of the extension to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "path",
+                        "description": "The version of the extension to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dbHost",
+                        "in": "query",
+                        "description": "Exasol database hostname",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dbPort",
+                        "in": "query",
+                        "description": "Exasol database port number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            }
+        },
         "/api/v1/extension/{extensionId}/{extensionVersion}/instances": {
             "summary": "List all instances of an extension.",
             "description": "This lists all instances of an extension, e.g. virtual schema.",
@@ -237,10 +317,10 @@
                 },
                 "security": [
                     {
-                        "DbUsernamePassword": []
+                        "DbAccessToken": []
                     },
                     {
-                        "DbAccessToken": []
+                        "DbUsernamePassword": []
                     }
                 ],
                 "parameters": [

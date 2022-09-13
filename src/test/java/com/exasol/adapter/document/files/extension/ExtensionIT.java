@@ -145,6 +145,20 @@ class ExtensionIT {
     }
 
     @Test
+    void uninstall_succeedsForNonExistingInstallation() {
+        assertDoesNotThrow(() -> setup.client().uninstallExtension("unknownVersion"));
+    }
+
+    @Test
+    void uninstall_removesAdapters_ignoringVersion() {
+        setup.client().installExtension();
+        assertScriptsExist();
+        setup.client().uninstallExtension("unknownVersion");
+        assertAll(() -> assertThat(setup.client().getExtensions(), is(empty())),
+                () -> setup.exasolMetadata().assertNoScripts());
+    }
+
+    @Test
     void virtualSchemaWorks() throws SQLException {
         setup.client().installExtension();
         final String prefix = "vs-works-test-" + System.currentTimeMillis() + "/";

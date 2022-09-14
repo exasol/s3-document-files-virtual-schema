@@ -11,8 +11,7 @@ import org.hamcrest.Matcher;
 import org.junit.jupiter.api.function.Executable;
 
 import com.exasol.exasoltestsetup.SqlConnectionInfo;
-import com.exasol.extensionmanager.client.api.ExtensionApi;
-import com.exasol.extensionmanager.client.api.InstanceApi;
+import com.exasol.extensionmanager.client.api.*;
 import com.exasol.extensionmanager.client.invoker.ApiClient;
 import com.exasol.extensionmanager.client.invoker.ApiException;
 import com.exasol.extensionmanager.client.model.*;
@@ -23,21 +22,22 @@ import jakarta.json.bind.JsonbBuilder;
 public class ExtensionManagerClient {
     private static final Logger LOGGER = Logger.getLogger(ExtensionManagerClient.class.getName());
     private final ExtensionApi extensionClient;
+    private final InstallationApi installationApi;
     private final InstanceApi instanceClient;
     private final SqlConnectionInfo dbConnectionInfo;
 
-    private ExtensionManagerClient(final ExtensionApi extensionClient, final InstanceApi instanceClient,
-            final SqlConnectionInfo dbConnectionInfo) {
+    private ExtensionManagerClient(final ExtensionApi extensionClient, final InstallationApi installationApi,
+            final InstanceApi instanceClient, final SqlConnectionInfo dbConnectionInfo) {
         this.extensionClient = extensionClient;
+        this.installationApi = installationApi;
         this.instanceClient = instanceClient;
         this.dbConnectionInfo = dbConnectionInfo;
     }
 
     static ExtensionManagerClient create(final String serverBasePath, final SqlConnectionInfo connectionInfo) {
         final ApiClient apiClient = createApiClient(serverBasePath, connectionInfo);
-        final ExtensionApi extensionClient = new ExtensionApi(apiClient);
-        final InstanceApi instanceClient = new InstanceApi(apiClient);
-        return new ExtensionManagerClient(extensionClient, instanceClient, connectionInfo);
+        return new ExtensionManagerClient(new ExtensionApi(apiClient), new InstallationApi(apiClient),
+                new InstanceApi(apiClient), connectionInfo);
     }
 
     private static ApiClient createApiClient(final String serverBasePath, final SqlConnectionInfo connectionInfo) {
@@ -52,7 +52,7 @@ public class ExtensionManagerClient {
     }
 
     public List<InstallationsResponseInstallation> getInstallations() {
-        return this.extensionClient.listInstalledExtensions(getDbHost(), getDbPort()).getInstallations();
+        return this.installationApi.listInstalledExtensions(getDbHost(), getDbPort()).getInstallations();
     }
 
     public void installExtension(final String version) {
@@ -66,9 +66,8 @@ public class ExtensionManagerClient {
     }
 
     public void install(final String extensionId, final String extensionVersion) {
-        final InstallExtensionRequest request = new InstallExtensionRequest().extensionId(extensionId)
-                .extensionVersion(extensionVersion);
-        this.extensionClient.installExtension(request, getDbHost(), getDbPort());
+        this.extensionClient.installExtension(new InstallExtensionRequest(), getDbHost(), getDbPort(), extensionId,
+                extensionVersion);
     }
 
     public void uninstallExtension() {
@@ -81,7 +80,7 @@ public class ExtensionManagerClient {
     }
 
     private void uninstall(final String extensionId, final String extensionVersion) {
-        this.extensionClient.uninstallExtension(extensionId, extensionVersion, getDbHost(), getDbPort());
+        this.installationApi.uninstallExtension(extensionId, extensionVersion, getDbHost(), getDbPort());
     }
 
     public String createInstance(final List<ParameterValue> parameterValues) {
@@ -104,11 +103,12 @@ public class ExtensionManagerClient {
     }
 
     public void deleteInstance(final String instanceId) {
-        deleteInstance(getExtension().getId(), instanceId);
+        final Extension extension = getExtension();
+        deleteInstance(extension.getId(), extension.getCurrentVersion(), instanceId);
     }
 
-    private void deleteInstance(final String extensionId, final String instanceId) {
-        this.instanceClient.deleteInstance(extensionId, instanceId, getDbHost(), getDbPort());
+    private void deleteInstance(final String extensionId, final String extensionVersion, final String instanceId) {
+        this.instanceClient.deleteInstance(extensionId, extensionVersion, instanceId, getDbHost(), getDbPort());
     }
 
     public void assertRequestFails(final Executable executable, final Matcher<String> messageMatcher,
@@ -121,9 +121,8 @@ public class ExtensionManagerClient {
 
     private CreateInstanceResponse createInstance(final String extensionId, final String extensionVersion,
             final List<ParameterValue> parameterValues) {
-        final CreateInstanceRequest request = new CreateInstanceRequest().extensionId(extensionId)
-                .extensionVersion(extensionVersion).parameterValues(parameterValues);
-        return this.instanceClient.createInstance(request, getDbHost(), getDbPort());
+        final CreateInstanceRequest request = new CreateInstanceRequest().parameterValues(parameterValues);
+        return this.instanceClient.createInstance(request, getDbHost(), getDbPort(), extensionId, extensionVersion);
     }
 
     private ExtensionsResponseExtension getSingleExtension() {
@@ -154,11 +153,11 @@ public class ExtensionManagerClient {
         }
 
         public String getId() {
-            return id;
+            return this.id;
         }
 
         public String getCurrentVersion() {
-            return currentVersion;
+            return this.currentVersion;
         }
     }
 

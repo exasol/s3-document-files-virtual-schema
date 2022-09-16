@@ -13,6 +13,7 @@ import { CONFIG } from "./extension-config";
 import { findInstallations } from "./findInstallations";
 import { findInstances } from "./findInstances";
 import { installExtension } from "./installExtension";
+import { uninstall } from "./uninstallExtension";
 
 function createExtensionInfo(): ExtensionInfo {
     const version = CONFIG.version;
@@ -42,8 +43,8 @@ export function createExtension(): ExasolExtension {
         findInstances(context: Context, version: string): Instance[] {
             return findInstances(context);
         },
-        uninstall(_context: Context, _installation: Installation): void {
-            //empty on purpose
+        uninstall(context: Context, version: string): void {
+            uninstall(context, extensionInfo, version)
         },
         deleteInstance(context: Context, instanceId: string): void {
             deleteInstance(context, instanceId);

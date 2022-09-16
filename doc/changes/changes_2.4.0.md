@@ -4,7 +4,7 @@ Code name: Support for Extension Manager
 
 ## Summary
 
-This release allows installing an S3 Virtual Schema using the [extension manager](https://github.com/exasol/extension-manager). It also upgrades dependencies to fix CVE-2022-2047.
+This release allows installing an S3 Virtual Schema using the [extension manager](https://github.com/exasol/extension-manager). It also upgrades dependencies to fix CVE-2022-2047 and CVE-2022-38751.
 
 ## Features
 
@@ -38,7 +38,7 @@ This release allows installing an S3 Virtual Schema using the [extension manager
 * Updated `org.junit.jupiter:junit-jupiter-engine:5.8.2` to `5.9.0`
 * Updated `org.junit.jupiter:junit-jupiter-params:5.8.2` to `5.9.0`
 * Updated `org.mockito:mockito-core:4.6.1` to `4.7.0`
-* Updated `org.yaml:snakeyaml:1.30` to `1.31`
+* Updated `org.yaml:snakeyaml:1.30` to `1.32`
 
 ### Plugin Dependency Updates
 

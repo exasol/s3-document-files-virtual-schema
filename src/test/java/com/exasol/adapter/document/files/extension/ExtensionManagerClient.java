@@ -55,6 +55,14 @@ public class ExtensionManagerClient {
         return this.installationApi.listInstalledExtensions(getDbHost(), getDbPort()).getInstallations();
     }
 
+    public ExtensionDetailsResponse getExtensionDetails(final String extensionVersion) {
+        return getExtensionDetails(getExtension().getId(), extensionVersion);
+    }
+
+    private ExtensionDetailsResponse getExtensionDetails(final String extensionId, final String extensionVersion) {
+        return this.extensionClient.getExtensionDetails(extensionId, extensionVersion, getDbHost(), getDbPort());
+    }
+
     public void installExtension(final String version) {
         final Extension extension = getExtension();
         LOGGER.fine(() -> "Installing extension " + extension.getId() + " in version " + version);
@@ -102,6 +110,11 @@ public class ExtensionManagerClient {
         return this.instanceClient.listInstances(extensionId, extensionVersion, getDbHost(), getDbPort());
     }
 
+    public void deleteInstance(final String version, final String instanceId) {
+        final Extension extension = getExtension();
+        deleteInstance(extension.getId(), version, instanceId);
+    }
+
     public void deleteInstance(final String instanceId) {
         final Extension extension = getExtension();
         deleteInstance(extension.getId(), extension.getCurrentVersion(), instanceId);
@@ -140,7 +153,7 @@ public class ExtensionManagerClient {
             throw new IllegalStateException("Expected at exactly one installable version for extensions "
                     + extension.getId() + " but got " + extension.getInstallableVersions());
         }
-        return new Extension(extension.getId(), extension.getInstallableVersions().get(0));
+        return new Extension(extension.getId(), extension.getInstallableVersions().get(0).getName());
     }
 
     private static class Extension {

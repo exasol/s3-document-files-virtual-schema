@@ -7,7 +7,7 @@ const allParams: ScopedParameters = {
     virtualSchemaName: { scope: "general", id: "virtualSchemaName", name: "Name of the new virtual schema", type: "string", required: true },
 
     // Connection parameters
-    awsAccessKeyId: { scope: "connection", id: "awsAccessKeyId", name: "AWS Access Key Id", type: "string", required: true, regex: ".*" },
+    awsAccessKeyId: { scope: "connection", id: "awsAccessKeyId", name: "AWS Access Key Id", type: "string", required: true },
     awsSecretAccessKey: { scope: "connection", id: "awsSecretAccessKey", name: "AWS Secret AccessKey", type: "string", required: true, secret: true },
     awsRegion: { scope: "connection", id: "awsRegion", name: "AWS Region", type: "string", required: true },
     s3Bucket: { scope: "connection", id: "s3Bucket", name: "S3 Bucket", type: "string", required: true },

@@ -113,18 +113,23 @@ describe("S3 VS Extension", () => {
           }
         })
       });
-      // TODO
-      // it("returns expected parameters", () => {
-      //   const actual = findInstallations([adapterScript({}), importScript({})])
-      //   expect(actual).toHaveLength(1)
-      //   expect(actual[0].instanceParameters).toHaveLength(10)
-      //   expect(actual[0].instanceParameters[0]).toStrictEqual({
-      //     id: "virtualSchemaName", name: "Name of the new virtual schema", required: true, type: "string", scope: "general",
-      //   })
-      //   expect(actual[0].instanceParameters[1]).toStrictEqual({
-      //     id: "awsAccessKeyId", name: "AWS Access Key Id", required: true, type: "string", scope: "connection",
-      //   })
-      // })
+    })
+  })
+
+  describe("getInstanceParameters()", () => {
+    it("fails for wrong version", () => {
+      expect(() => { createExtension().getInstanceParameters(createMockContext(), "wrongVersion") })
+        .toThrow(`Version 'wrongVersion' not supported, can only use '${CONFIG.version}'.`)
+    })
+    it("returns expected parameters", () => {
+      const actual = createExtension().getInstanceParameters(createMockContext(), CONFIG.version)
+      expect(actual).toHaveLength(10)
+      expect(actual[0]).toStrictEqual({
+        id: "virtualSchemaName", name: "Name of the new virtual schema", required: true, type: "string", scope: "general",
+      })
+      expect(actual[1]).toStrictEqual({
+        id: "awsAccessKeyId", name: "AWS Access Key Id", required: true, type: "string", scope: "connection",
+      })
     })
   })
 

@@ -35,6 +35,14 @@ function createMockContext() {
 
 describe("S3 VS Extension", () => {
 
+  describe("installableVersions", () => {
+    it("contains exactly one 'latest', non deprecated version", () => {
+      const latestVersions = createExtension().installableVersions.filter(version => version.latest)
+      expect(latestVersions).toHaveLength(1)
+      expect(latestVersions[0].deprecated).toEqual(false)
+    })
+  })
+
   describe("extension registration", () => {
     it("creates an extension", () => {
       const ext = createExtension();

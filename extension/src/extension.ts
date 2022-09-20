@@ -3,7 +3,7 @@ import {
     Context, ExaMetadata,
     ExasolExtension,
     Installation,
-    Instance, ParameterValues,
+    Instance, NotFoundError, Parameter, ParameterValues,
     registerExtension
 } from "@exasol/extension-manager-interface";
 import { addInstance } from "./addInstance";
@@ -13,6 +13,7 @@ import { CONFIG } from "./extension-config";
 import { findInstallations } from "./findInstallations";
 import { findInstances } from "./findInstances";
 import { installExtension } from "./installExtension";
+import { createInstanceParameters } from "./parameterDefinitions";
 import { uninstall } from "./uninstallExtension";
 
 function createExtensionInfo(): ExtensionInfo {
@@ -29,7 +30,7 @@ export function createExtension(): ExasolExtension {
     return {
         name: "S3 Virtual Schema",
         description: "Virtual Schema for document files on AWS S3",
-        installableVersions: [extensionInfo.version],
+        installableVersions: [{ name: extensionInfo.version, latest: true, deprecated: false }],
         bucketFsUploads: [{ bucketFsFilename: extensionInfo.fileName, downloadUrl, fileSize: CONFIG.fileSizeBytes, name: "S3 VS Jar file", licenseUrl, licenseAgreementRequired: false }],
         install(context: Context, version: string) {
             installExtension(context, extensionInfo, version)
@@ -46,10 +47,16 @@ export function createExtension(): ExasolExtension {
         uninstall(context: Context, version: string): void {
             uninstall(context, extensionInfo, version)
         },
-        deleteInstance(context: Context, instanceId: string): void {
-            deleteInstance(context, instanceId);
+        deleteInstance(context: Context, version: string, instanceId: string): void {
+            deleteInstance(context, extensionInfo, version, instanceId);
         },
-        readInstanceParameters(_context: Context, _instanceId: string): ParameterValues {
+        getInstanceParameters(context: Context, version: string): Parameter[] {
+            if (extensionInfo.version !== version) {
+                throw new NotFoundError(`Version '${version}' not supported, can only use '${extensionInfo.version}'.`)
+            }
+            return createInstanceParameters()
+        },
+        readInstanceParameterValues(_context: Context, _version: string, _instanceId: string): ParameterValues {
             return { values: [] };
         }
     }

@@ -35,6 +35,14 @@ function createMockContext() {
 
 describe("S3 VS Extension", () => {
 
+  describe("installableVersions", () => {
+    it("contains exactly one 'latest', non deprecated version", () => {
+      const latestVersions = createExtension().installableVersions.filter(version => version.latest)
+      expect(latestVersions).toHaveLength(1)
+      expect(latestVersions[0].deprecated).toEqual(false)
+    })
+  })
+
   describe("extension registration", () => {
     it("creates an extension", () => {
       const ext = createExtension();
@@ -73,7 +81,7 @@ describe("S3 VS Extension", () => {
 
     describe("returns expected installations", () => {
       function installation({ name = "schema.S3_FILES_ADAPTER", version = "(unknown)" }: Partial<Installation>): Installation {
-        return { name, version, instanceParameters: [] }
+        return { name, version }
       }
       function script({ schema = "schema", name = "name", inputType, resultType, type = "", text = "", comment }: Partial<ExaScriptsRow>): ExaScriptsRow {
         return { schema, name, inputType, resultType, type, text, comment }
@@ -113,16 +121,22 @@ describe("S3 VS Extension", () => {
           }
         })
       });
-      it("returns expected parameters", () => {
-        const actual = findInstallations([adapterScript({}), importScript({})])
-        expect(actual).toHaveLength(1)
-        expect(actual[0].instanceParameters).toHaveLength(10)
-        expect(actual[0].instanceParameters[0]).toStrictEqual({
-          id: "virtualSchemaName", name: "Name of the new virtual schema", required: true, type: "string", scope: "general",
-        })
-        expect(actual[0].instanceParameters[1]).toStrictEqual({
-          id: "awsAccessKeyId", name: "AWS Access Key Id", required: true, type: "string", scope: "connection",
-        })
+    })
+  })
+
+  describe("getInstanceParameters()", () => {
+    it("fails for wrong version", () => {
+      expect(() => { createExtension().getInstanceParameters(createMockContext(), "wrongVersion") })
+        .toThrow(`Version 'wrongVersion' not supported, can only use '${CONFIG.version}'.`)
+    })
+    it("returns expected parameters", () => {
+      const actual = createExtension().getInstanceParameters(createMockContext(), CONFIG.version)
+      expect(actual).toHaveLength(10)
+      expect(actual[0]).toStrictEqual({
+        id: "virtualSchemaName", name: "Name of the new virtual schema", required: true, type: "string", scope: "general",
+      })
+      expect(actual[1]).toStrictEqual({
+        id: "awsAccessKeyId", name: "AWS Access Key Id", required: true, type: "string", scope: "connection",
       })
     })
   })
@@ -277,11 +291,15 @@ describe("S3 VS Extension", () => {
   describe("deleteInstance()", () => {
     it("drops connection and virtual schema", () => {
       const context = createMockContext();
-      createExtension().deleteInstance(context, "instId")
+      createExtension().deleteInstance(context, CONFIG.version, "instId")
       const executeCalls = context.executeMock.mock.calls
       expect(executeCalls.length).toEqual(2)
       expect(executeCalls[0]).toEqual(["DROP VIRTUAL SCHEMA IF EXISTS \"instId\" CASCADE"])
       expect(executeCalls[1]).toEqual(["DROP CONNECTION IF EXISTS \"instId_CONNECTION\""])
+    })
+    it("fails for wrong version", () => {
+      expect(() => { createExtension().deleteInstance(createMockContext(), "wrongVersion", "instId") })
+        .toThrow(`Version 'wrongVersion' not supported, can only use '${CONFIG.version}'.`)
     })
   })
 })

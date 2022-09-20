@@ -14,7 +14,7 @@
         "test-watch": "jest --watch"
     },
     "dependencies": {
-        "@exasol/extension-manager-interface": "0.1.14"
+        "@exasol/extension-manager-interface": "0.1.15"
     },
     "devDependencies": {
         "@types/jest": "^28.1.6",

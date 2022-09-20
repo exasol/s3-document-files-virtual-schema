@@ -9,8 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
@@ -73,7 +72,9 @@ class ExtensionIT {
         final List<ExtensionsResponseExtension> extensions = setup.client().getExtensions();
         assertAll(() -> assertThat(extensions, hasSize(1)), //
                 () -> assertThat(extensions.get(0).getName(), equalTo("S3 Virtual Schema")),
-                () -> assertThat(extensions.get(0).getInstallableVersions(), contains(projectVersion)),
+                () -> assertThat(extensions.get(0).getInstallableVersions().get(0).getName(), equalTo(projectVersion)),
+                () -> assertThat(extensions.get(0).getInstallableVersions().get(0).isLatest(), is(true)),
+                () -> assertThat(extensions.get(0).getInstallableVersions().get(0).isDeprecated(), is(false)),
                 () -> assertThat(extensions.get(0).getDescription(),
                         equalTo("Virtual Schema for document files on AWS S3")));
     }
@@ -98,8 +99,7 @@ class ExtensionIT {
         assertAll(() -> assertThat(installations, hasSize(1)), //
                 () -> assertThat(installations.get(0).getName(),
                         equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
-                () -> assertThat(installations.get(0).getVersion(), equalTo(setup.getCurrentProjectVersion())),
-                () -> assertThat(installations.get(0).getInstanceParameters(), hasSize(EXPECTED_PARAMETER_COUNT)));
+                () -> assertThat(installations.get(0).getVersion(), equalTo(setup.getCurrentProjectVersion())));
     }
 
     @Test
@@ -109,8 +109,27 @@ class ExtensionIT {
         assertAll(() -> assertThat(installations, hasSize(1)), //
                 () -> assertThat(installations.get(0).getName(),
                         equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
-                () -> assertThat(installations.get(0).getVersion(), equalTo(setup.getCurrentProjectVersion())),
-                () -> assertThat(installations.get(0).getInstanceParameters(), hasSize(EXPECTED_PARAMETER_COUNT)));
+                () -> assertThat(installations.get(0).getVersion(), equalTo(setup.getCurrentProjectVersion())));
+    }
+
+    @Test
+    void getExtensionDetailsFailsForUnknownVersion() {
+        setup.client().assertRequestFails(() -> setup.client().getExtensionDetails("unknownVersion"),
+                equalTo("Version 'unknownVersion' not supported, can only use '" + projectVersion + "'."),
+                equalTo(404));
+    }
+
+    @Test
+    void getExtensionDetailsSuccess() {
+        final ExtensionDetailsResponse extensionDetails = setup.client().getExtensionDetails(projectVersion);
+        final List<ParamDefinition> parameters = extensionDetails.getParameterDefinitions();
+        final ParamDefinition param1 = new ParamDefinition().id("virtualSchemaName")
+                .name("Name of the new virtual schema").definition(Map.of("id", "virtualSchemaName", "name",
+                        "Name of the new virtual schema", "required", true, "scope", "general", "type", "string"));
+        assertAll(() -> assertThat(extensionDetails.getId(), equalTo("s3-vs-extension.js")),
+                () -> assertThat(extensionDetails.getVersion(), equalTo(projectVersion)),
+                () -> assertThat(parameters, hasSize(EXPECTED_PARAMETER_COUNT)),
+                () -> assertThat(parameters.get(0), equalTo(param1)));
     }
 
     @Test
@@ -246,6 +265,13 @@ class ExtensionIT {
     @Test
     void deleteNonExistingInstance() {
         assertDoesNotThrow(() -> setup.client().deleteInstance("no-such-instance"));
+    }
+
+    @Test
+    void deleteFailsForUnknownVersion() {
+        setup.client().assertRequestFails(() -> setup.client().deleteInstance("unknownVersion", "no-such-instance"),
+                equalTo("Version 'unknownVersion' not supported, can only use '" + projectVersion + "'."),
+                equalTo(404));
     }
 
     @Test

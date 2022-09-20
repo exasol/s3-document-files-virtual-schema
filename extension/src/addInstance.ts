@@ -1,46 +1,16 @@
 import { Context, Instance, ParameterValues } from "@exasol/extension-manager-interface";
 import { Parameter } from "@exasol/extension-manager-interface/dist/parameters";
 import { ADAPTER_SCRIPT_NAME, convertSchemaNameToInstanceId, ExtensionInfo, getConnectionName } from "./common";
+import { getAllParameterDefinitions, ScopedParameter } from "./parameterDefinitions";
 
-type ScopedParameter = Parameter & { scope: "general" | "connection" | "vs" }
-
-const allParams: { [key: string]: ScopedParameter } = {
-    virtualSchemaName: { scope: "general", id: "virtualSchemaName", name: "Name of the new virtual schema", type: "string", required: true },
-
-    // Connection parameters
-    awsAccessKeyId: { scope: "connection", id: "awsAccessKeyId", name: "AWS Access Key Id", type: "string", required: true },
-    awsSecretAccessKey: { scope: "connection", id: "awsSecretAccessKey", name: "AWS Secret AccessKey", type: "string", required: true, secret: true },
-    awsRegion: { scope: "connection", id: "awsRegion", name: "AWS Region", type: "string", required: true },
-    s3Bucket: { scope: "connection", id: "s3Bucket", name: "S3 Bucket", type: "string", required: true },
-    awsSessionToken: { scope: "connection", id: "awsSessionToken", name: "AWS Session Token", type: "string", required: false, secret: true },
-    awsEndpointOverride: { scope: "connection", id: "awsEndpointOverride", name: "AWS Endpoint Override", type: "string", required: false },
-    s3PathStyleAccess: { scope: "connection", id: "s3PathStyleAccess", name: "S3 Path Style Access", type: "boolean", required: false },
-    useSsl: { scope: "connection", id: "useSsl", name: "Use SSL", type: "boolean", required: false },
-
-    // Virtual Schema parameters
-    mapping: { scope: "vs", id: "mapping", name: "EDML Mapping", type: "string", required: true, multiline: true },
-};
-export function createInstanceParameters(): Parameter[] {
-    return [
-        allParams.virtualSchemaName,
-        allParams.awsAccessKeyId,
-        allParams.awsSecretAccessKey,
-        allParams.awsRegion,
-        allParams.s3Bucket,
-        allParams.awsSessionToken,
-        allParams.awsEndpointOverride,
-        allParams.s3PathStyleAccess,
-        allParams.useSsl,
-        allParams.mapping
-    ];
-}
 
 export function addInstance(context: Context, extensionInfo: ExtensionInfo, versionToInstall: string, paramValues: ParameterValues): Instance {
     if (extensionInfo.version !== versionToInstall) {
         throw new Error(`Version '${versionToInstall}' not supported, can only use ${extensionInfo.version}.`)
     }
 
-    const virtualSchemaName = getParameterValue(paramValues, allParams.virtualSchemaName)
+    const allParams = getAllParameterDefinitions();
+    const virtualSchemaName = getParameterValue(paramValues, allParams.virtualSchemaName);
     const mapping = getParameterValue(paramValues, allParams.mapping);
     const connectionName = getConnectionName(virtualSchemaName);
     context.sqlClient.execute(createConnectionStatement(connectionName, paramValues));
@@ -78,7 +48,7 @@ function escapeSingleQuotes(value: string): string {
 }
 
 function findParam(id: string): ScopedParameter | undefined {
-    return allParams[id]
+    return getAllParameterDefinitions()[id]
 }
 
 function convertConnectionParameters(paramValues: ParameterValues) {

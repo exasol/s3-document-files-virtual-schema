@@ -46,7 +46,7 @@ class ExtensionIT {
 
     @BeforeAll
     static void setup() {
-        exasolTestSetup = new ExasolTestSetupFactory(Path.of("dummy-config")).getTestSetup();
+        exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
         setup = ExtensionManagerSetup.create(exasolTestSetup, ExtensionBuilder.createDefaultNpmBuilder(
                 EXTENSION_SOURCE_DIR, EXTENSION_SOURCE_DIR.resolve("dist/s3-vs-extension.js")));
         s3TestSetup = new AwsS3TestSetup();

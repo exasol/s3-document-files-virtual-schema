@@ -28,7 +28,7 @@ import lombok.Setter;
 import software.amazon.awssdk.services.s3.S3Client;
 
 public class IntegrationTestSetup implements AutoCloseable {
-    public static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.1.0-s3-2.4.0.jar";
+    public static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.1.1-s3-2.4.0.jar";
     public static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(

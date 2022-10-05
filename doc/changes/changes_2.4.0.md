@@ -26,15 +26,21 @@ This release allows installing an S3 Virtual Schema using the [extension manager
 ### Test Dependency Updates
 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.267` to `1.12.296`
+* Removed `com.brsanthu:migbase64:2.2`
+* Added `com.exasol:extension-manager-integration-test-java:0.0.2`
 * Updated `com.exasol:hamcrest-resultset-matcher:1.5.1` to `1.5.2`
 * Updated `com.exasol:maven-project-version-getter:1.1.0` to `1.1.1`
 * Updated `com.exasol:performance-test-recorder-java:0.1.0` to `0.1.1`
 * Updated `com.exasol:small-json-files-test-fixture:0.1.1` to `0.1.2`
 * Updated `com.exasol:test-db-builder-java:3.3.3` to `3.3.4`
-* Updated `com.fasterxml.jackson.core:jackson-annotations:2.13.3` to `2.13.4`
-* Updated `com.fasterxml.jackson.core:jackson-core:2.13.3` to `2.13.4`
-* Updated `com.fasterxml.jackson.core:jackson-databind:2.13.3` to `2.13.4`
-* Updated `io.swagger.core.v3:swagger-annotations:2.2.1` to `2.2.2`
+* Removed `com.fasterxml.jackson.core:jackson-annotations:2.13.3`
+* Removed `com.fasterxml.jackson.core:jackson-core:2.13.3`
+* Removed `com.fasterxml.jackson.core:jackson-databind:2.13.3`
+* Removed `io.swagger.core.v3:swagger-annotations:2.2.1`
+* Removed `org.glassfish.jersey.core:jersey-client:2.36`
+* Removed `org.glassfish.jersey.inject:jersey-hk2:2.36`
+* Removed `org.glassfish.jersey.media:jersey-media-json-jackson:2.36`
+* Removed `org.glassfish.jersey.media:jersey-media-multipart:2.36`
 * Updated `org.junit.jupiter:junit-jupiter-engine:5.8.2` to `5.9.0`
 * Updated `org.junit.jupiter:junit-jupiter-params:5.8.2` to `5.9.0`
 * Updated `org.mockito:mockito-core:4.6.1` to `4.7.0`
@@ -43,5 +49,7 @@ This release allows installing an S3 Virtual Schema using the [extension manager
 ### Plugin Dependency Updates
 
 * Updated `com.exasol:error-code-crawler-maven-plugin:1.1.1` to `1.1.2`
-* Updated `com.exasol:project-keeper-maven-plugin:2.4.6` to `2.7.0`
+* Updated `com.exasol:project-keeper-maven-plugin:2.4.6` to `2.8.0`
+* Removed `io.swagger.codegen.v3:swagger-codegen-maven-plugin:3.0.34`
 * Updated `org.apache.maven.plugins:maven-enforcer-plugin:3.0.0` to `3.1.0`
+* Removed `org.codehaus.mojo:build-helper-maven-plugin:3.3.0`

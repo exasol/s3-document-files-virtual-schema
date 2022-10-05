@@ -151,6 +151,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <!-- Explicitly upgrade transitivie dependency of aws-java-sdk-s3 to fix CVE-2022-42003 and CVE-2022-42004 -->
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.14.0-rc1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.7.36</version>
@@ -227,6 +234,9 @@
                         <!-- org.yaml:snakeyaml: https://ossindex.sonatype.org/vulnerability/CVE-2022-38752
                         Used only for using test config file, not parsing untrusted input. -->
                         <exclude>CVE-2022-38752</exclude>
+                        <!-- org.apache.hadoop:hadoop-hdfs-client:jar:3.3.4: https://ossindex.sonatype.org/vulnerability/sonatype-2022-5732
+                        No fixed version available, see https://github.com/exasol/parquet-io-java/issues/50 -->
+                        <exclude>sonatype-2022-5732</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>

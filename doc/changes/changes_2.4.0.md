@@ -37,7 +37,7 @@ This release allows installing an S3 Virtual Schema using the [extension manager
 * Updated `com.exasol:virtual-schema-common-document-files:7.1.0` to `7.1.1`
 * Removed `com.fasterxml.jackson.core:jackson-annotations:2.13.3`
 * Removed `com.fasterxml.jackson.core:jackson-core:2.13.3`
-* Removed `com.fasterxml.jackson.core:jackson-databind:2.13.3`
+* Updated `com.fasterxml.jackson.core:jackson-databind:2.13.3` to `2.14.0-rc1`
 * Removed `io.swagger.core.v3:swagger-annotations:2.2.1`
 * Removed `org.glassfish.jersey.core:jersey-client:2.36`
 * Removed `org.glassfish.jersey.inject:jersey-hk2:2.36`

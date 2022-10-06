@@ -76,7 +76,9 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     @AfterAll
     static void afterAll() throws Exception {
         AWS_S3_TEST_SETUP.deleteBucket(s3BucketName);
-        SETUP.close();
+        if (SETUP != null) {
+            SETUP.close();
+        }
     }
 
     @AfterEach

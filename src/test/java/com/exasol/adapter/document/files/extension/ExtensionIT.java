@@ -6,11 +6,13 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.*;
 
@@ -22,6 +24,7 @@ import com.exasol.adapter.document.edml.serializer.EdmlSerializer;
 import com.exasol.adapter.document.files.IntegrationTestSetup;
 import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
 import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
+import com.exasol.bucketfs.BucketAccessException;
 import com.exasol.dbbuilder.dialects.exasol.AdapterScript.Language;
 import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
@@ -45,7 +48,7 @@ class ExtensionIT {
     private static String projectVersion;
 
     @BeforeAll
-    static void setup() {
+    static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
         setup = ExtensionManagerSetup.create(exasolTestSetup, ExtensionBuilder.createDefaultNpmBuilder(
                 EXTENSION_SOURCE_DIR, EXTENSION_SOURCE_DIR.resolve("dist/s3-vs-extension.js")));
@@ -53,6 +56,8 @@ class ExtensionIT {
         s3BucketName = "extension-test.s3.virtual-schema-test-bucket-" + System.currentTimeMillis();
         s3TestSetup.createBucket(s3BucketName);
         projectVersion = MavenProjectVersionGetter.getCurrentProjectVersion();
+        exasolTestSetup.getDefaultBucket().uploadFile(IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH,
+                IntegrationTestSetup.ADAPTER_JAR);
     }
 
     @AfterAll
@@ -64,6 +69,7 @@ class ExtensionIT {
         if (setup != null) {
             setup.close();
         }
+        exasolTestSetup.getDefaultBucket().deleteFileNonBlocking(IntegrationTestSetup.ADAPTER_JAR);
         exasolTestSetup.close();
     }
 

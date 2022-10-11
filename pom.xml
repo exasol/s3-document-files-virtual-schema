@@ -165,7 +165,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- Explicitly upgrade transitivie dependency of aws-java-sdk-s3 to fix CVE-2022-42003 and CVE-2022-42004 -->
+            <!-- Explicitly upgrade transitive dependency of aws-java-sdk-s3 to fix CVE-2022-42003 and CVE-2022-42004 -->
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.14.0-rc1</version>
@@ -208,7 +208,6 @@
             <version>2.4.0</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
@@ -387,16 +386,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.exasol</groupId>
-                <artifactId>error-code-crawler-maven-plugin</artifactId>
-                <configuration>
-                    <sourcePaths>
-                        <sourcePath>target/delombok/main</sourcePath>
-                        <sourcePath>target/delombok/test</sourcePath>
-                    </sourcePaths>
-                </configuration>
             </plugin>
         </plugins>
     </build>

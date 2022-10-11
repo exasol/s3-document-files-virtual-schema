@@ -49,7 +49,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.17.288</version>
+                <version>2.17.290</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -146,7 +146,7 @@
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.317</version>
+            <version>1.12.319</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -265,6 +265,9 @@
                         <!-- org.apache.hadoop:hadoop-hdfs-client:jar:3.3.4: https://ossindex.sonatype.org/vulnerability/sonatype-2022-5732
                         No fixed version available, see https://github.com/exasol/parquet-io-java/issues/50 -->
                         <exclude>sonatype-2022-5732</exclude>
+                        <!-- org.apache.hadoop:hadoop-common:jar:3.3.4: https://ossindex.sonatype.org/vulnerability/sonatype-2022-5820
+                        No fixed version available, will be fixed in 3.3.5 -->
+                        <exclude>sonatype-2022-5820</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>

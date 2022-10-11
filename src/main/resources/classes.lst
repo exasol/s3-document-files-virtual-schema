@@ -1,4 +1,3 @@
-com/sun/org/apache/xerces/internal/impl/XMLDocumentFragmentScannerImpl
 software/amazon/awssdk/core/retry/RetryPolicy
 org/logicng/cardinalityconstraints/CCAtLeastK
 software/amazon/awssdk/http/apache/internal/conn/IdleConnectionReaper$ReaperTask
@@ -15,6 +14,8 @@ software/amazon/awssdk/regions/regionmetadata/UsEast1
 software/amazon/awssdk/regions/regionmetadata/UsEast2
 io/netty/handler/ssl/SslHandler$11
 software/amazon/awssdk/core/interceptor/Context$FailedExecution
+com/ctc/wstx/sr/CompactNsContext
+scala/collection/SeqOps
 java/util/stream/DistinctOps$1$2
 java/security/AllPermissionCollection
 jdk/net/LinuxSocketOptions
@@ -40,9 +41,9 @@ software/amazon/awssdk/regions/servicemetadata/StoragegatewayServiceMetadata
 sun/security/ssl/KeyShareExtension$CHKeyShareOnTradeAbsence
 io/netty/buffer/ByteBufUtil$ThreadLocalDirectByteBuf
 java/lang/Integer$IntegerCache
-com/sun/org/apache/xerces/internal/jaxp/SAXParserFactoryImpl
 sun/security/ssl/SSLConfiguration
 sun/security/ssl/PskKeyExchangeModesExtension$PskKeyExchangeModesConsumer
+javax/xml/stream/XMLStreamWriter
 software/amazon/awssdk/http/HttpStatusFamily
 software/amazon/awssdk/core/internal/retry/DefaultTokenBucketExceptionCostFunction$Builder
 java/util/RegularEnumSet
@@ -55,8 +56,8 @@ software/amazon/awssdk/regions/servicemetadata/RamServiceMetadata
 jdk/internal/ref/WeakCleanable
 java/nio/file/attribute/BasicFileAttributeView
 java/lang/NullPointerException
+com/ctc/wstx/util/SymbolTable
 software/amazon/awssdk/core/util/SdkAutoConstructMap
-com/sun/org/apache/xerces/internal/impl/XMLScanner$NameType
 java/time/LocalTime
 sun/security/provider/NativePRNG$Variant
 software/amazon/awssdk/regions/servicemetadata/ServicediscoveryServiceMetadata
@@ -73,6 +74,7 @@ software/amazon/awssdk/regions/servicemetadata/FinspaceServiceMetadata
 java/text/spi/NumberFormatProvider
 software/amazon/awssdk/regions/servicemetadata/ElasticacheServiceMetadata
 sun/security/ssl/ServerHello
+org/codehaus/stax2/typed/TypedArrayDecoder
 java/lang/invoke/ClassSpecializer$SpeciesData
 sun/security/rsa/SunRsaSign
 software/amazon/awssdk/core/retry/backoff/BackoffStrategy$1
@@ -96,6 +98,7 @@ com/exasol/adapter/document/documentpath/PathIterationStateProvider
 io/netty/util/internal/CleanerJava9
 software/amazon/awssdk/core/ResponseBytes
 software/amazon/awssdk/http/nio/netty/internal/SdkChannelOptions
+com/ctc/wstx/exc/WstxIOException
 javax/management/NotificationEmitter
 sun/nio/ch/DefaultSelectorProvider
 com/exasol/adapter/document/documentfetcher/files/RemoteFilePrefetchingIterator
@@ -106,7 +109,6 @@ software/amazon/awssdk/utils/Lazy
 software/amazon/awssdk/awscore/client/builder/AwsAsyncClientBuilder
 java/security/Principal
 java/net/StandardSocketOptions
-com/sun/org/apache/xerces/internal/xni/NamespaceContext
 com/exasol/sql/Column
 software/amazon/awssdk/regions/regionmetadata/CaCentral1
 java/lang/reflect/Field
@@ -142,6 +144,7 @@ sun/security/ssl/SSLHandshake$HandshakeMessage
 software/amazon/awssdk/http/nio/netty/NettyNioAsyncHttpClient$DefaultBuilder
 jdk/internal/jimage/ImageReader$SharedImageReader
 com/exasol/adapter/sql/SqlPredicateIsNotNull
+org/codehaus/stax2/evt/XMLEvent2
 javax/net/ssl/KeyManagerFactory
 sun/security/ssl/SupportedGroupsExtension$CHSupportedGroupsConsumer
 software/amazon/awssdk/regions/regionmetadata/EuWest2
@@ -155,6 +158,7 @@ sun/security/x509/KeyUsageExtension
 jdk/internal/org/objectweb/asm/ByteVector
 software/amazon/awssdk/regions/servicemetadata/NeptuneServiceMetadata
 io/netty/util/NetUtil
+org/codehaus/stax2/XMLInputFactory2
 software/amazon/awssdk/regions/servicemetadata/SessionQldbServiceMetadata
 org/antlr/v4/runtime/misc/Interval
 sun/text/normalizer/NormalizerBase$Mode
@@ -163,7 +167,9 @@ com/exasol/adapter/metadata/TableMetadata
 java/net/SocketOption
 sun/net/sdp/SdpProvider
 sun/security/ssl/ServerNameExtension$SHServerNameConsumer
+scala/collection/Stepper
 io/netty/util/Signal$SignalConstant
+scala/util/Right
 software/amazon/awssdk/core/internal/http/timers/TimeoutTask
 com/exasol/adapter/document/iterators/FilteringIterator
 org/antlr/v4/runtime/atn/RuleTransition
@@ -175,6 +181,7 @@ java/util/Objects
 java/io/ObjectInputStream$GetFieldImpl
 software/amazon/awssdk/core/interceptor/SdkExecutionAttribute
 org/antlr/v4/runtime/atn/StarBlockStartState
+com/ctc/wstx/compat/QNameCreator
 java/nio/IntBuffer
 org/jcp/xml/dsig/internal/dom/XMLDSigRI
 java/util/concurrent/Future
@@ -205,6 +212,7 @@ sun/security/ssl/CertStatusExtension$CHCertStatusReqConsumer
 sun/security/util/math/ImmutableIntegerModuloP
 java/util/zip/ZipFile$ZipFileInflaterInputStream
 org/apache/http/message/BasicRequestLine
+com/ctc/wstx/util/TextBuilder
 sun/security/provider/certpath/AlgorithmChecker
 sun/security/ssl/ClientHello$ClientHelloKickstartProducer
 sun/nio/fs/UnixChannelFactory
@@ -241,6 +249,7 @@ java/nio/channels/ByteChannel
 com/sun/crypto/provider/SunJCE
 sun/util/resources/LocaleData$SupplementaryStrategy
 java/util/concurrent/ConcurrentHashMap$EntryIterator
+scala/collection/LinearSeqOps
 sun/security/x509/PKIXExtensions
 java/io/FilePermission$1
 sun/security/util/MemoryCache$SoftCacheEntry
@@ -260,9 +269,9 @@ software/amazon/awssdk/http/async/AsyncExecuteRequest
 software/amazon/awssdk/http/nio/netty/internal/nrs/HttpStreamsHandler$3$1
 software/amazon/awssdk/regions/servicemetadata/KinesisvideoServiceMetadata
 software/amazon/awssdk/services/s3/internal/endpoints/S3BucketEndpointResolver
-com/sun/org/apache/xerces/internal/impl/XMLEntityScanner
 io/netty/util/internal/PriorityQueueNode
 org/apache/http/conn/ConnectionReleaseTrigger
+com/ctc/wstx/io/MergedStream
 java/util/ServiceLoader$LazyClassPathLookupIterator
 org/apache/http/client/ClientProtocolException
 java/security/cert/CertPathValidatorSpi
@@ -271,6 +280,7 @@ org/antlr/v4/runtime/atn/ATNState
 org/antlr/v4/runtime/atn/ATNDeserializationOptions
 sun/security/ssl/DHKeyExchange$DHEKAGenerator
 sun/security/ssl/SupportedGroupsExtension$EESupportedGroupsProducer
+java/io/CharArrayReader
 software/amazon/awssdk/regions/servicemetadata/ApiDetectiveServiceMetadata
 sun/text/normalizer/UCharacterProperty$IntProperty
 software/amazon/awssdk/protocols/core/ValueToStringConverter
@@ -328,6 +338,7 @@ org/antlr/v4/runtime/atn/TokensStartState
 software/amazon/awssdk/services/s3/model/AbortMultipartUploadRequest
 io/netty/util/internal/PlatformDependent$Mpsc
 sun/security/x509/X509CertImpl
+scala/collection/LinearSeq
 jakarta/json/stream/JsonParser
 software/amazon/awssdk/regions/servicemetadata/Appstream2ServiceMetadata
 software/amazon/awssdk/auth/signer/AwsS3V4Signer
@@ -349,7 +360,6 @@ java/util/zip/InflaterInputStream
 software/amazon/awssdk/protocols/core/PathMarshaller$GreedyLeadingSlashPathMarshaller
 org/logicng/io/parsers/LogicNGPseudoBooleanParser$ConstantContext
 sun/security/jgss/SunProvider$ProviderService
-com/sun/org/apache/xerces/internal/impl/XMLErrorReporter
 software/amazon/awssdk/http/nio/netty/internal/ChannelPipelineInitializer
 java/nio/Bits
 io/netty/util/concurrent/AbstractScheduledEventExecutor$2
@@ -365,7 +375,6 @@ sun/nio/cs/UTF_16LE
 org/antlr/v4/runtime/dfa/LexerDFASerializer
 sun/reflect/generics/visitor/Reifier
 software/amazon/awssdk/utils/http/SdkHttpUtils
-javax/xml/catalog/CatalogFeatures$Feature
 java/util/Queue
 java/io/ObjectInputStream$ValidationList
 software/amazon/awssdk/regions/servicemetadata/ApigatewayServiceMetadata
@@ -390,8 +399,8 @@ org/apache/http/config/SocketConfig
 java/util/stream/MatchOps$MatchKind
 software/amazon/awssdk/core/internal/util/HttpChecksumResolver
 com/exasol/adapter/document/files/stringfilter/wildcardexpression/fragments/RegularCharacter
-software/amazon/awssdk/awscore/client/handler/AwsAsyncClientHandler
 org/jcp/xml/dsig/internal/dom/XMLDSigRI$ProviderService
+software/amazon/awssdk/awscore/client/handler/AwsAsyncClientHandler
 sun/security/ssl/SSLContextImpl$AbstractTLSContext
 java/time/ZonedDateTime
 software/amazon/awssdk/utils/FunctionalUtils$UnsafeRunnable
@@ -401,10 +410,10 @@ sun/security/x509/X509CertInfo
 java/lang/annotation/Annotation
 com/exasol/adapter/capabilities/PredicateCapability
 java/util/concurrent/atomic/AtomicReference
-com/sun/org/apache/xerces/internal/util/XMLResourceIdentifierImpl
 com/exasol/ExaIterationException
 software/amazon/awssdk/services/s3/model/CompleteMultipartUploadRequest
 java/security/cert/TrustAnchor
+com/ctc/wstx/ent/EntityDecl
 sun/invoke/util/ValueConversions$WrapperCache
 io/netty/util/internal/PlatformDependent$2
 io/netty/util/internal/PlatformDependent$1
@@ -414,7 +423,6 @@ java/lang/invoke/BoundMethodHandle$Species_LLLLL
 io/netty/handler/codec/http/HttpHeadersEncoder
 java/security/InvalidParameterException
 jdk/internal/module/ModuleReferenceImpl
-com/sun/org/apache/xerces/internal/util/AugmentationsImpl
 software/amazon/awssdk/core/internal/http/pipeline/stages/utils/RetryableStageHelper
 sun/security/ssl/SSLExtension$ExtensionConsumer
 org/apache/http/config/Lookup
@@ -436,12 +444,12 @@ jdk/internal/reflect/UnsafeFieldAccessorFactory
 sun/security/util/math/intpoly/IntegerPolynomial$Element
 software/amazon/awssdk/services/s3/paginators/ListObjectsV2Iterable
 java/lang/Throwable
+org/codehaus/stax2/ri/evt/AttributeEventImpl
 java/io/DefaultFileSystem
 jdk/internal/jimage/ImageHeader
 sun/security/x509/CertificateSerialNumber
 sun/security/util/IOUtils
 sun/text/normalizer/Trie2$UTrie2Header
-com/sun/org/apache/xerces/internal/impl/XMLDocumentFragmentScannerImpl$Driver
 org/apache/http/HttpInetConnection
 java/io/DataInput
 org/apache/http/protocol/HttpProcessor
@@ -480,7 +488,6 @@ java/util/NavigableMap
 io/netty/buffer/UnsafeByteBufUtil
 software/amazon/awssdk/http/SdkHttpConfigurationOption
 sun/security/provider/certpath/PKIXMasterCertPathValidator
-com/sun/org/apache/xerces/internal/impl/XMLDocumentScannerImpl
 software/amazon/awssdk/http/nio/netty/internal/HandlerRemovingChannelPoolListener
 org/apache/http/impl/cookie/BasicCommentHandler
 java/util/concurrent/ConcurrentHashMap$Node
@@ -488,8 +495,10 @@ sun/security/util/FilePermCompat
 org/apache/http/impl/io/ContentLengthOutputStream
 io/netty/handler/codec/DefaultHeadersImpl
 software/amazon/awssdk/regions/regionmetadata/ApSouth1
+scala/collection/IterableOnce
 software/amazon/awssdk/regions/servicemetadata/HealthlakeServiceMetadata
 org/apache/http/pool/AbstractConnPool$2
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$DoubleArrayDecoder
 org/apache/http/pool/AbstractConnPool$1
 sun/security/ssl/SSLContextImpl
 java/util/zip/ZipUtils
@@ -567,7 +576,6 @@ sun/security/ssl/SignatureAlgorithmsExtension
 java/lang/invoke/MemberName
 java/util/zip/ZipCoder
 org/logicng/pseudobooleans/PBConfig$PB_ENCODER
-com/sun/org/apache/xerces/internal/impl/XMLDocumentFragmentScannerImpl$ElementStack
 sun/util/locale/provider/LocaleProviderAdapter$Type
 java/lang/StringLatin1
 io/netty/handler/codec/http/EmptyHttpHeaders$InstanceInitializer
@@ -599,15 +607,14 @@ software/amazon/awssdk/core/internal/interceptor/SyncHttpChecksumInTrailerInterc
 org/antlr/v4/runtime/Parser
 java/security/interfaces/XECPublicKey
 sun/security/ssl/SSLContextImpl$CustomizedTLSContext
-com/sun/xml/internal/stream/events/CharacterEvent
 java/lang/LiveStackFrame
 jakarta/json/stream/JsonGenerationException
 java/util/concurrent/atomic/AtomicReferenceFieldUpdater$AtomicReferenceFieldUpdaterImpl
 org/apache/http/conn/ssl/AllowAllHostnameVerifier
 sun/security/ssl/SSLCipher$T13CC20P1305WriteCipherGenerator
 sun/util/logging/PlatformLogger$ConfigurableBridge
-software/amazon/awssdk/regions/servicemetadata/ModelsV2LexServiceMetadata
 java/lang/reflect/ProxyGenerator$ExceptionTableEntry
+software/amazon/awssdk/regions/servicemetadata/ModelsV2LexServiceMetadata
 io/netty/channel/ChannelOutboundHandler
 software/amazon/awssdk/regions/servicemetadata/AmplifyuibuilderServiceMetadata
 org/logicng/transformations/cnf/CNFEncoder
@@ -621,7 +628,6 @@ javax/net/DefaultSocketFactory
 java/time/LocalDate
 io/netty/util/concurrent/SingleThreadEventExecutor$1
 sun/net/www/protocol/jar/JarURLConnection
-com/sun/org/apache/xerces/internal/utils/XMLSecurityManager$Limit
 org/logicng/io/parsers/LogicNGPseudoBooleanParser$EquivContext
 java/security/PublicKey
 org/apache/http/pool/PoolEntryCallback
@@ -684,6 +690,7 @@ java/util/Arrays$ArrayList
 software/amazon/awssdk/regions/servicemetadata/CodestarNotificationsServiceMetadata
 software/amazon/awssdk/regions/servicemetadata/LookoutequipmentServiceMetadata
 software/amazon/awssdk/awscore/AwsRequest
+com/ctc/wstx/sr/InputElementStack
 io/netty/util/internal/CleanerJava9$1
 java/util/stream/Streams$ConcatSpliterator
 org/antlr/v4/runtime/atn/PredictionContextCache
@@ -695,9 +702,11 @@ org/glassfish/json/JsonWriterImpl$NoFlushOutputStream
 org/apache/http/impl/client/ProxyAuthenticationStrategy
 io/netty/buffer/AbstractReferenceCountedByteBuf
 software/amazon/awssdk/auth/credentials/StaticCredentialsProvider
+java/util/Formatter$FixedString
 sun/reflect/misc/ReflectUtil
 software/amazon/awssdk/regions/regionmetadata/ApEast1
 java/lang/CharacterData
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$BaseArrayDecoder
 org/apache/http/entity/HttpEntityWrapper
 software/amazon/awssdk/http/nio/netty/internal/http2/FlushOnReadHandler
 org/apache/http/conn/HttpClientConnectionManager
@@ -705,6 +714,7 @@ io/netty/handler/ssl/SslClosedEngineException
 software/amazon/awssdk/regions/servicemetadata/AppconfigdataServiceMetadata
 software/amazon/awssdk/regions/servicemetadata/ModelsLexServiceMetadata
 software/amazon/awssdk/metrics/MetricLevel
+scala/collection/immutable/$colon$colon
 sun/security/util/ECParameters
 com/exasol/adapter/sql/SqlLiteralTimestamp
 sun/security/ssl/SSLLogger
@@ -733,7 +743,6 @@ software/amazon/awssdk/core/io/SdkDigestInputStream
 io/netty/util/internal/shaded/org/jctools/queues/BaseMpscLinkedArrayQueueProducerFields
 sun/security/ec/ECDSASignature$SHA1
 io/netty/handler/codec/DefaultHeaders$NameValidator
-com/sun/org/apache/xerces/internal/impl/XMLDocumentFragmentScannerImpl$FragmentContentDriver
 java/util/TreeMap$EntryIterator
 sun/security/ssl/ECDHKeyExchange$ECDHEKAGenerator
 java/lang/PublicMethods
@@ -749,7 +758,6 @@ software/amazon/awssdk/core/internal/util/MetricUtils
 io/netty/resolver/AbstractAddressResolver
 io/netty/buffer/PoolChunkList
 java/io/ExpiringCache$1
-org/slf4j/impl/JDK14LoggerFactory
 io/netty/util/NettyRuntime$AvailableProcessorsHolder
 sun/security/ssl/Authenticator$MacImpl
 sun/security/ssl/SSLKeyAgreementGenerator
@@ -779,11 +787,12 @@ software/amazon/awssdk/utils/NamedThreadFactory
 sun/security/ssl/ClientHello$ClientHelloProducer
 javax/crypto/Cipher
 io/netty/util/concurrent/ThreadPerTaskExecutor
+com/ctc/wstx/sr/ValidatingStreamReader
 java/security/DigestInputStream
 java/security/Permissions$1
 software/amazon/awssdk/services/s3/model/UploadPartCopyRequest
+com/ctc/wstx/api/ReaderConfig
 org/apache/http/HttpConnectionMetrics
-com/sun/org/apache/xerces/internal/util/XMLAttributesIteratorImpl
 java/util/stream/ReduceOps$ReduceOp
 sun/security/x509/CertificatePolicyId
 java/util/TreeMap$EntrySet
@@ -839,6 +848,7 @@ jdk/internal/loader/URLClassPath$Loader
 org/antlr/v4/runtime/TokenSource
 io/netty/util/internal/PlatformDependent$ThreadLocalRandomProvider
 org/antlr/v4/runtime/Vocabulary
+scala/Some
 software/amazon/awssdk/auth/signer/params/AwsS3V4SignerParams$Builder
 java/nio/charset/CodingErrorAction
 java/security/MessageDigestSpi
@@ -849,7 +859,6 @@ javax/xml/stream/events/XMLEvent
 java/net/SocketInputStream
 java/lang/module/ModuleDescriptor$Provides
 com/exasol/adapter/document/documentpath/DocumentPathExpression$Builder
-com/sun/xml/internal/stream/XMLEventReaderImpl
 java/util/concurrent/CompletableFuture$UniApply
 java/util/stream/ReduceOps$3ReducingSink
 java/lang/StackStreamFactory
@@ -858,6 +867,7 @@ org/apache/http/message/BasicHttpResponse
 org/glassfish/json/JsonReaderImpl
 software/amazon/awssdk/regions/servicemetadata/IngestTimestreamServiceMetadata
 java/util/TimSort
+org/codehaus/stax2/ri/evt/BaseEventImpl
 software/amazon/awssdk/core/internal/io/AwsChunkedEncodingInputStream
 software/amazon/awssdk/utils/DateUtils
 software/amazon/awssdk/regions/servicemetadata/CognitoIdentityServiceMetadata
@@ -950,6 +960,7 @@ sun/security/provider/NativePRNG$RandomIO
 sun/security/ssl/SSLCipher$T12GcmReadCipherGenerator
 io/netty/handler/timeout/ReadTimeoutHandler
 software/amazon/awssdk/core/internal/http/loader/ClasspathSdkHttpServiceProvider
+java/io/CharConversionException
 java/time/temporal/ValueRange
 io/netty/util/concurrent/GlobalEventExecutor
 com/exasol/sql/rendering/AbstractFragmentRenderer
@@ -958,7 +969,6 @@ io/netty/util/AsciiString$CharEqualityComparator
 org/apache/http/params/BasicHttpParams
 io/netty/util/internal/shaded/org/jctools/queues/MpscArrayQueueProducerLimitField
 sun/invoke/util/BytecodeDescriptor
-com/sun/org/apache/xerces/internal/utils/XMLSecurityPropertyManager$State
 software/amazon/awssdk/http/nio/netty/internal/nrs/StreamedHttpMessage
 software/amazon/awssdk/utils/AttributeMap
 software/amazon/awssdk/core/retry/conditions/RetryCondition
@@ -967,15 +977,19 @@ org/antlr/v4/runtime/atn/ATNConfigSet$ConfigEqualityComparator
 java/lang/StackStreamFactory$StackFrameTraverser$StackFrameBuffer
 sun/reflect/generics/reflectiveObjects/ParameterizedTypeImpl
 java/util/HashMap$HashMapSpliterator
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$LongArrayDecoder
 io/netty/handler/codec/CodecException
 java/text/ParseException
 org/apache/http/impl/client/InternalHttpClient
 jakarta/json/spi/JsonProvider
 sun/nio/fs/UnixNativeDispatcher$1
 software/amazon/awssdk/regions/Region$RegionCache
+scala/util/Either
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$DoubleDecoder
 software/amazon/awssdk/services/s3/model/ListPartsRequest
 jdk/internal/math/FDBigInteger
 java/util/ImmutableCollections$AbstractImmutableList
+scala/runtime/Nothing$
 com/exasol/adapter/document/mapping/PropertyToColumnMapping
 java/lang/StringBuffer
 software/amazon/awssdk/regions/servicemetadata/MturkRequesterServiceMetadata
@@ -1006,11 +1020,11 @@ sun/security/ssl/CertificateVerify$T13CertificateVerifyConsumer
 java/util/Spliterators$ArraySpliterator
 java/util/LinkedList
 software/amazon/awssdk/regions/servicemetadata/InspectorServiceMetadata
-com/sun/org/apache/xerces/internal/util/XMLAttributesImpl$Attribute
 org/apache/http/message/BasicHeaderIterator
 software/amazon/awssdk/regions/servicemetadata/RbinServiceMetadata
 java/util/concurrent/ConcurrentSkipListMap$Node
 sun/security/ssl/ECDHKeyExchange
+org/codehaus/stax2/validation/XMLValidator
 sun/security/ssl/CertificateRequest$T12CertificateRequestProducer
 java/net/NetPermission
 sun/security/ssl/PredefinedDHParameterSpecs$1
@@ -1036,13 +1050,14 @@ com/exasol/adapter/document/documentfetcher/files/randomaccessinputstream/InMemo
 io/netty/buffer/ByteBufHolder
 java/util/EventListener
 software/amazon/awssdk/protocols/xml/internal/marshall/XmlMarshaller
-com/sun/xml/internal/stream/events/StartElementEvent
 java/lang/Object
 java/lang/invoke/LambdaForm$Holder
-software/amazon/awssdk/regions/servicemetadata/SecretsmanagerServiceMetadata
 jdk/internal/loader/AbstractClassLoaderValue$Sub
+software/amazon/awssdk/regions/servicemetadata/SecretsmanagerServiceMetadata
+com/ctc/wstx/evt/WEntityDeclaration
 sun/nio/cs/US_ASCII
 sun/security/ssl/HandshakeConsumer
+com/ctc/wstx/io/InputBootstrapper
 sun/security/ssl/SSLSocketInputRecord
 software/amazon/awssdk/http/ExecutableHttpRequest
 io/netty/util/internal/shaded/org/jctools/queues/BaseMpscLinkedArrayQueuePad1
@@ -1057,6 +1072,7 @@ software/amazon/awssdk/services/s3/model/S3ResponseMetadata
 io/netty/channel/VoidChannelPromise
 io/netty/buffer/DuplicatedByteBuf
 org/logicng/formulas/cache/CacheEntry
+com/ctc/wstx/sr/StreamScanner
 java/util/SortedSet
 java/lang/reflect/ParameterizedType
 org/apache/http/client/utils/URIUtils
@@ -1064,6 +1080,7 @@ software/amazon/awssdk/services/s3/model/DeleteBucketInventoryConfigurationReque
 org/apache/http/impl/client/AuthenticationStrategyImpl
 sun/security/ssl/CertSignAlgsExtension$CRCertSignatureSchemesConsumer
 sun/security/ssl/ECDHClientKeyExchange$ECDHClientKeyExchangeProducer
+com/ctc/wstx/io/WstxInputLocation
 software/amazon/awssdk/services/s3/model/GetBucketReplicationRequest
 com/exasol/adapter/document/mapping/PropertyToColumnValueExtractorFactory
 software/amazon/awssdk/regions/servicemetadata/CodedeployServiceMetadata
@@ -1074,6 +1091,7 @@ sun/text/normalizer/NormalizerBase$NONEMode
 software/amazon/awssdk/core/traits/XmlAttributeTrait
 sun/security/ssl/ECPointFormatsExtension$SHECPointFormatsConsumer
 java/time/temporal/TemporalAccessor
+io/netty/handler/codec/http/HttpMessageUtil
 io/netty/handler/ssl/IdentityCipherSuiteFilter
 software/amazon/awssdk/http/nio/netty/internal/nrs/HandlerPublisher$ChannelSubscription
 sun/net/www/protocol/http/Handler
@@ -1110,12 +1128,10 @@ java/lang/ClassValue
 java/security/cert/PKIXParameters
 sun/util/locale/provider/CalendarNameProviderImpl$LengthBasedComparator
 java/util/ServiceLoader$ProviderImpl
-com/sun/org/apache/xerces/internal/xni/XMLLocator
 software/amazon/awssdk/regions/servicemetadata/BillingconductorServiceMetadata
 software/amazon/awssdk/core/exception/AbortedException
 jdk/internal/ref/CleanerImpl$WeakCleanableRef
 sun/net/idn/StringPrepDataReader
-com/sun/org/apache/xerces/internal/util/NamespaceContextWrapper
 software/amazon/awssdk/core/ClientType
 sun/text/normalizer/NormalizerBase$NFCMode
 jakarta/json/JsonArrayBuilder
@@ -1171,8 +1187,8 @@ java/lang/Math
 sun/nio/ch/Net$1
 java/lang/ThreadLocal$ThreadLocalMap$Entry
 java/lang/ThreadDeath
+com/ctc/wstx/evt/CompactStartElement
 java/lang/reflect/ProxyGenerator$ConstantPool$IndirectEntry
-com/sun/xml/internal/stream/XMLBufferListener
 software/amazon/awssdk/services/s3/S3Configuration$Builder
 software/amazon/awssdk/regions/servicemetadata/Macie2ServiceMetadata
 java/util/logging/StreamHandler
@@ -1185,7 +1201,6 @@ io/netty/buffer/AbstractByteBuf
 io/netty/buffer/UnreleasableByteBuf
 java/util/TreeMap$Values
 software/amazon/awssdk/services/s3/model/Owner$Builder
-com/sun/org/apache/xerces/internal/xni/QName
 org/apache/http/client/NonRepeatableRequestException
 jdk/internal/logger/BootstrapLogger
 com/exasol/adapter/document/files/connection/S3ConnectionProperties
@@ -1201,6 +1216,7 @@ sun/reflect/generics/tree/SimpleClassTypeSignature
 io/netty/util/internal/shaded/org/jctools/queues/MpscArrayQueueMidPad
 java/util/IdentityHashMap$Values
 org/apache/log4j/LogManager
+com/ctc/wstx/io/BaseInputSource
 java/io/BufferedOutputStream
 sun/invoke/util/VerifyAccess$1
 io/netty/channel/socket/DuplexChannelConfig
@@ -1209,9 +1225,9 @@ org/antlr/v4/runtime/atn/AbstractPredicateTransition
 sun/security/ec/ECDSASignature$SHA512
 software/amazon/awssdk/regions/servicemetadata/MobileanalyticsServiceMetadata
 io/netty/channel/DefaultChannelPipeline$PendingHandlerAddedTask
-com/sun/org/apache/xerces/internal/util/XMLSymbols
 sun/security/ssl/ServerHello$ServerHelloMessage
 javax/crypto/Mac
+com/ctc/wstx/sr/Attribute
 java/util/LinkedHashMap$LinkedKeyIterator
 java/lang/invoke/MethodType
 org/apache/http/conn/util/InetAddressUtils
@@ -1224,6 +1240,7 @@ jakarta/json/JsonWriter
 io/netty/util/internal/shaded/org/jctools/queues/ConcurrentCircularArrayQueueL0Pad
 software/amazon/awssdk/regions/servicemetadata/FmsServiceMetadata
 org/apache/http/impl/cookie/DefaultCookieSpecProvider$CompatibilityLevel
+org/codehaus/stax2/validation/Validatable
 sun/security/ssl/Finished$T12FinishedConsumer
 java/util/Enumeration
 java/util/stream/IntPipeline$Head
@@ -1237,8 +1254,8 @@ sun/security/ssl/ServerHelloDone$ServerHelloDoneMessage
 software/amazon/awssdk/core/signer/Presigner
 software/amazon/awssdk/regions/servicemetadata/SupportappServiceMetadata
 sun/net/idn/StringPrep
-software/amazon/awssdk/regions/servicemetadata/ApiSagemakerServiceMetadata
 java/lang/annotation/Retention
+software/amazon/awssdk/regions/servicemetadata/ApiSagemakerServiceMetadata
 sun/security/ssl/SSLCipher$StreamReadCipherGenerator
 java/util/concurrent/locks/ReentrantLock$NonfairSync
 java/lang/invoke/BoundMethodHandle$Species_LL
@@ -1260,6 +1277,7 @@ io/netty/util/concurrent/DefaultEventExecutorChooserFactory
 java/util/concurrent/LinkedBlockingQueue
 software/amazon/awssdk/services/s3/model/GetBucketMetricsConfigurationRequest
 io/netty/util/Recycler$DefaultHandle
+org/codehaus/stax2/validation/ValidationContext
 java/lang/VirtualMachineError
 java/lang/instrument/Instrumentation
 org/antlr/v4/runtime/misc/IntervalSet
@@ -1315,13 +1333,13 @@ software/amazon/awssdk/core/protocol/MarshallingType$1
 software/amazon/awssdk/core/http/MetricCollectingHttpResponseHandler
 sun/security/util/Cache$EqualByteArray
 software/amazon/awssdk/core/exception/SdkServiceException$Builder
+com/ctc/wstx/api/WstxInputProperties$ParsingMode
 javax/net/ssl/SSLContext
 sun/nio/fs/AbstractFileSystemProvider
 javax/crypto/CryptoPermission
 software/amazon/awssdk/regions/servicemetadata/DatabrewServiceMetadata
 software/amazon/awssdk/core/internal/handler/BaseSyncClientHandler
 software/amazon/awssdk/services/s3/model/GetBucketRequestPaymentRequest
-org/slf4j/impl/JDK14LoggerAdapter
 com/exasol/adapter/document/files/stringfilter/wildcardexpression/parser/AbstractParser$EscapedState
 io/netty/buffer/PooledUnsafeDirectByteBuf
 java/lang/invoke/InvokerBytecodeGenerator
@@ -1330,6 +1348,7 @@ java/util/TreeMap
 io/netty/util/DefaultAttributeMap
 software/amazon/awssdk/http/nio/netty/internal/ListenerInvokingChannelPool$ChannelPoolListener
 java/net/URLEncoder
+scala/collection/immutable/Seq
 software/amazon/awssdk/regions/servicemetadata/KinesisanalyticsServiceMetadata
 software/amazon/awssdk/regions/servicemetadata/CognitoSyncServiceMetadata
 java/util/Collections
@@ -1339,8 +1358,8 @@ sun/reflect/generics/tree/Tree
 software/amazon/awssdk/services/s3/model/GetObjectTorrentRequest
 com/exasol/adapter/document/querypredicate/NoPredicate
 software/amazon/awssdk/auth/signer/internal/util/SignerMethodResolver
-software/amazon/awssdk/http/apache/ProxyConfiguration
 java/lang/reflect/ProxyGenerator$FieldInfo
+software/amazon/awssdk/http/apache/ProxyConfiguration
 java/util/ImmutableCollections$MapN
 org/jcp/xml/dsig/internal/dom/XMLDSigRI$2
 sun/security/ssl/MaxFragExtension$SHMaxFragmentLengthConsumer
@@ -1374,7 +1393,6 @@ java/security/AccessControlContext
 java/lang/invoke/VarHandleObjects$FieldInstanceReadWrite
 java/util/regex/Pattern$Begin
 software/amazon/awssdk/core/traits/MapTrait
-com/sun/xml/internal/stream/events/StartDocumentEvent
 java/util/logging/Logger$SystemLoggerHelper$1
 software/amazon/awssdk/http/nio/netty/internal/ListenerInvokingChannelPool
 sun/security/ssl/CertSignAlgsExtension$CRCertSignatureSchemesProducer
@@ -1402,6 +1420,7 @@ org/antlr/v4/runtime/dfa/DFA
 java/security/interfaces/RSAPublicKey
 io/netty/buffer/AbstractUnsafeSwappedByteBuf
 jakarta/json/JsonObjectBuilder
+scala/collection/StrictOptimizedIterableOps
 software/amazon/awssdk/utils/BinaryUtils
 com/exasol/adapter/document/mapping/ColumnMappingVisitor
 java/util/concurrent/ConcurrentHashMap$CollectionView
@@ -1414,7 +1433,6 @@ java/lang/invoke/InvokerBytecodeGenerator$2
 sun/util/calendar/Gregorian
 java/lang/invoke/BoundMethodHandle$Species_LLLLLLLLLLIIL
 java/net/URI$1
-com/sun/org/apache/xerces/internal/xni/parser/XMLDocumentSource
 java/lang/InstantiationException
 com/sun/crypto/provider/GHASH
 org/apache/http/cookie/CookieIdentityComparator
@@ -1436,12 +1454,13 @@ software/amazon/awssdk/regions/servicemetadata/IvsServiceMetadata
 org/antlr/v4/runtime/atn/RuleStartState
 java/util/Formatter$Conversion
 software/amazon/awssdk/regions/servicemetadata/GroundstationServiceMetadata
-com/sun/xml/internal/stream/events/XMLEventAllocatorImpl
 software/amazon/awssdk/regions/servicemetadata/CassandraServiceMetadata
 software/amazon/awssdk/core/Response$Builder
 org/apache/http/params/HttpParams
 software/amazon/awssdk/core/http/HttpResponseHandler
 java/util/concurrent/ConcurrentHashMap$Traverser
+scala/collection/IterableFactoryDefaults
+scala/collection/AbstractSeq
 sun/security/ssl/CipherSuite
 java/util/Spliterators$IteratorSpliterator
 java/net/JarURLConnection
@@ -1467,7 +1486,6 @@ java/util/regex/Pattern$BmpCharProperty
 org/logicng/formulas/printer/FormulaStringRepresentation
 sun/security/ssl/CertificateVerify$S30CertificateVerifyProducer
 sun/nio/ch/IOUtil$1
-javax/xml/parsers/SAXParserFactory
 java/lang/System$Logger$Level
 java/net/InetAddressContainer
 java/util/logging/Handler
@@ -1503,6 +1521,7 @@ java/lang/module/ModuleDescriptor$Requires
 io/netty/util/internal/shaded/org/jctools/queues/MpscArrayQueueL3Pad
 java/io/ObjectStreamField
 java/io/ObjectStreamConstants
+com/ctc/wstx/util/SymbolTable$Bucket
 com/exasol/sql/rendering/StringRendererConfig$Builder
 sun/security/x509/CertificateAlgorithmId
 software/amazon/awssdk/auth/signer/internal/BoundedLinkedHashMap
@@ -1538,6 +1557,7 @@ software/amazon/awssdk/protocols/core/PathMarshaller
 io/netty/handler/codec/http/HttpMethod$EnumNameMap$Node
 java/util/ArrayList$ArrayListSpliterator
 sun/nio/ch/Util$1
+org/codehaus/stax2/DTDInfo
 java/lang/invoke/LambdaForm$NamedFunction
 java/util/regex/Pattern$Curly
 java/lang/ClassValue$Entry
@@ -1562,11 +1582,13 @@ java/lang/Byte
 sun/util/resources/Bundles
 java/util/Properties$EntrySet
 sun/security/ssl/Finished$FinishedMessage
+com/ctc/wstx/exc/WstxParsingException
 sun/nio/cs/UTF_16
 com/exasol/logging/VersionCollector
 org/apache/http/impl/BHttpConnectionBase
 io/netty/util/internal/ThrowableUtil
 java/security/interfaces/DSAKey
+com/ctc/wstx/util/EmptyNamespaceContext
 com/exasol/adapter/document/documentfetcher/files/csv/CsvDocumentFetcher
 software/amazon/awssdk/services/s3/model/PutPublicAccessBlockRequest
 org/apache/http/Consts
@@ -1578,19 +1600,19 @@ sun/nio/fs/LinuxFileSystemProvider
 io/netty/channel/pool/ChannelPool
 software/amazon/awssdk/core/internal/http/AmazonAsyncHttpClient$RequestExecutionBuilder
 com/exasol/adapter/sql/SqlStatement
-software/amazon/awssdk/services/s3/internal/handlers/CopySourceInterceptor
 java/lang/annotation/RetentionPolicy
+software/amazon/awssdk/services/s3/internal/handlers/CopySourceInterceptor
 com/exasol/adapter/document/querypredicate/normalizer/QueryPredicateToLogicngConverter
 sun/security/x509/RDN
 sun/security/ec/XECParameters$1
 java/io/DataOutput
-com/sun/org/apache/xerces/internal/util/MessageFormatter
 software/amazon/awssdk/http/nio/netty/internal/nrs/HttpStreamsHandler
 software/amazon/awssdk/http/HttpExecuteRequest$BuilderImpl
 com/sun/crypto/provider/GCTR
 software/amazon/awssdk/regions/servicemetadata/SyntheticsServiceMetadata
 java/net/InetSocketAddress
 io/netty/buffer/PoolSubpage
+com/ctc/wstx/io/CharsetNames
 com/exasol/adapter/sql/ScalarFunction
 software/amazon/awssdk/services/s3/model/GetBucketInventoryConfigurationRequest
 io/netty/buffer/ByteBufInputStream
@@ -1613,6 +1635,7 @@ com/exasol/adapter/sql/SqlJoin
 java/lang/reflect/Proxy$ProxyBuilder$1
 software/amazon/awssdk/core/ApiName$BuilderImpl
 javax/net/ssl/SSLEngineResult$HandshakeStatus
+com/ctc/wstx/sr/ElemCallback
 software/amazon/awssdk/core/interceptor/Context$AfterExecution
 java/lang/ClassLoader$ParallelLoaders
 io/netty/util/concurrent/PromiseTask
@@ -1635,6 +1658,7 @@ java/lang/WeakPairMap$Pair$Lookup
 java/util/stream/Collectors$CollectorImpl
 io/netty/channel/PendingBytesTracker$ChannelOutboundBufferPendingBytesTracker
 sun/security/rsa/RSAPublicKeyImpl
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$LongDecoder
 jdk/internal/misc/TerminatingThreadLocal$1
 sun/security/ssl/KeyShareExtension$HRRKeyShareReproducer
 com/sun/crypto/provider/ElectronicCodeBook
@@ -1658,7 +1682,6 @@ io/netty/buffer/PoolArena$HeapArena
 org/apache/http/impl/conn/LoggingManagedHttpClientConnection
 software/amazon/awssdk/regions/servicemetadata/S3ServiceMetadata
 com/exasol/adapter/request/parser/RequestParserException
-com/sun/xml/internal/stream/events/AttributeImpl
 org/antlr/v4/runtime/atn/BasicState
 io/netty/channel/RecvByteBufAllocator$ExtendedHandle
 sun/nio/fs/DynamicFileAttributeView
@@ -1760,17 +1783,19 @@ com/exasol/adapter/response/converter/ResponseException
 java/time/temporal/Temporal
 software/amazon/awssdk/awscore/interceptor/HelpfulUnknownHostExceptionInterceptor
 jdk/internal/math/FloatingDecimal$ExceptionalBinaryToASCIIBuffer
+org/codehaus/stax2/typed/TypedValueDecoder
 org/apache/http/conn/ssl/StrictHostnameVerifier
 software/amazon/awssdk/regions/PartitionMetadata
+scala/collection/AnyStepper
 software/amazon/awssdk/utils/builder/CopyableBuilder
 sun/security/ssl/AlpnExtension$CHAlpnProducer
 com/exasol/adapter/metadata/DataType
 org/apache/http/conn/util/PublicSuffixList
 software/amazon/awssdk/protocols/core/PathMarshaller$GreedyPathMarshaller
-com/sun/org/apache/xerces/internal/util/XMLAttributesImpl
 software/amazon/awssdk/regions/servicemetadata/ElasticbeanstalkServiceMetadata
 sun/security/ssl/SSLCipher$T13GcmWriteCipherGenerator
 software/amazon/awssdk/http/nio/netty/internal/utils/DelegatingChannelHandlerContext
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$IntDecoder
 org/antlr/v4/runtime/atn/ActionTransition
 com/exasol/adapter/document/querypredicate/normalizer/DnfNormalizer
 software/amazon/awssdk/http/nio/netty/SdkEventLoopGroup$DefaultBuilder
@@ -1808,7 +1833,6 @@ com/sun/management/internal/PlatformMBeanProviderImpl
 software/amazon/awssdk/regions/servicemetadata/OidcServiceMetadata
 jdk/internal/math/FloatingDecimal$BinaryToASCIIBuffer
 org/antlr/v4/runtime/TokenStream
-com/sun/org/apache/xerces/internal/impl/XMLScanner
 java/util/regex/Pattern$LastNode
 software/amazon/awssdk/regions/regionmetadata/UsGovWest1
 java/io/File$PathStatus
@@ -1833,7 +1857,6 @@ software/amazon/awssdk/awscore/client/config/AwsAdvancedClientOption
 java/nio/channels/SeekableByteChannel
 sun/nio/ch/SocketAdaptor
 sun/text/resources/JavaTimeSupplementary
-com/sun/xml/internal/stream/XMLInputFactoryImpl
 jdk/internal/reflect/UTF8
 io/netty/buffer/WrappedByteBuf
 jdk/internal/misc/TerminatingThreadLocal
@@ -1853,7 +1876,9 @@ org/apache/http/config/RegistryBuilder
 java/io/ObjectStreamClass$EntryFuture
 org/antlr/v4/runtime/RuleContext
 io/netty/buffer/SizeClassesMetric
+com/ctc/wstx/cfg/ParsingErrorMsgs
 sun/security/provider/certpath/UntrustedChecker
+com/ctc/wstx/evt/WstxEventReader
 java/text/spi/CollatorProvider
 java/lang/invoke/StringConcatFactory$Stringifiers$StringifierAny
 software/amazon/awssdk/protocols/core/InstantToString
@@ -1916,6 +1941,7 @@ java/lang/management/DefaultPlatformMBeanProvider$9
 java/lang/management/DefaultPlatformMBeanProvider$6
 software/amazon/awssdk/regions/servicemetadata/DatasyncServiceMetadata
 java/lang/management/DefaultPlatformMBeanProvider$7
+com/ctc/wstx/sr/Element
 java/lang/management/DefaultPlatformMBeanProvider$4
 java/lang/management/DefaultPlatformMBeanProvider$5
 java/util/concurrent/ConcurrentHashMap$TreeBin
@@ -1926,7 +1952,6 @@ java/lang/CharacterData00
 sun/security/ssl/JsseJce$EcAvailability
 org/antlr/v4/runtime/misc/IntSet
 software/amazon/awssdk/core/interceptor/Context$BeforeTransmission
-com/sun/org/apache/xerces/internal/utils/XMLSecurityPropertyManager
 org/apache/http/conn/HttpHostConnectException
 sun/security/ssl/ExtendedMasterSecretExtension$CHExtendedMasterSecretProducer
 jdk/internal/loader/ClassLoaders$BootClassLoader
@@ -1938,7 +1963,6 @@ io/netty/handler/timeout/IdleStateHandler$ReaderIdleTimeoutTask
 org/glassfish/json/JsonParserImpl$ArrayContext
 software/amazon/awssdk/core/http/ExecutionContext$Builder
 io/netty/handler/ssl/util/SimpleTrustManagerFactory
-com/sun/org/apache/xerces/internal/utils/XMLLimitAnalyzer
 io/netty/channel/socket/ChannelInputShutdownEvent
 java/util/LinkedHashMap$LinkedKeySet
 software/amazon/awssdk/core/internal/http/pipeline/stages/AsyncExecutionFailureExceptionReportingStage
@@ -2003,8 +2027,8 @@ org/antlr/v4/runtime/LexerNoViableAltException
 org/apache/http/impl/cookie/RFC2965DomainAttributeHandler
 org/antlr/v4/runtime/misc/IntegerStack
 software/amazon/awssdk/services/s3/internal/handlers/EndpointAddressInterceptor
+com/ctc/wstx/io/WstxInputData
 jdk/internal/logger/DefaultLoggerFinder$1
-com/sun/org/apache/xerces/internal/impl/XMLDocumentScannerImpl$XMLDeclDriver
 java/lang/invoke/StringConcatFactory$1
 software/amazon/awssdk/http/apache/internal/net/SdkSocket
 org/antlr/v4/runtime/BufferedTokenStream
@@ -2050,6 +2074,7 @@ sun/text/normalizer/Norm2AllModes$ComposeNormalizer2
 java/lang/Float
 software/amazon/awssdk/core/internal/http/loader/DefaultSdkAsyncHttpClientBuilder
 software/amazon/awssdk/regions/ServiceEndpointKey$Builder
+com/ctc/wstx/api/WstxInputProperties
 sun/util/cldr/CLDRCalendarNameProviderImpl
 java/time/zone/ZoneRules
 java/io/ObjectInputStream$PeekInputStream
@@ -2065,7 +2090,6 @@ io/netty/util/internal/ObjectUtil
 org/logicng/formulas/Not
 sun/security/ssl/CookieExtension
 software/amazon/awssdk/core/signer/Signer
-com/sun/org/apache/xerces/internal/impl/XMLEntityManager
 jdk/net/ExtendedSocketOptions$PlatformSocketOptions$1
 sun/text/normalizer/NormalizerImpl$ReorderingBuffer
 com/exasol/adapter/request/GetCapabilitiesRequest
@@ -2089,6 +2113,7 @@ java/time/ZoneId
 org/antlr/v4/runtime/misc/EqualityComparator
 com/exasol/sql/expression/function/exasol/ExasolFunction
 org/apache/http/config/SocketConfig$Builder
+com/ctc/wstx/io/InputSourceFactory
 jdk/internal/misc/JavaLangAccess
 java/lang/invoke/VarHandle$AccessType
 java/util/WeakHashMap$KeySet
@@ -2114,6 +2139,7 @@ org/apache/http/config/ConnectionConfig$Builder
 io/netty/handler/codec/DefaultHeaders$HeaderEntry
 java/lang/invoke/LambdaFormBuffer
 java/util/ServiceLoader$ModuleServicesLookupIterator
+scala/collection/IterableOps
 jakarta/json/stream/JsonParsingException
 sun/nio/fs/UnixFileAttributes$UnixAsBasicFileAttributes
 com/exasol/ExaConnectionInformation
@@ -2141,6 +2167,7 @@ software/amazon/awssdk/services/s3/model/ListBucketIntelligentTieringConfigurati
 com/exasol/adapter/document/UdfEntryPoint
 sun/util/locale/provider/LocaleProviderAdapter$NonExistentAdapter
 java/util/LinkedHashMap
+scala/Product
 com/sun/crypto/provider/TlsMasterSecretGenerator$TlsMasterSecretKey
 org/apache/http/auth/MalformedChallengeException
 sun/reflect/generics/scope/ClassScope
@@ -2160,20 +2187,22 @@ sun/security/ssl/KeyShareExtension$HRRKeyShareProducer
 software/amazon/awssdk/core/metrics/CoreMetric
 java/lang/Iterable
 sun/reflect/generics/tree/BaseType
-com/sun/org/apache/xerces/internal/impl/io/UTF8Reader
 io/netty/util/internal/shaded/org/jctools/queues/atomic/BaseMpscLinkedAtomicArrayQueuePad2
 io/netty/util/internal/shaded/org/jctools/queues/atomic/BaseMpscLinkedAtomicArrayQueuePad1
 org/logicng/io/parsers/LogicNGPseudoBooleanParser$ComparisonContext
 software/amazon/awssdk/core/internal/http/pipeline/stages/ApiCallMetricCollectionStage
+org/codehaus/stax2/ri/evt/StartDocumentEventImpl
 org/apache/http/client/methods/HttpUriRequest
 software/amazon/awssdk/services/s3/model/ListObjectsV2Response$BuilderImpl
 sun/security/pkcs12/PKCS12KeyStore
-com/sun/org/apache/xerces/internal/util/XMLChar
 jdk/internal/math/FloatingDecimal$PreparedASCIIToBinaryBuffer
 org/apache/http/protocol/RequestTargetHost
+org/slf4j/impl/Reload4jLoggerFactory
 java/lang/invoke/StringConcatFactory$Stringifiers$StringifierMost
+com/ctc/wstx/util/BaseNsContext
 sun/security/ssl/Finished$VerifyDataGenerator
 java/lang/ProcessEnvironment$Value
+software/amazon/awssdk/utils/ToString
 sun/security/pkcs12/PKCS12KeyStore$DualFormatPKCS12
 sun/security/ssl/PreSharedKeyExtension$CHPreSharedKeyConsumer
 software/amazon/awssdk/protocols/query/unmarshall/XmlElement$Builder
@@ -2206,7 +2235,6 @@ sun/security/util/DerInputStream
 software/amazon/awssdk/services/s3/model/HeadBucketRequest
 java/lang/invoke/MethodHandleImpl$Intrinsic
 com/exasol/adapter/document/mapping/ColumnValueExtractorFactory$Visitor
-com/sun/org/apache/xerces/internal/impl/XMLEntityHandler
 sun/security/x509/AuthorityInfoAccessExtension
 sun/net/idn/StringPrep$StringPrepTrieImpl
 io/netty/handler/codec/DefaultHeaders$ValueIterator
@@ -2236,7 +2264,6 @@ software/amazon/awssdk/core/internal/handler/BaseClientHandler
 java/nio/file/SecureDirectoryStream
 software/amazon/awssdk/http/nio/netty/internal/nrs/StreamedHttpRequest
 java/util/Stack
-com/sun/xml/internal/stream/util/ReadOnlyIterator
 io/netty/channel/ChannelFuture
 java/net/Inet4Address
 com/exasol/adapter/metadata/DataType$ExaCharset
@@ -2249,7 +2276,6 @@ org/glassfish/json/JsonWriterImpl
 java/lang/ClassLoader$NativeLibrary
 software/amazon/awssdk/services/s3/model/DeletePublicAccessBlockRequest
 com/exasol/adapter/sql/SqlFunctionScalar
-com/sun/org/apache/xerces/internal/xni/parser/XMLDocumentScanner
 java/lang/PublicMethods$MethodList
 software/amazon/awssdk/http/nio/netty/internal/HealthCheckedChannelPool
 com/exasol/adapter/document/files/FilesSelectionExtractor$Result
@@ -2261,6 +2287,7 @@ org/apache/http/protocol/RequestContent
 java/text/spi/DecimalFormatSymbolsProvider
 software/amazon/awssdk/regions/servicemetadata/FsxServiceMetadata
 java/util/Map$Entry
+com/ctc/wstx/evt/DefaultEventAllocator
 software/amazon/awssdk/protocols/xml/internal/unmarshall/XmlUnmarshallerRegistry$Builder
 java/util/concurrent/Executor
 software/amazon/awssdk/protocols/xml/internal/unmarshall/XmlUnmarshallerContext
@@ -2311,7 +2338,9 @@ java/lang/Package
 java/util/Locale$Category
 software/amazon/awssdk/utils/builder/SdkBuilder
 software/amazon/awssdk/auth/signer/params/AwsS3V4SignerParams
+scala/util/Properties
 software/amazon/awssdk/regions/servicemetadata/Cloud9ServiceMetadata
+org/codehaus/stax2/ri/evt/EndElementEventImpl
 jdk/internal/misc/InnocuousThread
 software/amazon/awssdk/regions/servicemetadata/IdentityChimeServiceMetadata
 javax/management/JMException
@@ -2328,7 +2357,6 @@ software/amazon/awssdk/core/internal/retry/DefaultTokenBucketExceptionCostFuncti
 com/exasol/adapter/document/iterators/CloseableIteratorWrapper
 sun/security/util/UntrustedCertificates$1
 io/netty/handler/ssl/JdkSslClientContext
-com/sun/xml/internal/stream/XMLEntityStorage
 java/lang/System
 sun/security/ec/XDHKeyPairGenerator
 io/netty/channel/WriteBufferWaterMark
@@ -2353,6 +2381,7 @@ sun/security/ssl/TransportContext
 io/netty/handler/codec/http/HttpObjectDecoder$State
 sun/security/provider/NativePRNG
 java/util/ArrayDeque
+com/ctc/wstx/sr/ReaderCreator
 software/amazon/awssdk/http/nio/netty/internal/nrs/HandlerSubscriber$State
 org/apache/http/impl/EnglishReasonPhraseCatalog
 sun/security/ssl/OutputRecord$T13PaddingHolder
@@ -2386,7 +2415,6 @@ java/nio/file/attribute/FileAttributeView
 java/text/spi/BreakIteratorProvider
 software/amazon/awssdk/core/async/AsyncResponseTransformerUtils
 com/exasol/adapter/document/querypredicate/normalizer/QueryPredicateToLogicngConverter$VariablesMappingBuilder
-com/sun/org/apache/xerces/internal/impl/XMLEntityScanner$1
 io/netty/util/concurrent/FailedFuture
 software/amazon/awssdk/core/internal/http/timers/TimerUtils
 jdk/internal/reflect/UnsafeQualifiedStaticObjectFieldAccessorImpl
@@ -2433,6 +2461,7 @@ java/util/AbstractSet
 java/util/Formattable
 org/apache/http/cookie/MalformedCookieException
 software/amazon/awssdk/regions/servicemetadata/AuditmanagerServiceMetadata
+scala/collection/generic/DefaultSerializable
 jdk/internal/org/objectweb/asm/ClassVisitor
 software/amazon/awssdk/services/s3/model/GetObjectAclRequest
 software/amazon/awssdk/core/async/listener/SubscriberListener$NotifyingSubscriber
@@ -2469,6 +2498,7 @@ java/util/LinkedList$ListItr
 org/antlr/v4/runtime/atn/OrderedATNConfigSet
 java/lang/invoke/InvokerBytecodeGenerator$CpPatch
 software/amazon/awssdk/services/s3/model/RestoreObjectRequest
+org/codehaus/stax2/XMLStreamLocation2
 io/netty/util/internal/ReferenceCountUpdater
 org/apache/commons/logging/impl/WeakHashtable$Referenced
 org/apache/http/client/utils/URLEncodedUtils
@@ -2519,7 +2549,7 @@ jdk/internal/misc/JavaNetInetAddressAccess
 io/netty/handler/ssl/OpenSsl
 java/time/format/DateTimeTextProvider
 software/amazon/awssdk/core/internal/interceptor/AsyncRequestBodyHttpChecksumTrailerInterceptor
-com/sun/org/apache/xerces/internal/impl/XMLStreamReaderImpl$1
+com/ctc/wstx/compat/QNameCreator$Helper
 java/util/HashMap$TreeNode
 io/netty/channel/nio/AbstractNioByteChannel
 java/util/AbstractList$Itr
@@ -2536,7 +2566,6 @@ java/util/LinkedHashMap$LinkedValues
 io/netty/util/ResourceLeakHint
 org/apache/http/util/CharArrayBuffer
 io/netty/util/concurrent/DefaultFutureListeners
-java/io/EOFException
 java/util/LinkedHashMap$LinkedEntrySet
 software/amazon/awssdk/http/apache/internal/conn/IdleConnectionReaper
 org/apache/http/message/BasicNameValuePair
@@ -2635,7 +2664,6 @@ software/amazon/awssdk/awscore/defaultsmode/DefaultsMode
 sun/security/ssl/TrustStoreManager$TrustStoreDescriptor$1
 com/exasol/classlistextractor/agent/ClassListExtractorAgent
 com/exasol/adapter/document/files/stringfilter/matcher/MatcherFactory
-com/sun/org/apache/xerces/internal/impl/XMLDocumentScannerImpl$PrologDriver
 software/amazon/awssdk/regions/servicemetadata/SecurityhubServiceMetadata
 io/netty/channel/ChannelHandlerContext
 sun/nio/fs/AbstractBasicFileAttributeView
@@ -2657,6 +2685,7 @@ software/amazon/awssdk/regions/partitionmetadata/AwsIsoBPartitionMetadata
 com/sun/security/sasl/gsskerb/JdkSASL$ProviderService
 sun/security/ssl/SupportedVersionsExtension$SHSupportedVersionsStringizer
 jakarta/json/stream/JsonParser$Event
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$BooleanDecoder
 java/io/Externalizable
 java/io/FilterOutputStream
 software/amazon/awssdk/services/s3/DefaultS3AsyncClientBuilder
@@ -2675,7 +2704,6 @@ com/exasol/adapter/document/querypredicate/normalizer/LogicngToQueryPredicateCon
 com/exasol/adapter/document/documentnode/DocumentNode
 org/antlr/v4/runtime/misc/Pair
 java/net/SocketAddress
-com/sun/org/apache/xerces/internal/xni/grammars/XMLGrammarDescription
 org/antlr/v4/runtime/InputMismatchException
 java/lang/invoke/ConstantCallSite
 sun/security/x509/BasicConstraintsExtension
@@ -2693,15 +2721,17 @@ software/amazon/awssdk/regions/servicemetadata/ApiPricingServiceMetadata
 software/amazon/awssdk/regions/servicemetadata/SnowballServiceMetadata
 com/exasol/adapter/document/mapping/TableMapping
 sun/security/ssl/RandomCookie
+scala/Option$
 software/amazon/awssdk/services/s3/model/GetObjectAttributesRequest
 software/amazon/awssdk/services/s3/model/S3Object$Builder
+scala/util/Left
 java/time/temporal/TemporalQueries$4
 java/time/temporal/TemporalQueries$5
 com/sun/management/internal/PlatformMBeanProviderImpl$5
 java/time/temporal/TemporalQueries$6
-com/sun/org/apache/xerces/internal/impl/XMLEntityManager$RewindableInputStream
 com/sun/management/internal/PlatformMBeanProviderImpl$4
 java/time/temporal/TemporalQueries$7
+com/ctc/wstx/sr/InputProblemReporter
 com/sun/management/internal/PlatformMBeanProviderImpl$3
 com/sun/management/internal/PlatformMBeanProviderImpl$2
 java/time/temporal/TemporalQueries$1
@@ -2752,11 +2782,11 @@ java/security/cert/CertificateFactory
 com/exasol/adapter/document/files/BinDistributor$Bin
 sun/nio/cs/UTF_8
 com/exasol/adapter/document/files/RequestRateRetryIterator
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$FloatArrayDecoder
 software/amazon/awssdk/services/s3/model/ListObjectsV2Response$Builder
 software/amazon/awssdk/http/apache/internal/conn/ClientConnectionRequestFactory
 io/netty/channel/socket/nio/NioChannelOption
 sun/security/ssl/Finished$1
-com/sun/org/apache/xerces/internal/xni/parser/XMLInputSource
 software/amazon/awssdk/http/nio/netty/internal/RequestAdapter
 jdk/internal/loader/URLClassPath
 java/time/format/DecimalStyle
@@ -2771,7 +2801,6 @@ software/amazon/awssdk/regions/servicemetadata/NetworkmanagerServiceMetadata
 org/apache/http/conn/ConnectionKeepAliveStrategy
 sun/security/ssl/CookieExtension$CookieStringizer
 sun/security/ssl/ExtendedMasterSecretExtension$SHExtendedMasterSecretProducer
-com/sun/xml/internal/stream/events/NamespaceImpl
 java/util/Collections$EmptyList
 java/lang/StackStreamFactory$WalkerState
 java/io/FileInputStream
@@ -2805,6 +2834,7 @@ org/apache/http/impl/cookie/RFC6265CookieSpecProvider
 jdk/internal/module/SystemModuleFinders
 sun/nio/ch/IOVecWrapper
 jdk/internal/event/EventHelper
+com/ctc/wstx/util/DataUtil
 io/netty/util/internal/TypeParameterMatcher
 com/exasol/adapter/metadata/DataType$ExaDataType
 io/netty/buffer/AbstractReferenceCountedByteBuf$1
@@ -2814,6 +2844,7 @@ software/amazon/awssdk/regions/servicemetadata/EsServiceMetadata
 sun/util/resources/Bundles$CacheKey
 com/exasol/adapter/response/converter/ResponseJsonConverter
 java/lang/ExceptionInInitializerError
+scala/collection/immutable/List
 sun/security/ssl/CertStatusExtension$SHCertStatusReqConsumer
 software/amazon/awssdk/regions/regionmetadata/EuCentral1
 io/netty/channel/pool/ChannelHealthChecker$1
@@ -2829,6 +2860,7 @@ software/amazon/awssdk/utils/FunctionalUtils
 software/amazon/awssdk/regions/servicemetadata/PortalSsoServiceMetadata
 sun/security/rsa/RSAUtil
 java/util/concurrent/ConcurrentHashMap$ForwardingNode
+scala/collection/Iterator
 io/netty/util/internal/ThreadExecutorMap
 com/exasol/sql/dql/select/rendering/SelectRenderer
 java/net/InetAddress$PlatformNameService
@@ -2858,6 +2890,7 @@ java/lang/SecurityException
 io/netty/handler/ssl/ApplicationProtocolAccessor
 com/exasol/adapter/sql/SqlPredicateLike
 java/io/ObjectInputFilter
+com/ctc/wstx/io/BranchingReaderSource
 java/util/concurrent/RejectedExecutionHandler
 sun/security/ssl/KeyUpdate$KeyUpdateConsumer
 sun/security/rsa/RSASignature$SHA224withRSA
@@ -2869,7 +2902,6 @@ com/exasol/adapter/document/documentfetcher/files/FilesDocumentFetcher
 software/amazon/awssdk/services/s3/model/GetBucketAnalyticsConfigurationRequest
 org/apache/log4j/Category
 org/apache/http/pool/RouteSpecificPool
-com/sun/org/apache/xerces/internal/xni/parser/XMLComponent
 java/io/InputStreamReader
 jdk/internal/reflect/UnsafeQualifiedStaticFieldAccessorImpl
 software/amazon/awssdk/http/SdkHttpClient$Builder
@@ -2897,6 +2929,7 @@ org/apache/http/auth/AuthProtocolState
 software/amazon/awssdk/regions/servicemetadata/MediaconnectServiceMetadata
 jdk/internal/loader/URLClassPath$JarLoader
 org/antlr/v4/runtime/atn/PlusLoopbackState
+com/ctc/wstx/io/ISOLatinReader
 org/apache/http/impl/auth/HttpAuthenticator$1
 jdk/internal/loader/AbstractClassLoaderValue
 software/amazon/awssdk/http/ContentStreamProvider
@@ -2918,12 +2951,13 @@ org/antlr/v4/runtime/atn/ATNDeserializer$2
 sun/security/ssl/SSLCredentials
 org/antlr/v4/runtime/atn/ATNDeserializer$1
 software/amazon/awssdk/services/s3/model/GetPublicAccessBlockRequest
-org/antlr/v4/runtime/atn/ATNDeserializer$3
 java/lang/module/ModuleDescriptor$Builder
+org/antlr/v4/runtime/atn/ATNDeserializer$3
 software/amazon/awssdk/services/s3/model/PutBucketNotificationConfigurationRequest
 jdk/management/jfr/internal/FlightRecorderMXBeanProvider$SingleMBeanComponent
 com/exasol/adapter/document/files/stringfilter/StringFilterVisitor
 sun/security/ssl/SupportedGroupsExtension$SupportedGroups
+org/codehaus/stax2/AttributeInfo
 java/net/AbstractPlainSocketImpl
 java/security/KeyStore
 sun/security/ssl/Utilities
@@ -2938,6 +2972,7 @@ sun/security/ssl/SSLEngineOutputRecord$RecordMemo
 sun/security/ssl/SSLMasterKeyDerivation$1
 java/lang/module/Configuration
 software/amazon/awssdk/services/s3/model/PutBucketAccelerateConfigurationRequest
+com/ctc/wstx/io/UTF32Reader
 io/netty/handler/ssl/SslHandler$SslHandlerCoalescingBufferQueue
 software/amazon/awssdk/services/s3/model/GetBucketEncryptionRequest
 sun/security/ssl/SignatureAlgorithmsExtension$SignatureSchemesSpec
@@ -2954,6 +2989,7 @@ java/nio/MappedByteBuffer
 java/util/HashMap$Node
 org/apache/http/cookie/CookieRestrictionViolationException
 sun/management/VMManagementImpl
+org/codehaus/stax2/XMLEventReader2
 sun/nio/ch/Net
 io/netty/resolver/DefaultAddressResolverGroup
 com/exasol/adapter/document/mapping/PropertyToVarcharColumnMapping
@@ -3025,6 +3061,7 @@ java/lang/StrictMath
 software/amazon/awssdk/core/internal/http/loader/SdkServiceLoader
 java/nio/file/FileSystems
 sun/text/normalizer/Trie2
+com/ctc/wstx/evt/BaseStartElement
 software/amazon/awssdk/core/checksums/SdkChecksum
 java/lang/ArrayIndexOutOfBoundsException
 java/lang/Byte$ByteCache
@@ -3050,7 +3087,6 @@ sun/security/util/DisabledAlgorithmConstraints$1
 jdk/internal/event/X509CertificateEvent
 java/util/concurrent/ConcurrentHashMap$KeyIterator
 java/lang/ClassValue$Identity
-com/sun/xml/internal/stream/util/ThreadLocalBufferAllocator
 java/security/Key
 java/util/Collections$EmptySet
 software/amazon/awssdk/services/s3/model/BucketAlreadyExistsException
@@ -3071,6 +3107,7 @@ java/nio/ByteOrder
 sun/util/locale/provider/LocaleDataMetaInfo
 sun/security/ssl/CertificateAuthoritiesExtension$CRCertificateAuthoritiesProducer
 org/apache/log4j/DefaultCategoryFactory
+io/netty/buffer/ByteBufUtil$HexUtil
 io/netty/util/CharsetUtil
 java/util/logging/LogManager$RootLogger
 java/lang/invoke/MethodType$ConcurrentWeakInternSet
@@ -3078,6 +3115,7 @@ org/apache/http/impl/client/DefaultUserTokenHandler
 java/util/logging/LogManager$LoggingProviderAccess
 com/exasol/sql/expression/ColumnReference
 java/io/ObjectStreamClass$2
+com/ctc/wstx/util/DefaultXmlSymbolTable
 com/sun/security/sasl/gsskerb/JdkSASL
 io/netty/channel/pool/ChannelHealthChecker
 sun/security/ssl/SSLCipher$SSLWriteCipher
@@ -3098,8 +3136,8 @@ io/netty/util/internal/shaded/org/jctools/queues/atomic/BaseLinkedAtomicQueuePro
 io/netty/buffer/ReadOnlyByteBuf
 org/apache/http/config/Registry
 software/amazon/awssdk/protocols/query/internal/unmarshall/AwsXmlErrorUnmarshaller
+com/ctc/wstx/sr/AttributeCollector
 sun/util/locale/provider/LocaleServiceProviderPool$LocalizedObjectGetter
-com/sun/org/apache/xerces/internal/xni/grammars/XMLDTDDescription
 io/netty/util/internal/shaded/org/jctools/queues/SupportsIterator
 software/amazon/awssdk/core/traits/LocationTrait
 sun/security/ssl/KeyUpdate$KeyUpdateKickstartProducer
@@ -3122,7 +3160,6 @@ software/amazon/awssdk/core/internal/http/pipeline/stages/SigningStage
 java/lang/Class$Atomic
 software/amazon/awssdk/regions/servicemetadata/EntitlementMarketplaceServiceMetadata
 java/util/concurrent/locks/ReentrantLock$Sync
-com/sun/org/apache/xerces/internal/impl/XMLDocumentScannerImpl$TrailingMiscDriver
 sun/security/rsa/RSACore
 io/netty/util/internal/logging/Slf4JLogger
 sun/security/ssl/AlpnExtension$CHAlpnConsumer
@@ -3137,7 +3174,6 @@ io/netty/util/internal/SystemPropertyUtil
 jdk/internal/reflect/AccessorGenerator
 software/amazon/awssdk/utils/Pair
 org/apache/http/message/BasicStatusLine
-com/sun/org/apache/xerces/internal/utils/XMLSecurityPropertyManager$Property
 io/netty/handler/ssl/ConscryptAlpnSslEngine
 java/lang/module/ResolvedModule
 jdk/internal/util/jar/JarIndex
@@ -3156,6 +3192,7 @@ com/exasol/adapter/document/mapping/AbstractPropertyToNumberColumnValueExtractor
 software/amazon/awssdk/utils/ThreadFactoryBuilder
 java/util/concurrent/atomic/LongAdder
 io/netty/buffer/WrappedUnpooledUnsafeDirectByteBuf
+scala/collection/immutable/SeqOps
 software/amazon/awssdk/awscore/AwsResponse$BuilderImpl
 software/amazon/awssdk/regions/GeneratedPartitionMetadataProvider
 java/lang/invoke/VarHandleLongs$FieldInstanceReadWrite
@@ -3216,13 +3253,16 @@ software/amazon/awssdk/awscore/AwsRequest$BuilderImpl
 io/netty/channel/ChannelFactory
 sun/security/provider/certpath/PKIXCertPathValidator
 java/util/concurrent/ConcurrentHashMap$CounterCell
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$FloatDecoder
 java/lang/management/DefaultPlatformMBeanProvider
 software/amazon/awssdk/regions/servicemetadata/LookoutmetricsServiceMetadata
 com/exasol/adapter/document/querypredicate/normalizer/DnfAnd
+scala/collection/immutable/LinearSeq
 org/apache/http/conn/ssl/AbstractVerifier
 java/nio/channels/Selector
 javax/xml/stream/events/EndElement
 com/exasol/datatype/type/Char
+scala/None$
 sun/security/rsa/RSAPadding
 org/apache/log4j/helpers/OptionConverter
 io/netty/channel/ChannelInboundHandler
@@ -3284,6 +3324,7 @@ sun/security/util/UntrustedCertificates
 software/amazon/awssdk/regions/servicemetadata/SupportServiceMetadata
 org/glassfish/json/JsonParserImpl$4
 io/netty/util/internal/shaded/org/jctools/queues/ConcurrentCircularArrayQueue
+com/ctc/wstx/io/CharArraySource
 java/lang/invoke/ClassSpecializer
 java/lang/invoke/MethodHandleImpl
 jdk/internal/perf/PerfCounter
@@ -3302,12 +3343,12 @@ org/apache/commons/logging/impl/WeakHashtable$WeakKey
 java/security/BasicPermissionCollection
 software/amazon/awssdk/regions/servicemetadata/MghServiceMetadata
 software/amazon/awssdk/regions/servicemetadata/RekognitionServiceMetadata
-com/sun/org/apache/xerces/internal/impl/XMLNSDocumentScannerImpl
 com/exasol/sql/dml/merge/MergeFragment
 software/amazon/awssdk/http/nio/netty/internal/InUseTrackingChannelPoolListener
 org/apache/http/conn/routing/RouteTracker
 sun/security/ssl/NewSessionTicket$NewSessionTicketConsumer
 java/util/concurrent/TimeoutException
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$IntArrayDecoder
 sun/nio/cs/StandardCharsets
 software/amazon/awssdk/core/retry/conditions/TokenBucketExceptionCostFunction
 software/amazon/awssdk/awscore/retry/AwsRetryPolicy
@@ -3399,6 +3440,7 @@ sun/text/normalizer/Trie
 sun/security/ssl/ClientKeyExchange$ClientKeyExchangeProducer
 java/security/KeyPairGenerator$Delegate
 org/apache/http/message/LineFormatter
+scala/PartialFunction
 org/apache/http/conn/ssl/DefaultHostnameVerifier
 org/apache/http/client/protocol/ResponseProcessCookies
 java/util/logging/Logger$SystemLoggerHelper
@@ -3458,12 +3500,14 @@ sun/security/ssl/X509TrustManagerImpl
 javax/management/MBeanServer
 java/security/ProtectionDomain
 org/apache/log4j/or/RendererMap
+scala/collection/immutable/LinearSeqOps
 software/amazon/awssdk/http/apache/internal/impl/ApacheHttpRequestFactory$1
 sun/nio/ch/SelChImpl
 software/amazon/awssdk/http/nio/netty/internal/utils/ExceptionHandlingUtils
 software/amazon/awssdk/core/interceptor/Context$BeforeExecution
 sun/security/ssl/ECDHKeyExchange$ECDHEPossessionGenerator
 java/util/regex/Pattern$SliceI
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$DecimalDecoder
 sun/security/ssl/SupportedVersionsExtension$HRRSupportedVersionsProducer
 com/sun/crypto/provider/AESConstants
 org/apache/http/client/AuthCache
@@ -3479,6 +3523,7 @@ io/netty/buffer/PoolArena
 java/util/regex/Pattern$SliceS
 io/netty/util/concurrent/SucceededFuture
 io/netty/buffer/PooledByteBuf
+scala/collection/StrictOptimizedLinearSeqOps
 jdk/internal/reflect/LangReflectAccess
 sun/security/ec/SunEC$ProviderService
 org/apache/http/impl/auth/NTLMSchemeFactory
@@ -3486,7 +3531,6 @@ software/amazon/awssdk/http/apache/ProxyConfiguration$Builder
 software/amazon/awssdk/awscore/AwsRequestOverrideConfiguration
 software/amazon/awssdk/regions/ServiceMetadataConfiguration
 sun/security/ssl/NamedGroup
-com/sun/org/apache/xerces/internal/impl/msg/XMLMessageFormatter
 org/antlr/v4/runtime/NoViableAltException
 jdk/internal/misc/SharedSecrets
 jdk/internal/module/ModuleBootstrap$SafeModuleFinder
@@ -3511,6 +3555,7 @@ sun/security/ssl/ExtendedMasterSecretExtension$ExtendedMasterSecretStringizer
 software/amazon/awssdk/core/client/builder/SdkAsyncClientBuilder
 java/util/Collections$UnmodifiableMap
 software/amazon/awssdk/services/s3/model/NoSuchBucketException
+com/ctc/wstx/io/ReaderSource
 com/exasol/adapter/document/files/stringfilter/wildcardexpression/parser/GlobParser
 sun/nio/cs/StandardCharsets$Aliases
 software/amazon/awssdk/regions/servicemetadata/RdsServiceMetadata
@@ -3550,6 +3595,7 @@ sun/security/ssl/DHKeyExchange
 io/netty/channel/AdaptiveRecvByteBufAllocator$HandleImpl
 io/netty/util/concurrent/CompleteFuture
 com/sun/crypto/provider/GaloisCounterMode
+org/codehaus/stax2/ri/evt/CharactersEventImpl
 io/netty/buffer/SizeClasses
 software/amazon/awssdk/services/s3/model/DeleteBucketLifecycleRequest
 org/logicng/io/parsers/LogicNGPseudoBooleanParser$DisjContext
@@ -3558,6 +3604,7 @@ java/lang/module/ModuleDescriptor$Modifier
 software/amazon/awssdk/regions/servicemetadata/EdgeSagemakerServiceMetadata
 io/netty/handler/codec/Headers
 software/amazon/awssdk/services/s3/model/PutBucketLifecycleConfigurationRequest
+scala/collection/Iterable
 com/exasol/adapter/sql/SqlPredicateNot
 java/time/format/DateTimeFormatterBuilder$FractionPrinterParser
 java/util/regex/Pattern$TreeInfo
@@ -3588,10 +3635,8 @@ software/amazon/awssdk/awscore/AwsResponseMetadata
 java/lang/invoke/MethodHandleNatives$CallSiteContext
 sun/util/locale/LocaleObjectCache$CacheEntry
 jdk/internal/math/FloatingDecimal$BinaryToASCIIConverter
-com/sun/xml/internal/stream/events/DummyEvent$DummyLocation
 sun/security/x509/CertificateVersion
 org/apache/http/io/SessionOutputBuffer
-com/sun/org/apache/xerces/internal/impl/XMLDocumentFragmentScannerImpl$ElementStack2
 sun/security/ssl/MaxFragExtension$CHMaxFragmentLengthProducer
 sun/security/util/ByteArrayTagOrder
 jdk/net/ExtendedSocketOptions$PlatformSocketOptions
@@ -3615,6 +3660,7 @@ io/netty/channel/ChannelOutboundBuffer$Entry$1
 sun/security/provider/SHA5$SHA512
 jdk/internal/org/objectweb/asm/Label
 sun/util/calendar/ZoneInfoFile$ZoneOffsetTransitionRule
+com/ctc/wstx/exc/WstxUnexpectedCharException
 io/netty/buffer/SwappedByteBuf
 software/amazon/awssdk/services/s3/model/CreateBucketRequest
 io/netty/channel/FileRegion
@@ -3624,11 +3670,11 @@ sun/security/ssl/CertStatusExtension$CTCertStatusResponseProducer
 sun/security/ssl/ECPointFormatsExtension$CHECPointFormatsConsumer
 java/util/concurrent/CompletableFuture$UniCompletion
 org/glassfish/json/JsonProviderImpl
+com/ctc/wstx/util/DataUtil$EI
 sun/security/x509/DNSName
 sun/security/ssl/SSLSocketImpl$AppInputStream
 software/amazon/awssdk/protocols/xml/internal/unmarshall/XmlUnmarshallerContext$Builder
 org/glassfish/json/JsonGeneratorImpl$Scope
-com/sun/xml/internal/stream/Entity$ScannedEntity
 software/amazon/awssdk/services/s3/model/GetObjectLegalHoldRequest
 software/amazon/awssdk/utils/AttributeMap$Key$UnsafeValueType
 java/util/concurrent/ConcurrentHashMap$TreeNode
@@ -3658,6 +3704,7 @@ java/util/concurrent/CompletableFuture$Completion
 com/exasol/adapter/request/LoggingConfiguration
 sun/security/ssl/RenegoInfoExtension$CHRenegotiationInfoProducer
 java/util/jar/JarFile$1
+com/ctc/wstx/api/CommonConfig
 sun/text/normalizer/UCharacter
 java/time/temporal/TemporalQueries
 org/logicng/formulas/FormulaFactoryConfig$FormulaMergeStrategy
@@ -3667,6 +3714,7 @@ org/apache/http/conn/ssl/SSLConnectionSocketFactory
 io/netty/handler/codec/http/HttpMethod
 io/netty/buffer/PoolSubpageMetric
 java/util/ImmutableCollections$Set12
+scala/Option
 software/amazon/awssdk/regions/servicemetadata/LakeformationServiceMetadata
 java/lang/invoke/MethodTypeForm
 java/lang/reflect/ReflectAccess
@@ -3687,14 +3735,13 @@ org/apache/http/client/protocol/RequestDefaultHeaders
 java/security/ProviderException
 org/apache/http/impl/execchain/TunnelRefusedException
 software/amazon/awssdk/regions/servicemetadata/EmrServerlessServiceMetadata
-jdk/xml/internal/JdkXmlUtils
 software/amazon/awssdk/regions/PartitionEndpointKey$Builder
 com/exasol/adapter/document/queryplan/FetchQueryPlan
 java/lang/Enum
 sun/security/ssl/CertificateAuthoritiesExtension$CertificateAuthoritiesStringizer
 org/logicng/io/parsers/PseudoBooleanParser
-com/sun/org/apache/xerces/internal/xni/parser/XMLEntityResolver
 software/amazon/awssdk/regions/servicemetadata/IoteventsServiceMetadata
+com/ctc/wstx/util/TextBuffer$BufferReader
 java/net/DefaultInterface
 io/netty/handler/timeout/TimeoutException
 jdk/internal/reflect/DelegatingMethodAccessorImpl
@@ -3721,9 +3768,12 @@ software/amazon/awssdk/awscore/internal/defaultsmode/DefaultsModeResolver
 org/apache/http/ReasonPhraseCatalog
 software/amazon/awssdk/utils/internal/Base16Lower
 java/util/Dictionary
+scala/collection/StrictOptimizedSeqOps
 org/apache/http/impl/client/HttpClientBuilder$2
+com/ctc/wstx/io/WstxInputSource
 sun/nio/ch/SocketChannelImpl
 sun/security/ssl/CertStatusExtension$CertStatusRespStringizer
+org/codehaus/stax2/validation/XMLValidationSchema
 org/apache/http/client/methods/HttpRequestBase
 java/io/DataOutputStream
 org/antlr/v4/runtime/atn/LexerAction
@@ -3748,14 +3798,11 @@ software/amazon/awssdk/services/s3/model/GetObjectResponse$Builder
 sun/security/ssl/ServerHello$T12ServerHelloProducer
 java/security/InvalidKeyException
 sun/security/ec/ECKeyPairGenerator
-com/sun/org/apache/xerces/internal/xni/XMLResourceIdentifier
-java/lang/StackTraceElement$HashedModules
 java/nio/channels/ClosedChannelException
 com/exasol/adapter/sql/SqlLiteralBool
 io/netty/handler/codec/http/HttpResponseStatus
 software/amazon/awssdk/core/interceptor/Context$AfterMarshalling
 sun/security/x509/AccessDescription
-com/sun/org/apache/xerces/internal/utils/XMLSecurityManager
 software/amazon/awssdk/metrics/NoOpMetricCollector
 io/netty/channel/ChannelOutboundBuffer$Entry
 java/lang/ref/Reference$ReferenceHandler
@@ -3795,6 +3842,7 @@ sun/security/ssl/KeyShareExtension$SHKeyShareAbsence
 jakarta/json/JsonPointer
 software/amazon/awssdk/services/s3/model/PutBucketVersioningRequest
 org/apache/http/impl/io/ContentLengthInputStream
+org/codehaus/stax2/validation/XMLValidationException
 jdk/internal/reflect/MethodAccessorImpl
 java/security/MessageDigest$Delegate
 com/exasol/adapter/document/files/stringfilter/wildcardexpression/parser/AbstractParser
@@ -3898,7 +3946,6 @@ io/netty/util/concurrent/DefaultPromise$StacklessCancellationException
 software/amazon/awssdk/regions/servicemetadata/AmplifybackendServiceMetadata
 software/amazon/awssdk/regions/servicemetadata/BudgetsServiceMetadata
 javax/management/MBeanServerConnection
-com/sun/org/apache/xerces/internal/utils/XMLSecurityManager$NameMap
 org/apache/http/io/SessionInputBuffer
 java/util/logging/StreamHandler$1
 sun/security/util/CurveDB$Holder
@@ -3909,7 +3956,6 @@ software/amazon/awssdk/regions/servicemetadata/ProfileServiceMetadata
 software/amazon/awssdk/regions/servicemetadata/BackupstorageServiceMetadata
 sun/security/ssl/MaxFragExtension$CHMaxFragmentLengthConsumer
 jdk/internal/logger/BootstrapLogger$DetectBackend$1
-com/sun/org/apache/xerces/internal/util/NamespaceSupport
 software/amazon/awssdk/http/nio/netty/internal/utils/BetterFixedChannelPool
 java/net/PlainSocketImpl
 org/apache/log4j/spi/RendererSupport
@@ -3929,7 +3975,6 @@ sun/security/ec/ECPrivateKeyImpl
 java/security/interfaces/XECPrivateKey
 sun/security/ssl/Finished$T13FinishedProducer
 java/util/concurrent/ScheduledThreadPoolExecutor
-com/sun/org/apache/xerces/internal/impl/PropertyManager
 software/amazon/awssdk/regions/servicemetadata/GreengrassServiceMetadata
 com/exasol/adapter/document/documentfetcher/files/RemoteFileContent
 org/antlr/v4/runtime/atn/SetTransition
@@ -3949,6 +3994,7 @@ io/netty/channel/nio/AbstractNioChannel$AbstractNioUnsafe$2
 org/slf4j/helpers/Util
 io/netty/util/AbstractConstant
 org/antlr/v4/runtime/atn/StarLoopbackState
+com/ctc/wstx/stax/WstxInputFactory
 java/util/zip/ZipFile$Source
 com/exasol/adapter/document/mapping/AbstractPropertyToColumnMapping
 io/netty/channel/nio/AbstractNioChannel$AbstractNioUnsafe$1
@@ -3982,8 +4028,10 @@ software/amazon/awssdk/regions/ServiceEndpointKey$DefaultBuilder
 java/net/Inet6Address$Inet6AddressHolder
 io/netty/handler/codec/UnsupportedMessageTypeException
 io/netty/channel/MultithreadEventLoopGroup
+com/ctc/wstx/sr/TypedStreamReader
 org/apache/http/impl/cookie/NetscapeDraftSpec
 io/netty/util/concurrent/ProgressivePromise
+scala/collection/Seq
 java/util/StringJoiner
 io/netty/handler/timeout/ReadTimeoutException
 software/amazon/awssdk/services/s3/internal/handlers/DecodeUrlEncodedResponseInterceptor
@@ -4063,6 +4111,7 @@ sun/security/util/BitArray
 io/netty/channel/socket/DuplexChannel
 io/netty/util/internal/PlatformDependent$Mpsc$1
 jakarta/json/JsonReaderFactory
+com/ctc/wstx/util/TextBuffer
 software/amazon/awssdk/services/s3/model/DeleteBucketOwnershipControlsRequest
 sun/text/normalizer/Trie$DataManipulate
 io/netty/resolver/AddressResolverGroup
@@ -4082,6 +4131,7 @@ jdk/internal/ref/CleanerImpl$SoftCleanableRef
 java/lang/LiveStackFrameInfo
 software/amazon/awssdk/services/s3/model/GetBucketOwnershipControlsRequest
 sun/security/util/DerIndefLenConverter
+com/ctc/wstx/ent/IntEntity
 org/apache/http/impl/execchain/RequestAbortedException
 java/util/concurrent/AbstractExecutorService
 io/netty/handler/codec/http/HttpObjectDecoder
@@ -4165,7 +4215,6 @@ com/exasol/adapter/capabilities/AggregateFunctionCapability
 com/exasol/adapter/document/mapping/PropertyToVarcharColumnValueExtractor$ToStringVisitor
 sun/reflect/annotation/AnnotationParser
 software/amazon/awssdk/regions/internal/MetadataLoader
-com/sun/xml/internal/stream/events/DummyEvent
 com/exasol/adapter/document/files/FilesDocumentFetcherFactory
 java/security/KeyStore$1
 software/amazon/awssdk/core/internal/http/pipeline/RequestPipeline
@@ -4238,12 +4287,13 @@ java/time/LocalTime$1
 org/apache/http/impl/cookie/NetscapeDraftSpecProvider
 java/io/DataInputStream
 sun/security/ssl/SSLContextImpl$CustomizedSSLProtocols
+scala/collection/IterableOnceOps
+com/ctc/wstx/util/InternCache
 java/util/stream/ReferencePipeline
 java/lang/invoke/MethodHandleImpl$1
 java/util/stream/Sink$ChainedReference
 io/netty/handler/ssl/SslHandshakeCompletionEvent
 sun/security/ssl/CertificateAuthoritiesExtension$CHCertificateAuthoritiesConsumer
-com/sun/org/apache/xerces/internal/utils/XMLSecurityManager$State
 sun/security/util/Length
 jdk/internal/module/Checks
 com/exasol/adapter/document/querypredicate/QueryPredicateToBooleanExpressionConverter
@@ -4255,7 +4305,6 @@ java/util/ResourceBundle$NoFallbackControl
 software/amazon/awssdk/services/s3/model/SelectObjectContentRequest
 software/amazon/awssdk/regions/servicemetadata/PiServiceMetadata
 io/netty/util/IntSupplier
-com/sun/org/apache/xerces/internal/util/AugmentationsImpl$SmallContainer
 java/security/SecureClassLoader$CodeSourceKey
 java/net/SocketImpl
 org/apache/http/impl/conn/DefaultManagedHttpClientConnection
@@ -4263,6 +4312,7 @@ java/util/stream/TerminalOp
 org/logicng/formulas/FType
 software/amazon/awssdk/services/s3/model/PutBucketMetricsConfigurationRequest
 org/apache/http/protocol/ImmutableHttpProcessor
+javax/xml/stream/events/EntityDeclaration
 org/apache/http/pool/ConnPoolControl
 java/net/Proxy
 jdk/internal/misc/JavaIORandomAccessFileAccess
@@ -4285,6 +4335,7 @@ com/exasol/adapter/document/queryplanning/selectionextractor/SelectionExtractor$
 java/net/NetworkInterface
 java/lang/ref/Cleaner
 javax/net/ssl/X509TrustManager
+scala/util/Properties$
 io/netty/util/internal/TypeParameterMatcher$1
 software/amazon/awssdk/profiles/Profile
 javax/security/cert/Certificate
@@ -4319,7 +4370,6 @@ org/apache/http/util/LangUtils
 software/amazon/awssdk/regions/regionmetadata/UsWest2
 com/exasol/adapter/sql/AbstractSqlPredicateJson
 io/netty/buffer/UnpooledUnsafeDirectByteBuf
-com/sun/org/apache/xerces/internal/impl/XMLNSDocumentScannerImpl$NSContentDriver
 io/netty/handler/timeout/IdleStateHandler$AbstractIdleTask
 org/apache/http/FormattedHeader
 sun/security/ssl/MaxFragExtension$SHMaxFragmentLengthUpdate
@@ -4338,6 +4388,7 @@ io/netty/channel/pool/ChannelPoolMap
 io/netty/util/internal/shaded/org/jctools/queues/SpscLinkedQueue
 java/security/interfaces/DSAPublicKey
 org/apache/http/client/methods/HttpRequestWrapper
+scala/collection/immutable/Iterable
 software/amazon/awssdk/http/nio/netty/internal/SharedSdkEventLoopGroup$ReferenceCountingEventLoopGroup
 sun/security/x509/GeneralNames
 sun/nio/fs/UnixFileAttributeViews$Basic
@@ -4351,6 +4402,7 @@ org/logicng/formulas/CTrue
 java/util/concurrent/atomic/AtomicLongFieldUpdater$CASUpdater
 java/lang/VersionProps
 org/apache/http/conn/ssl/BrowserCompatHostnameVerifier
+org/codehaus/stax2/validation/DTDValidationSchema
 com/exasol/sql/expression/literal/LiteralVisitor
 sun/util/locale/provider/LocaleResources$ResourceReference
 software/amazon/awssdk/services/s3/model/ObjectAlreadyInActiveTierErrorException$Builder
@@ -4358,7 +4410,9 @@ sun/security/ssl/SSLSessionContextImpl
 java/util/zip/Inflater
 software/amazon/awssdk/regions/regionmetadata/ApNortheast1
 java/io/InputStream
+org/codehaus/stax2/XMLStreamProperties
 com/exasol/adapter/request/DropVirtualSchemaRequest
+scala/collection/immutable/AbstractSeq
 sun/security/ssl/SupportedVersionsExtension$HRRSupportedVersionsReproducer
 java/lang/Character
 io/netty/channel/AbstractChannel
@@ -4402,7 +4456,6 @@ org/apache/http/impl/conn/PoolingHttpClientConnectionManager
 sun/security/provider/SHA5
 sun/security/ssl/Authenticator$MAC
 sun/security/provider/SHA2
-com/sun/org/apache/xerces/internal/util/XMLStringBuffer
 sun/reflect/generics/parser/SignatureParser
 io/netty/util/concurrent/RejectedExecutionHandlers$1
 software/amazon/awssdk/metrics/MetricCollection
@@ -4411,10 +4464,10 @@ jdk/internal/event/TLSHandshakeEvent
 io/netty/buffer/UnsafeDirectSwappedByteBuf
 java/time/format/DateTimeParseException
 sun/nio/cs/ThreadLocalCoders$2
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$QNameDecoder
 java/security/SecureClassLoader$1
 sun/security/ssl/SSLSocketOutputRecord
 sun/util/calendar/CalendarDate
-com/sun/org/apache/xerces/internal/xni/XMLString
 java/security/spec/ECFieldF2m
 sun/nio/cs/ThreadLocalCoders$1
 java/util/Iterator
@@ -4445,6 +4498,7 @@ io/netty/channel/ChannelOutboundHandlerAdapter
 org/apache/http/cookie/Cookie
 software/amazon/awssdk/auth/signer/params/AwsS3V4SignerParams$BuilderImpl
 jdk/internal/ref/CleanerImpl
+scala/collection/immutable/StrictOptimizedSeqOps
 java/util/stream/SortedOps$OfRef
 software/amazon/awssdk/utils/async/DelegatingSubscription
 java/security/cert/CertificateParsingException
@@ -4470,6 +4524,7 @@ java/lang/ArrayStoreException
 sun/security/util/ByteArrays
 com/exasol/adapter/sql/SqlLiteralTimestampUtc
 sun/security/ssl/CertStatusExtension$CertStatusRequestsStringizer
+org/codehaus/stax2/XMLStreamReader2
 java/net/InetAddressImplFactory
 io/netty/util/internal/shaded/org/jctools/queues/atomic/MpscAtomicArrayQueueMidPad
 sun/reflect/generics/factory/GenericsFactory
@@ -4480,6 +4535,7 @@ java/lang/Module$ReflectionData
 sun/security/validator/PKIXValidator
 com/exasol/adapter/document/files/stringfilter/wildcardexpression/fragments/DirectoryLimitedMultiCharWildcard
 sun/security/ssl/Finished$T12VerifyDataGenerator
+org/codehaus/stax2/typed/TypedXMLStreamException
 software/amazon/awssdk/http/nio/netty/internal/nrs/HandlerSubscriber$5
 io/netty/channel/pool/ChannelPoolHandler
 jakarta/json/JsonValueImpl
@@ -4488,8 +4544,8 @@ com/exasol/sql/ValueTableRow
 sun/net/www/URLConnection
 javax/crypto/JceSecurity$1
 javax/crypto/JceSecurity$2
-com/sun/org/apache/xerces/internal/util/SymbolTable$Entry
 java/util/concurrent/locks/ReentrantReadWriteLock$FairSync
+com/ctc/wstx/io/UTF8Reader
 software/amazon/awssdk/http/nio/netty/internal/nrs/HandlerSubscriber$1
 software/amazon/awssdk/core/SdkResponse$BuilderImpl
 software/amazon/awssdk/http/nio/netty/internal/nrs/HandlerSubscriber$2
@@ -4529,7 +4585,6 @@ sun/reflect/annotation/AnnotationInvocationHandler
 jakarta/json/stream/JsonParserFactory
 io/netty/util/internal/shaded/org/jctools/queues/MpscArrayQueueConsumerIndexField
 software/amazon/awssdk/core/internal/http/pipeline/stages/MakeHttpRequestStage
-com/sun/org/apache/xerces/internal/impl/dtd/XMLDTDDescription
 software/amazon/awssdk/services/s3/model/PutBucketTaggingRequest
 sun/security/ssl/CertStatusExtension$OCSPStatusRequest
 io/netty/channel/nio/AbstractNioByteChannel$1
@@ -4544,6 +4599,7 @@ software/amazon/awssdk/http/HttpExecuteResponse
 io/netty/channel/AbstractChannel$AnnotatedNoRouteToHostException
 java/security/AuthProvider
 sun/security/util/DisabledAlgorithmConstraints
+scala/collection/immutable/Nil$
 io/netty/channel/DefaultSelectStrategy
 java/lang/Shutdown$Lock
 sun/security/ssl/NamedGroup$FFDHEScheme
@@ -4561,6 +4617,7 @@ software/amazon/awssdk/core/SdkBytes
 io/netty/buffer/PooledByteBufAllocatorMetric
 io/netty/util/concurrent/EventExecutorGroup
 sun/security/ssl/PreSharedKeyExtension$CHPreSharedKeyProducer
+com/ctc/wstx/io/StreamBootstrapper
 software/amazon/awssdk/services/s3/internal/endpoints/S3EndpointUtils
 sun/security/ssl/ServerNameExtension$SHServerNameProducer
 io/netty/buffer/PooledByteBufAllocator
@@ -4571,6 +4628,7 @@ sun/management/ManagementFactoryHelper$LoggingMXBeanAccess$1
 sun/security/ssl/CertificateStatus$CertificateStatusConsumer
 software/amazon/awssdk/protocols/core/StringToValueConverter$StringToValue
 com/exasol/adapter/document/queryplanning/RemoteTableQuery
+com/ctc/wstx/cfg/InputConfigFlags
 java/time/temporal/IsoFields$Field
 java/lang/management/ManagementPermission
 software/amazon/awssdk/core/traits/MapTrait$Builder
@@ -4609,6 +4667,7 @@ sun/security/ssl/SSLSocketImpl$AppOutputStream
 java/lang/WeakPairMap
 com/exasol/adapter/document/mapping/SchemaMappingException
 org/apache/http/conn/ssl/SSLInitializationException
+scala/MatchError
 javax/xml/stream/FactoryFinder$1
 io/netty/bootstrap/AbstractBootstrap$PendingRegistrationPromise
 org/apache/http/conn/EofSensorWatcher
@@ -4624,6 +4683,7 @@ io/netty/channel/ChannelHandler
 java/lang/module/ModuleDescriptor
 jdk/internal/loader/URLClassPath$JarLoader$1
 software/amazon/awssdk/protocols/xml/internal/marshall/QueryParamMarshaller
+org/codehaus/stax2/ri/evt/NamespaceEventImpl
 jdk/internal/loader/URLClassPath$JarLoader$2
 com/exasol/adapter/sql/SqlGroupBy
 com/exasol/adapter/document/files/stringfilter/wildcardexpression/WildcardExpression
@@ -4635,6 +4695,7 @@ sun/reflect/generics/scope/Scope
 com/exasol/adapter/document/documentnode/DocumentObject
 software/amazon/awssdk/core/io/SdkFilterInputStream
 sun/security/ssl/ServerNameExtension$CHServerNameProducer
+com/ctc/wstx/sr/NsDefaultProvider
 software/amazon/awssdk/http/apache/internal/conn/ClientConnectionManagerFactory$InstrumentedHttpClientConnectionManager
 com/exasol/adapter/document/files/SourceString
 software/amazon/awssdk/regions/EndpointTag$EndpointTagCache
@@ -4712,6 +4773,7 @@ com/sun/security/sasl/Provider$1
 software/amazon/awssdk/http/nio/netty/internal/ReleaseOnceChannelPool
 software/amazon/awssdk/regions/servicemetadata/AmplifyServiceMetadata
 org/apache/http/client/methods/CloseableHttpResponse
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$IntegerDecoder
 java/security/Permissions
 software/amazon/awssdk/utils/JavaSystemSetting
 sun/security/ssl/ClientKeyExchange$ClientKeyExchangeConsumer
@@ -4738,6 +4800,7 @@ java/util/stream/SortedOps
 java/nio/channels/UnsupportedAddressTypeException
 sun/nio/cs/Unicode
 jdk/internal/ref/CleanerFactory$1
+com/ctc/wstx/util/ArgUtil
 jdk/internal/reflect/Label$PatchInfo
 sun/security/ssl/X509Authentication
 sun/security/ssl/CertificateVerify$T10CertificateVerifyConsumer
@@ -4753,6 +4816,7 @@ java/lang/CharSequence
 sun/security/x509/CertificateValidity
 sun/security/util/AbstractAlgorithmConstraints
 java/lang/ProcessEnvironment$ExternalData
+scala/collection/AbstractIterable
 com/exasol/sql/expression/literal/AbstractLiteral
 com/exasol/sql/dql/select/SelectFragment
 sun/text/normalizer/UCharacterProperty$BiDiIntProperty
@@ -4763,6 +4827,7 @@ java/util/ImmutableCollections$ListN
 java/lang/invoke/InnerClassLambdaMetafactory$ForwardingMethodGenerator
 com/exasol/sql/AbstractFragment
 java/time/Clock$SystemClock
+com/ctc/wstx/exc/WstxException
 sun/nio/ch/AllocatedNativeObject
 software/amazon/awssdk/regions/servicemetadata/ServicecatalogAppregistryServiceMetadata
 sun/net/spi/DefaultProxySelector$NonProxyInfo
@@ -4794,6 +4859,7 @@ sun/security/ssl/SupportedGroupsExtension$EESupportedGroupsConsumer
 sun/security/util/math/IntegerModuloP
 software/amazon/awssdk/services/s3/model/GetObjectResponse$BuilderImpl
 io/netty/util/AsciiString
+org/codehaus/stax2/validation/ValidatorPair
 com/exasol/adapter/document/properties/DocumentAdapterProperties
 java/nio/channels/InterruptibleChannel
 java/net/StandardSocketOptions$StdSocketOption
@@ -4818,7 +4884,6 @@ sun/security/ssl/SSLCipher$T10BlockReadCipherGenerator
 software/amazon/awssdk/regions/servicemetadata/GlueServiceMetadata
 software/amazon/awssdk/services/s3/model/BucketAlreadyOwnedByYouException$Builder
 io/netty/util/internal/InternalThreadLocalMap
-com/sun/org/apache/xerces/internal/impl/XMLDocumentScannerImpl$ContentDriver
 software/amazon/awssdk/core/traits/TimestampFormatTrait
 java/security/spec/PKCS8EncodedKeySpec
 java/util/Spliterator$OfPrimitive
@@ -4856,8 +4921,8 @@ java/util/IdentityHashMap$KeyIterator
 jdk/internal/reflect/ReflectionFactory$GetReflectionFactoryAction
 jdk/internal/misc/JavaSecurityAccess
 jdk/net/ExtendedSocketOptions
-software/amazon/awssdk/regions/servicemetadata/AppsyncServiceMetadata
 org/apache/log4j/Hierarchy
+software/amazon/awssdk/regions/servicemetadata/AppsyncServiceMetadata
 software/amazon/awssdk/regions/regionmetadata/UsIsoWest1
 io/netty/handler/ssl/SslHandler$SslTasksRunner$1
 software/amazon/awssdk/services/s3/model/GetObjectRequest$BuilderImpl
@@ -4865,7 +4930,6 @@ java/lang/ProcessEnvironment
 sun/security/util/math/MutableIntegerModuloP
 jdk/internal/logger/LazyLoggers$LazyLoggerFactories
 java/net/InetAddress$NameService
-com/sun/org/apache/xerces/internal/xni/Augmentations
 org/apache/http/impl/cookie/AbstractCookieAttributeHandler
 sun/security/ssl/CookieExtension$HRRCookieProducer
 sun/security/provider/FileInputStreamPool$UnclosableInputStream
@@ -4884,6 +4948,7 @@ software/amazon/awssdk/regions/regionmetadata/MeSouth1
 sun/security/ssl/SSLPossessionGenerator
 sun/nio/ch/SocketChannelImpl$DefaultOptionsHolder
 sun/reflect/generics/tree/ClassSignature
+com/ctc/wstx/util/StringVector
 software/amazon/awssdk/core/RequestOverrideConfiguration
 java/util/regex/Pattern$GroupTail
 java/net/InetAddress$CachedLocalHost
@@ -4897,7 +4962,6 @@ java/util/concurrent/atomic/AtomicReferenceFieldUpdater$AtomicReferenceFieldUpda
 software/amazon/awssdk/core/traits/Trait
 java/util/concurrent/atomic/AtomicReferenceFieldUpdater
 org/apache/http/util/Asserts
-com/sun/xml/internal/stream/events/EndElementEvent
 com/exasol/adapter/document/files/S3DocumentFilesAdapterFactory
 sun/security/util/CurveDB
 io/netty/util/Signal
@@ -4921,6 +4985,7 @@ javax/crypto/NullCipher
 io/netty/handler/codec/http/DefaultHttpHeaders
 java/lang/management/CompilationMXBean
 sun/text/normalizer/Norm2AllModes$NFKCSingleton
+com/ctc/wstx/util/StringUtil
 software/amazon/awssdk/regions/servicemetadata/StreamsDynamodbServiceMetadata
 sun/security/ssl/XDHKeyExchange$1
 sun/security/ec/ECDSASignature$SHA224
@@ -5004,6 +5069,7 @@ software/amazon/awssdk/http/nio/netty/internal/RequestContext
 java/lang/invoke/Invokers$Holder
 java/security/Security$1
 software/amazon/awssdk/http/apache/ApacheHttpClient$Builder
+scala/Equals
 software/amazon/awssdk/regions/servicemetadata/S3OutpostsServiceMetadata
 org/apache/commons/logging/impl/LogFactoryImpl
 java/lang/StringCoding$Result
@@ -5013,13 +5079,13 @@ software/amazon/awssdk/regions/servicemetadata/Ec2ServiceMetadata
 java/util/concurrent/ScheduledExecutorService
 java/io/ObjectOutputStream
 org/apache/commons/logging/impl/WeakHashtable
-com/sun/xml/internal/stream/StaxErrorReporter
 java/lang/ref/Cleaner$Cleanable
 java/net/Proxy$Type
 jdk/internal/logger/BootstrapLogger$DetectBackend
 sun/nio/cs/HistoricallyNamedCharset
 software/amazon/awssdk/regions/servicemetadata/SnsServiceMetadata
 software/amazon/awssdk/core/interceptor/Context$BeforeUnmarshalling
+com/ctc/wstx/sr/BasicStreamReader
 sun/security/rsa/RSAKeyFactory
 org/apache/http/HeaderIterator
 org/apache/http/client/config/RequestConfig$Builder
@@ -5027,6 +5093,7 @@ java/util/function/Predicate
 sun/net/InetAddressCachePolicy
 org/apache/http/conn/HttpConnectionFactory
 java/lang/invoke/BoundMethodHandle$Species_LLL
+com/ctc/wstx/io/AsciiReader
 java/util/HashMap$HashIterator
 sun/security/util/DisabledAlgorithmConstraints$Constraint
 io/netty/channel/socket/nio/NioSocketChannel$NioSocketChannelConfig
@@ -5040,6 +5107,7 @@ org/logicng/io/parsers/LogicNGPseudoBooleanParser$AddContext
 software/amazon/awssdk/protocols/xml/internal/marshall/XmlPayloadMarshaller$2
 software/amazon/awssdk/protocols/xml/internal/marshall/XmlPayloadMarshaller$3
 software/amazon/awssdk/protocols/xml/internal/marshall/XmlPayloadMarshaller$1
+com/ctc/wstx/sr/StreamReaderImpl
 com/exasol/adapter/document/files/connection/S3ConnectionProperties$S3ConnectionPropertiesBuilder
 com/exasol/adapter/document/documentnode/DocumentDecimalValue
 org/antlr/v4/runtime/atn/StarLoopEntryState
@@ -5111,7 +5179,6 @@ jdk/internal/logger/BootstrapLogger$BootstrapExecutors
 jdk/internal/logger/SimpleConsoleLogger
 org/apache/http/client/methods/HttpRequestWrapper$HttpEntityEnclosingRequestWrapper
 java/security/spec/X509EncodedKeySpec
-com/sun/org/apache/xerces/internal/xni/XMLAttributes
 io/netty/channel/nio/SelectedSelectionKeySetSelector
 software/amazon/awssdk/http/apache/ApacheHttpClient$DefaultBuilder
 software/amazon/awssdk/core/signer/AsyncRequestBodySigner
@@ -5126,6 +5193,7 @@ java/net/SocksSocketImpl
 jdk/internal/logger/BootstrapLogger$LoggingBackend
 java/util/regex/Pattern$BranchConn
 io/netty/util/concurrent/RejectedExecutionHandler
+com/ctc/wstx/io/BaseReader
 java/nio/DirectByteBuffer$Deallocator
 io/netty/util/internal/shaded/org/jctools/queues/MpscArrayQueueL2Pad
 sun/util/logging/PlatformLogger$Bridge
@@ -5161,7 +5229,6 @@ sun/reflect/generics/visitor/TypeTreeVisitor
 sun/security/ssl/ServerHelloDone$ServerHelloDoneProducer
 software/amazon/awssdk/http/apache/internal/impl/ApacheHttpRequestFactory
 io/netty/handler/codec/http/DefaultHttpHeaders$1
-com/sun/org/apache/xerces/internal/impl/XMLStreamReaderImpl
 software/amazon/awssdk/utils/CompletableFutureUtils
 io/netty/handler/codec/http/DefaultHttpHeaders$2
 sun/security/ssl/SSLTrafficKeyDerivation
@@ -5176,16 +5243,19 @@ sun/text/normalizer/Norm2AllModes$DecomposeNormalizer2
 io/netty/channel/ChannelOutboundBuffer$1
 jdk/internal/loader/BuiltinClassLoader$5
 java/time/Clock
+scala/util/PropertiesTrait
 software/amazon/awssdk/http/SdkHttpMethod
 javax/xml/stream/Location
 java/lang/invoke/DirectMethodHandle$Constructor
 software/amazon/awssdk/regions/servicemetadata/MedialiveServiceMetadata
 java/util/regex/Pattern$First
+scala/Function0
 io/netty/util/internal/PlatformDependent$4
 java/time/temporal/IsoFields$Field$3
 java/security/Provider$Service
 java/time/temporal/IsoFields$Field$2
 software/amazon/awssdk/utils/internal/CodecUtils
+scala/Function1
 sun/text/normalizer/CharTrie
 java/time/temporal/IsoFields$Field$1
 software/amazon/awssdk/auth/token/credentials/SdkTokenProvider
@@ -5193,8 +5263,6 @@ java/util/logging/LogManager$LoggerContext$1
 org/apache/http/conn/DnsResolver
 java/time/temporal/IsoFields$Field$4
 org/apache/http/client/methods/HttpExecutionAware
-com/sun/xml/internal/stream/util/BufferAllocator
-com/sun/org/apache/xerces/internal/util/NamespaceSupport$Prefixes
 java/util/zip/CRC32
 java/lang/annotation/Target
 jdk/internal/misc/OSEnvironment
@@ -5224,9 +5292,9 @@ com/exasol/adapter/document/documentnode/DocumentStringValue
 java/util/zip/ZipFile$1
 jdk/internal/jimage/decompressor/Decompressor
 sun/security/ec/point/ProjectivePoint$Mutable
+java/net/MalformedURLException
 software/amazon/awssdk/regions/servicemetadata/AutoscalingServiceMetadata
 software/amazon/awssdk/regions/servicemetadata/XrayServiceMetadata
-java/net/MalformedURLException
 sun/reflect/generics/tree/TypeArgument
 java/lang/System$Logger
 org/apache/http/conn/ssl/X509HostnameVerifier
@@ -5238,8 +5306,10 @@ sun/net/spi/DefaultProxySelector$1
 sun/security/ssl/NamedGroup$ECDHEScheme
 com/exasol/adapter/capabilities/LiteralCapability
 io/netty/handler/codec/HeadersUtils$StringEntryIterator
+com/ctc/wstx/io/ReaderBootstrapper
 software/amazon/awssdk/core/internal/http/pipeline/stages/ApplyTransactionIdStage
 sun/net/spi/DefaultProxySelector$4
+com/ctc/wstx/exc/WstxEOFException
 org/antlr/v4/runtime/misc/AbstractEqualityComparator
 javax/net/ssl/SSLParameters
 com/sun/crypto/provider/PKCS5Padding
@@ -5279,8 +5349,9 @@ org/logicng/transformations/dnf/DNFFactorization
 software/amazon/awssdk/services/s3/model/PutBucketAclRequest
 jdk/internal/misc/JavaSecuritySignatureAccess
 io/netty/channel/DefaultChannelId
-org/antlr/v4/runtime/ParserRuleContext
+org/slf4j/impl/Reload4jLoggerAdapter
 sun/reflect/generics/scope/AbstractScope
+org/antlr/v4/runtime/ParserRuleContext
 sun/text/normalizer/NormalizerBase$NFDMode
 javax/net/ssl/TrustManagerFactory$1
 sun/security/ssl/KeyShareExtension$HRRKeyShareConsumer
@@ -5297,6 +5368,7 @@ java/io/ObjectStreamClass$FieldReflectorKey
 sun/security/pkcs11/wrapper/PKCS11Exception
 sun/security/ssl/SSLKeyExchange$T13KeyAgreement
 javax/crypto/SecretKey
+org/codehaus/stax2/typed/TypedXMLStreamReader
 com/exasol/adapter/document/files/S3FileFinderFactory
 sun/security/ssl/CertStatusExtension$CertStatusRequestSpec
 javax/net/ssl/SSLSocketFactory
@@ -5312,7 +5384,6 @@ sun/management/ManagementFactoryHelper$LoggingMXBeanAccess
 sun/security/ssl/ServerNameExtension$EEServerNameConsumer
 io/netty/handler/ssl/JdkSslEngine
 io/netty/handler/ssl/OpenSslClientContext
-com/sun/org/apache/xerces/internal/util/AugmentationsImpl$AugmentationsItemsContainer
 org/logicng/io/parsers/ParserWithFormula
 org/apache/http/impl/auth/DigestSchemeFactory
 com/exasol/adapter/document/mapping/AbstractColumnMapping$AbstractColumnMappingBuilder
@@ -5321,8 +5392,8 @@ sun/security/ssl/SSLExtensions
 java/util/regex/Pattern$Qtype
 io/netty/util/internal/logging/Slf4JLoggerFactory
 sun/security/ssl/ServerHello$ServerHelloConsumer
-software/amazon/awssdk/regions/servicemetadata/Inspector2ServiceMetadata
 org/apache/log4j/spi/LoggingEvent
+software/amazon/awssdk/regions/servicemetadata/Inspector2ServiceMetadata
 sun/security/ssl/SupportedGroupsExtension
 java/lang/reflect/AnnotatedElement
 io/netty/channel/AbstractChannel$AnnotatedSocketException
@@ -5417,7 +5488,6 @@ jdk/internal/reflect/ByteVector
 io/netty/handler/codec/http/LastHttpContent
 org/logicng/formulas/printer/DefaultStringRepresentation
 java/lang/invoke/BootstrapMethodInvoker
-com/sun/org/apache/xerces/internal/util/SymbolTable
 com/exasol/adapter/document/documentpath/DocumentPathWalker$WalkVisitor
 com/exasol/adapter/document/mapping/PropertyToVarcharColumnMapping$PropertyToVarcharColumnMappingBuilder
 software/amazon/awssdk/services/s3/model/GetObjectRequest
@@ -5444,8 +5514,8 @@ sun/security/ssl/SSLCipher$T12GcmWriteCipherGenerator
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad2
 io/netty/handler/codec/HeadersUtils$StringEntry
 org/apache/http/impl/client/BasicCredentialsProvider
-sun/security/jgss/SunProvider$1
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad0
+sun/security/jgss/SunProvider$1
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad1
 io/netty/util/internal/PlatformDependent0$3
 org/antlr/v4/runtime/CommonTokenFactory
@@ -5507,7 +5577,6 @@ sun/security/ssl/SupportedVersionsExtension$CHSupportedVersionsSpec
 sun/security/ssl/SSLMasterKeyDerivation
 jdk/internal/math/FloatingDecimal$ASCIIToBinaryBuffer
 software/amazon/awssdk/http/SdkHttpHeaders
-com/sun/org/apache/xerces/internal/impl/XMLEntityManager$EncodingInfo
 io/netty/channel/AbstractChannel$AbstractUnsafe$1
 io/netty/util/ReferenceCountUtil
 org/apache/http/client/HttpClient
@@ -5525,7 +5594,6 @@ software/amazon/awssdk/core/SdkStandardLogger
 com/exasol/util/QuotesApplier
 software/amazon/awssdk/core/internal/util/Crc32ChecksumValidatingInputStream
 software/amazon/awssdk/services/s3/model/PutObjectLegalHoldRequest
-com/sun/xml/internal/stream/Entity
 software/amazon/awssdk/core/interceptor/Context$ModifyHttpResponse
 java/util/ImmutableCollections$List12
 software/amazon/awssdk/protocols/core/AbstractMarshallingRegistry$Builder
@@ -5572,15 +5640,18 @@ software/amazon/awssdk/http/async/AsyncExecuteRequest$BuilderImpl
 java/lang/AssertionError
 java/util/regex/Pattern$Branch
 java/security/SecureRandomSpi
+org/codehaus/stax2/ri/typed/ValueDecoderFactory$DecoderBase
 java/lang/BootstrapMethodError
 java/lang/NoSuchFieldException
+com/ctc/wstx/exc/WstxValidationException
 software/amazon/awssdk/regions/servicemetadata/IotfleetwiseServiceMetadata
 jdk/internal/jimage/ImageLocation
 io/netty/util/NetUtilInitializations$NetworkIfaceAndInetAddress
 java/time/ZonedDateTime$1
-org/apache/http/client/methods/HttpOptions
 sun/reflect/annotation/AnnotationType
+org/apache/http/client/methods/HttpOptions
 java/util/Set
+org/codehaus/stax2/LocationInfo
 io/netty/handler/ssl/ApplicationProtocolNegotiator
 jdk/internal/logger/LazyLoggers$1
 java/nio/Buffer$1

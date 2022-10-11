@@ -70,6 +70,21 @@
             <artifactId>virtual-schema-common-document-files</artifactId>
             <version>${vs-common-document-files.version}</version>
         </dependency>
+        <dependency>
+            <!-- Explicitly upgrade parquet-io-java until virtual-schema-common-document-files uses 2.0.0 -->
+            <groupId>com.exasol</groupId>
+            <artifactId>parquet-io-java</artifactId>
+            <version>2.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <!-- Required to avoid
+                        java.lang.NoSuchMethodError: 'void javax.ws.rs.core.MultivaluedMap.addAll(java.lang.Object, java.lang.Object[])'
+                    -->
+                    <groupId>javax.ws.rs</groupId>
+                    <artifactId>jsr311-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <!-- Explicitly upgrade transitive dependency via com.exasol:parquet-io-java and hadoop to fix CVE-2022-2047 -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -229,21 +244,6 @@
             <artifactId>extension-manager-integration-test-java</artifactId>
             <version>0.1.0</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- Required to avoid
-                java.lang.NoSuchMethodError: 'void javax.ws.rs.core.MultivaluedMap.addAll(java.lang.Object, java.lang.Object[])'
-            -->
-            <groupId>com.exasol</groupId>
-            <artifactId>parquet-io-java</artifactId>
-            <version>1.3.3</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.ws.rs</groupId>
-                    <artifactId>jsr311-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
     <build>

@@ -60,10 +60,10 @@
 | [Lombok Maven Plugin][65]                               | [The MIT License][30]                         |
 | [Maven Failsafe Plugin][66]                             | [Apache License, Version 2.0][28]             |
 | [JaCoCo :: Maven Plugin][67]                            | [Eclipse Public License 2.0][50]              |
-| [Apache Maven Clean Plugin][68]                         | [Apache License, Version 2.0][28]             |
-| [Exec Maven Plugin][69]                                 | [Apache License 2][8]                         |
-| [error-code-crawler-maven-plugin][70]                   | [MIT License][71]                             |
-| [Reproducible Build Maven Plugin][72]                   | [Apache 2.0][8]                               |
+| [error-code-crawler-maven-plugin][68]                   | [MIT License][69]                             |
+| [Reproducible Build Maven Plugin][70]                   | [Apache 2.0][8]                               |
+| [Apache Maven Clean Plugin][71]                         | [Apache License, Version 2.0][28]             |
+| [Exec Maven Plugin][72]                                 | [Apache License 2][8]                         |
 | [Maven Resources Plugin][73]                            | [The Apache Software License, Version 2.0][8] |
 | [Maven Install Plugin][74]                              | [The Apache Software License, Version 2.0][8] |
 | [Maven Deploy Plugin][75]                               | [The Apache Software License, Version 2.0][8] |
@@ -137,11 +137,11 @@
 [65]: http://anthonywhitford.com/lombok.maven/lombok-maven-plugin/
 [66]: https://maven.apache.org/surefire/maven-failsafe-plugin/
 [67]: https://www.jacoco.org/jacoco/trunk/doc/maven.html
-[68]: https://maven.apache.org/plugins/maven-clean-plugin/
-[69]: http://www.mojohaus.org/exec-maven-plugin
-[70]: https://github.com/exasol/error-code-crawler-maven-plugin/
-[71]: https://github.com/exasol/error-code-crawler-maven-plugin/blob/main/LICENSE
-[72]: http://zlika.github.io/reproducible-build-maven-plugin
+[68]: https://github.com/exasol/error-code-crawler-maven-plugin/
+[69]: https://github.com/exasol/error-code-crawler-maven-plugin/blob/main/LICENSE
+[70]: http://zlika.github.io/reproducible-build-maven-plugin
+[71]: https://maven.apache.org/plugins/maven-clean-plugin/
+[72]: http://www.mojohaus.org/exec-maven-plugin
 [73]: http://maven.apache.org/plugins/maven-resources-plugin/
 [74]: http://maven.apache.org/plugins/maven-install-plugin/
 [75]: http://maven.apache.org/plugins/maven-deploy-plugin/

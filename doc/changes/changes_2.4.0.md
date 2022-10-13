@@ -1,4 +1,4 @@
-# Virtual Schema for document data in files on AWS S3 2.4.0, released 2022-??-??
+# Virtual Schema for document data in files on AWS S3 2.4.0, released 2022-10-13
 
 Code name: Support for Extension Manager
 

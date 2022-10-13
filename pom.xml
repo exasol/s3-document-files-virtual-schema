@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.exasol</groupId>
     <artifactId>s3-document-files-virtual-schema</artifactId>
     <version>2.4.0</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
-        <junit.version>5.9.0</junit.version>
-        <org.testcontainers.version>1.17.3</org.testcontainers.version>
-        <vs-common-document-files.version>7.1.0</vs-common-document-files.version>
+        <junit.version>5.9.1</junit.version>
+        <org.testcontainers.version>1.17.5</org.testcontainers.version>
+        <vs-common-document-files.version>7.1.1</vs-common-document-files.version>
         <!-- Additional sonar configuration for analyzing TypeScript extension -->
         <sonar.sources>src/main/,extension/src/</sonar.sources>
         <sonar.exclusions>extension/src/*.test.ts</sonar.exclusions>
         <sonar.tests>src/test/,extension/src</sonar.tests>
         <sonar.test.inclusions>src/test/,*.test.ts</sonar.test.inclusions>
         <sonar.javascript.lcov.reportPaths>extension/coverage/lcov.info</sonar.javascript.lcov.reportPaths>
-        <!-- Generated code dependencies -->
-        <swagger-core-version>2.2.2</swagger-core-version>
-        <jersey-version>2.36</jersey-version>
-        <jackson-version>2.13.4</jackson-version>
     </properties>
     <profiles>
         <profile>
@@ -54,7 +49,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.17.267</version>
+                <version>2.17.290</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -74,6 +69,21 @@
             <groupId>com.exasol</groupId>
             <artifactId>virtual-schema-common-document-files</artifactId>
             <version>${vs-common-document-files.version}</version>
+        </dependency>
+        <dependency>
+            <!-- Explicitly upgrade parquet-io-java until virtual-schema-common-document-files uses 2.0.0 -->
+            <groupId>com.exasol</groupId>
+            <artifactId>parquet-io-java</artifactId>
+            <version>2.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <!-- Required to avoid
+                        java.lang.NoSuchMethodError: 'void javax.ws.rs.core.MultivaluedMap.addAll(java.lang.Object, java.lang.Object[])'
+                    -->
+                    <groupId>javax.ws.rs</groupId>
+                    <artifactId>jsr311-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- Explicitly upgrade transitive dependency via com.exasol:parquet-io-java and hadoop to fix CVE-2022-2047 -->
         <dependency>
@@ -125,7 +135,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.7.0</version>
+            <version>4.8.0</version>
             <scope>test</scope>
         </dependency>
         <!--Integration test dependencies-->
@@ -144,14 +154,21 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>test-db-builder-java</artifactId>
-            <version>3.3.4</version>
+            <version>3.4.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.296</version>
+            <version>1.12.319</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Explicitly upgrade transitive dependency of aws-java-sdk-s3 to fix CVE-2022-42003 and CVE-2022-42004 -->
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.14.0-rc1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -179,15 +196,28 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>exasol-testcontainers</artifactId>
+            <version>6.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Required to void ClassNotFoundException: com.exasol.bucketfs.monitor.BucketFsMonitor-->
+            <groupId>com.exasol</groupId>
+            <artifactId>bucketfs-java</artifactId>
+            <version>2.4.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.32</version>
+            <version>1.33</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>small-json-files-test-fixture</artifactId>
-            <version>0.1.2</version>
+            <version>0.1.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -205,65 +235,13 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>maven-project-version-getter</artifactId>
-            <version>1.1.1</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- Dependencies for generated extension-manager client -->
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>${swagger-core-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- HTTP client: jersey-client -->
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>${jersey-version}</version>
+            <version>1.2.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-multipart</artifactId>
-            <version>${jersey-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-jackson</artifactId>
-            <version>${jersey-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.inject</groupId>
-            <artifactId>jersey-hk2</artifactId>
-            <version>${jersey-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- JSON processing: jackson -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- Base64 encoding that works in both JVM and Android -->
-        <dependency>
-            <groupId>com.brsanthu</groupId>
-            <artifactId>migbase64</artifactId>
-            <version>2.2</version>
+            <groupId>com.exasol</groupId>
+            <artifactId>extension-manager-integration-test-java</artifactId>
+            <version>0.1.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -283,13 +261,19 @@
                         <!-- org.yaml:snakeyaml: https://ossindex.sonatype.org/vulnerability/CVE-2022-38752
                         Used only for using test config file, not parsing untrusted input. -->
                         <exclude>CVE-2022-38752</exclude>
+                        <!-- org.apache.hadoop:hadoop-hdfs-client:jar:3.3.4: https://ossindex.sonatype.org/vulnerability/sonatype-2022-5732
+                        No fixed version available, see https://github.com/exasol/parquet-io-java/issues/50 -->
+                        <exclude>sonatype-2022-5732</exclude>
+                        <!-- org.apache.hadoop:hadoop-common:jar:3.3.4: https://ossindex.sonatype.org/vulnerability/sonatype-2022-5820
+                        No fixed version available, will be fixed in 3.3.5 -->
+                        <exclude>sonatype-2022-5820</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>2.7.0</version>
+                <version>2.8.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -350,7 +334,7 @@
                 <version>3.0.0</version>
                 <executions>
                     <execution>
-                        <id>npm-install</id>
+                        <id>npm-ci</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>exec</goal>
@@ -402,69 +386,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>io.swagger.codegen.v3</groupId>
-                <artifactId>swagger-codegen-maven-plugin</artifactId>
-                <version>3.0.34</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/test/resources/extension-manager-swagger.yaml</inputSpec>
-                            <language>java</language>
-                            <addCompileSourceRoot>false</addCompileSourceRoot>
-                            <apiPackage>com.exasol.extensionmanager.client.api</apiPackage>
-                            <modelPackage>com.exasol.extensionmanager.client.model</modelPackage>
-                            <invokerPackage>com.exasol.extensionmanager.client.invoker</invokerPackage>
-                            <generateApiTests>false</generateApiTests>
-                            <generateModelTests>false</generateModelTests>
-                            <generateSupportingFiles>true</generateSupportingFiles>
-                            <generateApiDocumentation>false</generateApiDocumentation>
-                            <configHelp>false</configHelp>
-                            <configOptions>
-                                <sourceFolder>extension-manager-client</sourceFolder>
-                                <dateLibrary>java11</dateLibrary>
-                                <java11>true</java11>
-                                <checkDuplicatedModelName>true</checkDuplicatedModelName>
-                                <useRuntimeException>true</useRuntimeException>
-                                <library>jersey2</library>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <id>add-generated-test-source</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>target/generated-sources/swagger/extension-manager-client/</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.exasol</groupId>
-                <artifactId>error-code-crawler-maven-plugin</artifactId>
-                <configuration>
-                    <sourcePaths>
-                        <sourcePath>target/delombok/main</sourcePath>
-                        <sourcePath>target/delombok/test</sourcePath>
-                        <sourcePath>target/generated-sources/swagger/extension-manager-client/</sourcePath>
-                    </sourcePaths>
-                </configuration>
             </plugin>
         </plugins>
     </build>

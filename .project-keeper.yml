@@ -8,10 +8,7 @@ sources:
       - lombok
 linkReplacements:
   - "https://awhitford.github.com/lombok.maven/lombok-maven-plugin/|http://anthonywhitford.com/lombok.maven/lombok-maven-plugin/"
-  - "https://github.com/swagger-api/swagger-core/modules/swagger-annotations|https://github.com/swagger-api/swagger-core/tree/master/modules/swagger-annotations"
-  - "jquery.org/license|https://jquery.org/license/"
-  - "https://github.com/swagger-api/swagger-codegen/modules/swagger-codegen-maven-plugin|https://github.com/swagger-api/swagger-codegen/tree/master/modules/swagger-codegen-maven-plugin"
 excludes:
   - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build.yml'"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_prepare_original_checksum.yml'"
-
+  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_upload_github_release_assets.yml'"

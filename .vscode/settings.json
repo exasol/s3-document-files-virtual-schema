@@ -12,4 +12,8 @@
             "-Djava.util.logging.config.file=src/test/resources/logging.properties"
         ]
     },
+    "sonarlint.connectedMode.project": {
+        "connectionId": "exasol",
+        "projectKey": "com.exasol:s3-document-files-virtual-schema"
+    },
 }

@@ -78,11 +78,3 @@ npm run lint
 To use a local, non-published version of the extension manager interface during development, edit [extension/package.json](../../extension/package.json) and replace the version of `"@exasol/extension-manager-interface"` with the path to your local clone of [extension-manager-interface](https://github.com/exasol/extension-manager-interface).
 
 Then run `npm install` and restart your IDE.
-
-### Updating the Extension Manager OpenAPI Definition
-
-Start the extension manager, then run this command:
-
-```shell
-curl "http://localhost:8080/openapi.json" -o src/test/resources/extension-manager-swagger.yaml && mvn test-compile
-```

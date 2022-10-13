@@ -4,10 +4,8 @@
 .github/workflows/ci-build-next-java.yml                         linguist-generated=true
 .github/workflows/dependencies_check.yml                         linguist-generated=true
 .github/workflows/release_droid_print_quick_checksum.yml         linguist-generated=true
-.github/workflows/release_droid_upload_github_release_assets.yml linguist-generated=true
 dependencies.md                                                  linguist-generated=true
 pk_generated_parent.pom                                          linguist-generated=true
 doc/changes/changelog.md                                         linguist-generated=true
-src/test/resources/extension-manager-swagger.yaml                linguist-generated=true
 src/main/resources/classes.lst                                   linguist-generated=true
 extension/package-lock.json                                      linguist-generated=true

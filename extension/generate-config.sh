@@ -46,4 +46,5 @@ export const CONFIG = {
 }
 EOL
 
-echo "Generated extension config $extension_config"
+echo "Generated extension config $extension_config:"
+echo "File name: ${file_name}, size: ${file_size_bytes} bytes, version: ${version}, document files VS version: ${document_files_vs_version}"

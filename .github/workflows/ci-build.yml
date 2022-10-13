@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      EXTENSION_MANAGER_VERSION: latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -29,18 +27,16 @@ jobs:
           cache: 'npm'
           cache-dependency-path: extension/package-lock.json
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: 1.19
-      - name: Configure extension manager version ${{ env.EXTENSION_MANAGER_VERSION }}
-        run: echo "extensionManagerVersion = $EXTENSION_MANAGER_VERSION" > extension-test.properties
       - name: Cache Go modules
         uses: actions/cache@v3
         with:
           path: |
             ~/.cache/go-build
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('extension-test.properties') }}
+          key: ${{ runner.os }}-go-${{ hashFiles('pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-go-
       - name: Cache SonarCloud packages

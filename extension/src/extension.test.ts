@@ -302,5 +302,11 @@ describe("S3 VS Extension", () => {
         .toThrow(`Version 'wrongVersion' not supported, can only use '${CONFIG.version}'.`)
     })
   })
-})
 
+  describe("readInstanceParameterValues()", () => {
+    it("is not supported", () => {
+      expect(() => { createExtension().readInstanceParameterValues(createMockContext(), "version", "instId") })
+        .toThrow("Reading instance parameter values not supported")
+    })
+  })
+})

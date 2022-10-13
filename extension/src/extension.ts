@@ -57,7 +57,7 @@ export function createExtension(): ExasolExtension {
             return createInstanceParameters()
         },
         readInstanceParameterValues(_context: Context, _version: string, _instanceId: string): ParameterValues {
-            return { values: [] };
+            throw new NotFoundError("Reading instance parameter values not supported")
         }
     }
 }

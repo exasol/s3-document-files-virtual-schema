@@ -23,11 +23,12 @@ This release allows installing an S3 Virtual Schema using the [extension manager
 * Updated `com.exasol:error-reporting-java:0.4.1` to `1.0.0`
 * Added `com.exasol:parquet-io-java:2.0.0`
 * Updated `com.exasol:virtual-schema-common-document-files:7.1.0` to `7.1.1`
-* Updated `software.amazon.awssdk:s3:2.17.238` to `2.17.290`
+* Added `org.apache.commons:commons-text:1.10.0`
+* Updated `software.amazon.awssdk:s3:2.17.238` to `2.17.293`
 
 ### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.267` to `1.12.319`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.267` to `1.12.322`
 * Removed `com.brsanthu:migbase64:2.2`
 * Added `com.exasol:bucketfs-java:2.4.0`
 * Added `com.exasol:exasol-testcontainers:6.2.0`

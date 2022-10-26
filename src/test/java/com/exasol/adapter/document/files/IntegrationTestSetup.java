@@ -23,8 +23,6 @@ import com.exasol.exasoltestsetup.*;
 import com.exasol.udfdebugging.UdfTestSetup;
 
 import jakarta.json.*;
-import lombok.Getter;
-import lombok.Setter;
 import software.amazon.awssdk.services.s3.S3Client;
 
 public class IntegrationTestSetup implements AutoCloseable {
@@ -33,14 +31,10 @@ public class IntegrationTestSetup implements AutoCloseable {
     public static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(CLOUD_SETUP_CONFIG).getTestSetup();
-    @Getter
     private final Connection connection;
-    @Getter
     private final Statement statement;
     private final ExasolObjectFactory exasolObjectFactory;
     private final AdapterScript adapterScript;
-    @Getter
-    @Setter
     private ConnectionDefinition connectionDefinition;
     private final Bucket bucket;
     private final List<DatabaseObject> createdObjects = new LinkedList<>();
@@ -205,7 +199,19 @@ public class IntegrationTestSetup implements AutoCloseable {
                 .connectionDefinition(this.connectionDefinition).adapterScript(this.adapterScript);
     }
 
-    public S3TestSetup getS3TestSetup() {
-        return this.s3TestSetup;
+    public Connection getConnection() {
+        return this.connection;
+    }
+
+    public ConnectionDefinition getConnectionDefinition() {
+        return this.connectionDefinition;
+    }
+
+    public Statement getStatement() {
+        return this.statement;
+    }
+
+    public void setConnectionDefinition(final ConnectionDefinition connectionDefinition) {
+        this.connectionDefinition = connectionDefinition;
     }
 }

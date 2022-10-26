@@ -10,11 +10,6 @@ Code name:
 
 ## Dependency Updates
 
-### Compile Dependency Updates
-
-* Updated `org.eclipse.jetty:jetty-client:9.4.48.v20220622` to `11.0.12`
-* Updated `org.slf4j:slf4j-jdk14:1.7.36` to `2.0.3`
-
 ### Test Dependency Updates
 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.322` to `1.12.328`

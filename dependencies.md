@@ -7,7 +7,7 @@
 | ---------------------------------------------- | ------------------------------------------------------------------------------------- |
 | [Virtual Schema for document data in files][0] | [MIT License][1]                                                                      |
 | [Parquet for Java][2]                          | [MIT License][3]                                                                      |
-| [Jetty :: Asynchronous HTTP Client][4]         | [Eclipse Public License - Version 2.0][5]; [Apache Software License - Version 2.0][6] |
+| [Jetty :: Asynchronous HTTP Client][4]         | [Apache Software License - Version 2.0][5]; [Eclipse Public License - Version 1.0][6] |
 | [reload4j][7]                                  | [The Apache Software License, Version 2.0][8]                                         |
 | [AWS Java SDK :: Services :: Amazon S3][9]     | [Apache License, Version 2.0][10]                                                     |
 | [error-reporting-java][11]                     | [MIT License][12]                                                                     |
@@ -74,8 +74,8 @@
 [2]: https://github.com/exasol/parquet-io-java/
 [3]: https://github.com/exasol/parquet-io-java/blob/main/LICENSE
 [4]: https://eclipse.org/jetty/jetty-client
-[5]: https://www.eclipse.org/legal/epl-2.0
-[6]: https://www.apache.org/licenses/LICENSE-2.0
+[5]: http://www.apache.org/licenses/LICENSE-2.0
+[6]: https://www.eclipse.org/org/documents/epl-v10.php
 [7]: https://reload4j.qos.ch
 [8]: http://www.apache.org/licenses/LICENSE-2.0.txt
 [9]: https://aws.amazon.com/sdkforjava

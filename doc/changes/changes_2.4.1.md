@@ -10,6 +10,10 @@ Code name:
 
 ## Dependency Updates
 
+### Compile Dependency Updates
+
+* Updated `software.amazon.awssdk:s3:2.17.293` to `2.18.3`
+
 ### Test Dependency Updates
 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.322` to `1.12.328`

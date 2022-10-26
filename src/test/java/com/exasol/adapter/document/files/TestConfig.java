@@ -1,7 +1,6 @@
 package com.exasol.adapter.document.files;
 
 import java.io.*;
-import java.util.Objects;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -50,27 +49,6 @@ public final class TestConfig {
 
     public void setS3CacheBucket(final String s3CacheBucket) {
         this.s3CacheBucket = s3CacheBucket;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.awsProfile, this.owner, this.s3CacheBucket);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final TestConfig other = (TestConfig) obj;
-        return Objects.equals(this.awsProfile, other.awsProfile) && Objects.equals(this.owner, other.owner)
-                && Objects.equals(this.s3CacheBucket, other.s3CacheBucket);
     }
 
     private static class Reader {

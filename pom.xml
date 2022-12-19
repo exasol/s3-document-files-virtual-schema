@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>2.4.1</version>
+    <version>2.4.2</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
         <junit.version>5.9.1</junit.version>
-        <org.testcontainers.version>1.17.5</org.testcontainers.version>
-        <vs-common-document-files.version>7.1.1</vs-common-document-files.version>
+        <org.testcontainers.version>1.17.6</org.testcontainers.version>
+        <vs-common-document-files.version>7.1.2</vs-common-document-files.version>
         <!-- Additional sonar configuration for analyzing TypeScript extension -->
         <sonar.sources>src/main/,extension/src/</sonar.sources>
         <sonar.exclusions>extension/src/*.test.ts</sonar.exclusions>
@@ -75,17 +75,36 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Explicitly upgrade transitive dependency via com.exasol:parquet-io-java and hadoop to fix CVE-2022-40152 -->
+        <dependency>
+            <groupId>com.fasterxml.woodstox</groupId>
+            <artifactId>woodstox-core</artifactId>
+            <version>5.4.0</version>
+        </dependency>
+        <!-- Explicitly upgrade transitive dependency via com.exasol:parquet-io-java and hadoop to fix CVE-2021-37533 -->
+        <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.9.0</version>
+        </dependency>
+        <!-- Explicitly upgrade transitive dependency via awssdk to fix CVE-2022-41915 -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec</artifactId>
+            <version>4.1.86.Final</version>
+        </dependency>
         <!-- Explicitly upgrade transitive dependency via com.exasol:parquet-io-java and hadoop to fix CVE-2022-2047 -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-client</artifactId>
-            <version>9.4.48.v20220622</version>
+            <version>11.0.13</version>
         </dependency>
         <!-- Explicitly upgrade transtive dependency via com.exasol:parquet-io-java and hadoop to fix https://ossindex.sonatype.org/vulnerability/sonatype-2022-5401 -->
         <dependency>
             <groupId>ch.qos.reload4j</groupId>
             <artifactId>reload4j</artifactId>
-            <version>1.2.22</version>
+            <version>1.2.24</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
@@ -106,7 +125,7 @@
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier</artifactId>
-            <version>3.10.1</version>
+            <version>3.12.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -131,7 +150,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.8.1</version>
+            <version>4.10.0</version>
             <scope>test</scope>
         </dependency>
         <!--Integration test dependencies-->
@@ -157,26 +176,26 @@
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.328</version>
+            <version>1.12.367</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- Explicitly upgrade transitive dependency of aws-java-sdk-s3 to fix CVE-2022-42003 and CVE-2022-42004 -->
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.14.0-rc1</version>
+            <version>2.14.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.36</version>
+            <version>2.0.6</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>udf-debugging-java</artifactId>
-            <version>0.6.4</version>
+            <version>0.6.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -188,20 +207,20 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-test-setup-abstraction-java</artifactId>
-            <version>0.3.2</version>
+            <version>1.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-testcontainers</artifactId>
-            <version>6.3.0</version>
+            <version>6.4.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- Required to void ClassNotFoundException: com.exasol.bucketfs.monitor.BucketFsMonitor-->
             <groupId>com.exasol</groupId>
             <artifactId>bucketfs-java</artifactId>
-            <version>2.4.1</version>
+            <version>2.5.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -225,7 +244,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>performance-test-recorder-java</artifactId>
-            <version>0.1.1</version>
+            <version>0.1.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -243,7 +262,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>extension-manager-integration-test-java</artifactId>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -260,22 +279,25 @@
                         <!-- io.netty:netty-handler: https://ossindex.sonatype.org/vulnerability/sonatype-2020-0026
                         Not a vulnerability in netty but how it is configured by the client software.amazon.awssdk:netty-nio-client. -->
                         <exclude>sonatype-2020-0026</exclude>
-                        <!-- org.yaml:snakeyaml: https://ossindex.sonatype.org/vulnerability/CVE-2022-38752
+                        <!-- org.yaml:snakeyaml
                         Used only for using test config file, not parsing untrusted input. -->
-                        <exclude>CVE-2022-38752</exclude>
+                        <exclude>CVE-2022-1471</exclude>
                         <!-- org.apache.hadoop:hadoop-hdfs-client:jar:3.3.4: https://ossindex.sonatype.org/vulnerability/sonatype-2022-5732
                         No fixed version available, see https://github.com/exasol/parquet-io-java/issues/50 -->
                         <exclude>sonatype-2022-5732</exclude>
                         <!-- org.apache.hadoop:hadoop-common:jar:3.3.4: https://ossindex.sonatype.org/vulnerability/sonatype-2022-5820
                         No fixed version available, will be fixed in 3.3.5 -->
                         <exclude>sonatype-2022-5820</exclude>
+                        <!-- com.fasterxml.jackson.core:jackson-core:jar:2.14.1
+                             Currently no fixed version available. -->
+                        <exclude>sonatype-2022-6438</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>2.8.0</version>
+                <version>2.9.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -394,7 +416,7 @@
     <parent>
         <artifactId>s3-document-files-virtual-schema-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>2.4.1</version>
+        <version>2.4.2</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
 </project>

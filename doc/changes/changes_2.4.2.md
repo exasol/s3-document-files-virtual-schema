@@ -1,4 +1,4 @@
-# Virtual Schema for document data in files on AWS S3 2.4.2, released 2022-22-12-19
+# Virtual Schema for document data in files on AWS S3 2.4.2, released 2022-12-19
 
 Code name: Dependency Upgrade
 

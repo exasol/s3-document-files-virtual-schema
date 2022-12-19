@@ -80,7 +80,7 @@
 [5]: http://www.apache.org/licenses/LICENSE-2.0.txt
 [6]: https://commons.apache.org/proper/commons-net/
 [7]: https://www.apache.org/licenses/LICENSE-2.0.txt
-[8]: https://netty.io/netty-codec/
+[8]: https://netty.io/
 [9]: https://www.apache.org/licenses/LICENSE-2.0
 [10]: https://eclipse.org/jetty/jetty-client
 [11]: https://www.eclipse.org/legal/epl-2.0

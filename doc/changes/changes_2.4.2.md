@@ -32,7 +32,6 @@ Fixed vulnerabilities
 * Updated `com.exasol:bucketfs-java:2.4.0` to `2.5.0`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:0.3.2` to `1.1.0`
 * Updated `com.exasol:exasol-testcontainers:6.2.0` to `6.4.0`
-* Updated `com.exasol:extension-manager-integration-test-java:0.1.0` to `0.2.0`
 * Updated `com.exasol:java-class-list-verifier:0.2.0` to `0.2.1`
 * Updated `com.exasol:performance-test-recorder-java:0.1.1` to `0.1.2`
 * Updated `com.exasol:test-db-builder-java:3.4.0` to `3.4.1`

@@ -164,6 +164,18 @@ public class IntegrationTestSetup implements AutoCloseable {
         return virtualSchema;
     }
 
+    /**
+     * Old version added property "DEBUG_ADDRESS" with value "127.0.0.1:3001". Recommendation is to use default
+     * properties provided by test-db-builder-java:
+     * <ul>
+     * <li>com.exasol.virtualschema.debug.host</li>
+     * <li>com.exasol.virtualschema.debug.port</li>
+     * <li>com.exasol.virtualschema.debug.level</li>
+     * </ul>
+     *
+     * @param mapping must be non null
+     * @return map
+     */
     @NotNull
     private Map<String, String> getVirtualSchemaProperties(final String mapping) {
         final Map<String, String> properties = new HashMap<>(Map.of("MAPPING", mapping));
@@ -171,10 +183,6 @@ public class IntegrationTestSetup implements AutoCloseable {
         final String profileProperty = System.getProperty("test.jprofiler", "");
         if (!debugProperty.isBlank() || !profileProperty.isBlank()) {
             properties.put("MAX_PARALLEL_UDFS", "1");
-        }
-        if (System.getProperty("test.vs-logs", "false").equals("true")) {
-            properties.put("DEBUG_ADDRESS", "127.0.0.1:3001");
-            properties.put("LOG_LEVEL", "ALL");
         }
         return properties;
     }

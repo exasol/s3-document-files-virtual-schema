@@ -18,8 +18,8 @@ Fixed vulnerabilities
 ### Compile Dependency Updates
 
 * Updated `ch.qos.reload4j:reload4j:1.2.22` to `1.2.24`
-* Updated `com.exasol:virtual-schema-common-document-files:7.1.1` to `7.1.2`
-* Added `com.fasterxml.woodstox:woodstox-core:5.4.0`
+* Removed `com.exasol:parquet-io-java:2.0.0`
+* Updated `com.exasol:virtual-schema-common-document-files:7.1.1` to `7.1.3`
 * Added `commons-net:commons-net:3.9.0`
 * Added `io.netty:netty-codec:4.1.86.Final`
 * Updated `org.eclipse.jetty:jetty-client:9.4.48.v20220622` to `11.0.13`
@@ -37,8 +37,8 @@ Fixed vulnerabilities
 * Updated `com.exasol:performance-test-recorder-java:0.1.1` to `0.1.2`
 * Updated `com.exasol:test-db-builder-java:3.4.0` to `3.4.1`
 * Updated `com.exasol:udf-debugging-java:0.6.4` to `0.6.5`
-* Updated `com.exasol:virtual-schema-common-document-files:7.1.1` to `7.1.2`
-* Updated `com.fasterxml.jackson.core:jackson-databind:2.14.0-rc1` to `2.14.1`
+* Updated `com.exasol:virtual-schema-common-document-files:7.1.1` to `7.1.3`
+* Removed `com.fasterxml.jackson.core:jackson-databind:2.14.0-rc1`
 * Added `nl.jqno.equalsverifier:equalsverifier:3.12.3`
 * Updated `org.mockito:mockito-core:4.8.0` to `4.10.0`
 * Updated `org.testcontainers:junit-jupiter:1.17.5` to `1.17.6`

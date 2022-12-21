@@ -19,7 +19,7 @@ public class S3ConnectionPropertiesReader {
     private String ensureNoProtocol(final String input) {
         final Matcher matcher = PROTOCOLS.matcher(input);
         if (matcher.find()) {
-            throw new IllegalArgumentException(ExaError.messageBuilder("E-S3VS-8")
+            throw new IllegalArgumentException(ExaError.messageBuilder("E-VSS3-8")
                     .message("Property {{property}} has invalid value {{value}}."
                             + " Value must not contain a protocol.", AWS_ENDPOINT_OVERRIDE, input)
                     .mitigation("Please remove prefix {{prefix}}.", matcher.group(0)).toString());

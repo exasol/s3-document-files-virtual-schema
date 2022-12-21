@@ -48,7 +48,7 @@ class RequestRateRetryIteratorTest {
         final RequestRateRetryIterator iterator = new RequestRateRetryIterator(source);
         final IllegalStateException exception = assertThrows(IllegalStateException.class, iterator::next);
         assertThat(exception.getMessage(),
-                equalTo("E-S3VS-7: Failed to get next response from AWS after 100 retries."));
+                equalTo("E-VSS3-7: Failed to get next response from AWS after 100 retries."));
     }
 
     private static class ThrottledIterator implements Iterator<ListObjectsV2Response> {
@@ -69,7 +69,7 @@ class RequestRateRetryIteratorTest {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            if (Math.random() < errorLikeliness) {
+            if (Math.random() < this.errorLikeliness) {
                 throw S3Exception.builder().message(REDUCE_REQUEST_RATE_MESSAGE).build();
             }
             this.counter++;

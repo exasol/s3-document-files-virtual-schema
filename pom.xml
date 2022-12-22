@@ -164,7 +164,7 @@
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.367</version>
+            <version>1.12.370</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -188,20 +188,13 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-test-setup-abstraction-java</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>exasol-testcontainers</artifactId>
-            <version>6.4.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- Required to void ClassNotFoundException: com.exasol.bucketfs.monitor.BucketFsMonitor-->
-            <groupId>com.exasol</groupId>
-            <artifactId>bucketfs-java</artifactId>
-            <version>2.5.0</version>
+            <version>6.4.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>

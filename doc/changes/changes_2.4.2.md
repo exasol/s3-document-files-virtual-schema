@@ -28,10 +28,10 @@ Fixed vulnerabilities
 
 ### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.322` to `1.12.367`
-* Updated `com.exasol:bucketfs-java:2.4.0` to `2.5.0`
-* Updated `com.exasol:exasol-test-setup-abstraction-java:0.3.2` to `1.1.0`
-* Updated `com.exasol:exasol-testcontainers:6.2.0` to `6.4.0`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.322` to `1.12.370`
+* Removed `com.exasol:bucketfs-java:2.4.0`
+* Updated `com.exasol:exasol-test-setup-abstraction-java:0.3.2` to `1.1.1`
+* Updated `com.exasol:exasol-testcontainers:6.2.0` to `6.4.1`
 * Updated `com.exasol:extension-manager-integration-test-java:0.1.0` to `0.2.0`
 * Updated `com.exasol:java-class-list-verifier:0.2.0` to `0.2.1`
 * Updated `com.exasol:performance-test-recorder-java:0.1.1` to `0.1.2`

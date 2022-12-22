@@ -47,7 +47,7 @@ For the document Virtual Schemas, and by that also the S3 Virtual Schema, this i
 To install the Virtual Schema adapter, download its latest jar from the [releases](https://github.com/exasol/s3-document-files-virtual-schema/releases) and upload to BucketFS:
 
 ``` shell script
-curl -I -X PUT -T document-files-virtual-schema-dist-7.1.3-s3-2.4.2.jar http://w:writepw@<YOUR_DB_IP>:2580/default/
+curl -I -X PUT -T document-files-virtual-schema-dist-7.1.4-s3-2.4.2.jar http://w:writepw@<YOUR_DB_IP>:2580/default/
 ```
 
 (If you have never used BucketFS, you can check out [its documentation](https://docs.exasol.com/database_concepts/bucketfs/bucketfs.htm))
@@ -59,7 +59,7 @@ CREATE SCHEMA ADAPTER;
 
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.1.3-s3-2.4.2.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.1.4-s3-2.4.2.jar;
 /
 
 CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
@@ -68,7 +68,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   CONNECTION_NAME VARCHAR(500))
   EMITS(...) AS
     %scriptclass com.exasol.adapter.document.UdfEntryPoint;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.1.3-s3-2.4.2.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.1.4-s3-2.4.2.jar;
 /
 ```
 

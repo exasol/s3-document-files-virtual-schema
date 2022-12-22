@@ -9,7 +9,7 @@
     <properties>
         <junit.version>5.9.1</junit.version>
         <org.testcontainers.version>1.17.6</org.testcontainers.version>
-        <vs-common-document-files.version>7.1.3</vs-common-document-files.version>
+        <vs-common-document-files.version>7.1.4</vs-common-document-files.version>
         <!-- Additional sonar configuration for analyzing TypeScript extension -->
         <sonar.sources>src/main/,extension/src/</sonar.sources>
         <sonar.exclusions>extension/src/*.test.ts</sonar.exclusions>
@@ -176,7 +176,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>udf-debugging-java</artifactId>
-            <version>0.6.5</version>
+            <version>0.6.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>

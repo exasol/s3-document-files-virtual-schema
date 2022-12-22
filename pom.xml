@@ -59,6 +59,15 @@
             <groupId>com.exasol</groupId>
             <artifactId>virtual-schema-common-document-files</artifactId>
             <version>${vs-common-document-files.version}</version>
+            <exclusions>
+              <exclusion>
+                <!-- Exclude transitive dependency to jsr311-api via VSDF / parquet-io-java / hadoop / jersey-client:1.19
+                     to avoid clash with jersey-client:2.36 required by extension-manager-client
+                     and dependency to jakarta.ws.rs:jakarta.ws.rs-api -->
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>jsr311-api</artifactId>
+              </exclusion>
+            </exclusions>
         </dependency>
         <!-- Explicitly upgrade transitive dependency via com.exasol:parquet-io-java and hadoop to fix CVE-2021-37533 -->
         <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
@@ -234,7 +243,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>extension-manager-integration-test-java</artifactId>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

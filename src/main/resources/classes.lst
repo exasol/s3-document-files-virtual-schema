@@ -1,4 +1,4 @@
-software/amazon/awssdk/core/retry/RetryPolicy
+ software/amazon/awssdk/core/retry/RetryPolicy
 org/logicng/cardinalityconstraints/CCAtLeastK
 software/amazon/awssdk/http/apache/internal/conn/IdleConnectionReaper$ReaperTask
 software/amazon/awssdk/protocols/xml/internal/unmarshall/XmlPayloadUnmarshaller

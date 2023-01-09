@@ -18,6 +18,7 @@ Fixed vulnerabilities
 ### Compile Dependency Updates
 
 * Updated `ch.qos.reload4j:reload4j:1.2.22` to `1.2.24`
+* Added `com.exasol:bucketfs-java:2.5.0`
 * Removed `com.exasol:parquet-io-java:2.0.0`
 * Updated `com.exasol:virtual-schema-common-document-files:7.1.1` to `7.1.4`
 * Added `commons-net:commons-net:3.9.0`

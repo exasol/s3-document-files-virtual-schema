@@ -160,6 +160,12 @@
             <version>3.4.1</version>
             <scope>test</scope>
         </dependency>
+        <!-- test if old version fixes bug -->
+        <dependency>
+            <groupId>com.exasol</groupId>
+            <artifactId>bucketfs-java</artifactId>
+            <version>2.5.0</version>
+        </dependency>
         <dependency>
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>

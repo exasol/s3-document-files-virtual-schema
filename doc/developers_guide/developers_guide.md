@@ -14,10 +14,6 @@ owner: <your email used for exa:owner tag>
 s3CacheBucket: <name of an s3 bucket that will be used for caching the test files (optional)>
 ```
 
-### Get temporary AWS token
-
-Use [product-integration-tool-chest/aws-store-session-token.sh](https://github.com/exasol/product-integration-tool-chest/blob/main/aws-store-session-token.sh) to allocate a temporary token for accessing AWS resources in the `dev` account. The profile must match the name in file `test_config.yml`.
-
 ### Executing Integration Tests on Windows
 
 AWS command line client (AWS CLI) and the AWS Software Development Kit for Java (AWS SDK) are using different defaults for finding your HOME directory:

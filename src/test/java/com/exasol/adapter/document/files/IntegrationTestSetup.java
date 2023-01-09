@@ -121,11 +121,6 @@ public class IntegrationTestSetup implements AutoCloseable {
 
     AdapterScript createAdapterScript(final ExasolSchema adapterSchema)
             throws BucketAccessException, TimeoutException, FileNotFoundException {
-        try {
-            Thread.sleep(500);
-        } catch (final InterruptedException e) {
-            throw new AssertionError(e);
-        }
         this.bucket.uploadFile(ADAPTER_JAR_LOCAL_PATH, ADAPTER_JAR);
         return adapterSchema.createAdapterScriptBuilder("FILES_ADAPTER")
                 .bucketFsContent("com.exasol.adapter.RequestDispatcher", getAdapterJarInBucketFs())

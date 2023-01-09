@@ -414,8 +414,8 @@ org/apache/http/config/SocketConfig
 java/util/stream/MatchOps$MatchKind
 software/amazon/awssdk/core/internal/util/HttpChecksumResolver
 com/exasol/adapter/document/files/stringfilter/wildcardexpression/fragments/RegularCharacter
-org/jcp/xml/dsig/internal/dom/XMLDSigRI$ProviderService
 software/amazon/awssdk/awscore/client/handler/AwsAsyncClientHandler
+org/jcp/xml/dsig/internal/dom/XMLDSigRI$ProviderService
 sun/security/ssl/SSLContextImpl$AbstractTLSContext
 java/time/ZonedDateTime
 software/amazon/awssdk/utils/FunctionalUtils$UnsafeRunnable
@@ -1409,8 +1409,8 @@ java/lang/reflect/ProxyGenerator$FieldInfo
 java/util/ImmutableCollections$MapN
 org/jcp/xml/dsig/internal/dom/XMLDSigRI$2
 sun/security/ssl/MaxFragExtension$SHMaxFragmentLengthConsumer
-org/jcp/xml/dsig/internal/dom/XMLDSigRI$1
 software/amazon/awssdk/thirdparty/jackson/core/JsonEncoding
+org/jcp/xml/dsig/internal/dom/XMLDSigRI$1
 software/amazon/awssdk/http/async/AsyncExecuteRequest$Builder
 sun/security/ssl/ExtendedMasterSecretExtension$CHExtendedMasterSecretAbsence
 io/netty/handler/codec/CodecOutputList$CodecOutputListRecycler
@@ -3500,9 +3500,9 @@ sun/management/RuntimeImpl
 org/apache/http/conn/EofSensorInputStream
 jdk/internal/module/ModuleBootstrap
 java/net/URI$Parser
-sun/security/pkcs11/SunPKCS11
 software/amazon/awssdk/services/s3/model/NoSuchUploadException
 software/amazon/awssdk/core/internal/handler/BaseAsyncClientHandler
+sun/security/pkcs11/SunPKCS11
 io/netty/util/internal/SocketUtils
 software/amazon/awssdk/core/exception/SdkInterruptedException
 javax/xml/stream/events/Namespace
@@ -4145,6 +4145,7 @@ org/antlr/v4/runtime/atn/SetTransition
 com/exasol/sql/dql/select/SelectVisitor
 software/amazon/awssdk/services/s3/endpoints/S3ClientContextParams
 software/amazon/awssdk/regions/servicemetadata/SmsVoiceServiceMetadata
+java/util/concurrent/CompletableFuture$ThreadPerTaskExecutor
 java/util/logging/Formatter
 java/lang/invoke/VarHandleGuards
 java/lang/ReflectiveOperationException
@@ -5322,6 +5323,7 @@ java/util/stream/SortedOps$AbstractRefSortingSink
 java/util/ServiceLoader$3
 java/util/ServiceLoader$2
 org/apache/http/protocol/HTTP
+software/amazon/awssdk/auth/credentials/AwsBasicCredentials
 com/exasol/sql/expression/ValueExpression
 software/amazon/awssdk/http/apache/internal/net/DelegateSslSocket
 java/nio/channels/Channel
@@ -5731,8 +5733,8 @@ sun/security/ssl/SSLCipher$T12GcmWriteCipherGenerator
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad2
 io/netty/handler/codec/HeadersUtils$StringEntry
 org/apache/http/impl/client/BasicCredentialsProvider
-io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad0
 sun/security/jgss/SunProvider$1
+io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad0
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad1
 io/netty/util/internal/PlatformDependent0$3
 org/antlr/v4/runtime/CommonTokenFactory

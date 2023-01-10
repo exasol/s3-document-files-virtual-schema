@@ -19,7 +19,7 @@ class RequestRateRetryIterator implements Iterator<ListObjectsV2Response> {
 
     /**
      * Create a new instance of {@link RequestRateRetryIterator}.
-     * 
+     *
      * @param source aws s3 iterator
      */
     RequestRateRetryIterator(final Iterator<ListObjectsV2Response> source) {
@@ -41,7 +41,7 @@ class RequestRateRetryIterator implements Iterator<ListObjectsV2Response> {
                 if (exception.getMessage().contains(REDUCE_REQUEST_RATE_MESSAGE)) {
                     waitABit();
                     if (retryCounter >= MAX_RETRIES) {
-                        throw new IllegalStateException(ExaError.messageBuilder("E-S3VS-7")
+                        throw new IllegalStateException(ExaError.messageBuilder("E-VSS3-7")
                                 .message("Failed to get next response from AWS after {{num retries}} retries.",
                                         retryCounter)
                                 .toString());
@@ -60,7 +60,7 @@ class RequestRateRetryIterator implements Iterator<ListObjectsV2Response> {
         } catch (final InterruptedException exception) {
             Thread.currentThread().interrupt();
             throw new IllegalStateException(
-                    ExaError.messageBuilder("E-S3VS-6").message("Interrupted while waiting.").toString(), exception);
+                    ExaError.messageBuilder("E-VSS3-6").message("Interrupted while waiting.").toString(), exception);
         }
     }
 }

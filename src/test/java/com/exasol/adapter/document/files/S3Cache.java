@@ -51,7 +51,7 @@ public class S3Cache implements S3UploadInterface {
         try {
             return Files.size(file);
         } catch (final IOException exception) {
-            throw new UncheckedIOException(ExaError.messageBuilder("E-S3VS-5")
+            throw new UncheckedIOException(ExaError.messageBuilder("E-VSS3-5")
                     .message("Failed to determine size of {{file}}.", file).toString(), exception);
         }
     }
@@ -61,7 +61,7 @@ public class S3Cache implements S3UploadInterface {
                 .stream().filter(s3object -> s3object.key().equals(checksum)).findAny();
         if (cachedFile.isPresent()) {
             if (cachedFile.get().size() != fileSize) {
-                throw new IllegalStateException(ExaError.messageBuilder("F-S3VS-4")
+                throw new IllegalStateException(ExaError.messageBuilder("F-VSS3-4")
                         .message("Found a different sized version of file {{file name}} in cache with same checksum.",
                                 fileName)
                         .message("This can be caused by a very unlikely checksum collision.")
@@ -87,7 +87,7 @@ public class S3Cache implements S3UploadInterface {
             return toHex(checksumBuilder.digest());
         } catch (final NoSuchAlgorithmException | IOException exception) {
             throw new IllegalStateException(
-                    ExaError.messageBuilder("F-S3VS-3")
+                    ExaError.messageBuilder("F-VSS3-3")
                             .message("Failed to calculate checksum of file {{file}}.", localPath).toString(),
                     exception);
         }

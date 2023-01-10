@@ -1,5 +1,5 @@
 error-tags:
-  S3VS:
+  VSS3:
     packages:
       - com.exasol.adapter.document.files
     highest-index: 8

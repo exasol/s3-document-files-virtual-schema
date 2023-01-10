@@ -60,7 +60,7 @@ class S3ConnectionPropertiesReaderTest {
                 () -> runReader("{\"awsAccessKeyId\": \"myKey\", " + "\"awsSecretAccessKey\": \"mySecretAccessKey\", "
                         + "\"awsRegion\": \"eu-central-1\", " + "\"awsEndpointOverride\": \"https://aws.com\" }"));
         assertThat(exception.getMessage(),
-                startsWith("E-S3VS-8: " + "Property 'awsEndpointOverride' has invalid value 'https://aws.com'."
+                startsWith("E-VSS3-8: " + "Property 'awsEndpointOverride' has invalid value 'https://aws.com'."
                         + " Value must not contain a protocol." + " Please remove prefix 'https://'."));
     }
 

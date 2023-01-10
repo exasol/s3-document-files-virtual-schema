@@ -1,6 +1,7 @@
 package com.exasol.adapter.document.files;
 
 import java.io.*;
+import java.util.logging.Logger;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -8,6 +9,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import software.amazon.awssdk.auth.credentials.*;
 
 public final class TestConfig {
+    private static final Logger LOGGER = Logger.getLogger(S3Cache.class.getName());
     public static final String FILE_NAME = "test_config.yml";
     private static final TestConfig CONFIG = new Reader().readTestConfig();
     private String awsProfile;
@@ -53,6 +55,7 @@ public final class TestConfig {
 
     private static class Reader {
         public TestConfig readTestConfig() {
+            LOGGER.finer(() -> "Reading test configuration from " + new File(FILE_NAME).getAbsoluteFile().toString());
             final Yaml yaml = new Yaml(new Constructor(TestConfig.class));
             try (final FileReader fileReader = new FileReader(FILE_NAME)) {
                 return yaml.load(fileReader);

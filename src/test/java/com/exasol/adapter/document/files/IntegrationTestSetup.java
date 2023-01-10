@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 public class IntegrationTestSetup implements AutoCloseable {
     public static final Path CLOUD_SETUP_CONFIG = Path.of("cloudSetup/generated/testConfig.json");
-    public static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.1.1-s3-2.4.1.jar";
+    public static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.1.4-s3-2.4.2.jar";
     public static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(CLOUD_SETUP_CONFIG).getTestSetup();
@@ -164,6 +164,18 @@ public class IntegrationTestSetup implements AutoCloseable {
         return virtualSchema;
     }
 
+    /**
+     * Old version added property "DEBUG_ADDRESS" with value "127.0.0.1:3001". Recommendation is to use default
+     * properties provided by test-db-builder-java:
+     * <ul>
+     * <li>com.exasol.virtualschema.debug.host</li>
+     * <li>com.exasol.virtualschema.debug.port</li>
+     * <li>com.exasol.virtualschema.debug.level</li>
+     * </ul>
+     *
+     * @param mapping must be non null
+     * @return map
+     */
     @NotNull
     private Map<String, String> getVirtualSchemaProperties(final String mapping) {
         final Map<String, String> properties = new HashMap<>(Map.of("MAPPING", mapping));
@@ -171,10 +183,6 @@ public class IntegrationTestSetup implements AutoCloseable {
         final String profileProperty = System.getProperty("test.jprofiler", "");
         if (!debugProperty.isBlank() || !profileProperty.isBlank()) {
             properties.put("MAX_PARALLEL_UDFS", "1");
-        }
-        if (System.getProperty("test.vs-logs", "false").equals("true")) {
-            properties.put("DEBUG_ADDRESS", "127.0.0.1:3001");
-            properties.put("LOG_LEVEL", "ALL");
         }
         return properties;
     }

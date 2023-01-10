@@ -2,17 +2,40 @@
 
 This guide contains information for developers.
 
-## Configuring Local Test Setup
+## Executing the Integration Tests Locally
 
 The integration tests of this project use an S3 bucket. Using a local mock was not possible since the tested local-stack s3 implementation did not work.
 
-For that reason you need to configure the test. For that create a `test_config.yml` file:
+Instead you need to configure the tests by creating file `test_config.yml` in the folder of `s3-document-files-virtual-schema`:
 
 ```yml
 awsProfile: <AWS profile>
 owner: <your email used for exa:owner tag>
 s3CacheBucket: <name of an s3 bucket that will be used for caching the test files (optional)>
 ```
+
+### Executing Integration Tests on Windows
+
+AWS command line client (AWS CLI) and the AWS Software Development Kit for Java (AWS SDK) are using different defaults for finding your HOME directory:
+
+|                  | Default HOME directory | Documentation                                                               |
+|------------------|------------------------|-----------------------------------------------------------------------------|
+| AWS CLI          | `%USERPROFILE%`        | https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html |
+| AWS SDK for Java | `%HOME%`               | https://docs.aws.amazon.com/sdkref/latest/guide/file-location.html          |
+
+In order to make the CLI write the same files as the SDK will read later on
+* either do not set environment variable `HOME`
+* or set environment variable `HOME` appropriately
+* or set environment variable `AWS_SHARED_CREDENTIALS_FILE` to `%USER_PROFILE%\.aws\credentials`
+* or copy the files manually from `%USER_PROFILE%\.aws\` to `%HOME%\.aws\`
+
+#### Download HADOOPUTILS
+
+Hadoop requires native libraries on Windows e.g. for accessing the local filesystem via `file://` as Hadoop uses some Windows APIs to implement posix-like file access permissions. This is implemented in `HADOOP.DLL` and `WINUTILS.EXE`. If these files are not locatable in `%HADOOP_HOME%\BIN\WINUTILS.EXE` then Hadoop and applications built on top it will fail, see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems.
+
+* download from https://github.com/steveloughran/winutils
+* unzip to Folder `<FOLDER>\bin`
+* set environment variable `HADOOP_HOME=<FOLDER>`
 
 ## Running Regression Test
 

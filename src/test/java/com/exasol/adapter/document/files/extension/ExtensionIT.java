@@ -69,7 +69,8 @@ class ExtensionIT {
         if (setup != null) {
             setup.close();
         }
-        exasolTestSetup.getDefaultBucket().deleteFileNonBlocking(IntegrationTestSetup.ADAPTER_JAR);
+        // do not delete ADAPTER_JAR as it is required by other integration tests, too
+        // and upload immediately after delete fails.
         exasolTestSetup.close();
     }
 

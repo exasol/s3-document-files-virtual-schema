@@ -251,19 +251,24 @@
                         Excluded because we assume that the attacker does not have access to the machine. -->
                         <exclude>sonatype-2020-0926</exclude>
                         <!-- io.netty:netty-handler:
-                        Not a vulnerability in netty but how it is configured by the client software.amazon.awssdk:netty-nio-client. -->
+                        Not a vulnerability in netty but how it is configured by the client software.amazon.awssdk:netty-nio-client.
+                        VSS3 is not affected, see https://github.com/aws/aws-sdk-java-v2/issues/3263 for details. -->
                         <exclude>sonatype-2020-0026</exclude>
                         <!-- org.yaml:snakeyaml
                         Used only for using test config file, not parsing untrusted input. -->
                         <exclude>CVE-2022-1471</exclude>
                         <!-- org.apache.hadoop:hadoop-hdfs-client:jar:3.3.4
-                        No fixed version available, see https://github.com/exasol/parquet-io-java/issues/50 -->
+                        No fixed version available, see https://github.com/exasol/parquet-io-java/issues/50
+                        Vulnerability affects XML import while payload for virtual-schema-common-document-files
+                        supports only json, csv, and parquet. Hence VSS3 is not affected. -->
                         <exclude>sonatype-2022-5732</exclude>
                         <!-- org.apache.hadoop:hadoop-common:jar:3.3.4:
-                        No fixed version available, will be fixed in 3.3.5 -->
+                        No fixed version available, will be fixed in 3.3.5
+                        Vulnerability affects XML import while payload for virtual-schema-common-document-files
+                        supports only json, csv, and parquet. Hence VSS3 is not affected. -->
                         <exclude>sonatype-2022-5820</exclude>
                         <!-- com.fasterxml.jackson.core:jackson-core:jar:2.14.1
-                             Currently no fixed version available. -->
+                        Currently no fixed version available. -->
                         <exclude>sonatype-2022-6438</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>

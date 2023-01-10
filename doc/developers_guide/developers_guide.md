@@ -31,6 +31,8 @@ In order to make the CLI write the same files as the SDK will read later on
 
 #### Download HADOOPUTILS
 
+Hadoop requires native libraries on Windows e.g. for accessing the local filesystem via `file://` as Hadoop uses some Windows APIs to implement posix-like file access permissions. This is implemented in `HADOOP.DLL` and `WINUTILS.EXE`. If these files are not locatable in `%HADOOP_HOME%\BIN\WINUTILS.EXE` then Hadoop and applications built on top it will fail, see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems.
+
 * download from https://github.com/steveloughran/winutils
 * unzip to Folder `<FOLDER>\bin`
 * set environment variable `HADOOP_HOME=<FOLDER>`

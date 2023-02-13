@@ -1,5 +1,6 @@
 package com.exasol.adapter.document.files.s3testsetup;
 
+import java.net.InetSocketAddress;
 import java.util.Optional;
 
 import com.amazonaws.regions.DefaultAwsRegionProviderChain;
@@ -67,8 +68,8 @@ public class AwsS3TestSetup implements S3TestSetup {
     }
 
     @Override
-    public String getEntrypoint() {
-        return "amazonaws.com";
+    public InetSocketAddress getEntrypoint() {
+        return new InetSocketAddress("amazonaws.com", 443);
     }
 
     @Override

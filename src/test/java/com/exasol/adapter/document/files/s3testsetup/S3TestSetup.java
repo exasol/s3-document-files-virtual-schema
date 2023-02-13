@@ -1,5 +1,6 @@
 package com.exasol.adapter.document.files.s3testsetup;
 
+import java.net.InetSocketAddress;
 import java.util.Optional;
 
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -21,7 +22,7 @@ public interface S3TestSetup extends AutoCloseable {
 
     Optional<String> getMfaToken();
 
-    String getEntrypoint();
+    InetSocketAddress getEntrypoint();
 
     @Override
     void close();

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.io.FileNotFoundException;
+import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
@@ -29,7 +30,8 @@ import com.exasol.dbbuilder.dialects.exasol.AdapterScript.Language;
 import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript.InputType;
-import com.exasol.exasoltestsetup.*;
+import com.exasol.exasoltestsetup.ExasolTestSetup;
+import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
 import com.exasol.extensionmanager.client.model.*;
 import com.exasol.extensionmanager.itest.ExtensionManagerClient;
 import com.exasol.extensionmanager.itest.ExtensionManagerSetup;
@@ -310,7 +312,7 @@ class ExtensionIT {
 
     private List<ParameterValue> createValidParameters(final String virtualSchemaName, final EdmlDefinition mapping) {
         final List<ParameterValue> parameters = new ArrayList<>(List.of(param("virtualSchemaName", virtualSchemaName),
-                param("awsEndpointOverride", getInDatabaseS3Address()), //
+                param("awsEndpointOverride", getInDatabaseS3Address().toString()), //
                 param("awsRegion", s3TestSetup.getRegion()), //
                 param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
@@ -332,10 +334,10 @@ class ExtensionIT {
                 .build();
     }
 
-    private String getInDatabaseS3Address() {
-        final String s3Entrypoint = s3TestSetup.getEntrypoint();
-        if (s3Entrypoint.contains(":")) {
-            return exasolTestSetup.makeTcpServiceAccessibleFromDatabase(ServiceAddress.parse(s3Entrypoint)).toString();
+    private InetSocketAddress getInDatabaseS3Address() {
+        final InetSocketAddress s3Entrypoint = s3TestSetup.getEntrypoint();
+        if (s3Entrypoint.getAddress().equals("127.0.0.1")) {
+            return exasolTestSetup.makeTcpServiceAccessibleFromDatabase(s3Entrypoint);
         } else {
             return s3Entrypoint;
         }

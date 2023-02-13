@@ -19,7 +19,8 @@ import com.exasol.bucketfs.BucketAccessException;
 import com.exasol.dbbuilder.dialects.DatabaseObject;
 import com.exasol.dbbuilder.dialects.exasol.*;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
-import com.exasol.exasoltestsetup.*;
+import com.exasol.exasoltestsetup.ExasolTestSetup;
+import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
 import com.exasol.udfdebugging.UdfTestSetup;
 
 import jakarta.json.*;
@@ -27,7 +28,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 public class IntegrationTestSetup implements AutoCloseable {
     public static final Path CLOUD_SETUP_CONFIG = Path.of("cloudSetup/generated/testConfig.json");
-    public static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.1.4-s3-2.4.1.jar";
+    public static final String ADAPTER_JAR = "document-files-virtual-schema-dist-7.1.4-s3-2.4.2.jar";
     public static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(CLOUD_SETUP_CONFIG).getTestSetup();
@@ -73,8 +74,7 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     public InetSocketAddress makeLocalServiceAvailableInExasol(final int port) {
-        final ServiceAddress serviceAddress = this.exasolTestSetup.makeLocalTcpServiceAccessibleFromDatabase(port);
-        return new InetSocketAddress(serviceAddress.getHostName(), serviceAddress.getPort());
+        return this.exasolTestSetup.makeLocalTcpServiceAccessibleFromDatabase(port);
     }
 
     private ConnectionDefinition createConnectionDefinition() {
@@ -85,7 +85,7 @@ public class IntegrationTestSetup implements AutoCloseable {
     public JsonObjectBuilder getConnectionConfig() {
         final Optional<String> mfaToken = this.s3TestSetup.getMfaToken();
         final JsonObjectBuilder builder = Json.createObjectBuilder()//
-                .add("awsEndpointOverride", getInDatabaseS3Address())//
+                .add("awsEndpointOverride", getInDatabaseS3Address().toString())//
                 .add("awsRegion", this.s3TestSetup.getRegion())//
                 .add("s3Bucket", this.s3BucketName)//
                 .add("awsAccessKeyId", this.s3TestSetup.getUsername())//
@@ -109,11 +109,10 @@ public class IntegrationTestSetup implements AutoCloseable {
         }
     }
 
-    private String getInDatabaseS3Address() {
-        final String s3Entrypoint = this.s3TestSetup.getEntrypoint();
-        if (s3Entrypoint.contains(":")) {
-            return this.exasolTestSetup.makeTcpServiceAccessibleFromDatabase(ServiceAddress.parse(s3Entrypoint))
-                    .toString();
+    private InetSocketAddress getInDatabaseS3Address() {
+        final InetSocketAddress s3Entrypoint = this.s3TestSetup.getEntrypoint();
+        if (s3Entrypoint.getHostName().equals("127.0.0.1")) {
+            return this.exasolTestSetup.makeTcpServiceAccessibleFromDatabase(s3Entrypoint);
         } else {
             return s3Entrypoint;
         }

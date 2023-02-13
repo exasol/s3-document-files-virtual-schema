@@ -17,6 +17,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import com.exasol.adapter.document.files.connection.S3ConnectionProperties;
+import com.exasol.adapter.document.files.s3testsetup.LocalStackS3TestSetup;
 import com.exasol.adapter.document.files.stringfilter.wildcardexpression.WildcardExpression;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -30,7 +31,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 class S3FileFinderIT {
     @Container
     private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(
-            DockerImageName.parse("localstack/localstack:0.12.2")).withServices(S3);
+            DockerImageName.parse(LocalStackS3TestSetup.LOCALSTACK_CONTAINER)).withServices(S3);
     private static final String TEST_BUCKET = "test-bucket";
     private static final String CONTENT_1 = "content-1";
     private static final String CONTENT_2 = "content-2";

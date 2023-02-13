@@ -24,7 +24,6 @@ This release replaces test dependency `org.yaml:snakeyaml` to avoid vulnerabilit
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.370` to `1.12.405`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:1.1.1` to `2.0.0`
 * Updated `com.exasol:exasol-testcontainers:6.4.1` to `6.5.1`
-* Updated `com.exasol:extension-manager-integration-test-java:0.2.0` to `0.2.1`
 * Updated `com.exasol:small-json-files-test-fixture:0.1.3` to `0.1.4`
 * Updated `com.exasol:test-db-builder-java:3.4.1` to `3.4.2`
 * Updated `com.exasol:udf-debugging-java:0.6.6` to `0.6.8`

@@ -39,7 +39,8 @@ public class S3Cache implements S3UploadInterface {
     public void uploadFile(final Path file, final String key) {
         final String checksum = localSha512Checksum(file);
         if (isUploadRequired(checksum, getFileSize(file), file.toString())) {
-            LOGGER.log(Level.INFO, "Could not find {0} in cache. Uploading to {1}...", file, this.cacheBucket);
+            LOGGER.log(Level.INFO, "Could not find {0} in cache. Uploading to {1}...",
+                    new Object[] { file, this.cacheBucket });
             this.s3Interface.uploadFile(this.cacheBucket, checksum, file);
         } else {
             LOGGER.log(Level.INFO, "Using cached version of {0}", file);

@@ -83,14 +83,13 @@ public class IntegrationTestSetup implements AutoCloseable {
     }
 
     public JsonObjectBuilder getConnectionConfig() {
-        final Optional<String> mfaToken = this.s3TestSetup.getMfaToken();
         final JsonObjectBuilder builder = Json.createObjectBuilder()//
-                .add("awsEndpointOverride", getInDatabaseS3Address().toString())//
                 .add("awsRegion", this.s3TestSetup.getRegion())//
                 .add("s3Bucket", this.s3BucketName)//
                 .add("awsAccessKeyId", this.s3TestSetup.getUsername())//
                 .add("awsSecretAccessKey", this.s3TestSetup.getPassword());
-        mfaToken.ifPresent(s -> builder.add("awsSessionToken", s));
+        this.s3TestSetup.getMfaToken().ifPresent(s -> builder.add("awsSessionToken", s));
+        this.getInDatabaseS3Address().ifPresent(address -> builder.add("awsEndpointOverride", address.toString()));
         return builder;
     }
 
@@ -109,13 +108,10 @@ public class IntegrationTestSetup implements AutoCloseable {
         }
     }
 
-    private InetSocketAddress getInDatabaseS3Address() {
-        final InetSocketAddress s3Entrypoint = this.s3TestSetup.getEntrypoint();
-        if (s3Entrypoint.getHostString().equals("127.0.0.1")) {
-            return this.exasolTestSetup.makeTcpServiceAccessibleFromDatabase(s3Entrypoint);
-        } else {
-            return s3Entrypoint;
-        }
+    private Optional<String> getInDatabaseS3Address() {
+        return this.s3TestSetup.getEntrypoint()
+                .map(address -> this.exasolTestSetup.makeTcpServiceAccessibleFromDatabase(address))
+                .map(InetSocketAddress::toString);
     }
 
     AdapterScript createAdapterScript(final ExasolSchema adapterSchema)

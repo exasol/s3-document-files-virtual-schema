@@ -22,7 +22,7 @@ public interface S3TestSetup extends AutoCloseable {
 
     Optional<String> getMfaToken();
 
-    InetSocketAddress getEntrypoint();
+    Optional<InetSocketAddress> getEntrypoint();
 
     @Override
     void close();

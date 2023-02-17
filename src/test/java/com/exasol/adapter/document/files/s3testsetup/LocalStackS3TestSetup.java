@@ -60,8 +60,8 @@ public class LocalStackS3TestSetup implements S3TestSetup {
     }
 
     @Override
-    public InetSocketAddress getEntrypoint() {
-        return new InetSocketAddress("127.0.0.1", this.localStackContainer.getFirstMappedPort());
+    public Optional<InetSocketAddress> getEntrypoint() {
+        return Optional.of(new InetSocketAddress("127.0.0.1", this.localStackContainer.getFirstMappedPort()));
     }
 
     @Override

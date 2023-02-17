@@ -336,12 +336,9 @@ class ExtensionIT {
     }
 
     private Optional<String> getInDatabaseS3Address() {
-        final InetSocketAddress s3Entrypoint = s3TestSetup.getEntrypoint();
-        if (s3Entrypoint.getHostString().equals("127.0.0.1")) {
-            return Optional.of(exasolTestSetup.makeTcpServiceAccessibleFromDatabase(s3Entrypoint).toString());
-        } else {
-            return Optional.empty();
-        }
+        return s3TestSetup.getEntrypoint()
+                .map(endpoint -> exasolTestSetup.makeTcpServiceAccessibleFromDatabase(endpoint))
+                .map(InetSocketAddress::toString);
     }
 
     private ParameterValue param(final String name, final String value) {

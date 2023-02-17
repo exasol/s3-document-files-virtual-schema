@@ -68,8 +68,8 @@ public class AwsS3TestSetup implements S3TestSetup {
     }
 
     @Override
-    public InetSocketAddress getEntrypoint() {
-        return new InetSocketAddress("amazonaws.com", 443);
+    public Optional<InetSocketAddress> getEntrypoint() {
+        return Optional.empty();
     }
 
     @Override

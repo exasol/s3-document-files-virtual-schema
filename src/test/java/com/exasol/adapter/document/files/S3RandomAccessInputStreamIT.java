@@ -9,7 +9,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
-class S3RandomAccessInputStreamTest extends RandomAccessInputStreamTestBase {
+class S3RandomAccessInputStreamIT extends RandomAccessInputStreamTestBase {
     private static final String TEST_BUCKET = "test";
     private static final String TEST_DATA_KEY = "TEST_DATA";
     private S3TestSetup testSetup;

@@ -4,6 +4,7 @@
 .classpath
 .project
 .settings/org.eclipse.core.resources.prefs
+.settings/org.eclipse.jdt.apt.core.prefs
 # .settings : we need Eclipse settings for code formatter and clean-up rules
 target
 .cache
@@ -39,7 +40,8 @@ setEnv.sh
 *.orig
 *.old
 *.md.html
-test_config.yml
+test_config.properties
 deleteLambdaResources.sh
 *.flattened-pom.xml
 /.apt_generated/
+

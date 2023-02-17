@@ -19,7 +19,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
-class S3RemoteFileContentTest {
+class S3RemoteFileContentIT {
     private static final String TEST_BUCKET = "test";
     private static final String TEST_DATA_VALUE = "test content";
     private static final String TEST_DATA_KEY = "TEST_DATA";

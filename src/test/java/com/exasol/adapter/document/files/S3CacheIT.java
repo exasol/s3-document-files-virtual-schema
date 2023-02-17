@@ -2,6 +2,8 @@ package com.exasol.adapter.document.files;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
@@ -17,7 +19,7 @@ import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
 
 import software.amazon.awssdk.services.s3.S3Client;
 
-class S3CacheTest {
+class S3CacheIT {
     private static final S3TestSetup S3_TEST_SETUP = new LocalStackS3TestSetup();
     private static final String TEST_BUCKET_NAME = "test-bucket";
     private static final String CACHE_BUCKET_NAME = "cache-bucket";
@@ -30,6 +32,11 @@ class S3CacheTest {
         s3Client = S3_TEST_SETUP.getS3Client();
         s3Client.createBucket(request -> request.bucket(TEST_BUCKET_NAME));
         s3Client.createBucket(request -> request.bucket(CACHE_BUCKET_NAME));
+    }
+
+    @AfterAll
+    static void afterAll() {
+        S3_TEST_SETUP.close();
     }
 
     @BeforeEach

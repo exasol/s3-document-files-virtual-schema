@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.io.FileNotFoundException;
+import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
@@ -29,7 +30,8 @@ import com.exasol.dbbuilder.dialects.exasol.AdapterScript.Language;
 import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript.InputType;
-import com.exasol.exasoltestsetup.*;
+import com.exasol.exasoltestsetup.ExasolTestSetup;
+import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
 import com.exasol.extensionmanager.client.model.*;
 import com.exasol.extensionmanager.itest.ExtensionManagerClient;
 import com.exasol.extensionmanager.itest.ExtensionManagerSetup;
@@ -309,13 +311,14 @@ class ExtensionIT {
     }
 
     private List<ParameterValue> createValidParameters(final String virtualSchemaName, final EdmlDefinition mapping) {
-        final List<ParameterValue> parameters = new ArrayList<>(List.of(param("virtualSchemaName", virtualSchemaName),
-                param("awsEndpointOverride", getInDatabaseS3Address()), //
-                param("awsRegion", s3TestSetup.getRegion()), //
-                param("s3Bucket", s3BucketName), //
-                param("awsAccessKeyId", s3TestSetup.getUsername()), //
-                param("awsSecretAccessKey", s3TestSetup.getPassword()), //
-                param("mapping", new EdmlSerializer().serialize(mapping))));
+        final List<ParameterValue> parameters = new ArrayList<>(
+                List.of(param("virtualSchemaName", virtualSchemaName), param("awsRegion", s3TestSetup.getRegion()), //
+                        param("s3Bucket", s3BucketName), //
+                        param("awsAccessKeyId", s3TestSetup.getUsername()), //
+                        param("awsSecretAccessKey", s3TestSetup.getPassword()), //
+                        param("mapping", new EdmlSerializer().serialize(mapping))));
+        getInDatabaseS3Address().map(address -> param("awsEndpointOverride", address)) //
+                .ifPresent(parameters::add);
         if (s3TestSetup.getMfaToken().isPresent()) {
             parameters.add(param("awsSessionToken", s3TestSetup.getMfaToken().get()));
         }
@@ -332,13 +335,10 @@ class ExtensionIT {
                 .build();
     }
 
-    private String getInDatabaseS3Address() {
-        final String s3Entrypoint = s3TestSetup.getEntrypoint();
-        if (s3Entrypoint.contains(":")) {
-            return exasolTestSetup.makeTcpServiceAccessibleFromDatabase(ServiceAddress.parse(s3Entrypoint)).toString();
-        } else {
-            return s3Entrypoint;
-        }
+    private Optional<String> getInDatabaseS3Address() {
+        return s3TestSetup.getEntrypoint()
+                .map(endpoint -> exasolTestSetup.makeTcpServiceAccessibleFromDatabase(endpoint))
+                .map(InetSocketAddress::toString);
     }
 
     private ParameterValue param(final String name, final String value) {

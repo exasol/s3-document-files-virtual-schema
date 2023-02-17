@@ -2,6 +2,7 @@ package com.exasol.adapter.document.files.s3testsetup;
 
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 
+import java.net.InetSocketAddress;
 import java.util.Optional;
 
 import org.testcontainers.containers.localstack.LocalStackContainer;
@@ -14,8 +15,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
 public class LocalStackS3TestSetup implements S3TestSetup {
+    public static final String LOCALSTACK_CONTAINER = "localstack/localstack:1.4.0";
     private final LocalStackContainer localStackContainer = new LocalStackContainer(
-            DockerImageName.parse("localstack/localstack:1.0.3")).withServices(S3);
+            DockerImageName.parse(LOCALSTACK_CONTAINER)).withServices(S3).withReuse(true);
 
     public LocalStackS3TestSetup() {
         this.localStackContainer.start();
@@ -58,8 +60,8 @@ public class LocalStackS3TestSetup implements S3TestSetup {
     }
 
     @Override
-    public String getEntrypoint() {
-        return "127.0.0.1:" + this.localStackContainer.getFirstMappedPort();
+    public Optional<InetSocketAddress> getEntrypoint() {
+        return Optional.of(new InetSocketAddress("127.0.0.1", this.localStackContainer.getFirstMappedPort()));
     }
 
     @Override

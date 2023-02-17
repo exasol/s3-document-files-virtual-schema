@@ -1,7 +1,9 @@
 <!-- @formatter:off -->
 # Dependencies
 
-## Compile Dependencies
+## Virtual Schema for Document Data in Files on aws s3
+
+### Compile Dependencies
 
 | Dependency                                     | License                          |
 | ---------------------------------------------- | -------------------------------- |
@@ -12,7 +14,7 @@
 | [SLF4J JDK14 Binding][8]                       | [MIT License][9]                 |
 | [Apache Commons Text][10]                      | [Apache License, Version 2.0][3] |
 
-## Test Dependencies
+### Test Dependencies
 
 | Dependency                                      | License                           |
 | ----------------------------------------------- | --------------------------------- |
@@ -37,7 +39,7 @@
 | [Extension integration tests library][38]       | [MIT License][39]                 |
 | [JaCoCo :: Agent][40]                           | [Eclipse Public License 2.0][41]  |
 
-## Plugin Dependencies
+### Plugin Dependencies
 
 | Dependency                                              | License                          |
 | ------------------------------------------------------- | -------------------------------- |
@@ -63,6 +65,14 @@
 | [Apache Maven Install Plugin][66]                       | [Apache License, Version 2.0][3] |
 | [Apache Maven Deploy Plugin][67]                        | [Apache License, Version 2.0][3] |
 | [Apache Maven Site Plugin][68]                          | [Apache License, Version 2.0][3] |
+
+## Extension
+
+### Compile Dependencies
+
+| Dependency                                | License |
+| ----------------------------------------- | ------- |
+| [@exasol/extension-manager-interface][69] | MIT     |
 
 [0]: https://github.com/exasol/virtual-schema-common-document-files/
 [1]: https://github.com/exasol/virtual-schema-common-document-files/blob/main/LICENSE
@@ -133,3 +143,4 @@
 [66]: https://maven.apache.org/plugins/maven-install-plugin/
 [67]: https://maven.apache.org/plugins/maven-deploy-plugin/
 [68]: https://maven.apache.org/plugins/maven-site-plugin/
+[69]: https://registry.npmjs.org/@exasol/extension-manager-interface/-/extension-manager-interface-0.1.15.tgz

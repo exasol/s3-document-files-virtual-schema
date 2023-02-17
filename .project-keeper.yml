@@ -5,6 +5,10 @@ sources:
       - integration_tests
       - jar_artifact
       - udf_coverage
+  - type: npm
+    path: extension/package.json
+version:
+  fromSource: pom.xml
 linkReplacements:
   - https://netty.io/netty-codec/|https://netty.io/
 excludes:

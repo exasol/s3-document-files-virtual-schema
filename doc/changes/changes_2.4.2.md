@@ -15,19 +15,21 @@ This release replaces test dependency `org.yaml:snakeyaml` to avoid vulnerabilit
 ### Compile Dependency Updates
 
 * Removed `ch.qos.reload4j:reload4j:1.2.24`
+* Updated `com.exasol:error-reporting-java:1.0.0` to `1.0.1`
 * Removed `io.netty:netty-codec:4.1.86.Final`
 * Removed `org.eclipse.jetty:jetty-client:11.0.13`
-* Updated `software.amazon.awssdk:s3:2.18.3` to `2.20.2`
+* Updated `software.amazon.awssdk:s3:2.18.3` to `2.20.6`
 
 ### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.370` to `1.12.405`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.370` to `1.12.409`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:1.1.1` to `2.0.0`
 * Updated `com.exasol:exasol-testcontainers:6.4.1` to `6.5.1`
+* Updated `com.exasol:extension-manager-integration-test-java:0.2.0` to `0.2.2`
 * Updated `com.exasol:small-json-files-test-fixture:0.1.3` to `0.1.4`
 * Updated `com.exasol:test-db-builder-java:3.4.1` to `3.4.2`
 * Updated `com.exasol:udf-debugging-java:0.6.6` to `0.6.8`
-* Updated `nl.jqno.equalsverifier:equalsverifier:3.12.3` to `3.13.1`
+* Updated `nl.jqno.equalsverifier:equalsverifier:3.12.3` to `3.13.2`
 * Updated `org.junit.jupiter:junit-jupiter-engine:5.9.1` to `5.9.2`
 * Updated `org.junit.jupiter:junit-jupiter-params:5.9.1` to `5.9.2`
 * Updated `org.mockito:mockito-core:4.10.0` to `5.1.1`

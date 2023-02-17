@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>s3-document-files-virtual-schema</artifactId>
     <version>2.4.2</version>
@@ -39,7 +41,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.20.2</version>
+                <version>2.20.6</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -52,7 +54,8 @@
             <version>${vs-common-document-files.version}</version>
             <exclusions>
                 <exclusion>
-                    <!-- Exclude transitive dependency to jsr311-api via VSDF / parquet-io-java / hadoop / jersey-client:1.19
+                    <!-- Exclude transitive dependency to jsr311-api via VSDF / parquet-io-java /
+                    hadoop / jersey-client:1.19
                      to avoid clash with jersey-client:2.36 required by extension-manager-client
                      and dependency to jakarta.ws.rs:jakarta.ws.rs-api -->
                     <groupId>javax.ws.rs</groupId>
@@ -60,7 +63,8 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- Explicitly upgrade transitive dependency via com.exasol:parquet-io-java and hadoop to fix CVE-2021-37533 -->
+        <!-- Explicitly upgrade transitive dependency via com.exasol:parquet-io-java and hadoop to
+        fix CVE-2021-37533 -->
         <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
         <dependency>
             <groupId>commons-net</groupId>
@@ -74,7 +78,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>error-reporting-java</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
         <!-- Test dependencies -->
         <dependency>
@@ -86,7 +90,7 @@
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier</artifactId>
-            <version>3.13.1</version>
+            <version>3.13.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -114,7 +118,8 @@
             <version>5.1.1</version>
             <scope>test</scope>
         </dependency>
-        <!--Integration test dependencies-->
+        <!--Integration
+        test dependencies-->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -137,7 +142,7 @@
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.405</version>
+            <version>1.12.409</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -189,7 +194,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- Upgrade transitive dependency of performance-test-recorder-java to fix CVE-2022-42889 -->
+            <!-- Upgrade transitive dependency of performance-test-recorder-java to fix
+            CVE-2022-42889 -->
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>1.10.0</version>
@@ -203,7 +209,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>extension-manager-integration-test-java</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -218,7 +224,8 @@
                         Excluded because we assume that the attacker does not have access to the machine. -->
                         <exclude>sonatype-2020-0926</exclude>
                         <!-- io.netty:netty-handler:
-                        Not a vulnerability in netty but how it is configured by the client software.amazon.awssdk:netty-nio-client.
+                        Not a vulnerability in netty but how it is configured by the client
+                        software.amazon.awssdk:netty-nio-client.
                         VSS3 is not affected, see https://github.com/aws/aws-sdk-java-v2/issues/3263 for details. -->
                         <exclude>sonatype-2020-0026</exclude>
                         <!-- org.apache.hadoop:hadoop-hdfs-client:jar:3.3.4
@@ -261,7 +268,8 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <groupId>org.apache.maven.plugins</groupId>
                 <configuration>
-                    <finalName>document-files-virtual-schema-dist-${vs-common-document-files.version}-s3-${project.version}</finalName>
+                    <finalName>
+                        document-files-virtual-schema-dist-${vs-common-document-files.version}-s3-${project.version}</finalName>
                 </configuration>
             </plugin>
             <plugin>

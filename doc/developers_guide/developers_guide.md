@@ -6,12 +6,12 @@ This guide contains information for developers.
 
 The integration tests of this project use an S3 bucket. Using a local mock was not possible since the tested local-stack s3 implementation did not work.
 
-Instead you need to configure the tests by creating file `test_config.yml` in the folder of `s3-document-files-virtual-schema`:
+Instead you need to configure the tests by creating file `test_config.properties` in the folder of `s3-document-files-virtual-schema`:
 
-```yml
-awsProfile: <AWS profile>
-owner: <your email used for exa:owner tag>
-s3CacheBucket: <name of an s3 bucket that will be used for caching the test files (optional)>
+```properties
+awsProfile = <AWS profile>
+owner = <your email used for exa:owner tag>
+s3CacheBucket = <name of an s3 bucket that will be used for caching the test files (optional)>
 ```
 
 ### Executing Integration Tests on Windows

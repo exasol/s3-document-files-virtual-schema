@@ -1,4 +1,4 @@
-# Virtual Schema for Document Data in Files on AWS S3 2.4.2, released 2023-??-??
+# Virtual Schema for Document Data in Files on AWS S3 2.4.2, released 2023-02-17
 
 Code name: Fix vulnerabilities in dependencies
 

@@ -312,7 +312,7 @@ class ExtensionIT {
 
     private List<ParameterValue> createValidParameters(final String virtualSchemaName, final EdmlDefinition mapping) {
         final List<ParameterValue> parameters = new ArrayList<>(List.of(param("virtualSchemaName", virtualSchemaName),
-                param("awsEndpointOverride", getInDatabaseS3Address().toString()), //
+                param("awsEndpointOverride", getInDatabaseS3Address()), //
                 param("awsRegion", s3TestSetup.getRegion()), //
                 param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
@@ -334,12 +334,14 @@ class ExtensionIT {
                 .build();
     }
 
-    private InetSocketAddress getInDatabaseS3Address() {
+    private String getInDatabaseS3Address() {
         final InetSocketAddress s3Entrypoint = s3TestSetup.getEntrypoint();
         if (s3Entrypoint.getAddress().equals("127.0.0.1")) {
-            return exasolTestSetup.makeTcpServiceAccessibleFromDatabase(s3Entrypoint);
+            return exasolTestSetup.makeTcpServiceAccessibleFromDatabase(s3Entrypoint).toString();
+        } else if (s3Entrypoint.getPort() == 443) {
+            return s3Entrypoint.getHostName();
         } else {
-            return s3Entrypoint;
+            return s3Entrypoint.getHostName().toString();
         }
     }
 

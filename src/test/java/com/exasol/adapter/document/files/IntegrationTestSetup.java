@@ -111,7 +111,7 @@ public class IntegrationTestSetup implements AutoCloseable {
 
     private InetSocketAddress getInDatabaseS3Address() {
         final InetSocketAddress s3Entrypoint = this.s3TestSetup.getEntrypoint();
-        if (s3Entrypoint.getHostName().equals("127.0.0.1")) {
+        if (s3Entrypoint.getHostString().equals("127.0.0.1")) {
             return this.exasolTestSetup.makeTcpServiceAccessibleFromDatabase(s3Entrypoint);
         } else {
             return s3Entrypoint;

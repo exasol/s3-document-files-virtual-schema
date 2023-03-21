@@ -109,6 +109,7 @@ javax/management/NotificationEmitter
 sun/nio/ch/DefaultSelectorProvider
 com/exasol/adapter/document/documentfetcher/files/RemoteFilePrefetchingIterator
 io/netty/channel/pool/SimpleChannelPool$ChannelPoolFullException
+com/exasol/adapter/document/mapping/auto/SchemaFetcher
 software/amazon/awssdk/http/apache/internal/conn/SdkTlsSocketFactory
 java/net/InetAddressImpl
 software/amazon/awssdk/utils/Lazy
@@ -1466,6 +1467,7 @@ software/amazon/awssdk/services/s3/endpoints/internal/Literal$Bool
 software/amazon/awssdk/core/http/Crc32Validation
 software/amazon/awssdk/regions/RegionMetadataProvider
 org/antlr/v4/runtime/Lexer
+software/amazon/awssdk/regions/servicemetadata/InternetmonitorServiceMetadata
 software/amazon/awssdk/services/s3/model/PutBucketLoggingRequest
 org/apache/http/protocol/HttpRequestExecutor
 io/netty/util/concurrent/EventExecutorChooserFactory
@@ -1887,7 +1889,6 @@ java/lang/invoke/BoundMethodHandle$Species_LLLLLLII
 io/netty/util/concurrent/MultithreadEventExecutorGroup$1
 software/amazon/awssdk/services/s3/model/S3Object
 java/lang/invoke/ClassSpecializer$Factory$1Var
-java/time/Year
 java/security/UnresolvedPermission
 sun/security/ssl/SSLCipher$T12GcmReadCipherGenerator$GcmReadCipher
 jdk/internal/misc/JavaObjectInputStreamAccess
@@ -3514,9 +3515,9 @@ sun/management/RuntimeImpl
 org/apache/http/conn/EofSensorInputStream
 jdk/internal/module/ModuleBootstrap
 java/net/URI$Parser
+sun/security/pkcs11/SunPKCS11
 software/amazon/awssdk/services/s3/model/NoSuchUploadException
 software/amazon/awssdk/core/internal/handler/BaseAsyncClientHandler
-sun/security/pkcs11/SunPKCS11
 io/netty/util/internal/SocketUtils
 software/amazon/awssdk/core/exception/SdkInterruptedException
 javax/xml/stream/events/Namespace
@@ -4613,7 +4614,6 @@ scala/collection/immutable/AbstractSeq
 sun/security/ssl/SupportedVersionsExtension$HRRSupportedVersionsReproducer
 java/lang/Character
 software/amazon/awssdk/services/s3/endpoints/internal/Value$Record
-java/time/Month$1
 io/netty/channel/AbstractChannel
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueue
 com/exasol/adapter/document/mapping/PropertyToColumnMappingVisitor

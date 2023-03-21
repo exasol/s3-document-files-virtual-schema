@@ -26,6 +26,7 @@ This release adds automatic schema inference for Parquet files. This means that 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.409` to `1.12.431`
 * Updated `com.exasol:java-class-list-verifier:0.2.1` to `0.2.2`
 * Updated `com.exasol:virtual-schema-common-document-files:7.1.4` to `7.2.0`
+* Added `com.fasterxml.jackson.core:jackson-databind:2.14.2`
 * Updated `nl.jqno.equalsverifier:equalsverifier:3.13.2` to `3.14.1`
 * Updated `org.mockito:mockito-core:5.1.1` to `5.2.0`
 

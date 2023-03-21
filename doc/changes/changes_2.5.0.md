@@ -17,6 +17,7 @@ This release adds automatic schema inference for Parquet files. This means that 
 #### Compile Dependency Updates
 
 * Updated `com.exasol:virtual-schema-common-document-files:7.1.4` to `7.2.0`
+* Removed `commons-net:commons-net:3.9.0`
 * Updated `org.slf4j:slf4j-jdk14:2.0.6` to `2.0.7`
 * Updated `software.amazon.awssdk:s3:2.20.6` to `2.20.28`
 

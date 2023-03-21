@@ -4,14 +4,14 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>2.4.2</version>
+    <version>2.5.0</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
         <junit.version>5.9.2</junit.version>
         <org.testcontainers.version>1.17.6</org.testcontainers.version>
-        <vs-common-document-files.version>7.1.4</vs-common-document-files.version>
+        <vs-common-document-files.version>7.2.0</vs-common-document-files.version>
         <!-- Additional sonar configuration for analyzing TypeScript extension -->
         <sonar.sources>src/main/,extension/src/</sonar.sources>
         <sonar.exclusions>extension/src/*.test.ts</sonar.exclusions>
@@ -41,7 +41,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.20.6</version>
+                <version>2.20.28</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -52,24 +52,6 @@
             <groupId>com.exasol</groupId>
             <artifactId>virtual-schema-common-document-files</artifactId>
             <version>${vs-common-document-files.version}</version>
-            <exclusions>
-                <exclusion>
-                    <!-- Exclude transitive dependency to jsr311-api via VSDF / parquet-io-java /
-                    hadoop / jersey-client:1.19
-                     to avoid clash with jersey-client:2.36 required by extension-manager-client
-                     and dependency to jakarta.ws.rs:jakarta.ws.rs-api -->
-                    <groupId>javax.ws.rs</groupId>
-                    <artifactId>jsr311-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- Explicitly upgrade transitive dependency via com.exasol:parquet-io-java and hadoop to
-        fix CVE-2021-37533 -->
-        <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
-        <dependency>
-            <groupId>commons-net</groupId>
-            <artifactId>commons-net</artifactId>
-            <version>3.9.0</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
@@ -90,7 +72,7 @@
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier</artifactId>
-            <version>3.13.2</version>
+            <version>3.14.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -115,7 +97,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.1.1</version>
+            <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
         <!--Integration
@@ -142,13 +124,13 @@
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.409</version>
+            <version>1.12.431</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>2.0.6</version>
+            <version>2.0.7</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -184,7 +166,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>java-class-list-verifier</artifactId>
-            <version>0.2.1</version>
+            <version>0.2.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -246,16 +228,13 @@
                         CVE-2020-36641 is reported to be fixed in aXMLRPC 1.12.1. We use version 1.13.0, so this is a false
                         positive. -->
                         <exclude>CVE-2020-36641</exclude>
-                        <!-- Transitive dependency org.json:json used by edml-java. TODO: Upgrade
-                        once a fix is available -->
-                        <exclude>CVE-2022-45688</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>2.9.3</version>
+                <version>2.9.5</version>
                 <executions>
                     <execution>
                         <goals>
@@ -268,8 +247,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <groupId>org.apache.maven.plugins</groupId>
                 <configuration>
-                    <finalName>
-                        document-files-virtual-schema-dist-${vs-common-document-files.version}-s3-${project.version}</finalName>
+                    <finalName>document-files-virtual-schema-dist-${vs-common-document-files.version}-s3-${project.version}</finalName>
                 </configuration>
             </plugin>
             <plugin>
@@ -375,7 +353,7 @@
     <parent>
         <artifactId>s3-document-files-virtual-schema-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>2.4.2</version>
+        <version>2.5.0</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
 </project>

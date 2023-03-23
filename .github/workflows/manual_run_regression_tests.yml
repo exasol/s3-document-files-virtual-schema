@@ -75,3 +75,5 @@ jobs:
           status: ${{ job.status }}
           notification_title: "AWS S3 VS Performance regression tests: {workflow} has {status_message}"
           message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.INTEGRATION_TEAM_SLACK_NOTIFICATION_WEBHOOK }}

@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 2.5.1, released 2023-??-??
+# S3 Document Files Virtual Schema 2.5.1, released 2023-03-24
 
 Code name: Fix performance regression tests
 

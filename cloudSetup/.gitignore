@@ -4,5 +4,4 @@ terraform.tfstate
 *.info
 terraform.tfstate.backup
 *.tfvars
-*.lock.hcl
 generated/

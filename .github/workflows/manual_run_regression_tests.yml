@@ -24,7 +24,7 @@ jobs:
           cache: "maven"
       - name: Run local smoketests
         run: |
-          mvn --batch-mode --update-snapshots clean test -DtrimStackTrace=false -Dtest.coverage=false \
+          mvn --batch-mode --update-snapshots clean artifact-reference-checker:verify test -DtrimStackTrace=false -Dtest.coverage=false \
             -Derror-code-crawler.skip=true -Dmaven.javadoc.skip=true -Dproject-keeper.skip=true
       - name: Create AWS test setup
         run: |
@@ -41,18 +41,16 @@ jobs:
         run: |
           echo "owner = ${{ secrets.AWS_TAG_OWNER }}" > test_config.properties
           echo "s3CacheBucket = persistent-s3-vs-test-file-cache" >> test_config.properties
-      - name: Run tests and build with Maven
+      - name: Run regression tests
         run: |
-          mvn --batch-mode --update-snapshots verify \
+          mvn --batch-mode verify \
                -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false \
                -Derror-code-crawler.skip=true -Dmaven.javadoc.skip=true -Dproject-keeper.skip=true
         env:
-          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "eu-central-1"
-      - name: Publish Test Report for ${{ matrix.docker_db_version }}
+      - name: Publish Test Report
         uses: scacap/action-surefire-report@v1
         if: ${{ always() }}
         with:
@@ -74,3 +72,12 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Report Status to Slack channel
+        if: always()
+        uses: ravsamhq/notify-slack-action@v2
+        with:
+          status: ${{ job.status }}
+          notification_title: "AWS S3 VS Performance regression tests: {workflow} has {status_message}"
+          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.INTEGRATION_TEAM_SLACK_NOTIFICATION_WEBHOOK }}

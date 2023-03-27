@@ -1,9 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-readonly jdbc_client_version=7.1.10
-readonly jdbc_client_url=https://www.exasol.com/support/secure/attachment/205085/EXASOL_JDBC-$jdbc_client_version.tar.gz
-readonly jdbc_client_sha512_sum=9b4b8b43db6fb6bbd73e1ba091ba570ba3746bcd998ec1d7b95302b48aa78bcbaa25778b5c26f2d1e631be0b6caf96d7b50b4ed1b5b379b3fb80b035e8683102
+if [[ -z "${RELEASE_NAME+x}" || -z "${REGRESSION_TEST_RESULT_SUBMIT_USER+x}" || -z "${REGRESSION_TEST_RESULT_SUBMIT_PASSWORD+x}" ]] ; then
+  echo "Environment variabless RELEASE_NAME, REGRESSION_TEST_RESULT_SUBMIT_USER and REGRESSION_TEST_RESULT_SUBMIT_PASSWORD must be defined"
+  exit 1
+fi
+
+readonly jdbc_client_version="7.1.19"
+readonly jdbc_client_url="https://x-up.s3.amazonaws.com/7.x/7.1.19/EXASOL_JDBC-$jdbc_client_version.tar.gz"
+readonly jdbc_client_sha256_sum="f5bea58629a1d50c695e947792cb5e52a74667687d79c95a7593ef52035728b3"
 
 base_dir="$( cd "$(dirname "$0")/.." >/dev/null 2>&1 ; pwd -P )"
 readonly base_dir
@@ -18,7 +23,7 @@ cd "$target_dir"
 if [[ ! -d "$jdbc_client_dir" ]]; then
     echo "Downloading JDBC client from $jdbc_client_url"
     curl $jdbc_client_url -o "$jdbc_client_file"
-    echo "$jdbc_client_sha512_sum  $jdbc_client_file" | sha512sum -c
+    echo "$jdbc_client_sha256_sum  $jdbc_client_file" | sha256sum --check
     echo "Unpacking $jdbc_client_file"
     tar -xvzf "$jdbc_client_file"
 else

@@ -43,10 +43,6 @@ Code name:
 
 ### Extension
 
-#### Compile Dependency Updates
-
-* Updated `@exasol/extension-manager-interface:0.1.15` to `0.1.16`
-
 #### Development Dependency Updates
 
 * Updated `eslint:^8.34.0` to `^8.38.0`

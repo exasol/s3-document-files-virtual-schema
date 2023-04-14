@@ -3,7 +3,7 @@ package com.exasol.adapter.document.files.ciisolation;
 import com.exasol.ciisolation.aws.PolicyReader;
 import com.exasol.ciisolation.aws.ciuser.CiUserStack;
 
-import software.amazon.awscdk.core.App;
+import software.amazon.awscdk.App;
 
 /**
  * This class defines a CloudFormation stack that creates a user for the CI of this project.

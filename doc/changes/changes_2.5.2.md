@@ -21,7 +21,6 @@ Code name:
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.431` to `1.12.449`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:2.0.0` to `2.0.1`
 * Removed `com.exasol:exasol-testcontainers:6.5.1`
-* Updated `com.exasol:extension-manager-integration-test-java:0.2.2` to `0.2.3`
 * Updated `com.exasol:hamcrest-resultset-matcher:1.5.2` to `1.5.3`
 * Updated `com.exasol:small-json-files-test-fixture:0.1.4` to `0.1.5`
 * Updated `org.jacoco:org.jacoco.agent:0.8.8` to `0.8.9`

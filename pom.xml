@@ -61,6 +61,11 @@
                     <groupId>javax.ws.rs</groupId>
                     <artifactId>jsr311-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <!-- Contains duplicate classes as jakarta.xml.bind:jakarta.xml.bind-api -->
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jaxb-api</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -358,6 +363,17 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.basepom.maven</groupId>
+                <artifactId>duplicate-finder-maven-plugin</artifactId>
+                <configuration>
+                    <!-- Dependencies org.apache.hadoop:hadoop-yarn-api and org.apache.hadoop:hadoop-yarn-common both contain shaded.parquet.it.unimi.dsi.fastutil.** -->
+                    <failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
+                    <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
+                    <failBuildInCaseOfDifferentContentConflict>true</failBuildInCaseOfDifferentContentConflict>
+                    <printEqualFiles>false</printEqualFiles>
+                </configuration>
             </plugin>
         </plugins>
     </build>

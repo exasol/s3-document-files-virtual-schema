@@ -40,3 +40,20 @@ Code name:
 * Updated `org.codehaus.mojo:flatten-maven-plugin:1.3.0` to `1.4.1`
 * Updated `org.codehaus.mojo:versions-maven-plugin:2.14.2` to `2.15.0`
 * Updated `org.jacoco:jacoco-maven-plugin:0.8.8` to `0.8.9`
+
+### Extension
+
+#### Compile Dependency Updates
+
+* Updated `@exasol/extension-manager-interface:0.1.15` to `0.1.16`
+
+#### Development Dependency Updates
+
+* Updated `eslint:^8.34.0` to `^8.38.0`
+* Updated `@typescript-eslint/parser:^5.52.0` to `^5.58.0`
+* Updated `ts-jest:^29.0.5` to `^29.1.0`
+* Updated `@types/jest:^29.4.0` to `^29.5.0`
+* Updated `typescript:^4.9.5` to `^5.0.4`
+* Updated `@typescript-eslint/eslint-plugin:^5.52.0` to `^5.58.0`
+* Updated `jest:29.4.3` to `29.5.0`
+* Updated `esbuild:^0.17.8` to `^0.17.16`

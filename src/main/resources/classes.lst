@@ -1775,6 +1775,7 @@ sun/security/x509/X509AttributeName
 com/exasol/adapter/document/documentpath/DocumentPathExpression
 java/net/URISyntaxException
 sun/security/ssl/ECPointFormatsExtension$ECPointFormatsSpec
+com/exasol/adapter/document/documentnode/json/JsonNodeFactory$1
 java/net/InetAddress$InetAddressHolder
 jdk/internal/reflect/ConstructorAccessorImpl
 software/amazon/awssdk/core/client/config/ClientOverrideConfiguration
@@ -4172,6 +4173,7 @@ org/antlr/v4/runtime/atn/SetTransition
 com/exasol/sql/dql/select/SelectVisitor
 software/amazon/awssdk/services/s3/endpoints/S3ClientContextParams
 software/amazon/awssdk/regions/servicemetadata/SmsVoiceServiceMetadata
+java/util/concurrent/CompletableFuture$ThreadPerTaskExecutor
 java/util/logging/Formatter
 java/lang/invoke/VarHandleGuards
 java/lang/ReflectiveOperationException
@@ -5353,6 +5355,7 @@ java/util/stream/SortedOps$AbstractRefSortingSink
 java/util/ServiceLoader$3
 java/util/ServiceLoader$2
 org/apache/http/protocol/HTTP
+software/amazon/awssdk/auth/credentials/AwsBasicCredentials
 com/exasol/sql/expression/ValueExpression
 software/amazon/awssdk/http/apache/internal/net/DelegateSslSocket
 java/nio/channels/Channel
@@ -5766,8 +5769,8 @@ sun/security/ssl/SSLCipher$T12GcmWriteCipherGenerator
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad2
 io/netty/handler/codec/HeadersUtils$StringEntry
 org/apache/http/impl/client/BasicCredentialsProvider
-sun/security/jgss/SunProvider$1
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad0
+sun/security/jgss/SunProvider$1
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad1
 io/netty/util/internal/PlatformDependent0$3
 org/antlr/v4/runtime/CommonTokenFactory

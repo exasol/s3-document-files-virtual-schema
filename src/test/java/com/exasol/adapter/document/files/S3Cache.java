@@ -42,8 +42,6 @@ public class S3Cache implements S3UploadInterface {
             LOGGER.log(Level.INFO, "Could not find {0} in cache. Uploading to {1}...",
                     new Object[] { file, this.cacheBucket });
             this.s3Interface.uploadFile(this.cacheBucket, checksum, file);
-        } else {
-            LOGGER.log(Level.INFO, "Using cached version of {0}", file);
         }
         this.s3Interface.copyObject(this.cacheBucket, checksum, this.testBucket, key);
     }

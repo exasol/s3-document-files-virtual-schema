@@ -1,10 +1,14 @@
-# S3 Document Files Virtual Schema 2.6.0, released 2023-??-??
+# S3 Document Files Virtual Schema 2.6.0, released 2023-04-28
 
 Code name: Auto-inference for CSV
 
 ## Summary
 
-This release adds automatic schema inference for CSV files. This means that you don't need to specify a `mapping` element in the EDML definition. Instead VSBFS will automatically detect the mapping from the CSV files. See the [EDML user guide](https://github.com/exasol/virtual-schema-common-document/blob/main/doc/user_guide/edml_user_guide.md#automatic-mapping-inference) for details.
+This release adds more mapping types for CSV files. Before you could only use mapping `toVarcharMapping`, but now you can also use `toDecimalMapping`, `toDoubleMapping`, `toDateMapping` and `toTimestampMapping`.
+
+The release also adds automatic schema inference for CSV files. This means that you don't need to specify a `mapping` element in the EDML definition. Instead the virtual schema will automatically detect the mapping from the CSV file as well as the presence of a header line.
+
+See the [EDML user guide](https://github.com/exasol/virtual-schema-common-document/blob/main/doc/user_guide/edml_user_guide.md#automatic-mapping-inference) for details.
 
 ## Features
 

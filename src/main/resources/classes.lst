@@ -808,6 +808,7 @@ java/lang/ref/Cleaner$1
 java/io/ObjectStreamClass$FieldReflector
 org/antlr/v4/runtime/atn/ATNConfigSet$ConfigHashSet
 software/amazon/awssdk/regions/servicemetadata/StsServiceMetadata
+com/exasol/adapter/document/querypredicate/normalizer/LogicngToQueryPredicateConverter$1
 sun/security/util/MemoryCache$CacheEntry
 io/netty/util/internal/shaded/org/jctools/queues/atomic/BaseLinkedAtomicQueue
 io/netty/util/internal/logging/InternalLoggerFactory
@@ -1055,6 +1056,7 @@ jdk/internal/module/SystemModuleFinders$SystemModuleReader
 software/amazon/awssdk/http/apache/ApacheHttpClient$ApacheConnectionManagerFactory
 io/netty/util/concurrent/EventExecutor
 software/amazon/awssdk/http/nio/netty/internal/utils/NettyClientLogger
+java/lang/invoke/BoundMethodHandle$Species_LLLLLLLLLLII
 jdk/internal/module/ModuleHashes$HashSupplier
 software/amazon/awssdk/utils/MapUtils
 java/util/logging/Logger$LoggerBundle
@@ -1089,6 +1091,7 @@ software/amazon/awssdk/regions/servicemetadata/SsoServiceMetadata
 io/netty/util/concurrent/GenericProgressiveFutureListener
 java/nio/file/CopyOption
 java/lang/invoke/BoundMethodHandle$Species_LLLLLLLLLLL
+java/lang/invoke/BoundMethodHandle$Species_LLLLLLLLLLI
 javax/management/QueryExp
 software/amazon/awssdk/protocols/jsoncore/internal/ObjectJsonNode
 javax/xml/stream/util/XMLEventAllocator
@@ -1492,6 +1495,7 @@ sun/security/ssl/CipherSuite$HashAlg
 java/lang/invoke/InvokerBytecodeGenerator$2
 org/logicng/formulas/FormulaPredicate
 sun/util/calendar/Gregorian
+java/lang/invoke/BoundMethodHandle$Species_LLLLLLLLLLIIL
 java/net/URI$1
 java/lang/InstantiationException
 com/sun/crypto/provider/GHASH
@@ -2213,6 +2217,7 @@ java/security/Signature
 org/apache/http/message/BasicHeaderElement
 software/amazon/awssdk/http/SdkHttpFullResponse$Builder
 java/io/StreamTokenizer
+com/exasol/adapter/document/UdfCallBuilder$1
 io/netty/handler/codec/http/HttpClientCodec$Encoder
 org/apache/http/conn/UnsupportedSchemeException
 org/logicng/transformations/cnf/CNFConfig$Algorithm
@@ -5761,8 +5766,8 @@ sun/security/ssl/SSLCipher$T12GcmWriteCipherGenerator
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad2
 io/netty/handler/codec/HeadersUtils$StringEntry
 org/apache/http/impl/client/BasicCredentialsProvider
-io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad0
 sun/security/jgss/SunProvider$1
+io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad0
 io/netty/util/internal/shaded/org/jctools/queues/BaseLinkedQueuePad1
 io/netty/util/internal/PlatformDependent0$3
 org/antlr/v4/runtime/CommonTokenFactory

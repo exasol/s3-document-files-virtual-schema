@@ -4,14 +4,14 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>2.5.2</version>
+    <version>2.6.0</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
-        <junit.version>5.9.2</junit.version>
+        <junit.version>5.9.3</junit.version>
         <org.testcontainers.version>1.18.0</org.testcontainers.version>
-        <vs-common-document-files.version>7.2.0</vs-common-document-files.version>
+        <vs-common-document-files.version>7.3.0</vs-common-document-files.version>
         <!-- Additional sonar configuration for analyzing TypeScript extension -->
         <sonar.sources>src/main/,extension/src/</sonar.sources>
         <sonar.exclusions>extension/src/*.test.ts</sonar.exclusions>
@@ -41,7 +41,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.20.46</version>
+                <version>2.20.54</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -112,11 +112,10 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.3.0</version>
+            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
-        <!--Integration
-        test dependencies-->
+        <!--Integration test dependencies-->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -139,14 +138,14 @@
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.449</version>
+            <version>1.12.457</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
             <version>2.0.7</version>
-            <scope>compile</scope>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
@@ -157,7 +156,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>hamcrest-resultset-matcher</artifactId>
-            <version>1.5.3</version>
+            <version>1.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -207,7 +206,7 @@
             <!-- Required for integration testing the extension. This is required by extension-manager-integration-test-java but seems to be overwritten by another dependency. -->
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.14.2</version>
+            <version>2.15.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -218,29 +217,7 @@
                 <artifactId>ossindex-maven-plugin</artifactId>
                 <configuration>
                     <excludeVulnerabilityIds>
-                        <!-- com.google.guava:guava:
-                        Excluded because we assume that the attacker does not have access to the machine. -->
-                        <exclude>sonatype-2020-0926</exclude>
-                        <!-- io.netty:netty-handler:
-                        Not a vulnerability in netty but how it is configured by the client
-                        software.amazon.awssdk:netty-nio-client.
-                        VSS3 is not affected, see https://github.com/aws/aws-sdk-java-v2/issues/3263 for details. -->
-                        <exclude>sonatype-2020-0026</exclude>
-                        <!-- org.apache.hadoop:hadoop-hdfs-client:jar:3.3.4
-                        No fixed version available, see https://github.com/exasol/parquet-io-java/issues/50
-                        Vulnerability affects XML import while payload for virtual-schema-common-document-files
-                        supports only json, csv, and parquet. Hence VSS3 is not affected. -->
-                        <exclude>sonatype-2022-5732</exclude>
-                        <!-- org.apache.hadoop:hadoop-common:jar:3.3.4:
-                        No fixed version available, will be fixed in 3.3.5
-                        Vulnerability affects XML import while payload for virtual-schema-common-document-files
-                        supports only json, csv, and parquet. Hence VSS3 is not affected. -->
-                        <exclude>sonatype-2022-5820</exclude>
-                        <!-- com.fasterxml.jackson.core:jackson-core:jar:2.14.1
-                        Currently no fixed version available. -->
-                        <exclude>sonatype-2022-6438</exclude>
-                        <!-- Transitive dependency fr.turri:aXMLRPC used by
-                        com.exasol:bucketfs-java.
+                        <!-- Transitive dependency fr.turri:aXMLRPC used by com.exasol:bucketfs-java.
                         CVE-2020-36641 is reported to be fixed in aXMLRPC 1.12.1. We use version 1.13.0, so this is a false
                         positive. -->
                         <exclude>CVE-2020-36641</exclude>
@@ -380,7 +357,7 @@
     <parent>
         <artifactId>s3-document-files-virtual-schema-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>2.5.2</version>
+        <version>2.6.0</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
 </project>

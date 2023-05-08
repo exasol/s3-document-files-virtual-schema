@@ -22,4 +22,5 @@ This release updates performance regression rests for CSV files to use all data 
 #### Test Dependency Updates
 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.457` to `1.12.464`
+* Updated `com.exasol:small-json-files-test-fixture:0.1.5` to `0.1.6`
 * Updated `com.exasol:virtual-schema-common-document-files:7.3.0` to `7.3.2`

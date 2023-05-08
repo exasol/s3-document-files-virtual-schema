@@ -168,7 +168,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>small-json-files-test-fixture</artifactId>
-            <version>0.1.5</version>
+            <version>0.1.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>

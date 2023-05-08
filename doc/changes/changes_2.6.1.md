@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 2.6.1, released 2023-05-03
+# S3 Document Files Virtual Schema 2.6.1, released 2023-05-08
 
 Code name: CSV Performance Regression Tests
 
@@ -16,10 +16,10 @@ This release updates performance regression rests for CSV files to use all data 
 
 #### Compile Dependency Updates
 
-* Updated `com.exasol:virtual-schema-common-document-files:7.3.0` to `7.3.1`
-* Updated `software.amazon.awssdk:s3:2.20.54` to `2.20.57`
+* Updated `com.exasol:virtual-schema-common-document-files:7.3.0` to `7.3.2`
+* Updated `software.amazon.awssdk:s3:2.20.54` to `2.20.61`
 
 #### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.457` to `1.12.460`
-* Updated `com.exasol:virtual-schema-common-document-files:7.3.0` to `7.3.1`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.457` to `1.12.464`
+* Updated `com.exasol:virtual-schema-common-document-files:7.3.0` to `7.3.2`

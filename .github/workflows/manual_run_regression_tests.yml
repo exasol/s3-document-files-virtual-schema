@@ -1,4 +1,4 @@
-name: Regression Tests
+name: Performance Regression Tests
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
       - published
 
 jobs:
-  build:
+  performance-regression-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Print tag name

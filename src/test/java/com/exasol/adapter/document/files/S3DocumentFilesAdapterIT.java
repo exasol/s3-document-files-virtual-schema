@@ -227,4 +227,16 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
             // ignore
         }
     }
+
+    @Test
+    @Override
+    void testLoadRandomCsvFile() throws Exception {
+        super.testLoadRandomCsvFile();
+    }
+
+    @Override
+    @Test
+    void testLoadManyCsvRowsFromOneFile() throws Exception {
+        super.testLoadManyCsvRowsFromOneFile();
+    }
 }

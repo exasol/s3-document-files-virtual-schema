@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 2.6.1, released 2023-05-08
+# S3 Document Files Virtual Schema 2.6.1, released 2023-05-09
 
 Code name: CSV Performance Regression Tests
 

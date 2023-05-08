@@ -179,6 +179,7 @@ sun/security/ssl/ServerNameExtension$SHServerNameConsumer
 scala/collection/Stepper
 io/netty/util/Signal$SignalConstant
 scala/util/Right
+software/amazon/awssdk/regions/servicemetadata/SignerServiceMetadata
 software/amazon/awssdk/core/internal/http/timers/TimeoutTask
 com/exasol/adapter/document/iterators/FilteringIterator
 org/antlr/v4/runtime/atn/RuleTransition
@@ -415,8 +416,8 @@ org/apache/http/config/SocketConfig
 java/util/stream/MatchOps$MatchKind
 software/amazon/awssdk/core/internal/util/HttpChecksumResolver
 com/exasol/adapter/document/files/stringfilter/wildcardexpression/fragments/RegularCharacter
-org/jcp/xml/dsig/internal/dom/XMLDSigRI$ProviderService
 software/amazon/awssdk/awscore/client/handler/AwsAsyncClientHandler
+org/jcp/xml/dsig/internal/dom/XMLDSigRI$ProviderService
 sun/security/ssl/SSLContextImpl$AbstractTLSContext
 java/time/ZonedDateTime
 software/amazon/awssdk/utils/FunctionalUtils$UnsafeRunnable
@@ -464,6 +465,7 @@ software/amazon/awssdk/services/s3/paginators/ListObjectsV2Iterable
 java/lang/Throwable
 org/codehaus/stax2/ri/evt/AttributeEventImpl
 java/io/DefaultFileSystem
+software/amazon/awssdk/regions/partitionmetadata/AwsIsoEPartitionMetadata
 jdk/internal/jimage/ImageHeader
 sun/security/x509/CertificateSerialNumber
 sun/security/util/IOUtils
@@ -3524,9 +3526,9 @@ sun/management/RuntimeImpl
 org/apache/http/conn/EofSensorInputStream
 jdk/internal/module/ModuleBootstrap
 java/net/URI$Parser
-sun/security/pkcs11/SunPKCS11
 software/amazon/awssdk/services/s3/model/NoSuchUploadException
 software/amazon/awssdk/core/internal/handler/BaseAsyncClientHandler
+sun/security/pkcs11/SunPKCS11
 io/netty/util/internal/SocketUtils
 software/amazon/awssdk/core/exception/SdkInterruptedException
 javax/xml/stream/events/Namespace

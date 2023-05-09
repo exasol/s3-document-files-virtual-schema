@@ -37,6 +37,7 @@ import com.exasol.performancetestrecorder.PerformanceTestRecorder;
 import com.exasol.smalljsonfilesfixture.SmallJsonFilesTestSetup;
 
 import jakarta.json.JsonObjectBuilder;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.BucketAlreadyExistsException;
 import software.amazon.awssdk.services.s3.model.BucketAlreadyOwnedByYouException;
@@ -214,10 +215,10 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     private void createTestSetupWithSmallJsonFiles(final int numberOfJsonFiles) throws IOException {
         createBucketIfNotExists(SMALL_JSON_FILES_FIXTURE_BUCKET);
-        new SmallJsonFilesTestSetup().setup(
-                Map.of("exa:project", "S3VS", "exa:owner", TestConfig.instance().getOwner()),
-                SMALL_JSON_FILES_FIXTURE_BUCKET, TestConfig.instance().getAwsCredentialsProvider(), numberOfJsonFiles,
-                20_000);
+        final AwsCredentialsProvider awsCredentialsProvider = TestConfig.instance().getAwsCredentialsProvider();
+        final Map<String, String> tags = Map.of("exa:project", "S3VS", "exa:owner", TestConfig.instance().getOwner());
+        new SmallJsonFilesTestSetup(awsCredentialsProvider, tags, SMALL_JSON_FILES_FIXTURE_BUCKET)
+                .setup(numberOfJsonFiles);
     }
 
     private void createBucketIfNotExists(final String bucketName) {

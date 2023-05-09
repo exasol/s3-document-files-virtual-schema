@@ -65,6 +65,7 @@
         "s3:DeleteBucket",
         "s3:PutBucketTagging",
         "lambda:GetFunction",
+        "lambda:TagResource",
         "iam:GetRolePolicy",
         "ec2:Describe*",
         "ec2:ImportKeyPair",

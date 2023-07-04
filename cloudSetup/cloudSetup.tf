@@ -5,7 +5,7 @@ provider "aws" {
 
 module "exasol_setup" {
   source                 = "exasol/exasol-test-setup/aws"
-  version                = "1.2.0"
+  version                = "1.2.1"
   owner                  = var.owner
   deputy                 = var.deputy
   project                = var.project

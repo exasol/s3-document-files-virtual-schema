@@ -22,6 +22,10 @@ jobs:
           distribution: "temurin"
           java-version: 11
           cache: "maven"
+      - name: Install terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.1
       - name: Run local smoketests
         run: |
           mvn --batch-mode --update-snapshots clean artifact-reference-checker:verify test -DtrimStackTrace=false -Dtest.coverage=false \

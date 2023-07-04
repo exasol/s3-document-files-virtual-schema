@@ -24,6 +24,7 @@ This release upgrades dependencies to fix the following vulnerabilities:
 #### Compile Dependency Updates
 
 * Updated `com.exasol:virtual-schema-common-document-files:7.3.2` to `7.3.3`
+* Removed `org.apache.commons:commons-text:1.10.0`
 * Updated `software.amazon.awssdk:s3:2.20.61` to `2.20.98`
 
 #### Test Dependency Updates

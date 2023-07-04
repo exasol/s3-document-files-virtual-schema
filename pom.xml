@@ -184,13 +184,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <!-- Upgrade transitive dependency of performance-test-recorder-java to fix
-            CVE-2022-42889 -->
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>1.10.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>maven-project-version-getter</artifactId>
             <version>1.2.0</version>

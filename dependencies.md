@@ -146,4 +146,4 @@
 [65]: http://maven.apache.org/plugins/maven-install-plugin/
 [66]: http://maven.apache.org/plugins/maven-deploy-plugin/
 [67]: http://maven.apache.org/plugins/maven-site-plugin/
-[68]: https://registry.npmjs.org/@exasol/extension-manager-interface/-/extension-manager-interface-0.1.15.tgz
+[68]: https://registry.npmjs.org/@exasol/extension-manager-interface/-/extension-manager-interface-0.2.0.tgz

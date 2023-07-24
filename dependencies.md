@@ -63,7 +63,7 @@
 | [JaCoCo :: Maven Plugin][58]                            | [Eclipse Public License 2.0][36]               |
 | [error-code-crawler-maven-plugin][59]                   | [MIT License][60]                              |
 | [Reproducible Build Maven Plugin][61]                   | [Apache 2.0][45]                               |
-| [Apache Maven Clean Plugin][62]                         | [Apache License, Version 2.0][9]               |
+| [Apache Maven Clean Plugin][62]                         | [Apache-2.0][9]                                |
 | [Exec Maven Plugin][63]                                 | [Apache License 2][9]                          |
 | [Maven Resources Plugin][64]                            | [The Apache Software License, Version 2.0][45] |
 | [Maven Install Plugin][65]                              | [The Apache Software License, Version 2.0][45] |

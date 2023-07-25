@@ -8,16 +8,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.testcontainers.containers.localstack.LocalStackContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 import com.exasol.adapter.document.files.connection.S3ConnectionProperties;
-import com.exasol.adapter.document.files.s3testsetup.LocalStackS3TestSetup;
+import com.exasol.adapter.document.files.container.S3InterfaceContainer;
 import com.exasol.adapter.document.files.stringfilter.wildcardexpression.WildcardExpression;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -27,11 +24,12 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Tag("integration")
-@Testcontainers
+//@Testcontainers
 class S3FileFinderIT {
-    @Container
-    private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(
-            DockerImageName.parse(LocalStackS3TestSetup.LOCALSTACK_CONTAINER)).withServices(S3);
+//    @Container
+//    private static final LocalStackContainer LOCAL_STACK_CONTAINER = new LocalStackContainer(
+//            DockerImageName.parse(LocalStackS3TestSetup.LOCALSTACK_CONTAINER)).withServices(S3);
+
     private static final String TEST_BUCKET = "test-bucket";
     private static final String CONTENT_1 = "content-1";
     private static final String CONTENT_2 = "content-2";
@@ -39,20 +37,34 @@ class S3FileFinderIT {
     private static S3Client s3;
     private static S3ConnectionProperties connectionInformation;
 
-    @BeforeAll
-    static void beforeAll() {
-        s3 = S3Client.builder().endpointOverride(LOCAL_STACK_CONTAINER.getEndpointOverride(S3))
-                .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials
-                        .create(LOCAL_STACK_CONTAINER.getAccessKey(), LOCAL_STACK_CONTAINER.getSecretKey())))
-                .region(Region.of(LOCAL_STACK_CONTAINER.getRegion())).build();
+    static void beforeAll(final S3InterfaceContainer container) {
+        s3 = S3Client.builder().endpointOverride(container.getEndpointOverride(S3))
+                .credentialsProvider(StaticCredentialsProvider
+                        .create(AwsBasicCredentials.create(container.getAccessKey(), container.getSecretKey())))
+                .region(Region.of(container.getRegion())).build();
 
         s3.createBucket(b -> b.bucket(TEST_BUCKET));
         s3.putObject(b -> b.bucket(TEST_BUCKET).key("file-1.json"), RequestBody.fromBytes(CONTENT_1.getBytes()));
         s3.putObject(b -> b.bucket(TEST_BUCKET).key("file-2.json"), RequestBody.fromBytes(CONTENT_2.getBytes()));
         s3.putObject(b -> b.bucket(TEST_BUCKET).key("other.json"), RequestBody.fromBytes(CONTENT_OTHER.getBytes()));
-        connectionInformation = new LocalStackS3ConnectionInformationFactory().getConnectionInfo(LOCAL_STACK_CONTAINER,
+        connectionInformation = new LocalStackS3ConnectionInformationFactory().getConnectionInfo(container,
                 TEST_BUCKET);
     }
+
+//    @BeforeAll
+//    static void beforeAll() {
+//        s3 = S3Client.builder().endpointOverride(LOCAL_STACK_CONTAINER.getEndpointOverride(S3))
+//                .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials
+//                        .create(LOCAL_STACK_CONTAINER.getAccessKey(), LOCAL_STACK_CONTAINER.getSecretKey())))
+//                .region(Region.of(LOCAL_STACK_CONTAINER.getRegion())).build();
+//
+//        s3.createBucket(b -> b.bucket(TEST_BUCKET));
+//        s3.putObject(b -> b.bucket(TEST_BUCKET).key("file-1.json"), RequestBody.fromBytes(CONTENT_1.getBytes()));
+//        s3.putObject(b -> b.bucket(TEST_BUCKET).key("file-2.json"), RequestBody.fromBytes(CONTENT_2.getBytes()));
+//        s3.putObject(b -> b.bucket(TEST_BUCKET).key("other.json"), RequestBody.fromBytes(CONTENT_OTHER.getBytes()));
+//        connectionInformation = new LocalStackS3ConnectionInformationFactory().getConnectionInfo(LOCAL_STACK_CONTAINER,
+//                TEST_BUCKET);
+//    }
 
     @Test
     void testReadFile() {

@@ -14,11 +14,13 @@ MinIO is a high-performance, S3 compatible object store. It is built for large s
 
 ## Dependency Updates
 
-### Compile Dependency Updates
+### Virtual Schema for Document Data in Files on AWS S3
+
+#### Compile Dependency Updates
 
 * Updated `software.amazon.awssdk:s3:2.20.98` to `2.20.111`
 
-### Test Dependency Updates
+#### Test Dependency Updates
 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.501` to `1.12.514`
 * Updated `com.exasol:udf-debugging-java:0.6.9` to `0.6.10`
@@ -27,7 +29,7 @@ MinIO is a high-performance, S3 compatible object store. It is built for large s
 * Updated `org.junit.jupiter:junit-jupiter-engine:5.9.3` to `5.10.0`
 * Updated `org.junit.jupiter:junit-jupiter-params:5.9.3` to `5.10.0`
 
-### Plugin Dependency Updates
+#### Plugin Dependency Updates
 
 * Updated `com.exasol:error-code-crawler-maven-plugin:1.2.3` to `1.3.0`
 * Updated `com.exasol:project-keeper-maven-plugin:2.9.7` to `2.9.9`

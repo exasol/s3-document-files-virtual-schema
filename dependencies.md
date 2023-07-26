@@ -1,7 +1,9 @@
 <!-- @formatter:off -->
 # Dependencies
 
-## Compile Dependencies
+## Virtual Schema for Document Data in Files on aws s3
+
+### Compile Dependencies
 
 | Dependency                                     | License                          |
 | ---------------------------------------------- | -------------------------------- |
@@ -9,7 +11,7 @@
 | [AWS Java SDK :: Services :: Amazon S3][2]     | [Apache License, Version 2.0][3] |
 | [error-reporting-java][4]                      | [MIT License][5]                 |
 
-## Test Dependencies
+### Test Dependencies
 
 | Dependency                                      | License                                       |
 | ----------------------------------------------- | --------------------------------------------- |
@@ -34,13 +36,13 @@
 | [jackson-databind][34]                          | [The Apache Software License, Version 2.0][9] |
 | [JaCoCo :: Agent][35]                           | [Eclipse Public License 2.0][36]              |
 
-## Runtime Dependencies
+### Runtime Dependencies
 
 | Dependency                | License           |
 | ------------------------- | ----------------- |
 | [SLF4J JDK14 Binding][37] | [MIT License][38] |
 
-## Plugin Dependencies
+### Plugin Dependencies
 
 | Dependency                                              | License                                        |
 | ------------------------------------------------------- | ---------------------------------------------- |
@@ -67,6 +69,14 @@
 | [Maven Install Plugin][65]                              | [The Apache Software License, Version 2.0][45] |
 | [Maven Deploy Plugin][66]                               | [The Apache Software License, Version 2.0][45] |
 | [Maven Site Plugin 3][67]                               | [The Apache Software License, Version 2.0][45] |
+
+## Extension
+
+### Compile Dependencies
+
+| Dependency                                | License |
+| ----------------------------------------- | ------- |
+| [@exasol/extension-manager-interface][68] | MIT     |
 
 [0]: https://github.com/exasol/virtual-schema-common-document-files/
 [1]: https://github.com/exasol/virtual-schema-common-document-files/blob/main/LICENSE
@@ -136,3 +146,4 @@
 [65]: http://maven.apache.org/plugins/maven-install-plugin/
 [66]: http://maven.apache.org/plugins/maven-deploy-plugin/
 [67]: http://maven.apache.org/plugins/maven-site-plugin/
+[68]: https://registry.npmjs.org/@exasol/extension-manager-interface/-/extension-manager-interface-0.1.15.tgz

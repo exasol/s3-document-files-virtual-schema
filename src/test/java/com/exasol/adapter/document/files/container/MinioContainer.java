@@ -15,10 +15,6 @@ public class MinioContainer extends GenericContainer<MinioContainer> implements 
     private static final String ADMIN_SECRET_KEY = "12345678";
 
     public MinioContainer(final DockerImageName dockerImageName) {
-        // parent method uses @NonNull annotation from
-        // import org.apache.hadoop.thirdparty.org.checkerframework.checker.nullness.qual.NonNull;
-        // Should we do something similar?
-        // Objects.nonNull(dockerImageName);
         super(dockerImageName);
         this.withEnv("MINIO_ACCESS_KEY", ADMIN_ACCESS_KEY) //
                 .withEnv("MINIO_SECRET_KEY", ADMIN_SECRET_KEY) //

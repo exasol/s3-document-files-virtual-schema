@@ -5,15 +5,15 @@ import java.net.URI;
 import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer.Service;
 
-public class AwsLocalStackContainer implements S3Container {
+public class LocalStackS3Container implements S3Container {
 
-    public static AwsLocalStackContainer of(final LocalStackContainer localStackContainer) {
-        return new AwsLocalStackContainer(localStackContainer);
+    public static LocalStackS3Container of(final LocalStackContainer localStackContainer) {
+        return new LocalStackS3Container(localStackContainer);
     }
 
     private final LocalStackContainer container;
 
-    AwsLocalStackContainer(final LocalStackContainer container) {
+    LocalStackS3Container(final LocalStackContainer container) {
         this.container = container;
     }
 

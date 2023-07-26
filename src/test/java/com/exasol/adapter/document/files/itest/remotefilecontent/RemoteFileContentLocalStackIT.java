@@ -9,7 +9,7 @@ import com.exasol.adapter.document.files.s3testsetup.S3ContainerSetup;
  * flavors implementing interface {@code S3ContainerSetup}.
  */
 @Tag("integration")
-public class RemoteFileContentAwsLocalStackIT extends AbstractRemoteFileContentIT {
+public class RemoteFileContentLocalStackIT extends AbstractRemoteFileContentIT {
 
     private static final S3ContainerSetup SETUP = S3ContainerSetup.minio();
 

@@ -1,9 +1,7 @@
 <!-- @formatter:off -->
 # Dependencies
 
-## Virtual Schema for Document Data in Files on aws s3
-
-### Compile Dependencies
+## Compile Dependencies
 
 | Dependency                                     | License                          |
 | ---------------------------------------------- | -------------------------------- |
@@ -11,7 +9,7 @@
 | [AWS Java SDK :: Services :: Amazon S3][2]     | [Apache License, Version 2.0][3] |
 | [error-reporting-java][4]                      | [MIT License][5]                 |
 
-### Test Dependencies
+## Test Dependencies
 
 | Dependency                                      | License                                       |
 | ----------------------------------------------- | --------------------------------------------- |
@@ -36,13 +34,13 @@
 | [jackson-databind][34]                          | [The Apache Software License, Version 2.0][9] |
 | [JaCoCo :: Agent][35]                           | [Eclipse Public License 2.0][36]              |
 
-### Runtime Dependencies
+## Runtime Dependencies
 
 | Dependency                | License           |
 | ------------------------- | ----------------- |
 | [SLF4J JDK14 Binding][37] | [MIT License][38] |
 
-### Plugin Dependencies
+## Plugin Dependencies
 
 | Dependency                                              | License                                        |
 | ------------------------------------------------------- | ---------------------------------------------- |
@@ -55,10 +53,10 @@
 | [Versions Maven Plugin][47]                             | [Apache License, Version 2.0][9]               |
 | [duplicate-finder-maven-plugin Maven Mojo][48]          | [Apache License 2.0][49]                       |
 | [Project keeper maven plugin][50]                       | [The MIT License][51]                          |
-| [Apache Maven Assembly Plugin][52]                      | [Apache License, Version 2.0][9]               |
+| [Apache Maven Assembly Plugin][52]                      | [Apache-2.0][9]                                |
 | [Apache Maven JAR Plugin][53]                           | [Apache License, Version 2.0][9]               |
 | [Artifact reference checker and unifier][54]            | [MIT License][55]                              |
-| [Apache Maven Dependency Plugin][56]                    | [Apache License, Version 2.0][9]               |
+| [Apache Maven Dependency Plugin][56]                    | [Apache-2.0][9]                                |
 | [Maven Failsafe Plugin][57]                             | [Apache-2.0][9]                                |
 | [JaCoCo :: Maven Plugin][58]                            | [Eclipse Public License 2.0][36]               |
 | [error-code-crawler-maven-plugin][59]                   | [MIT License][60]                              |
@@ -69,14 +67,6 @@
 | [Maven Install Plugin][65]                              | [The Apache Software License, Version 2.0][45] |
 | [Maven Deploy Plugin][66]                               | [The Apache Software License, Version 2.0][45] |
 | [Maven Site Plugin 3][67]                               | [The Apache Software License, Version 2.0][45] |
-
-## Extension
-
-### Compile Dependencies
-
-| Dependency                                | License |
-| ----------------------------------------- | ------- |
-| [@exasol/extension-manager-interface][68] | MIT     |
 
 [0]: https://github.com/exasol/virtual-schema-common-document-files/
 [1]: https://github.com/exasol/virtual-schema-common-document-files/blob/main/LICENSE
@@ -126,7 +116,7 @@
 [45]: http://www.apache.org/licenses/LICENSE-2.0.txt
 [46]: https://maven.apache.org/surefire/maven-surefire-plugin/
 [47]: https://www.mojohaus.org/versions/versions-maven-plugin/
-[48]: https://github.com/basepom/duplicate-finder-maven-plugin
+[48]: https://basepom.github.io/duplicate-finder-maven-plugin
 [49]: http://www.apache.org/licenses/LICENSE-2.0.html
 [50]: https://github.com/exasol/project-keeper/
 [51]: https://github.com/exasol/project-keeper/blob/main/LICENSE
@@ -146,4 +136,3 @@
 [65]: http://maven.apache.org/plugins/maven-install-plugin/
 [66]: http://maven.apache.org/plugins/maven-deploy-plugin/
 [67]: http://maven.apache.org/plugins/maven-site-plugin/
-[68]: https://registry.npmjs.org/@exasol/extension-manager-interface/-/extension-manager-interface-0.1.15.tgz

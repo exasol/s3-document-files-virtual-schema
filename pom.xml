@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>2.6.2</version>
+    <version>2.7.0</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
-        <junit.version>5.9.3</junit.version>
+        <junit.version>5.10.0</junit.version>
         <org.testcontainers.version>1.18.3</org.testcontainers.version>
         <vs-common-document-files.version>7.3.3</vs-common-document-files.version>
         <!-- Additional sonar configuration for analyzing TypeScript extension -->
@@ -41,7 +39,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.20.98</version>
+                <version>2.20.111</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -87,7 +85,7 @@
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier</artifactId>
-            <version>3.14.3</version>
+            <version>3.15</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -138,7 +136,7 @@
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.501</version>
+            <version>1.12.514</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -150,7 +148,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>udf-debugging-java</artifactId>
-            <version>0.6.9</version>
+            <version>0.6.10</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -231,7 +229,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>2.9.7</version>
+                <version>2.9.9</version>
                 <executions>
                     <execution>
                         <goals>
@@ -350,7 +348,7 @@
     <parent>
         <artifactId>s3-document-files-virtual-schema-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>2.6.2</version>
+        <version>2.7.0</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
 </project>

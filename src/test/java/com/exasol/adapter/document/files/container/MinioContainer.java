@@ -3,10 +3,8 @@ package com.exasol.adapter.document.files.container;
 import java.net.*;
 import java.time.Duration;
 
-import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.localstack.LocalStackContainer.Service;
-import org.testcontainers.containers.startupcheck.OneShotStartupCheckStrategy;
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
 import org.testcontainers.utility.DockerImageName;
 
@@ -15,8 +13,6 @@ public class MinioContainer extends GenericContainer<MinioContainer> implements 
     private static final int PORT = 9000;
     private static final String ADMIN_ACCESS_KEY = "admin";
     private static final String ADMIN_SECRET_KEY = "12345678";
-    private static final String USER_ACCESS_KEY = "bob";
-    private static final String USER_SECRET_KEY = "87654321";
 
     public MinioContainer(final DockerImageName dockerImageName) {
         // parent method uses @NonNull annotation from
@@ -56,7 +52,7 @@ public class MinioContainer extends GenericContainer<MinioContainer> implements 
             final String address = getHost();
             // resolve IP address and use that as the endpoint so that path-style access is automatically used for S3
             final String ipAddress = InetAddress.getByName(address).getHostAddress();
-            return new URI("http://" + ipAddress + ":" + getMappedS3Port()); // getMappedPort(getServicePort(service)));
+            return new URI("http://" + ipAddress + ":" + getMappedS3Port());
         } catch (UnknownHostException | URISyntaxException e) {
             throw new IllegalStateException("Cannot obtain endpoint URL", e);
         }
@@ -66,24 +62,4 @@ public class MinioContainer extends GenericContainer<MinioContainer> implements 
     public Integer getMappedS3Port() {
         return getFirstMappedPort();
     }
-
-    public void addUser() {
-        final int mappedPort = getMappedS3Port();
-        Testcontainers.exposeHostPorts(mappedPort);
-        // final String minioServerUrl = String.format("http://%s:%s", getHost(), mappedPort);
-
-        // Minio Java SDK uses s3v4 protocol by default, need to specify explicitly for mc
-        final String cmdTpl = "mc config host add myminio http://host.testcontainers.internal:%s %s %s --api s3v4 && "
-                + "mc admin user add myminio %s %s readwrite";
-        final String cmd = String.format(cmdTpl, mappedPort, ADMIN_ACCESS_KEY, ADMIN_SECRET_KEY, USER_ACCESS_KEY,
-                USER_SECRET_KEY);
-
-        try (GenericContainer<?> mcContainer = new GenericContainer<>("minio/mc")) {
-            mcContainer.withStartupCheckStrategy(new OneShotStartupCheckStrategy()) //
-                    .withCreateContainerCmdModifier(
-                            containerCommand -> containerCommand.withTty(true).withEntrypoint("/bin/sh", "-c", cmd)) //
-                    .start();
-        }
-    }
-
 }

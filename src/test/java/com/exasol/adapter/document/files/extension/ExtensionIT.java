@@ -199,6 +199,19 @@ class ExtensionIT {
     }
 
     @Test
+    void upgradeFailsWhenNotInstalled() {
+        setup.client().assertRequestFails(() -> setup.client().upgrade(),
+                "extension is not installed, the following scripts are missing: S3_FILES_ADAPTER, IMPORT_FROM_S3_DOCUMENT_FILES",
+                404);
+    }
+
+    @Test
+    void upgradeFailsWhenAlreadyUpToDate() {
+        setup.client().install();
+        setup.client().assertRequestFails(() -> setup.client().upgrade(), "extension is already up-to-date", 302);
+    }
+
+    @Test
     void virtualSchemaWorks() throws SQLException {
         setup.client().install();
         final String prefix = "vs-works-test-" + System.currentTimeMillis() + "/";

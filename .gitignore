@@ -5,6 +5,7 @@
 .project
 .settings/org.eclipse.core.resources.prefs
 .settings/org.eclipse.jdt.apt.core.prefs
+.settings/org.eclipse.m2e.core.prefs
 # .settings : we need Eclipse settings for code formatter and clean-up rules
 target
 .cache
@@ -44,5 +45,3 @@ test_config.properties
 deleteLambdaResources.sh
 *.flattened-pom.xml
 /.apt_generated/
-.settings/org.eclipse.m2e.core.prefs
-

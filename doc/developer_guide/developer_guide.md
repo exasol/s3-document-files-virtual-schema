@@ -1,4 +1,4 @@
-# Developers Guide
+# Developer Guide
 
 This guide contains information for developers.
 

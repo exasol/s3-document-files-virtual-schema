@@ -10,9 +10,7 @@ import org.testcontainers.containers.startupcheck.OneShotStartupCheckStrategy;
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
 import org.testcontainers.utility.DockerImageName;
 
-import com.exasol.adapter.document.files.s3testsetup.MinioTestSetup;
-
-public class MinioContainer extends GenericContainer<MinioContainer> implements S3InterfaceContainer {
+public class MinioContainer extends GenericContainer<MinioContainer> implements S3Container {
 
     private static final int PORT = 9000;
     private static final String ADMIN_ACCESS_KEY = "admin";
@@ -20,15 +18,10 @@ public class MinioContainer extends GenericContainer<MinioContainer> implements 
     private static final String USER_ACCESS_KEY = "bob";
     private static final String USER_SECRET_KEY = "87654321";
 
-    public MinioContainer() {
-        this(MinioTestSetup.DOCKER_IMAGE_NAME);
-    }
-
-    public MinioContainer(final String dockerImageName) {
-        this(DockerImageName.parse(dockerImageName));
-    }
-
     public MinioContainer(final DockerImageName dockerImageName) {
+        // parent method uses @NonNull annotation from
+        // import org.apache.hadoop.thirdparty.org.checkerframework.checker.nullness.qual.NonNull;
+        // Should we do something similar?
         // Objects.nonNull(dockerImageName);
         super(dockerImageName);
         this.withEnv("MINIO_ACCESS_KEY", ADMIN_ACCESS_KEY) //
@@ -45,7 +38,6 @@ public class MinioContainer extends GenericContainer<MinioContainer> implements 
     @Override
     public String getAccessKey() {
         return ADMIN_ACCESS_KEY;
-        // return super.getEnvMap().get("MINIO_ACCESS_KEY");
     }
 
     @Override
@@ -55,8 +47,7 @@ public class MinioContainer extends GenericContainer<MinioContainer> implements 
 
     @Override
     public String getRegion() {
-        return null;
-        // return this.getEnvMap().getOrDefault("DEFAULT_REGION", DEFAULT_REGION);
+        return "us-east-1";
     }
 
     @Override
@@ -71,7 +62,8 @@ public class MinioContainer extends GenericContainer<MinioContainer> implements 
         }
     }
 
-    private int getMappedS3Port() {
+    @Override
+    public Integer getMappedS3Port() {
         return getFirstMappedPort();
     }
 

@@ -262,6 +262,7 @@ describe("S3 VS Extension", () => {
             const context = createMockContext();
             const parameters = [{ name: "virtualSchemaName", value: "vs'name" }, { name: "mapping", value: "mapping'with''quotes" }, { name: "awsAccessKeyId", value: "access'key" }]
             const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
+            expect(instance).toStrictEqual({ id: "vs'name", name: "vs'name", })
             const calls = context.mocks.sqlExecute.mock.calls
             expect(calls[0]).toEqual([`CREATE OR REPLACE CONNECTION "vs'name_CONNECTION" TO '' USER '' IDENTIFIED BY '{"awsAccessKeyId":"access''key"}'`])
             expect(calls[1]).toEqual([`CREATE VIRTUAL SCHEMA "vs'name" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'vs''name_CONNECTION' MAPPING = 'mapping''with''''quotes';`])

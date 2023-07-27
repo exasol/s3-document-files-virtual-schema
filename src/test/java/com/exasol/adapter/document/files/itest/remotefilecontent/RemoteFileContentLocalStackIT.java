@@ -11,7 +11,7 @@ import com.exasol.adapter.document.files.s3testsetup.S3ContainerSetup;
 @Tag("integration")
 public class RemoteFileContentLocalStackIT extends AbstractRemoteFileContentIT {
 
-    private static final S3ContainerSetup SETUP = S3ContainerSetup.minio();
+    private static final S3ContainerSetup SETUP = S3ContainerSetup.localStack();
 
     @BeforeAll
     static void beforeAll() {

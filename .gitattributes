@@ -9,5 +9,5 @@ pk_generated_parent.pom                                          linguist-genera
 doc/changes/changelog.md                                         linguist-generated=true
 src/main/resources/classes.lst                                   linguist-generated=true
 extension/package-lock.json                                      linguist-generated=true
-
-cloudSetup/.terraform.lock.hcl linguist-generated=true
+.settings/org.eclipse.m2e.core.prefs                             linguist-generated=true
+cloudSetup/.terraform.lock.hcl                                   linguist-generated=true

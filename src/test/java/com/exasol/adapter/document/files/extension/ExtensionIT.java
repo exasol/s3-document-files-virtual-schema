@@ -3,17 +3,19 @@ package com.exasol.adapter.document.files.extension;
 import static com.exasol.matcher.ResultSetStructureMatcher.table;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.FileNotFoundException;
-import java.net.InetSocketAddress;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.net.*;
+import java.net.http.*;
+import java.net.http.HttpClient.Redirect;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.nio.file.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
 
@@ -30,6 +32,7 @@ import com.exasol.dbbuilder.dialects.exasol.AdapterScript.Language;
 import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript.InputType;
+import com.exasol.errorreporting.ExaError;
 import com.exasol.exasoltestsetup.ExasolTestSetup;
 import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
 import com.exasol.extensionmanager.client.model.*;
@@ -41,7 +44,12 @@ import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 import software.amazon.awssdk.core.sync.RequestBody;
 
 class ExtensionIT {
+    private static final Logger LOG = Logger.getLogger(ExtensionIT.class.getName());
+    private static final String PREVIOUS_VERSION = "2.6.2";
+    private static final String PREVIOUS_VERSION_JAR_FILE = "document-files-virtual-schema-dist-7.3.3-s3-"
+            + PREVIOUS_VERSION + ".jar";
     private static final Path EXTENSION_SOURCE_DIR = Paths.get("extension").toAbsolutePath();
+    private static final String EXTENSION_ID = "s3-vs-extension.js";
     private static final int EXPECTED_PARAMETER_COUNT = 10;
     private static ExasolTestSetup exasolTestSetup;
     private static ExtensionManagerSetup setup;
@@ -53,7 +61,7 @@ class ExtensionIT {
     static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
         setup = ExtensionManagerSetup.create(exasolTestSetup, ExtensionBuilder.createDefaultNpmBuilder(
-                EXTENSION_SOURCE_DIR, EXTENSION_SOURCE_DIR.resolve("dist/s3-vs-extension.js")));
+                EXTENSION_SOURCE_DIR, EXTENSION_SOURCE_DIR.resolve("dist").resolve(EXTENSION_ID)));
         s3TestSetup = new AwsS3TestSetup();
         s3BucketName = "extension-test.s3.virtual-schema-test-bucket-" + System.currentTimeMillis();
         s3TestSetup.createBucket(s3BucketName);
@@ -208,19 +216,100 @@ class ExtensionIT {
     @Test
     void upgradeFailsWhenAlreadyUpToDate() {
         setup.client().install();
-        setup.client().assertRequestFails(() -> setup.client().upgrade(), "extension is already up-to-date", 302);
+        setup.client().assertRequestFails(() -> setup.client().upgrade(),
+                "Extension is already installed in latest version " + projectVersion, 412);
+    }
+
+    @Test
+    void upgradeFromPreviousVersion() throws InterruptedException, BucketAccessException, TimeoutException,
+            FileNotFoundException, URISyntaxException {
+        final String previousVersionExtensionId = setup.fetchExtension(getDownloadUrl(PREVIOUS_VERSION, EXTENSION_ID));
+        preparePreviousVersionAdapter();
+        setup.client().install(previousVersionExtensionId, PREVIOUS_VERSION);
+        final String virtualTable = createVirtualSchema(previousVersionExtensionId, PREVIOUS_VERSION);
+        verifyVirtualTableContainsData(virtualTable);
+        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PREVIOUS_VERSION);
+        upgrade();
+        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", projectVersion);
+        verifyVirtualTableContainsData(virtualTable);
+    }
+
+    private URI getDownloadUrl(final String version, final String fileName) {
+        final String project = "s3-document-files-virtual-schema";
+        return URI.create(
+                "https://extensions-internal.exasol.com/com.exasol/" + project + "/" + version + "/" + fileName);
+    }
+
+    private void upgrade() {
+        final UpgradeExtensionResponse upgradeResult = setup.client().upgrade(EXTENSION_ID);
+        assertEquals(new UpgradeExtensionResponse().previousVersion(PREVIOUS_VERSION).newVersion(projectVersion),
+                upgradeResult);
+    }
+
+    private void preparePreviousVersionAdapter()
+            throws URISyntaxException, FileNotFoundException, BucketAccessException, TimeoutException {
+        final Path file = downloadToTemp(getDownloadUrl(PREVIOUS_VERSION, PREVIOUS_VERSION_JAR_FILE));
+        exasolTestSetup.getDefaultBucket().uploadFile(file, PREVIOUS_VERSION_JAR_FILE);
+    }
+
+    private Path downloadToTemp(final URI url) {
+        final HttpClient httpClient = HttpClient.newBuilder().followRedirects(Redirect.NORMAL).build();
+        final HttpRequest request = HttpRequest.newBuilder(url).GET().build();
+        try {
+            final Path tempFile = Files.createTempFile("s3-adapter-", ".jar");
+            final HttpResponse<Path> response = httpClient.send(request, BodyHandlers.ofFile(tempFile));
+            final long fileSize = Files.size(tempFile);
+            LOG.fine("Downloaded " + url + " with response status " + response.statusCode() + " to " + tempFile
+                    + " with file size " + fileSize + " bytes");
+            return tempFile;
+        } catch (final IOException exception) {
+            throw new UncheckedIOException(ExaError.messageBuilder("E-EMIT-31")
+                    .message("Failed to download {{url}} to temp file", url).toString(), exception);
+        } catch (final InterruptedException exception) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(
+                    ExaError.messageBuilder("E-EMIT-32").message("Download of {{url}} was interrupted", url).toString(),
+                    exception);
+        }
+    }
+
+    private void assertInstalledVersion(final String expectedName, final String expectedVersion) {
+        final List<InstallationsResponseInstallation> installations = setup.client().getInstallations();
+        final InstallationsResponseInstallation expectedInstallation = new InstallationsResponseInstallation()
+                .name(expectedName).version(expectedVersion);
+        // The extension is installed twice (previous and current version), so each one returns the same installation.
+        assertAll(() -> assertThat(installations, hasSize(2)),
+                () -> assertThat(installations.get(0), equalTo(expectedInstallation)),
+                () -> assertThat(installations.get(1), equalTo(expectedInstallation)));
     }
 
     @Test
     void virtualSchemaWorks() throws SQLException {
         setup.client().install();
+        final String virtualTable = createVirtualSchema();
+        verifyVirtualTableContainsData(virtualTable);
+    }
+
+    private String createVirtualSchema() {
+        return createVirtualSchema(EXTENSION_ID, projectVersion);
+    }
+
+    private String createVirtualSchema(final String extensionId, final String extensionVersion) {
         final String prefix = "vs-works-test-" + System.currentTimeMillis() + "/";
         upload(prefix + "test-data-1.json", "{\"id\": 1, \"name\": \"abc\" }");
         upload(prefix + "test-data-2.json", "{\"id\": 2, \"name\": \"xyz\" }");
-        createInstance("MY_VS", getMappingDefinition(prefix + "test-data-*.json"));
+        final String virtualSchemaName = "MY_VS";
+        createInstance(extensionId, extensionVersion, virtualSchemaName,
+                getMappingDefinition(prefix + "test-data-*.json"));
+        return virtualSchemaName + ".TEST";
+    }
+
+    private void verifyVirtualTableContainsData(final String virtualTable) {
         try (final ResultSet result = exasolTestSetup.createConnection().createStatement()
-                .executeQuery("SELECT ID, NAME FROM MY_VS.TEST ORDER BY ID ASC")) {
+                .executeQuery("SELECT ID, NAME FROM " + virtualTable + " ORDER BY ID ASC")) {
             assertThat(result, table().row(1L, "abc").row(2L, "xyz").matches());
+        } catch (final SQLException exception) {
+            throw new AssertionError("Assertion query failed", exception);
         }
     }
 
@@ -317,9 +406,15 @@ class ExtensionIT {
     }
 
     private void createInstance(final String virtualSchemaName, final EdmlDefinition mapping) {
+        createInstance(EXTENSION_ID, projectVersion, virtualSchemaName, mapping);
+    }
+
+    private void createInstance(final String extensionId, final String extensionVersion, final String virtualSchemaName,
+            final EdmlDefinition mapping) {
         setup.addVirtualSchemaToCleanupQueue(virtualSchemaName);
         setup.addConnectionToCleanupQueue(virtualSchemaName.toUpperCase() + "_CONNECTION");
-        final String instanceName = setup.client().createInstance(createValidParameters(virtualSchemaName, mapping));
+        final String instanceName = setup.client().createInstance(extensionId, extensionVersion,
+                createValidParameters(virtualSchemaName, mapping));
         assertThat(instanceName, equalTo(virtualSchemaName));
     }
 

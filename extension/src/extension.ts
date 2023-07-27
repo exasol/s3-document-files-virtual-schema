@@ -50,7 +50,7 @@ export function createExtension(): ExasolExtension {
             uninstall(context, extensionInfo, version)
         },
         upgrade(context) {
-            return upgrade(context)
+            return upgrade(context, extensionInfo)
         },
         deleteInstance(context: Context, version: string, instanceId: string): void {
             deleteInstance(context, extensionInfo, version, instanceId);

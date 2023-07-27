@@ -29,7 +29,6 @@ public class LocalStackS3Container implements S3Container {
 
     @Override
     public String getRegion() {
-        this.container.close();
         return this.container.getRegion();
     }
 

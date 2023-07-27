@@ -13,17 +13,13 @@ abstract class AbstractRandomAccessInputStreamIT extends RandomAccessInputStream
     private static final String TEST_BUCKET = "test";
     private static final String TEST_DATA_KEY = "TEST_DATA";
 
-    private final S3ContainerSetup testSetup;
+    private S3ContainerSetup testSetup;
     private S3Client s3Client;
     private int dataSize;
 
-    AbstractRandomAccessInputStreamIT(final S3ContainerSetup setup) {
-        this.testSetup = setup;
-    }
-
-    @Override
-    protected void prepareTestSetup(final byte[] bytes) {
-        this.s3Client = this.testSetup.getS3Client();
+    protected void prepareTestSetup(final S3ContainerSetup testSetup, final byte[] bytes) {
+        this.testSetup = testSetup;
+        this.s3Client = testSetup.getS3Client();
         this.s3Client.createBucket(CreateBucketRequest.builder().bucket(TEST_BUCKET).build());
         this.dataSize = bytes.length;
         this.s3Client.putObject(b -> b.bucket(TEST_BUCKET).key(TEST_DATA_KEY), RequestBody.fromBytes(bytes));

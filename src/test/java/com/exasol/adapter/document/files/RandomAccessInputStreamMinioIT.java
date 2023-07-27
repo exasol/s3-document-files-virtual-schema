@@ -2,14 +2,14 @@ package com.exasol.adapter.document.files;
 
 import com.exasol.adapter.document.documentfetcher.files.randomaccessinputstream.RandomAccessInputStream;
 import com.exasol.adapter.document.documentfetcher.files.randomaccessinputstream.RandomAccessInputStreamTestBase;
-import com.exasol.adapter.document.files.s3testsetup.LocalStackS3TestSetup;
+import com.exasol.adapter.document.files.s3testsetup.S3ContainerSetup;
 import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
 
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
-class S3RandomAccessInputStreamIT extends RandomAccessInputStreamTestBase {
+class RandomAccessInputStreamMinioIT extends RandomAccessInputStreamTestBase {
     private static final String TEST_BUCKET = "test";
     private static final String TEST_DATA_KEY = "TEST_DATA";
     private S3TestSetup testSetup;
@@ -18,7 +18,7 @@ class S3RandomAccessInputStreamIT extends RandomAccessInputStreamTestBase {
 
     @Override
     protected void prepareTestSetup(final byte[] bytes) {
-        this.testSetup = new LocalStackS3TestSetup();
+        this.testSetup = S3ContainerSetup.minio();
         this.s3Client = this.testSetup.getS3Client();
         this.s3Client.createBucket(CreateBucketRequest.builder().bucket(TEST_BUCKET).build());
         this.dataSize = bytes.length;

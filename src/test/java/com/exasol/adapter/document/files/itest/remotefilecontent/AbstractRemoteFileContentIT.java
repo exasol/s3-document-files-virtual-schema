@@ -1,4 +1,4 @@
-package com.exasol.adapter.document.files;
+package com.exasol.adapter.document.files.itest.remotefilecontent;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -8,38 +8,28 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.*;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
 import com.exasol.adapter.document.documentfetcher.files.RemoteFileContent;
-import com.exasol.adapter.document.files.s3testsetup.LocalStackS3TestSetup;
-import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
+import com.exasol.adapter.document.files.RemoteContentBuilder;
+import com.exasol.adapter.document.files.s3testsetup.S3ContainerSetup;
 
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
-
-class S3RemoteFileContentIT {
+abstract class AbstractRemoteFileContentIT {
     private static final String TEST_BUCKET = "test";
     private static final String TEST_DATA_VALUE = "test content";
     private static final String TEST_DATA_KEY = "TEST_DATA";
-    private static S3TestSetup testSetup;
     private static RemoteFileContent remoteFileContent;
 
-    @BeforeAll
-    static void beforeAll() {
-        testSetup = new LocalStackS3TestSetup();
-        final S3Client s3Client = testSetup.getS3Client();
-        final S3AsyncClient s3AsyncClient = testSetup.getS3AsyncClient();
-        s3Client.createBucket(CreateBucketRequest.builder().bucket(TEST_BUCKET).build());
-        s3Client.putObject(b -> b.bucket(TEST_BUCKET).key(TEST_DATA_KEY), RequestBody.fromString(TEST_DATA_VALUE));
-        remoteFileContent = new S3RemoteFileContent(s3Client, s3AsyncClient,
-                new S3ObjectDescription(TEST_DATA_KEY, TEST_DATA_VALUE.length()), TEST_BUCKET);
+    static void beforeAll(final S3ContainerSetup setup) {
+        remoteFileContent = new RemoteContentBuilder(setup) //
+                .bucket(TEST_BUCKET) //
+                .key(TEST_DATA_KEY) //
+                .value(TEST_DATA_VALUE) //
+                .build();
     }
 
-    @AfterAll
-    static void afterAll() {
-        testSetup.close();
+    static void afterAll(final S3ContainerSetup setup) {
+        setup.close();
     }
 
     @Test

@@ -1,12 +1,15 @@
-# Developers Guide
+# Developer Guide
 
 This guide contains information for developers.
 
 ## Executing the Integration Tests Locally
 
-The integration tests of this project use an S3 bucket. Using a local mock was not possible since the tested local-stack s3 implementation did not work.
+The integration tests of this project use an S3 bucket. There are multiple ways to use or emulate S3 buckets:
+* Real S3 buckets in the AWS cloud
+* [Localstack](https://github.com/localstack/localstack)
+* [MinIO](https://min.io)
 
-Instead you need to configure the tests by creating file `test_config.properties` in the folder of `s3-document-files-virtual-schema`:
+For using real AWS S3 buckets you need to configure the tests appropriately by creating file `s3-document-files-virtual-schema/test_config.properties` with the following content:
 
 ```properties
 awsProfile = <AWS profile>

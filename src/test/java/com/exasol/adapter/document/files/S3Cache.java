@@ -29,7 +29,7 @@ public class S3Cache implements S3UploadInterface {
         this(new S3Interface(s3), testBucket, cacheBucket);
     }
 
-    S3Cache(final S3Interface s3Interface, final String testBucket, final String cacheBucket) {
+    public S3Cache(final S3Interface s3Interface, final String testBucket, final String cacheBucket) {
         this.s3Interface = s3Interface;
         this.testBucket = testBucket;
         this.cacheBucket = cacheBucket;
@@ -110,24 +110,24 @@ public class S3Cache implements S3UploadInterface {
      * This class is a wrapper around the s3 API to facilitate testing. (The AWS API uses final classes, so we can't spy
      * on it with mockito.)
      */
-    static class S3Interface {
+    public static class S3Interface {
         private final S3Client s3;
 
-        S3Interface(final S3Client s3) {
+        public S3Interface(final S3Client s3) {
             this.s3 = s3;
         }
 
-        void uploadFile(final String bucketName, final String key, final Path file) {
+        public void uploadFile(final String bucketName, final String key, final Path file) {
             this.s3.putObject(request -> request.bucket(bucketName).key(key), file);
         }
 
-        void copyObject(final String sourceBucket, final String sourceKey, final String destinationBucket,
+        public void copyObject(final String sourceBucket, final String sourceKey, final String destinationBucket,
                 final String destinationKey) {
             this.s3.copyObject(request -> request.sourceKey(sourceKey).destinationKey(destinationKey)
                     .sourceBucket(sourceBucket).destinationBucket(destinationBucket));
         }
 
-        ListObjectsResponse listObjects(final String bucket, final String prefix) {
+        public ListObjectsResponse listObjects(final String bucket, final String prefix) {
             return this.s3.listObjects(request -> request.bucket(bucket).prefix(prefix));
         }
     }

@@ -55,10 +55,10 @@
 | [Versions Maven Plugin][47]                             | [Apache License, Version 2.0][9]               |
 | [duplicate-finder-maven-plugin Maven Mojo][48]          | [Apache License 2.0][49]                       |
 | [Project keeper maven plugin][50]                       | [The MIT License][51]                          |
-| [Apache Maven Assembly Plugin][52]                      | [Apache License, Version 2.0][9]               |
+| [Apache Maven Assembly Plugin][52]                      | [Apache-2.0][9]                                |
 | [Apache Maven JAR Plugin][53]                           | [Apache License, Version 2.0][9]               |
 | [Artifact reference checker and unifier][54]            | [MIT License][55]                              |
-| [Apache Maven Dependency Plugin][56]                    | [Apache License, Version 2.0][9]               |
+| [Apache Maven Dependency Plugin][56]                    | [Apache-2.0][9]                                |
 | [Maven Failsafe Plugin][57]                             | [Apache-2.0][9]                                |
 | [JaCoCo :: Maven Plugin][58]                            | [Eclipse Public License 2.0][36]               |
 | [error-code-crawler-maven-plugin][59]                   | [MIT License][60]                              |
@@ -126,7 +126,7 @@
 [45]: http://www.apache.org/licenses/LICENSE-2.0.txt
 [46]: https://maven.apache.org/surefire/maven-surefire-plugin/
 [47]: https://www.mojohaus.org/versions/versions-maven-plugin/
-[48]: https://github.com/basepom/duplicate-finder-maven-plugin
+[48]: https://basepom.github.io/duplicate-finder-maven-plugin
 [49]: http://www.apache.org/licenses/LICENSE-2.0.html
 [50]: https://github.com/exasol/project-keeper/
 [51]: https://github.com/exasol/project-keeper/blob/main/LICENSE

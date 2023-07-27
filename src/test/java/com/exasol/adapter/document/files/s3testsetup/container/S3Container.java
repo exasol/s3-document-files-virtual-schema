@@ -1,4 +1,4 @@
-package com.exasol.adapter.document.files.container;
+package com.exasol.adapter.document.files.s3testsetup.container;
 
 import java.net.URI;
 

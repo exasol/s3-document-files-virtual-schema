@@ -9,9 +9,7 @@ The integration tests of this project use an S3 bucket. There are multiple ways 
 * [Localstack](https://github.com/localstack/localstack)
 * [MinIO](https://min.io)
 
-Please note that **Localstack does not work on your local machine**.
-
-Instead you need to fall back to using real AWS S3 buckets by configuring the tests appropriately by creating file `s3-document-files-virtual-schema/test_config.properties` with the following content:
+For using real AWS S3 buckets you need to configure the tests appropriately by creating file `s3-document-files-virtual-schema/test_config.properties` with the following content:
 
 ```properties
 awsProfile = <AWS profile>

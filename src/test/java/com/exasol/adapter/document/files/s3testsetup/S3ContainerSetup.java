@@ -10,7 +10,7 @@ import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import com.exasol.adapter.document.files.connection.S3ConnectionProperties;
-import com.exasol.adapter.document.files.container.*;
+import com.exasol.adapter.document.files.s3testsetup.container.*;
 
 import software.amazon.awssdk.auth.credentials.*;
 import software.amazon.awssdk.regions.Region;
@@ -23,7 +23,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 public class S3ContainerSetup implements S3TestSetup {
 
     static class DockerImage {
-        static final String LOCALSTACK = "localstack/localstack:1.4.0";
+        static final String LOCALSTACK = "localstack/localstack:2.2.0";
         static final String MINIO = "minio/minio:RELEASE.2023-07-21T21-12-44Z.fips";
     }
 

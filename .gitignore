@@ -44,4 +44,5 @@ test_config.properties
 deleteLambdaResources.sh
 *.flattened-pom.xml
 /.apt_generated/
+.settings/org.eclipse.m2e.core.prefs
 

@@ -24,11 +24,11 @@ Enhanced support by VSS3 includes
 
 #### Compile Dependency Updates
 
-* Updated `software.amazon.awssdk:s3:2.20.98` to `2.20.111`
+* Updated `software.amazon.awssdk:s3:2.20.98` to `2.20.114`
 
 #### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.501` to `1.12.514`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.501` to `1.12.517`
 * Updated `com.exasol:extension-manager-integration-test-java:0.4.0` to `0.5.0`
 * Updated `com.exasol:udf-debugging-java:0.6.9` to `0.6.10`
 * Updated `nl.jqno.equalsverifier:equalsverifier:3.14.3` to `3.15`

@@ -21,9 +21,10 @@ export function findInstallations(scripts: ExaScriptsRow[]): Installation[] {
     if (!importScript.isValidImportScript() || !adapterScript.isValidAdapterScript()) {
         return [];
     }
+
     return [{
         name: `${adapterScript.schema}.${adapterScript.name}`,
-        version: adapterScript.getVersion()
+        version: adapterScript.getVersion() ?? "(unknown)"
     }];
 }
 

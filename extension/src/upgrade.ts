@@ -10,8 +10,7 @@ interface Scripts {
 
 export function upgrade(context: Context, extensionInfo: ExtensionInfo): UpgradeResult {
     const scripts = getAdapterScripts(context)
-    verifyVersionOutdated(extensionInfo, scripts)
-    const previousVersion = scripts.adapterScript.getVersion()
+    const previousVersion = getAdapterVersion(extensionInfo, scripts)
     const newVersion = extensionInfo.version
     installExtension(context, extensionInfo, newVersion)
     return { previousVersion, newVersion };
@@ -36,10 +35,18 @@ function getAdapterScripts(context: Context): Scripts {
     }
 }
 
-function verifyVersionOutdated(extensionInfo: ExtensionInfo, scripts: Scripts) {
-    if (scripts.adapterScript.getVersion() !== scripts.importScript.getVersion()) {
-        throw new PreconditionFailedError(`Scripts have inconsistent versions. ${scripts.adapterScript.name}: ${scripts.adapterScript.getVersion()}, ${scripts.importScript.name}: ${scripts.importScript.getVersion()}`)
-    } else if (scripts.adapterScript.getVersion() === extensionInfo.version) {
+function getAdapterVersion(extensionInfo: ExtensionInfo, scripts: Scripts): string {
+    const { adapterScript, importScript } = scripts;
+    const adapterVersion = adapterScript.getVersion();
+    const importScriptVersion = importScript.getVersion();
+    if (!adapterVersion) {
+        throw new PreconditionFailedError(`Failed to extract version from adapter script ${adapterScript.qualifiedName}, script text: '${adapterScript.text}'`)
+    } else if (!importScriptVersion) {
+        throw new PreconditionFailedError(`Failed to extract version from import script ${importScript.qualifiedName}, script text: '${importScript.text}'`)
+    } else if (adapterVersion !== importScriptVersion) {
+        throw new PreconditionFailedError(`Scripts have inconsistent versions. ${adapterScript.qualifiedName}: ${adapterVersion}, ${importScript.qualifiedName}: ${importScriptVersion}`)
+    } else if (adapterVersion === extensionInfo.version) {
         throw new PreconditionFailedError(`Extension is already installed in latest version ${extensionInfo.version}`)
     }
+    return adapterVersion
 }

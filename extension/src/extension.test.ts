@@ -1,52 +1,9 @@
-import { Context, ExaMetadata, Installation, Instance, ParameterValue, QueryResult, Row, SqlClient } from '@exasol/extension-manager-interface';
+import { ExaMetadata, Installation, Instance, ParameterValue, Row } from '@exasol/extension-manager-interface';
 import { ExaScriptsRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
 import { describe, expect, it } from '@jest/globals';
-import * as jestMock from "jest-mock";
 import { createExtension } from "./extension";
 import { CONFIG } from './extension-config';
-
-const EXTENSION_SCHEMA_NAME = "ext-schema"
-
-function getInstalledExtension(): any {
-    return (global as any).installedExtension
-}
-
-type ContextMock = Context & {
-    mocks: {
-        sqlExecute: jestMock.Mock<(query: string, ...args: any) => void>,
-        sqlQuery: jestMock.Mock<(query: string, ...args: any) => QueryResult>
-        getScriptByName: jestMock.Mock<(scriptName: string) => ExaScriptsRow | null>
-    }
-}
-
-function createMockContext(): ContextMock {
-    const execute = jestMock.fn<(query: string, ...args: any) => void>()
-    const query = jestMock.fn<(query: string, ...args: any) => QueryResult>()
-    const getScriptByName = jestMock.fn<(scriptName: string) => ExaScriptsRow | null>()
-
-    const sqlClient: SqlClient = {
-        execute: execute,
-        query: query
-    }
-
-    return {
-        extensionSchemaName: EXTENSION_SCHEMA_NAME,
-        sqlClient,
-        bucketFs: {
-            resolvePath(fileName: string) {
-                return "/bucketfs/" + fileName;
-            },
-        },
-        metadata: {
-            getScriptByName
-        },
-        mocks: {
-            sqlExecute: execute,
-            sqlQuery: query,
-            getScriptByName: getScriptByName
-        }
-    }
-}
+import { adapterScript, createMockContext, getInstalledExtension, importScript } from './test-utils';
 
 describe("S3 VS Extension", () => {
 
@@ -98,15 +55,7 @@ describe("S3 VS Extension", () => {
             function installation({ name = "schema.S3_FILES_ADAPTER", version = "(unknown)" }: Partial<Installation>): Installation {
                 return { name, version }
             }
-            function script({ schema = "schema", name = "name", inputType, resultType, type = "", text = "", comment }: Partial<ExaScriptsRow>): ExaScriptsRow {
-                return { schema, name, inputType, resultType, type, text, comment }
-            }
-            function adapterScript({ name = "S3_FILES_ADAPTER", type = "ADAPTER", text = "adapter script" }: Partial<ExaScriptsRow>): ExaScriptsRow {
-                return script({ name, type, text })
-            }
-            function importScript({ name = "IMPORT_FROM_S3_DOCUMENT_FILES", type = "UDF", inputType = "SET", resultType = "EMITS" }: Partial<ExaScriptsRow>): ExaScriptsRow {
-                return script({ name, type, inputType, resultType })
-            }
+
             const tests: { name: string; scripts: ExaScriptsRow[], expected?: Installation }[] = [
                 { name: "all values match", scripts: [adapterScript({}), importScript({})], expected: installation({}) },
                 { name: "adapter has wrong type", scripts: [adapterScript({ type: "wrong" }), importScript({})], expected: undefined },

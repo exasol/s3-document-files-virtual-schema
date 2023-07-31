@@ -2,6 +2,17 @@
 
 This guide contains information for developers.
 
+## Building
+
+In case of time outs for building the extension for the [Extension Manager](https://github.com/exasol/extension-manager) please build it manually with
+```shell
+cd extension
+npm ci
+```
+
+See also [PK ticket #461](https://github.com/exasol/project-keeper/issues/461).
+
+
 ## Executing the Integration Tests Locally
 
 The integration tests of this project use an S3 bucket. There are multiple ways to use or emulate S3 buckets:

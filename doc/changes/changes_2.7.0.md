@@ -4,9 +4,14 @@ Code name: MinIO Integration Tests
 
 ## Summary
 
-This release updates dependencies and enhances the integration tests based on [Localstack](https://github.com/localstack/localstack) to to be executed for [MinIO](https://min.io), too.
+This release adds support [MinIO](https://min.io) and updates dependencies.
 
 MinIO is a high-performance, S3 compatible object store. It is built for large scale AI/ML, data lake and database workloads. It runs on-prem and on any cloud (public or private) and from the data center to the edge. MinIO is software-defined and open source under GNU AGPL v3.
+
+Enhanced support by VSS3 includes
+* Updated requirements specification
+* Dedicated Hands-On Guide for MinIO
+* Integration tests based on [Localstack](https://github.com/localstack/localstack) to be executed for [MinIO](https://min.io), too
 
 ## Features
 

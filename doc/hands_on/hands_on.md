@@ -59,7 +59,7 @@ For the document Virtual Schemas, and by that also the S3 Virtual Schema, this i
 
 ### Installation
 
-To install the Virtual Schema adapter, [download its latest jar from the [releases](https://github.com/exasol/s3-document-files-virtual-schema/releases) and upload to BucketFS:
+To install the Virtual Schema adapter, download its latest jar from the [releases](https://github.com/exasol/s3-document-files-virtual-schema/releases) and upload to BucketFS:
 
 ``` shell script
 curl -I -X PUT -T document-files-virtual-schema-dist-7.3.3-s3-2.7.0.jar http://w:writepw@<YOUR_DB_IP>:2580/default/
@@ -72,11 +72,13 @@ Now, create a schema for the adapter script and the UDF:
 ```sql
 CREATE SCHEMA ADAPTER;
 
+--/
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
     %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.3.3-s3-2.7.0.jar;
 /
 
+--/
 CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   DATA_LOADER VARCHAR(2000000),
   SCHEMA_MAPPING_REQUEST VARCHAR(2000000),
@@ -102,7 +104,7 @@ CREATE CONNECTION S3_CONNECTION
     USER ''
     IDENTIFIED BY '{
         "awsAccessKeyId": "<AWS ACCESS KEY ID>", 
-        "awsSecretAccessKey": "<AWS SECRET KEY ID>", 
+        "awsSecretAccessKey": "<AWS SECRET KEY>", 
         "awsRegion": "<AWS REGION>", 
         "s3Bucket": "<S3 BUCKET NAME>" 
     }';

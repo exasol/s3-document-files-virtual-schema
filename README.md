@@ -14,21 +14,22 @@
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=com.exasol%3As3-document-files-virtual-schema&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=com.exasol%3As3-document-files-virtual-schema)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=com.exasol%3As3-document-files-virtual-schema&metric=ncloc)](https://sonarcloud.io/dashboard?id=com.exasol%3As3-document-files-virtual-schema)
 
-This Virtual Schemas allows you to access document files stored in S3 like any regular Exasol table. For different file systems sources check the [files Virtual Schema][files-vs]
+This Virtual Schemas allows you to access document files stored in S3 like any regular Exasol table.
 
 This Virtual Schema is built for and tested with the official AWS S3. Third-party S3 API compatible products are expected to work as well. It is highly recommended to thoroughly test 3rd party products used in combination with Exasol, especially regarding sufficient S3 API compatibility.
 
+For [MinIO](https://min.io) each release of VSS3 is verified by automated integration tests. MinIO is a high-performance, S3 compatible object store. It is built for large scale AI/ML, data lake and database workloads. It runs on-prem and on any cloud (public or private) and from the data center to the edge. MinIO is software-defined and open source under GNU AGPL v3. See the [Hand-On Guide](doc/hands_on/hands_minio.md) for a quick tour with some sample JSON files.
+
 This Virtual Schema is prepared for [Java UDF startup time improver](https://github.com/exasol/java-udf-startup-time-improver/).
 
-For supported document file formats: see [files Virtual Schema][files-vs]
+For supported document file formats see [Virtual Schema Common Document Files](https://github.com/exasol/virtual-schema-common-document-files).
 
 Additional Information:
 
 * [User Guide](doc/user_guide/user_guide.md)
-* [Hands-on Guide (JSON Files)](doc/hands_on/hands_on.md)
-* [Hands-on Guide (Parquet Files)](doc/hands_on/hands_on_parquet.md)
+* [Hands-on Guide (JSON files)](doc/hands_on/hands_on.md)
+* [Hands-on Guide (Parquet files)](doc/hands_on/hands_on_parquet.md)
+* [Hands-on Guide (MinIO with JSON files)](doc/hands_on/hands_minio.md)
 * [Changelog](doc/changes/changelog.md)
 * [Dependencies](dependencies.md)
 * [Developer Guide](doc/developer_guide/developer_guide.md)
-
-[files-vs]: https://github.com/exasol/virtual-schema-common-document-files

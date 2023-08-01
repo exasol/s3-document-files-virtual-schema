@@ -6,7 +6,7 @@ VSS3 supports using two different variants of S3 buckets:
 * Real S3 buckets in the AWS cloud
 * S3 buckets as emulated by [MinIO](https://min.io)'s S3-compatible interface
 
-The current Hands-On Guide describes how to access S3 buckets emulated by a MinIO Docker Container, see also [MinIO documentation](https://github.com/minio/minio/tree/master/docs/docker?rgh-link-date=2023-07-25T06:41:28Z).
+This Hands-On Guide describes how to access an S3 bucket emulated by a MinIO Docker Container, see also [MinIO documentation](https://github.com/minio/minio/tree/master/docs/docker?rgh-link-date=2023-07-25T06:41:28Z).
 
 ## Concepts
 

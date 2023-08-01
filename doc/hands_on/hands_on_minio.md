@@ -2,9 +2,8 @@
 
 ## Introduction
 
-VSS3 supports using three different variants of S3 buckets
+VSS3 supports using two different variants of S3 buckets:
 * Real S3 buckets in the AWS cloud
-* S3 buckets provided by [Localstack](https://github.com/localstack/localstack) Docker Container
 * S3 buckets as emulated by [MinIO](https://min.io)'s S3-compatible interface
 
 The current Hands-On Guide describes how to access S3 buckets emulated by a MinIO Docker Container, see also [MinIO documentation](https://github.com/minio/minio/tree/master/docs/docker?rgh-link-date=2023-07-25T06:41:28Z).
@@ -21,18 +20,18 @@ Select a user name and a password for the MinIO Docker Container. Throughout thi
 
 | MinIO Terminology                    | AWS terminology       | Reference |
 |--------------------------------------|-----------------------|-----------|
-| User name for MinIO Docker Container | `<AWS ACCESS KEY ID>` | `$MUSER`  |
-| Password for MinIO Docker Container  | `<AWS SECRET KEY>`    | `$MPASS`  |
+| User name for MinIO Docker Container | `<AWS ACCESS KEY ID>` | `$MINIO_USER`  |
+| Password for MinIO Docker Container  | `<AWS SECRET KEY>`    | `$MINIO_PASS`  |
 
 ### Variables
 
 In the following this Hand-On Guide will use variables for the Host running the MinIO server name and the name of sample S3 bucket:
 
 ```shell
-export MHOST=localhost
-export MUSER=user
-export MPASS=password
-export MBUCKET=my-bucket
+export MINIO_HOST=localhost
+export MINIO_USER=user
+export MINIO_PASS=password
+export MINIO_BUCKET=my-bucket
 ```
 
 ## Prerequisites and installation
@@ -41,12 +40,6 @@ export MBUCKET=my-bucket
 * Minio Docker Container
 * Minio Client
 * Exasol Docker Container
-
-<!--
-* [Sample Json Files from VSS3](./books)
-* Mapping Definitions for mapping json keys to SQL columns
-See [Hands-on S3-Virtual-Schema](hands_on.md).
--->
 
 
 ## Setup MinIO Docker Container and Client
@@ -59,7 +52,7 @@ docker run --detach --name minio \
   -p 9001:9001 \
   -e "MINIO_ROOT_USER=$MUSER" \
   -e "MINIO_ROOT_PASSWORD=$MPASS" \
-  -it minio/minio:RELEASE.2023-07-21T21-12-44Z.fips \
+  -it minio/minio:latest \
   server /data --console-address ":9001"
 ```
 
@@ -83,7 +76,7 @@ Its [manual](https://min.io/docs/minio/linux/reference/minio-mc.html#quickstart)
 The following following comand defines alias `myminio` for your MinIO server using the [selected credentials](#credentials):
 
 ```shell
-mc alias set myminio http://$MHOST:9000/ $MUSER $MPASS
+mc alias set myminio http://$MINIO_HOST:9000/ $MINIO_USER $MINIO_PASS
 ```
 
 ### Emulate an S3 Bucket With Sample Files
@@ -91,7 +84,7 @@ mc alias set myminio http://$MHOST:9000/ $MUSER $MPASS
 Next we will tell MinIO to emulate a sample S3 bucket:
 
 ```shell
-mc mb myminio/$MBUCKET
+mc mb myminio/$MINIO_BUCKET
 ```
 
 Download the [sample Json files](./books) and upload them to the emulated S3 bucket:
@@ -124,11 +117,11 @@ The following SQL statement will create a connection to this bucket:
 CREATE OR REPLACE CONNECTION S3_CONNECTION
   TO '' USER ''
   IDENTIFIED BY '{
-      "awsAccessKeyId": "$MUSER",
-      "awsSecretAccessKey": "$MPASS",
+      "awsAccessKeyId": "$MINIO_USER",
+      "awsSecretAccessKey": "$MINIO_PASS",
       "awsRegion": "any-region",
-      "s3Bucket": "$MBUCKET",
-      "awsEndpointOverride": "$MHOST:9000",
+      "s3Bucket": "$MINIO_BUCKET",
+      "awsEndpointOverride": "$MINIO_HOST:9000",
       "useSsl": false
   }';
 ```

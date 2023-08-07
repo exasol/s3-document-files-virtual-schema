@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.20.114</version>
+                <version>2.20.120</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>nl.jqno.equalsverifier</groupId>
             <artifactId>equalsverifier</artifactId>
-            <version>3.15</version>
+            <version>3.15.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -136,7 +136,7 @@
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.517</version>
+            <version>1.12.523</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -172,7 +172,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>java-class-list-verifier</artifactId>
-            <version>0.2.2</version>
+            <version>0.2.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>

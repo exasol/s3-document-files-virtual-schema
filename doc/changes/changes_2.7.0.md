@@ -24,12 +24,11 @@ Enhanced support by VSS3 includes
 
 #### Compile Dependency Updates
 
-* Updated `software.amazon.awssdk:s3:2.20.98` to `2.20.114`
+* Updated `software.amazon.awssdk:s3:2.20.98` to `2.20.111`
 
 #### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.501` to `1.12.517`
-* Updated `com.exasol:extension-manager-integration-test-java:0.4.0` to `0.5.0`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.501` to `1.12.514`
 * Updated `com.exasol:udf-debugging-java:0.6.9` to `0.6.10`
 * Updated `nl.jqno.equalsverifier:equalsverifier:3.14.3` to `3.15`
 * Updated `org.jacoco:org.jacoco.agent:0.8.9` to `0.8.10`
@@ -41,7 +40,6 @@ Enhanced support by VSS3 includes
 * Updated `com.exasol:error-code-crawler-maven-plugin:1.2.3` to `1.3.0`
 * Updated `com.exasol:project-keeper-maven-plugin:2.9.7` to `2.9.9`
 * Updated `org.apache.maven.plugins:maven-assembly-plugin:3.5.0` to `3.6.0`
-* Updated `org.apache.maven.plugins:maven-clean-plugin:3.2.0` to `3.3.1`
 * Updated `org.apache.maven.plugins:maven-dependency-plugin:3.5.0` to `3.6.0`
 * Updated `org.apache.maven.plugins:maven-failsafe-plugin:3.0.0` to `3.1.2`
 * Updated `org.apache.maven.plugins:maven-surefire-plugin:3.0.0` to `3.1.2`
@@ -49,20 +47,3 @@ Enhanced support by VSS3 includes
 * Updated `org.codehaus.mojo:flatten-maven-plugin:1.4.1` to `1.5.0`
 * Updated `org.codehaus.mojo:versions-maven-plugin:2.15.0` to `2.16.0`
 * Updated `org.jacoco:jacoco-maven-plugin:0.8.9` to `0.8.10`
-
-### Extension
-
-#### Compile Dependency Updates
-
-* Updated `@exasol/extension-manager-interface:0.1.15` to `0.3.0`
-
-#### Development Dependency Updates
-
-* Updated `eslint:^8.38.0` to `^8.45.0`
-* Updated `@typescript-eslint/parser:^5.58.0` to `^6.1.0`
-* Updated `ts-jest:^29.1.0` to `^29.1.1`
-* Updated `@types/jest:^29.5.0` to `^29.5.3`
-* Updated `typescript:^5.0.4` to `^5.1.6`
-* Updated `@typescript-eslint/eslint-plugin:^5.58.0` to `^6.1.0`
-* Updated `jest:29.5.0` to `29.6.1`
-* Updated `esbuild:^0.17.16` to `^0.18.16`

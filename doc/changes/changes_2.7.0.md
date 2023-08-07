@@ -1,4 +1,4 @@
-# Virtual Schema for Document Data in Files on AWS S3 2.7.0, released 2023-??-??
+# Virtual Schema for Document Data in Files on AWS S3 2.7.0, released 2023-08-07
 
 Code name: MinIO Integration Tests
 
@@ -15,6 +15,7 @@ Enhanced support by VSS3 includes
 
 ## Features
 
+* #128: Added Hand-On Guide for min.io
 * #125: Added integration tests for min.io
 
 ## Dependency Updates

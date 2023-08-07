@@ -1,6 +1,6 @@
 # Virtual Schema for Document Data in Files on AWS S3 2.7.0, released 2023-08-07
 
-Code name: MinIO Integration Tests
+Code name: MinIO Support
 
 ## Summary
 

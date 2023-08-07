@@ -18,7 +18,7 @@ This Virtual Schemas allows you to access document files stored in S3 like any r
 
 This Virtual Schema is built for and tested with the official AWS S3. Third-party S3 API compatible products are expected to work as well. It is highly recommended to thoroughly test 3rd party products used in combination with Exasol, especially regarding sufficient S3 API compatibility.
 
-For [MinIO](https://min.io) each release of VSS3 is verified by automated integration tests. MinIO is a high-performance, S3 compatible object store. It is built for large scale AI/ML, data lake and database workloads. It runs on-prem and on any cloud (public or private) and from the data center to the edge. MinIO is software-defined and open source under GNU AGPL v3. See the [Hand-On Guide](doc/hands_on/hands_minio.md) for a quick tour with some sample JSON files.
+For [MinIO](https://min.io) each release of VSS3 is verified by automated integration tests. MinIO is a high-performance, S3 compatible object store. It is built for large scale AI/ML, data lake and database workloads. It runs on-prem and on any cloud (public or private) and from the data center to the edge. MinIO is software-defined and open source under GNU AGPL v3. See the [Hand-On Guide](doc/hands_on/hands_on_minio.md) for a quick tour with some sample JSON files.
 
 This Virtual Schema is prepared for [Java UDF startup time improver](https://github.com/exasol/java-udf-startup-time-improver/).
 
@@ -29,7 +29,7 @@ Additional Information:
 * [User Guide](doc/user_guide/user_guide.md)
 * [Hands-on Guide (JSON files)](doc/hands_on/hands_on.md)
 * [Hands-on Guide (Parquet files)](doc/hands_on/hands_on_parquet.md)
-* [Hands-on Guide (MinIO with JSON files)](doc/hands_on/hands_minio.md)
+* [Hands-on Guide (MinIO with JSON files)](doc/hands_on/hands_on_minio.md)
 * [Changelog](doc/changes/changelog.md)
 * [Dependencies](dependencies.md)
 * [Developer Guide](doc/developer_guide/developer_guide.md)

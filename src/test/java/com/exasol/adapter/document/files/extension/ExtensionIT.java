@@ -3,14 +3,14 @@ package com.exasol.adapter.document.files.extension;
 import static com.exasol.matcher.ResultSetStructureMatcher.table;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import java.io.*;
-import java.net.*;
-import java.net.http.*;
-import java.net.http.HttpClient.Redirect;
-import java.net.http.HttpResponse.BodyHandlers;
-import java.nio.file.*;
+import java.io.FileNotFoundException;
+import java.net.InetSocketAddress;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -32,12 +32,10 @@ import com.exasol.dbbuilder.dialects.exasol.AdapterScript.Language;
 import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript.InputType;
-import com.exasol.errorreporting.ExaError;
 import com.exasol.exasoltestsetup.ExasolTestSetup;
 import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
 import com.exasol.extensionmanager.client.model.*;
-import com.exasol.extensionmanager.itest.ExtensionManagerClient;
-import com.exasol.extensionmanager.itest.ExtensionManagerSetup;
+import com.exasol.extensionmanager.itest.*;
 import com.exasol.extensionmanager.itest.builder.ExtensionBuilder;
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
@@ -223,54 +221,24 @@ class ExtensionIT {
     @Test
     void upgradeFromPreviousVersion() throws InterruptedException, BucketAccessException, TimeoutException,
             FileNotFoundException, URISyntaxException {
-        final String previousVersionExtensionId = setup.fetchExtension(getDownloadUrl(PREVIOUS_VERSION, EXTENSION_ID));
-        preparePreviousVersionAdapter();
-        setup.client().install(previousVersionExtensionId, PREVIOUS_VERSION);
-        final String virtualTable = createVirtualSchema(previousVersionExtensionId, PREVIOUS_VERSION);
+        final PreviousVersion previousVersion = createPreviousVersion();
+        previousVersion.prepare();
+        previousVersion.install();
+        final String virtualTable = createVirtualSchema(previousVersion.getExtensionId(), PREVIOUS_VERSION);
         verifyVirtualTableContainsData(virtualTable);
         assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PREVIOUS_VERSION);
-        upgrade();
+        previousVersion.upgrade();
         assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", projectVersion);
         verifyVirtualTableContainsData(virtualTable);
     }
 
-    private URI getDownloadUrl(final String version, final String fileName) {
-        final String project = "s3-document-files-virtual-schema";
-        return URI.create(
-                "https://extensions-internal.exasol.com/com.exasol/" + project + "/" + version + "/" + fileName);
-    }
-
-    private void upgrade() {
-        final UpgradeExtensionResponse upgradeResult = setup.client().upgrade(EXTENSION_ID);
-        assertEquals(new UpgradeExtensionResponse().previousVersion(PREVIOUS_VERSION).newVersion(projectVersion),
-                upgradeResult);
-    }
-
-    private void preparePreviousVersionAdapter()
-            throws URISyntaxException, FileNotFoundException, BucketAccessException, TimeoutException {
-        final Path file = downloadToTemp(getDownloadUrl(PREVIOUS_VERSION, PREVIOUS_VERSION_JAR_FILE));
-        exasolTestSetup.getDefaultBucket().uploadFile(file, PREVIOUS_VERSION_JAR_FILE);
-    }
-
-    private Path downloadToTemp(final URI url) {
-        final HttpClient httpClient = HttpClient.newBuilder().followRedirects(Redirect.NORMAL).build();
-        final HttpRequest request = HttpRequest.newBuilder(url).GET().build();
-        try {
-            final Path tempFile = Files.createTempFile("s3-adapter-", ".jar");
-            final HttpResponse<Path> response = httpClient.send(request, BodyHandlers.ofFile(tempFile));
-            final long fileSize = Files.size(tempFile);
-            LOG.fine("Downloaded " + url + " with response status " + response.statusCode() + " to " + tempFile
-                    + " with file size " + fileSize + " bytes");
-            return tempFile;
-        } catch (final IOException exception) {
-            throw new UncheckedIOException(ExaError.messageBuilder("E-EMIT-31")
-                    .message("Failed to download {{url}} to temp file", url).toString(), exception);
-        } catch (final InterruptedException exception) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(
-                    ExaError.messageBuilder("E-EMIT-32").message("Download of {{url}} was interrupted", url).toString(),
-                    exception);
-        }
+    private PreviousVersion createPreviousVersion() {
+        return setup.previousVersionManager().newVersion().currentVersion(projectVersion) //
+                .previousVersion(PREVIOUS_VERSION) //
+                .adapterFileName(PREVIOUS_VERSION_JAR_FILE) //
+                .extensionFileName(EXTENSION_ID) //
+                .project("s3-document-files-virtual-schema") //
+                .build();
     }
 
     private void assertInstalledVersion(final String expectedName, final String expectedVersion) {

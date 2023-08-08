@@ -16,11 +16,11 @@ This release updates the extension so that it supports categories and upgrading 
 
 #### Compile Dependency Updates
 
-* Updated `software.amazon.awssdk:s3:2.20.111` to `2.20.120`
+* Updated `software.amazon.awssdk:s3:2.20.111` to `2.20.121`
 
 #### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.514` to `1.12.523`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.514` to `1.12.524`
 * Updated `com.exasol:extension-manager-integration-test-java:0.4.0` to `0.5.0`
 * Updated `com.exasol:java-class-list-verifier:0.2.2` to `0.2.3`
 * Updated `nl.jqno.equalsverifier:equalsverifier:3.15` to `3.15.1`

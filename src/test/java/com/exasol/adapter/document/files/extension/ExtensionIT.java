@@ -15,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
 
@@ -42,7 +41,6 @@ import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 import software.amazon.awssdk.core.sync.RequestBody;
 
 class ExtensionIT {
-    private static final Logger LOG = Logger.getLogger(ExtensionIT.class.getName());
     private static final String PREVIOUS_VERSION = "2.6.2";
     private static final String PREVIOUS_VERSION_JAR_FILE = "document-files-virtual-schema-dist-7.3.3-s3-"
             + PREVIOUS_VERSION + ".jar";

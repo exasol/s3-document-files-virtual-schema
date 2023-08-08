@@ -221,7 +221,7 @@ class ExtensionIT {
     @Test
     void upgradeFromPreviousVersion() throws InterruptedException, BucketAccessException, TimeoutException,
             FileNotFoundException, URISyntaxException {
-        final PreviousVersion previousVersion = createPreviousVersion();
+        final PreviousExtensionVersion previousVersion = createPreviousVersion();
         previousVersion.prepare();
         previousVersion.install();
         final String virtualTable = createVirtualSchema(previousVersion.getExtensionId(), PREVIOUS_VERSION);
@@ -232,7 +232,7 @@ class ExtensionIT {
         verifyVirtualTableContainsData(virtualTable);
     }
 
-    private PreviousVersion createPreviousVersion() {
+    private PreviousExtensionVersion createPreviousVersion() {
         return setup.previousVersionManager().newVersion().currentVersion(projectVersion) //
                 .previousVersion(PREVIOUS_VERSION) //
                 .adapterFileName(PREVIOUS_VERSION_JAR_FILE) //

@@ -13,7 +13,6 @@ function scriptWithVersion(version: string): ExaScriptsRow {
     return scriptWithText(`CREATE ... %jar /path/to/document-files-virtual-schema-dist-0.0.0-s3-${version}.jar;`)
 }
 
-
 describe("upgrade()", () => {
     describe("preconditions fail", () => {
         const tests: { name: string; adapterScript: ExaScriptsRow | null, importScript: ExaScriptsRow | null, expectedError: Error }[] = [

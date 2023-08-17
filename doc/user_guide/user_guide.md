@@ -17,7 +17,7 @@ Next create the Adapter Script:
 ```sql
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.3.3-s3-2.7.0.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.3.3-s3-2.8.0.jar;
 /
 ```
 
@@ -30,7 +30,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   CONNECTION_NAME VARCHAR(500))
   EMITS(...) AS
     %scriptclass com.exasol.adapter.document.UdfEntryPoint;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.3.3-s3-2.7.0.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.3.3-s3-2.8.0.jar;
 /
 ```
 
@@ -126,7 +126,7 @@ In DbVisualizer use exactly this command:
 --/
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
    %scriptclass com.exasol.adapter.RequestDispatcher;
-   %jar /buckets/bfsdefault/default/vs/document-files-virtual-schema-dist-7.3.3-s3-2.7.0.jar;
+   %jar /buckets/bfsdefault/default/vs/document-files-virtual-schema-dist-7.3.3-s3-2.8.0.jar;
 /
 ```
 

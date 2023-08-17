@@ -15,6 +15,7 @@ import { findInstances } from "./findInstances";
 import { installExtension } from "./installExtension";
 import { createInstanceParameters } from "./parameterDefinitions";
 import { uninstall } from "./uninstallExtension";
+import { upgrade } from "./upgrade";
 
 function createExtensionInfo(): ExtensionInfo {
     const version = CONFIG.version;
@@ -30,6 +31,7 @@ export function createExtension(): ExasolExtension {
     return {
         name: "S3 Virtual Schema",
         description: "Virtual Schema for document files on AWS S3",
+        category: "document-virtual-schema",
         installableVersions: [{ name: extensionInfo.version, latest: true, deprecated: false }],
         bucketFsUploads: [{ bucketFsFilename: extensionInfo.fileName, downloadUrl, fileSize: CONFIG.fileSizeBytes, name: "S3 VS Jar file", licenseUrl, licenseAgreementRequired: false }],
         install(context: Context, version: string) {
@@ -46,6 +48,9 @@ export function createExtension(): ExasolExtension {
         },
         uninstall(context: Context, version: string): void {
             uninstall(context, extensionInfo, version)
+        },
+        upgrade(context) {
+            return upgrade(context, extensionInfo)
         },
         deleteInstance(context: Context, version: string, instanceId: string): void {
             deleteInstance(context, extensionInfo, version, instanceId);

@@ -16,7 +16,7 @@
 | Dependency                                      | License                                       |
 | ----------------------------------------------- | --------------------------------------------- |
 | [Hamcrest][6]                                   | [BSD License 3][7]                            |
-| [EqualsVerifier | release normal jar][8]        | [Apache License, Version 2.0][9]              |
+| [EqualsVerifier \| release normal jar][8]       | [Apache License, Version 2.0][9]              |
 | [Virtual Schema for document data in files][0]  | [MIT License][1]                              |
 | [JUnit Jupiter Engine][10]                      | [Eclipse Public License v2.0][11]             |
 | [JUnit Jupiter Params][10]                      | [Eclipse Public License v2.0][11]             |
@@ -63,7 +63,7 @@
 | [JaCoCo :: Maven Plugin][58]                            | [Eclipse Public License 2.0][36]               |
 | [error-code-crawler-maven-plugin][59]                   | [MIT License][60]                              |
 | [Reproducible Build Maven Plugin][61]                   | [Apache 2.0][45]                               |
-| [Apache Maven Clean Plugin][62]                         | [Apache License, Version 2.0][9]               |
+| [Apache Maven Clean Plugin][62]                         | [Apache-2.0][9]                                |
 | [Exec Maven Plugin][63]                                 | [Apache License 2][9]                          |
 | [Maven Resources Plugin][64]                            | [The Apache Software License, Version 2.0][45] |
 | [Maven Install Plugin][65]                              | [The Apache Software License, Version 2.0][45] |
@@ -146,4 +146,4 @@
 [65]: http://maven.apache.org/plugins/maven-install-plugin/
 [66]: http://maven.apache.org/plugins/maven-deploy-plugin/
 [67]: http://maven.apache.org/plugins/maven-site-plugin/
-[68]: https://registry.npmjs.org/@exasol/extension-manager-interface/-/extension-manager-interface-0.1.15.tgz
+[68]: https://registry.npmjs.org/@exasol/extension-manager-interface/-/extension-manager-interface-0.3.0.tgz

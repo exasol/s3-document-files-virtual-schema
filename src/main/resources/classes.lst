@@ -1363,7 +1363,6 @@ sun/security/ssl/PreSharedKeyExtension$SHPreSharedKeyAbsence
 com/exasol/adapter/document/DataProcessingPipeline
 java/util/logging/Level
 software/amazon/awssdk/protocols/query/unmarshall/AwsXmlErrorProtocolUnmarshaller
-software/amazon/awssdk/services/s3/internal/handlers/PutObjectInterceptor
 java/util/Deque
 sun/security/ssl/CertificateMessage$T13CertificateProducer
 com/exasol/adapter/document/files/S3RemoteFileContent$ContentFuture
@@ -2217,6 +2216,8 @@ java/time/ZoneId
 org/antlr/v4/runtime/misc/EqualityComparator
 com/exasol/sql/expression/function/exasol/ExasolFunction
 com/exasol/adapter/request/parser/DataTypeParser$DataTypeParserException
+software/amazon/awssdk/services/s3/internal/client/S3AsyncClientDecorator$1
+software/amazon/awssdk/services/s3/internal/client/S3AsyncClientDecorator$2
 org/apache/http/config/SocketConfig$Builder
 com/ctc/wstx/io/InputSourceFactory
 software/amazon/awssdk/services/s3/internal/client/S3AsyncClientDecorator
@@ -3105,6 +3106,7 @@ org/antlr/v4/runtime/atn/ATNDeserializer$1
 software/amazon/awssdk/services/s3/model/GetPublicAccessBlockRequest
 org/antlr/v4/runtime/atn/ATNDeserializer$3
 java/lang/module/ModuleDescriptor$Builder
+software/amazon/awssdk/services/s3/internal/handlers/StreamingRequestInterceptor
 software/amazon/awssdk/services/s3/model/PutBucketNotificationConfigurationRequest
 jdk/management/jfr/internal/FlightRecorderMXBeanProvider$SingleMBeanComponent
 com/exasol/adapter/document/files/stringfilter/StringFilterVisitor
@@ -3181,6 +3183,7 @@ sun/security/util/DisabledAlgorithmConstraints$Constraints
 java/lang/invoke/MethodHandleInfo
 jdk/internal/org/objectweb/asm/FieldVisitor
 software/amazon/awssdk/awscore/AwsResponse
+software/amazon/awssdk/regions/servicemetadata/TnbServiceMetadata
 java/lang/management/ManagementFactory
 software/amazon/awssdk/protocols/core/ValueToStringConverter$ValueToString
 software/amazon/awssdk/regions/servicemetadata/MediapackageServiceMetadata
@@ -3561,6 +3564,7 @@ com/exasol/datatype/type/AbstractStringDataType
 software/amazon/awssdk/services/s3/endpoints/internal/FnNode$Builder
 io/netty/handler/codec/http/EmptyHttpHeaders
 io/netty/handler/ssl/CipherSuiteFilter
+software/amazon/awssdk/regions/regionmetadata/IlCentral1
 software/amazon/awssdk/services/s3/model/GetBucketCorsRequest
 software/amazon/awssdk/core/interceptor/ExecutionInterceptorChain
 java/util/concurrent/CountDownLatch$Sync
@@ -3604,6 +3608,7 @@ software/amazon/awssdk/metrics/internal/DefaultSdkMetric
 java/math/RoundingMode
 software/amazon/awssdk/core/SdkServiceClientConfiguration
 java/net/InetAddress
+software/amazon/awssdk/services/s3/multipart/MultipartConfiguration
 sun/security/ssl/SupportedVersionsExtension$SHSupportedVersionsProducer
 org/logicng/formulas/Or
 com/exasol/adapter/document/documentnode/holder/StringHolderNode

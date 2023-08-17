@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.io.FileNotFoundException;
 import java.net.InetSocketAddress;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
@@ -33,31 +34,33 @@ import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript.InputType;
 import com.exasol.exasoltestsetup.ExasolTestSetup;
 import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
 import com.exasol.extensionmanager.client.model.*;
-import com.exasol.extensionmanager.itest.ExtensionManagerClient;
-import com.exasol.extensionmanager.itest.ExtensionManagerSetup;
+import com.exasol.extensionmanager.itest.*;
 import com.exasol.extensionmanager.itest.builder.ExtensionBuilder;
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
 import software.amazon.awssdk.core.sync.RequestBody;
 
 class ExtensionIT {
+    private static final String PREVIOUS_VERSION = "2.6.2";
+    private static final String PREVIOUS_VERSION_JAR_FILE = "document-files-virtual-schema-dist-7.3.3-s3-"
+            + PREVIOUS_VERSION + ".jar";
     private static final Path EXTENSION_SOURCE_DIR = Paths.get("extension").toAbsolutePath();
+    private static final String EXTENSION_ID = "s3-vs-extension.js";
     private static final int EXPECTED_PARAMETER_COUNT = 10;
+    private static final String PROJECT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
     private static ExasolTestSetup exasolTestSetup;
     private static ExtensionManagerSetup setup;
     private static S3TestSetup s3TestSetup;
     private static String s3BucketName;
-    private static String projectVersion;
 
     @BeforeAll
     static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
         setup = ExtensionManagerSetup.create(exasolTestSetup, ExtensionBuilder.createDefaultNpmBuilder(
-                EXTENSION_SOURCE_DIR, EXTENSION_SOURCE_DIR.resolve("dist/s3-vs-extension.js")));
+                EXTENSION_SOURCE_DIR, EXTENSION_SOURCE_DIR.resolve("dist").resolve(EXTENSION_ID)));
         s3TestSetup = new AwsS3TestSetup();
         s3BucketName = "extension-test.s3.virtual-schema-test-bucket-" + System.currentTimeMillis();
         s3TestSetup.createBucket(s3BucketName);
-        projectVersion = MavenProjectVersionGetter.getCurrentProjectVersion();
         exasolTestSetup.getDefaultBucket().uploadFile(IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH,
                 IntegrationTestSetup.ADAPTER_JAR);
     }
@@ -86,7 +89,7 @@ class ExtensionIT {
         final List<ExtensionsResponseExtension> extensions = setup.client().getExtensions();
         assertAll(() -> assertThat(extensions, hasSize(1)), //
                 () -> assertThat(extensions.get(0).getName(), equalTo("S3 Virtual Schema")),
-                () -> assertThat(extensions.get(0).getInstallableVersions().get(0).getName(), equalTo(projectVersion)),
+                () -> assertThat(extensions.get(0).getInstallableVersions().get(0).getName(), equalTo(PROJECT_VERSION)),
                 () -> assertThat(extensions.get(0).getInstallableVersions().get(0).isLatest(), is(true)),
                 () -> assertThat(extensions.get(0).getInstallableVersions().get(0).isDeprecated(), is(false)),
                 () -> assertThat(extensions.get(0).getDescription(),
@@ -113,7 +116,7 @@ class ExtensionIT {
         assertAll(() -> assertThat(installations, hasSize(1)), //
                 () -> assertThat(installations.get(0).getName(),
                         equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
-                () -> assertThat(installations.get(0).getVersion(), equalTo(projectVersion)));
+                () -> assertThat(installations.get(0).getVersion(), equalTo(PROJECT_VERSION)));
     }
 
     @Test
@@ -123,25 +126,25 @@ class ExtensionIT {
         assertAll(() -> assertThat(installations, hasSize(1)), //
                 () -> assertThat(installations.get(0).getName(),
                         equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
-                () -> assertThat(installations.get(0).getVersion(), equalTo(projectVersion)));
+                () -> assertThat(installations.get(0).getVersion(), equalTo(PROJECT_VERSION)));
     }
 
     @Test
     void getExtensionDetailsFailsForUnknownVersion() {
         setup.client().assertRequestFails(() -> setup.client().getExtensionDetails("unknownVersion"),
-                equalTo("Version 'unknownVersion' not supported, can only use '" + projectVersion + "'."),
+                equalTo("Version 'unknownVersion' not supported, can only use '" + PROJECT_VERSION + "'."),
                 equalTo(404));
     }
 
     @Test
     void getExtensionDetailsSuccess() {
-        final ExtensionDetailsResponse extensionDetails = setup.client().getExtensionDetails(projectVersion);
+        final ExtensionDetailsResponse extensionDetails = setup.client().getExtensionDetails(PROJECT_VERSION);
         final List<ParamDefinition> parameters = extensionDetails.getParameterDefinitions();
         final ParamDefinition param1 = new ParamDefinition().id("virtualSchemaName")
                 .name("Name of the new virtual schema").definition(Map.of("id", "virtualSchemaName", "name",
                         "Name of the new virtual schema", "required", true, "scope", "general", "type", "string"));
         assertAll(() -> assertThat(extensionDetails.getId(), equalTo("s3-vs-extension.js")),
-                () -> assertThat(extensionDetails.getVersion(), equalTo(projectVersion)),
+                () -> assertThat(extensionDetails.getVersion(), equalTo(PROJECT_VERSION)),
                 () -> assertThat(parameters, hasSize(EXPECTED_PARAMETER_COUNT)),
                 () -> assertThat(parameters.get(0), equalTo(param1)));
     }
@@ -163,7 +166,8 @@ class ExtensionIT {
     void install_failsForUnsupportedVersion() {
         final ExtensionManagerClient client = setup.client();
         client.assertRequestFails(() -> client.install("unsupported"),
-                equalTo("Installing version 'unsupported' not supported, try '" + projectVersion + "'."), equalTo(400));
+                equalTo("Installing version 'unsupported' not supported, try '" + PROJECT_VERSION + "'."),
+                equalTo(400));
         setup.exasolMetadata().assertNoScripts();
     }
 
@@ -179,7 +183,7 @@ class ExtensionIT {
     @Test
     void uninstall_failsForUnknownVersion() {
         setup.client().assertRequestFails(() -> setup.client().uninstall("unknownVersion"),
-                equalTo("Uninstalling version 'unknownVersion' not supported, try '" + projectVersion + "'."),
+                equalTo("Uninstalling version 'unknownVersion' not supported, try '" + PROJECT_VERSION + "'."),
                 equalTo(400));
     }
 
@@ -193,21 +197,85 @@ class ExtensionIT {
         setup.client().install();
         assertAll(() -> assertScriptsExist(), //
                 () -> assertThat(setup.client().getInstallations(), hasSize(1)));
-        setup.client().uninstall(projectVersion);
+        setup.client().uninstall(PROJECT_VERSION);
         assertAll(() -> assertThat(setup.client().getInstallations(), is(empty())),
                 () -> setup.exasolMetadata().assertNoScripts());
     }
 
     @Test
+    void upgradeFailsWhenNotInstalled() {
+        setup.client().assertRequestFails(() -> setup.client().upgrade(),
+                "extension is not installed, the following scripts are missing: S3_FILES_ADAPTER, IMPORT_FROM_S3_DOCUMENT_FILES",
+                404);
+    }
+
+    @Test
+    void upgradeFailsWhenAlreadyUpToDate() {
+        setup.client().install();
+        setup.client().assertRequestFails(() -> setup.client().upgrade(),
+                "Extension is already installed in latest version " + PROJECT_VERSION, 412);
+    }
+
+    @Test
+    void upgradeFromPreviousVersion() throws InterruptedException, BucketAccessException, TimeoutException,
+            FileNotFoundException, URISyntaxException {
+        final PreviousExtensionVersion previousVersion = createPreviousVersion();
+        previousVersion.prepare();
+        previousVersion.install();
+        final String virtualTable = createVirtualSchema(previousVersion.getExtensionId(), PREVIOUS_VERSION);
+        verifyVirtualTableContainsData(virtualTable);
+        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PREVIOUS_VERSION);
+        previousVersion.upgrade();
+        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PROJECT_VERSION);
+        verifyVirtualTableContainsData(virtualTable);
+    }
+
+    private PreviousExtensionVersion createPreviousVersion() {
+        return setup.previousVersionManager().newVersion().currentVersion(PROJECT_VERSION) //
+                .previousVersion(PREVIOUS_VERSION) //
+                .adapterFileName(PREVIOUS_VERSION_JAR_FILE) //
+                .extensionFileName(EXTENSION_ID) //
+                .project("s3-document-files-virtual-schema") //
+                .build();
+    }
+
+    private void assertInstalledVersion(final String expectedName, final String expectedVersion) {
+        final List<InstallationsResponseInstallation> installations = setup.client().getInstallations();
+        final InstallationsResponseInstallation expectedInstallation = new InstallationsResponseInstallation()
+                .name(expectedName).version(expectedVersion);
+        // The extension is installed twice (previous and current version), so each one returns the same installation.
+        assertAll(() -> assertThat(installations, hasSize(2)),
+                () -> assertThat(installations.get(0), equalTo(expectedInstallation)),
+                () -> assertThat(installations.get(1), equalTo(expectedInstallation)));
+    }
+
+    @Test
     void virtualSchemaWorks() throws SQLException {
         setup.client().install();
+        final String virtualTable = createVirtualSchema();
+        verifyVirtualTableContainsData(virtualTable);
+    }
+
+    private String createVirtualSchema() {
+        return createVirtualSchema(EXTENSION_ID, PROJECT_VERSION);
+    }
+
+    private String createVirtualSchema(final String extensionId, final String extensionVersion) {
         final String prefix = "vs-works-test-" + System.currentTimeMillis() + "/";
         upload(prefix + "test-data-1.json", "{\"id\": 1, \"name\": \"abc\" }");
         upload(prefix + "test-data-2.json", "{\"id\": 2, \"name\": \"xyz\" }");
-        createInstance("MY_VS", getMappingDefinition(prefix + "test-data-*.json"));
+        final String virtualSchemaName = "MY_VS";
+        createInstance(extensionId, extensionVersion, virtualSchemaName,
+                getMappingDefinition(prefix + "test-data-*.json"));
+        return virtualSchemaName + ".TEST";
+    }
+
+    private void verifyVirtualTableContainsData(final String virtualTable) {
         try (final ResultSet result = exasolTestSetup.createConnection().createStatement()
-                .executeQuery("SELECT ID, NAME FROM MY_VS.TEST ORDER BY ID ASC")) {
+                .executeQuery("SELECT ID, NAME FROM " + virtualTable + " ORDER BY ID ASC")) {
             assertThat(result, table().row(1L, "abc").row(2L, "xyz").matches());
+        } catch (final SQLException exception) {
+            throw new AssertionError("Assertion query failed", exception);
         }
     }
 
@@ -283,7 +351,7 @@ class ExtensionIT {
     @Test
     void deleteFailsForUnknownVersion() {
         setup.client().assertRequestFails(() -> setup.client().deleteInstance("unknownVersion", "no-such-instance"),
-                equalTo("Version 'unknownVersion' not supported, can only use '" + projectVersion + "'."),
+                equalTo("Version 'unknownVersion' not supported, can only use '" + PROJECT_VERSION + "'."),
                 equalTo(404));
     }
 
@@ -304,9 +372,15 @@ class ExtensionIT {
     }
 
     private void createInstance(final String virtualSchemaName, final EdmlDefinition mapping) {
+        createInstance(EXTENSION_ID, PROJECT_VERSION, virtualSchemaName, mapping);
+    }
+
+    private void createInstance(final String extensionId, final String extensionVersion, final String virtualSchemaName,
+            final EdmlDefinition mapping) {
         setup.addVirtualSchemaToCleanupQueue(virtualSchemaName);
         setup.addConnectionToCleanupQueue(virtualSchemaName.toUpperCase() + "_CONNECTION");
-        final String instanceName = setup.client().createInstance(createValidParameters(virtualSchemaName, mapping));
+        final String instanceName = setup.client().createInstance(extensionId, extensionVersion,
+                createValidParameters(virtualSchemaName, mapping));
         assertThat(instanceName, equalTo(virtualSchemaName));
     }
 
@@ -347,7 +421,7 @@ class ExtensionIT {
 
     private void assertScriptsExist() {
         final String jarDirective = "%jar /buckets/bfsdefault/default/" + IntegrationTestSetup.ADAPTER_JAR + ";";
-        final String comment = "Created by extension manager for S3 virtual schema extension " + projectVersion;
+        final String comment = "Created by extension manager for S3 virtual schema extension " + PROJECT_VERSION;
         setup.exasolMetadata()
                 .assertScript(table()
                         .row("IMPORT_FROM_S3_DOCUMENT_FILES", "UDF", "SET", "EMITS",

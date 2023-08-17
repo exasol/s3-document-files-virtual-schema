@@ -10,3 +10,5 @@ doc/changes/changelog.md                                         linguist-genera
 src/main/resources/classes.lst                                   linguist-generated=true
 extension/package-lock.json                                      linguist-generated=true
 cloudSetup/.terraform.lock.hcl                                   linguist-generated=true
+.settings/org.eclipse.jdt.core.prefs                             linguist-generated=true
+.settings/org.eclipse.jdt.ui.prefs                               linguist-generated=true

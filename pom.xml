@@ -172,7 +172,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>java-class-list-verifier</artifactId>
-            <version>0.2.2</version>
+            <version>0.2.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>

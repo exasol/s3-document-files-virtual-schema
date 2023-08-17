@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 2.8.0, released 2023-08-16
+# S3 Document Files Virtual Schema 2.8.0, released 2023-08-17
 
 Code name: Upgrade Extension
 

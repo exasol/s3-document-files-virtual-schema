@@ -2,7 +2,7 @@
 
 ## Introduction
 
-VSS3 supports using two different variants of S3 buckets:
+Virtual Schema for Document Files in S3 (VSS3) supports using two different variants of S3 buckets:
 * Real S3 buckets in the AWS cloud
 * S3 buckets as emulated by [MinIO](https://min.io)'s S3-compatible interface
 
@@ -102,7 +102,7 @@ mc cp book-3.json myminio/$MBUCKET/
 Run Exasol database, e.g. as [Docker-DB](https://hub.docker.com/r/exasol/docker-db/tags) in a Docker Container and follow the instructions in the following sections of document [Hands-on S3-Virtual-Schema](hands_on.md) to execute the required SQL statements:
 
 * Section [ Installation](hands_on.md#installation)
-  * Download S3VS latest jar and upload it to BucketFS
+  * Download VSS3 latest jar and upload it to BucketFS
   * Create Java Adapter Script
   * Create Java Set Script
 * Section [Creating a Mapping Definition](hands_on.md#creating-a-mapping-definition) to create a mapping definition and upload it to BucketFS.

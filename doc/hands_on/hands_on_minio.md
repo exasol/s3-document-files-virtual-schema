@@ -133,5 +133,5 @@ Please note:
 ### Create a Virtual Schema and Run Your First Query
 
 Follow additional instructions in document *Hands-on S3-Virtual-Schema*:
-* [Creating the Virtual Schema](#creating-the-virtual-schema)
+* [Creating the Virtual Schema](hands_on.md#creating-the-virtual-schema)
 * [First Query](hands_on.md#first-query) to execute your first query and watch the results in your SQL client.

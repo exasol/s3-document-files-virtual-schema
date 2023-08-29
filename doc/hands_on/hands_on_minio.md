@@ -2,7 +2,7 @@
 
 ## Introduction
 
-VSS3 supports using two different variants of S3 buckets:
+Virtual Schema for Document Files in S3 (VSS3) supports using two different variants of S3 buckets:
 * Real S3 buckets in the AWS cloud
 * S3 buckets as emulated by [MinIO](https://min.io)'s S3-compatible interface
 
@@ -18,8 +18,8 @@ This Hands-On Guide describes how to access an S3 bucket emulated by a MinIO Doc
 
 Select a user name and a password for the MinIO Docker Container. Throughout this Hands On Guide these strings will be named as specified in column *Reference*:
 
-| MinIO Terminology                    | AWS terminology       | Reference |
-|--------------------------------------|-----------------------|-----------|
+| MinIO Terminology                    | AWS terminology       | Reference      |
+|--------------------------------------|-----------------------|----------------|
 | User name for MinIO Docker Container | `<AWS ACCESS KEY ID>` | `$MINIO_USER`  |
 | Password for MinIO Docker Container  | `<AWS SECRET KEY>`    | `$MINIO_PASS`  |
 
@@ -50,8 +50,8 @@ export MINIO_BUCKET=my-bucket
 docker run --detach --name minio \
   -p 9000:9000 \
   -p 9001:9001 \
-  -e "MINIO_ROOT_USER=$MUSER" \
-  -e "MINIO_ROOT_PASSWORD=$MPASS" \
+  -e "MINIO_ROOT_USER=$MINIO_USER" \
+  -e "MINIO_ROOT_PASSWORD=$MINIO_PASS" \
   -it minio/minio:latest \
   server /data --console-address ":9001"
 ```
@@ -73,7 +73,7 @@ In the output of `docker ps` you can also see the ports forwarded to your localh
 For adding content to MinIO you can use the MinIO client `mc`.
 Its [manual](https://min.io/docs/minio/linux/reference/minio-mc.html#quickstart) also contains links to download a binary for various platforms.
 
-The following following comand defines alias `myminio` for your MinIO server using the [selected credentials](#credentials):
+The following following command defines alias `myminio` for your MinIO server using the [selected credentials](#credentials):
 
 ```shell
 mc alias set myminio http://$MINIO_HOST:9000/ $MINIO_USER $MINIO_PASS
@@ -90,9 +90,9 @@ mc mb myminio/$MINIO_BUCKET
 Download the [sample Json files](./books) and upload them to the emulated S3 bucket:
 
 ```shell
-mc cp book-1.json myminio/$MBUCKET/
-mc cp book-2.json myminio/$MBUCKET/
-mc cp book-3.json myminio/$MBUCKET/
+mc cp book-1.json myminio/$MINIO_BUCKET/
+mc cp book-2.json myminio/$MINIO_BUCKET/
+mc cp book-3.json myminio/$MINIO_BUCKET/
 ```
 
 ## Setting up the Exasol Database
@@ -102,7 +102,7 @@ mc cp book-3.json myminio/$MBUCKET/
 Run Exasol database, e.g. as [Docker-DB](https://hub.docker.com/r/exasol/docker-db/tags) in a Docker Container and follow the instructions in the following sections of document [Hands-on S3-Virtual-Schema](hands_on.md) to execute the required SQL statements:
 
 * Section [ Installation](hands_on.md#installation)
-  * Download S3VS latest jar and upload it to BucketFS
+  * Download VSS3 latest jar and upload it to BucketFS
   * Create Java Adapter Script
   * Create Java Set Script
 * Section [Creating a Mapping Definition](hands_on.md#creating-a-mapping-definition) to create a mapping definition and upload it to BucketFS.
@@ -127,11 +127,11 @@ CREATE OR REPLACE CONNECTION S3_CONNECTION
 ```
 
 Please note:
-* Your SQL client (e.g. [DbVisualizer](https://confluence.dbvis.com)) may not be able to resolve shell variables `$MUSER`, `MPASS`, `$MHOST`, `$MBUCKET`.
+* Your SQL client (e.g. [DbVisualizer](https://confluence.dbvis.com)) may not be able to resolve shell variables `$MINIO_USER`, `MINIO_PASS`, `$MINIO_HOST`, `$MINIO_BUCKET`.
 * So please replace these variables by the actual values described in section [Variables](#variables).
 
 ### Create a Virtual Schema and Run Your First Query
 
 Follow additional instructions in document *Hands-on S3-Virtual-Schema*:
-* [Creating the Virtual Schema](#creating-the-virtual-schema)
+* [Creating the Virtual Schema](hands_on.md#creating-the-virtual-schema)
 * [First Query](hands_on.md#first-query) to execute your first query and watch the results in your SQL client.

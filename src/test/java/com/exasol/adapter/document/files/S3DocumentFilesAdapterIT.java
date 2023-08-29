@@ -216,7 +216,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     private void createTestSetupWithSmallJsonFiles(final int numberOfJsonFiles) throws IOException {
         createBucketIfNotExists(SMALL_JSON_FILES_FIXTURE_BUCKET);
         final AwsCredentialsProvider awsCredentialsProvider = TestConfig.instance().getAwsCredentialsProvider();
-        final Map<String, String> tags = Map.of("exa:project", "S3VS", "exa:owner", TestConfig.instance().getOwner());
+        final Map<String, String> tags = Map.of("exa:project", "VSS3", "exa:owner", TestConfig.instance().getOwner());
         new SmallJsonFilesTestSetup(awsCredentialsProvider, tags, SMALL_JSON_FILES_FIXTURE_BUCKET)
                 .setup(numberOfJsonFiles);
     }

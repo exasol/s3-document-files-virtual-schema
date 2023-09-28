@@ -304,7 +304,7 @@ class ExtensionIT {
         createInstance(name);
 
         setup.exasolMetadata().assertConnection(table().row("MY_VIRTUAL_SCHEMA_CONNECTION",
-                "Created by Extension Manager for S3 virtual schema my_virtual_SCHEMA").matches());
+                "Created by Extension Manager for S3 Virtual Schema my_virtual_SCHEMA").matches());
         setup.exasolMetadata()
                 .assertVirtualSchema(table()
                         .row("my_virtual_SCHEMA", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString()))
@@ -321,8 +321,8 @@ class ExtensionIT {
 
         setup.exasolMetadata()
                 .assertConnection(table()
-                        .row("VS1_CONNECTION", "Created by Extension Manager for S3 virtual schema vs1")
-                        .row("VS2_CONNECTION", "Created by Extension Manager for S3 virtual schema vs2").matches());
+                        .row("VS1_CONNECTION", "Created by Extension Manager for S3 Virtual Schema vs1")
+                        .row("VS2_CONNECTION", "Created by Extension Manager for S3 Virtual Schema vs2").matches());
         setup.exasolMetadata()
                 .assertVirtualSchema(table()
                         .row("vs1", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString()))
@@ -337,7 +337,7 @@ class ExtensionIT {
         setup.client().install();
         createInstance("Quoted'schema");
         setup.exasolMetadata().assertConnection(table()
-                .row("QUOTED'SCHEMA_CONNECTION", "Created by Extension Manager for S3 virtual schema Quoted'schema")
+                .row("QUOTED'SCHEMA_CONNECTION", "Created by Extension Manager for S3 Virtual Schema Quoted'schema")
                 .matches());
         setup.exasolMetadata().assertVirtualSchema(table()
                 .row("Quoted'schema", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString())).matches());
@@ -421,7 +421,7 @@ class ExtensionIT {
 
     private void assertScriptsExist() {
         final String jarDirective = "%jar /buckets/bfsdefault/default/" + IntegrationTestSetup.ADAPTER_JAR + ";";
-        final String comment = "Created by Extension Manager for S3 virtual schema extension " + PROJECT_VERSION;
+        final String comment = "Created by Extension Manager for S3 Virtual Schema extension " + PROJECT_VERSION;
         setup.exasolMetadata()
                 .assertScript(table()
                         .row("IMPORT_FROM_S3_DOCUMENT_FILES", "UDF", "SET", "EMITS",

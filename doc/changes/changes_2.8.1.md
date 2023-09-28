@@ -1,8 +1,20 @@
 # S3 Document Files Virtual Schema 2.8.1, released 2023-09-28
 
-Code name:
+Code name: Fix vulnerabilities in dependencies
 
 ## Summary
+
+This release fixes the following vulnerabilities in dependencies:
+
+* `org.apache.commons:commons-compress:compile`: CVE-2023-42503 CWE-20: Improper Input Validation (5.5)
+* `org.xerial.snappy:snappy-java:compile`: CVE-2023-43642 CWE-770: Allocation of Resources Without Limits or Throttling (7.5)
+* `org.eclipse.jgit:org.eclipse.jgit:test`: CVE-2023-4759: CWE-178: Improper Handling of Case Sensitivity (8.8)
+
+**Known issue:** Transitive dependency `io.netty:netty-handler` of `software.amazon.awssdk:s3` contains vulnerability CVE-2023-4586 (CWE-300: Channel Accessible by Non-Endpoint ('Man-in-the-Middle') (6.5)). We assume that the AWS client's usage of `netty-handler` is not affected by the vulnerability.
+
+## Security
+
+* #37: Fix vulnerabilities in dependencies
 
 ## Documentation
 

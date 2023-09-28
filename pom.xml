@@ -212,6 +212,9 @@
                         CVE-2020-36641 is reported to be fixed in aXMLRPC 1.12.1. We use version 1.13.0, so this is a false
                         positive. -->
                         <exclude>CVE-2020-36641</exclude>
+                        <!-- Transitive dependency io.netty:netty-handler of software.amazon.awssdk:s3.
+                        We assume that the AWS client's usage of `netty-handler` is not affected by the vulnerability. -->
+                        <exclude>CVE-2023-4586</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>

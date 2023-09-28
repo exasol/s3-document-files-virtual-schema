@@ -14,7 +14,7 @@ This release fixes the following vulnerabilities in dependencies:
 
 ## Security
 
-* #37: Fix vulnerabilities in dependencies
+* #135: Fix vulnerabilities in dependencies
 
 ## Documentation
 

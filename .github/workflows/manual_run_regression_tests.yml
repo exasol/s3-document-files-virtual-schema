@@ -13,7 +13,7 @@ jobs:
       - name: Print tag name
         run: echo ${{ github.event.release.tag_name }}
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Set up JDK 11

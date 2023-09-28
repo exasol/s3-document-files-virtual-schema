@@ -1,7 +1,7 @@
 import { Context, Instance, ParameterValues } from "@exasol/extension-manager-interface";
 import { Parameter } from "@exasol/extension-manager-interface/dist/parameters";
-import { ADAPTER_SCRIPT_NAME, convertSchemaNameToInstanceId, ExtensionInfo, getConnectionName } from "./common";
-import { getAllParameterDefinitions, ScopedParameter } from "./parameterDefinitions";
+import { ADAPTER_SCRIPT_NAME, EXTENSION_NAME, ExtensionInfo, convertSchemaNameToInstanceId, getConnectionName } from "./common";
+import { ScopedParameter, getAllParameterDefinitions } from "./parameterDefinitions";
 
 
 export function addInstance(context: Context, extensionInfo: ExtensionInfo, versionToInstall: string, paramValues: ParameterValues): Instance {
@@ -16,7 +16,7 @@ export function addInstance(context: Context, extensionInfo: ExtensionInfo, vers
     context.sqlClient.execute(createConnectionStatement(connectionName, paramValues));
     context.sqlClient.execute(createVirtualSchemaStatement(virtualSchemaName, context.extensionSchemaName, connectionName, mapping));
 
-    const comment = `Created by extension manager for S3 virtual schema ${escapeSingleQuotes(virtualSchemaName)}`;
+    const comment = `Created by Extension Manager for ${EXTENSION_NAME} ${escapeSingleQuotes(virtualSchemaName)}`;
     context.sqlClient.execute(`COMMENT ON CONNECTION "${connectionName}" IS '${comment}'`);
     context.sqlClient.execute(`COMMENT ON SCHEMA "${virtualSchemaName}" IS '${comment}'`);
     return { id: convertSchemaNameToInstanceId(virtualSchemaName), name: virtualSchemaName }

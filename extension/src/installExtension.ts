@@ -1,5 +1,5 @@
 import { BadRequestError, Context } from "@exasol/extension-manager-interface";
-import { ADAPTER_SCRIPT_NAME, ExtensionInfo, IMPORT_SCRIPT_NAME } from "./common";
+import { ADAPTER_SCRIPT_NAME, EXTENSION_NAME, ExtensionInfo, IMPORT_SCRIPT_NAME } from "./common";
 
 export function installExtension(context: Context, extension: ExtensionInfo, versionToInstall: string): void {
     if (extension.version !== versionToInstall) {
@@ -18,6 +18,6 @@ export function installExtension(context: Context, extension: ExtensionInfo, ver
         EMITS(...) AS
             %scriptclass com.exasol.adapter.document.UdfEntryPoint;
             %jar ${jarPath};`)
-    context.sqlClient.execute(`COMMENT ON SCRIPT "${context.extensionSchemaName}"."${IMPORT_SCRIPT_NAME}" IS 'Created by extension manager for S3 virtual schema extension ${extension.version}'`);
-    context.sqlClient.execute(`COMMENT ON SCRIPT "${context.extensionSchemaName}"."${ADAPTER_SCRIPT_NAME}" IS 'Created by extension manager for S3 virtual schema extension ${extension.version}'`);
+    context.sqlClient.execute(`COMMENT ON SCRIPT "${context.extensionSchemaName}"."${IMPORT_SCRIPT_NAME}" IS 'Created by Extension Manager for ${EXTENSION_NAME} extension ${extension.version}'`);
+    context.sqlClient.execute(`COMMENT ON SCRIPT "${context.extensionSchemaName}"."${ADAPTER_SCRIPT_NAME}" IS 'Created by Extension Manager for ${EXTENSION_NAME} extension ${extension.version}'`);
 }

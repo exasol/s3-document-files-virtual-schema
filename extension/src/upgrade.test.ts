@@ -51,7 +51,7 @@ describe("upgrade()", () => {
             expect(adapterScript).toContain(`%jar /bucketfs/${CONFIG.fileName};`)
             expect(importScript).toContain(`CREATE OR REPLACE JAVA SET SCRIPT "ext-schema"."IMPORT_FROM_S3_DOCUMENT_FILES"`)
             expect(importScript).toContain(`%jar /bucketfs/${CONFIG.fileName};`)
-            const expectedComment = `Created by extension manager for S3 virtual schema extension ${CONFIG.version}`
+            const expectedComment = `Created by Extension Manager for S3 Virtual Schema extension ${CONFIG.version}`
             expect(executeCalls[2]).toEqual([`COMMENT ON SCRIPT "ext-schema"."IMPORT_FROM_S3_DOCUMENT_FILES" IS '${expectedComment}'`])
             expect(executeCalls[3]).toEqual([`COMMENT ON SCRIPT "ext-schema"."S3_FILES_ADAPTER" IS '${expectedComment}'`])
         })

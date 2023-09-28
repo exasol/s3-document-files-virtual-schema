@@ -38,9 +38,9 @@
 
 ### Runtime Dependencies
 
-| Dependency                | License           |
-| ------------------------- | ----------------- |
-| [SLF4J JDK14 Binding][37] | [MIT License][38] |
+| Dependency                 | License           |
+| -------------------------- | ----------------- |
+| [SLF4J JDK14 Provider][37] | [MIT License][38] |
 
 ### Plugin Dependencies
 
@@ -92,7 +92,7 @@
 [11]: https://www.eclipse.org/legal/epl-v20.html
 [12]: https://github.com/mockito/mockito
 [13]: https://github.com/mockito/mockito/blob/main/LICENSE
-[14]: https://testcontainers.org
+[14]: https://java.testcontainers.org
 [15]: http://opensource.org/licenses/MIT
 [16]: https://github.com/exasol/test-db-builder-java/
 [17]: https://github.com/exasol/test-db-builder-java/blob/main/LICENSE

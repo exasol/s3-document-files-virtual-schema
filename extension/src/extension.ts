@@ -7,7 +7,7 @@ import {
     registerExtension
 } from "@exasol/extension-manager-interface";
 import { addInstance } from "./addInstance";
-import { ExtensionInfo } from "./common";
+import { EXTENSION_NAME, ExtensionInfo } from "./common";
 import { deleteInstance } from "./deleteInstance";
 import { CONFIG } from "./extension-config";
 import { findInstallations } from "./findInstallations";
@@ -29,7 +29,7 @@ export function createExtension(): ExasolExtension {
     const downloadUrl = `${repoBaseUrl}/releases/download/${extensionInfo.version}/${extensionInfo.fileName}`;
     const licenseUrl = `${repoBaseUrl}/blob/main/LICENSE`;
     return {
-        name: "S3 Virtual Schema",
+        name: EXTENSION_NAME,
         description: "Virtual Schema for document files on AWS S3",
         category: "document-virtual-schema",
         installableVersions: [{ name: extensionInfo.version, latest: true, deprecated: false }],

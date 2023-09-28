@@ -1,6 +1,7 @@
 
 export const ADAPTER_SCRIPT_NAME = "S3_FILES_ADAPTER";
 export const IMPORT_SCRIPT_NAME = "IMPORT_FROM_S3_DOCUMENT_FILES";
+export const EXTENSION_NAME = "S3 Virtual Schema";
 
 export interface ExtensionInfo {
     version: string;

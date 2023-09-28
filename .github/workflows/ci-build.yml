@@ -14,7 +14,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Set up JDK 11 & 17
@@ -57,7 +57,10 @@ jobs:
           echo "owner = ${{ secrets.AWS_TAG_OWNER }}" > test_config.properties
           echo "s3CacheBucket = persistent-s3-vs-test-file-cache" >> test_config.properties
       - name: Run tests and build with Maven
-        run: JAVA_HOME=$JAVA_HOME_11_X64 mvn --batch-mode clean verify -DtrimStackTrace=false
+        run: |
+          JAVA_HOME=$JAVA_HOME_11_X64 mvn --batch-mode clean verify \
+              -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+              -DtrimStackTrace=false
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -77,10 +80,11 @@ jobs:
         if: ${{ env.SONAR_TOKEN != null }}
         run: |
           JAVA_HOME=$JAVA_HOME_17_X64 mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+              -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
               -DtrimStackTrace=false \
               -Dsonar.organization=exasol \
               -Dsonar.host.url=https://sonarcloud.io \
-              -Dsonar.login=$SONAR_TOKEN
+              -Dsonar.token=$SONAR_TOKEN
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

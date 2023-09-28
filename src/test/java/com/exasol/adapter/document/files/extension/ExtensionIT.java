@@ -41,7 +41,7 @@ import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 import software.amazon.awssdk.core.sync.RequestBody;
 
 class ExtensionIT {
-    private static final String PREVIOUS_VERSION = "2.6.2";
+    private static final String PREVIOUS_VERSION = "2.8.0";
     private static final String PREVIOUS_VERSION_JAR_FILE = "document-files-virtual-schema-dist-7.3.3-s3-"
             + PREVIOUS_VERSION + ".jar";
     private static final Path EXTENSION_SOURCE_DIR = Paths.get("extension").toAbsolutePath();

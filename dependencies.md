@@ -20,7 +20,7 @@
 | [Virtual Schema for document data in files][0]  | [MIT License][1]                              |
 | [JUnit Jupiter Engine][10]                      | [Eclipse Public License v2.0][11]             |
 | [JUnit Jupiter Params][10]                      | [Eclipse Public License v2.0][11]             |
-| [mockito-core][12]                              | [The MIT License][13]                         |
+| [mockito-core][12]                              | [MIT][13]                                     |
 | [Testcontainers :: JUnit Jupiter Extension][14] | [MIT][15]                                     |
 | [Testcontainers :: Localstack][14]              | [MIT][15]                                     |
 | [Test Database Builder for Java][16]            | [MIT License][17]                             |

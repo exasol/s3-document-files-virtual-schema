@@ -1,12 +1,14 @@
-# S3 Document Files Virtual Schema 2.8.2, released 2023-??-??
+# S3 Document Files Virtual Schema 2.8.2, released 2023-10-24
 
-Code name:
+Code name: Validate EDML for duplicate table names
 
 ## Summary
 
+This release upgrades to [virtual-schema-common-document-files 7.3.6](https://github.com/exasol/virtual-schema-common-document-files/releases/tag/7.3.6). This new version validates that the given EDML mapping uses unique values for each `destinationTable` entry as duplicate values led to unexpected behavior.
+
 ## Features
 
-* ISSUE_NUMBER: description
+* #134: Added validation for duplicate `destinationTable` entries
 
 ## Dependency Updates
 

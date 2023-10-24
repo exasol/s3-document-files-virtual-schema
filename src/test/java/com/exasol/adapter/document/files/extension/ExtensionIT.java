@@ -41,7 +41,7 @@ import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 import software.amazon.awssdk.core.sync.RequestBody;
 
 class ExtensionIT {
-    private static final String PREVIOUS_VERSION = "2.8.0";
+    private static final String PREVIOUS_VERSION = "2.8.1";
     private static final String PREVIOUS_VERSION_JAR_FILE = "document-files-virtual-schema-dist-7.3.3-s3-"
             + PREVIOUS_VERSION + ".jar";
     private static final Path EXTENSION_SOURCE_DIR = Paths.get("extension").toAbsolutePath();
@@ -224,9 +224,9 @@ class ExtensionIT {
         previousVersion.install();
         final String virtualTable = createVirtualSchema(previousVersion.getExtensionId(), PREVIOUS_VERSION);
         verifyVirtualTableContainsData(virtualTable);
-        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PREVIOUS_VERSION);
+        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PREVIOUS_VERSION, previousVersion.getExtensionId());
         previousVersion.upgrade();
-        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PROJECT_VERSION);
+        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PROJECT_VERSION, previousVersion.getExtensionId());
         verifyVirtualTableContainsData(virtualTable);
     }
 
@@ -239,10 +239,11 @@ class ExtensionIT {
                 .build();
     }
 
-    private void assertInstalledVersion(final String expectedName, final String expectedVersion) {
+    private void assertInstalledVersion(final String expectedName, final String expectedVersion,
+            final String expectedId) {
         final List<InstallationsResponseInstallation> installations = setup.client().getInstallations();
         final InstallationsResponseInstallation expectedInstallation = new InstallationsResponseInstallation()
-                .name(expectedName).version(expectedVersion);
+                .name(expectedName).version(expectedVersion).id(expectedId);
         // The extension is installed twice (previous and current version), so each one returns the same installation.
         assertAll(() -> assertThat(installations, hasSize(2)),
                 () -> assertThat(installations.get(0), equalTo(expectedInstallation)),

@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 2.8.2, released 2023-10-24
+# S3 Document Files Virtual Schema 2.8.2, released 2023-10-25
 
 Code name: Validate EDML for duplicate table names
 

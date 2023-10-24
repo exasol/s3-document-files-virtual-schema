@@ -224,7 +224,7 @@ class ExtensionIT {
         previousVersion.install();
         final String virtualTable = createVirtualSchema(previousVersion.getExtensionId(), PREVIOUS_VERSION);
         verifyVirtualTableContainsData(virtualTable);
-        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PREVIOUS_VERSION, previousVersion));
+        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PREVIOUS_VERSION, previousVersion);
         previousVersion.upgrade();
         assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PROJECT_VERSION, previousVersion);
         verifyVirtualTableContainsData(virtualTable);

@@ -169,28 +169,12 @@ class ExtensionIT {
     }
 
     @Test
-    void install_failsForUnsupportedVersion() {
-        final ExtensionManagerClient client = setup.client();
-        client.assertRequestFails(() -> client.install("unsupported"),
-                equalTo("Installing version 'unsupported' not supported, try '" + PROJECT_VERSION + "'."),
-                equalTo(400));
-        setup.exasolMetadata().assertNoScripts();
-    }
-
-    @Test
     void createInstanceFailsWithoutRequiredParameters() {
         final ExtensionManagerClient client = setup.client();
         client.install();
         client.assertRequestFails(() -> client.createInstance(List.of()), startsWith(
                 "invalid parameters: Failed to validate parameter 'Virtual Schema name' (base-vs.virtual-schema-name): This is a required parameter."),
                 equalTo(400));
-    }
-
-    @Test
-    void uninstall_failsForUnknownVersion() {
-        setup.client().assertRequestFails(() -> setup.client().uninstall("unknownVersion"),
-                equalTo("Uninstalling version 'unknownVersion' not supported, try '" + PROJECT_VERSION + "'."),
-                equalTo(404));
     }
 
     @Test

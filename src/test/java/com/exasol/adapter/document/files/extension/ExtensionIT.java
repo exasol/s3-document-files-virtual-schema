@@ -41,12 +41,12 @@ import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 import software.amazon.awssdk.core.sync.RequestBody;
 
 class ExtensionIT {
-    private static final String PREVIOUS_VERSION = "2.8.1";
-    private static final String PREVIOUS_VERSION_JAR_FILE = "document-files-virtual-schema-dist-7.3.4-s3-"
+    private static final String PREVIOUS_VERSION = "2.8.2";
+    private static final String PREVIOUS_VERSION_JAR_FILE = "document-files-virtual-schema-dist-7.3.6-s3-"
             + PREVIOUS_VERSION + ".jar";
     private static final Path EXTENSION_SOURCE_DIR = Paths.get("extension").toAbsolutePath();
     private static final String EXTENSION_ID = "s3-vs-extension.js";
-    private static final int EXPECTED_PARAMETER_COUNT = 10;
+    private static final int EXPECTED_PARAMETER_COUNT = 13;
     private static final String PROJECT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
     private static ExasolTestSetup exasolTestSetup;
     private static ExtensionManagerSetup setup;
@@ -55,7 +55,9 @@ class ExtensionIT {
 
     @BeforeAll
     static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
+        System.setProperty("com.exasol.dockerdb.image", "8.23.0");
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
+        ExasolVersionCheck.assumeExasolVersion8(exasolTestSetup);
         setup = ExtensionManagerSetup.create(exasolTestSetup, ExtensionBuilder.createDefaultNpmBuilder(
                 EXTENSION_SOURCE_DIR, EXTENSION_SOURCE_DIR.resolve("dist").resolve(EXTENSION_ID)));
         s3TestSetup = new AwsS3TestSetup();
@@ -114,8 +116,7 @@ class ExtensionIT {
         createAdapter("S3_FILES_ADAPTER", "IMPORT_FROM_S3_DOCUMENT_FILES");
         final List<InstallationsResponseInstallation> installations = setup.client().getInstallations();
         assertAll(() -> assertThat(installations, hasSize(1)), //
-                () -> assertThat(installations.get(0).getName(),
-                        equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
+                () -> assertThat(installations.get(0).getName(), equalTo("S3 Virtual Schema")),
                 () -> assertThat(installations.get(0).getVersion(), equalTo(PROJECT_VERSION)));
     }
 
@@ -124,8 +125,7 @@ class ExtensionIT {
         setup.client().install();
         final List<InstallationsResponseInstallation> installations = setup.client().getInstallations();
         assertAll(() -> assertThat(installations, hasSize(1)), //
-                () -> assertThat(installations.get(0).getName(),
-                        equalTo(ExtensionManagerSetup.EXTENSION_SCHEMA_NAME + ".S3_FILES_ADAPTER")),
+                () -> assertThat(installations.get(0).getName(), equalTo("S3 Virtual Schema")),
                 () -> assertThat(installations.get(0).getVersion(), equalTo(PROJECT_VERSION)));
     }
 
@@ -140,9 +140,15 @@ class ExtensionIT {
     void getExtensionDetailsSuccess() {
         final ExtensionDetailsResponse extensionDetails = setup.client().getExtensionDetails(PROJECT_VERSION);
         final List<ParamDefinition> parameters = extensionDetails.getParameterDefinitions();
-        final ParamDefinition param1 = new ParamDefinition().id("virtualSchemaName")
-                .name("Name of the new virtual schema").definition(Map.of("id", "virtualSchemaName", "name",
-                        "Name of the new virtual schema", "required", true, "scope", "general", "type", "string"));
+        final ParamDefinition param1 = new ParamDefinition().id("base-vs.virtual-schema-name")
+                .name("Virtual Schema name").definition(Map.of( //
+                        "id", "base-vs.virtual-schema-name", //
+                        "name", "Virtual Schema name", //
+                        "description", "Name for the new virtual schema", //
+                        "placeholder", "MY_VIRTUAL_SCHEMA", //
+                        "regex", "[a-zA-Z_]+", //
+                        "required", true, //
+                        "type", "string"));
         assertAll(() -> assertThat(extensionDetails.getId(), equalTo("s3-vs-extension.js")),
                 () -> assertThat(extensionDetails.getVersion(), equalTo(PROJECT_VERSION)),
                 () -> assertThat(parameters, hasSize(EXPECTED_PARAMETER_COUNT)),
@@ -176,7 +182,7 @@ class ExtensionIT {
         final ExtensionManagerClient client = setup.client();
         client.install();
         client.assertRequestFails(() -> client.createInstance(List.of()), startsWith(
-                "invalid parameters: Failed to validate parameter 'Name of the new virtual schema': This is a required parameter."),
+                "invalid parameters: Failed to validate parameter 'Virtual Schema name' (base-vs.virtual-schema-name): This is a required parameter."),
                 equalTo(400));
     }
 
@@ -184,7 +190,7 @@ class ExtensionIT {
     void uninstall_failsForUnknownVersion() {
         setup.client().assertRequestFails(() -> setup.client().uninstall("unknownVersion"),
                 equalTo("Uninstalling version 'unknownVersion' not supported, try '" + PROJECT_VERSION + "'."),
-                equalTo(400));
+                equalTo(404));
     }
 
     @Test
@@ -205,8 +211,8 @@ class ExtensionIT {
     @Test
     void upgradeFailsWhenNotInstalled() {
         setup.client().assertRequestFails(() -> setup.client().upgrade(),
-                "extension is not installed, the following scripts are missing: S3_FILES_ADAPTER, IMPORT_FROM_S3_DOCUMENT_FILES",
-                404);
+                "Not all required scripts are installed: Validation failed: Script 'S3_FILES_ADAPTER' is missing, Script 'IMPORT_FROM_S3_DOCUMENT_FILES' is missing",
+                412);
     }
 
     @Test
@@ -224,9 +230,9 @@ class ExtensionIT {
         previousVersion.install();
         final String virtualTable = createVirtualSchema(previousVersion.getExtensionId(), PREVIOUS_VERSION);
         verifyVirtualTableContainsData(virtualTable);
-        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PREVIOUS_VERSION, previousVersion);
+        assertInstalledVersion(PREVIOUS_VERSION, previousVersion);
         previousVersion.upgrade();
-        assertInstalledVersion("EXA_EXTENSIONS.S3_FILES_ADAPTER", PROJECT_VERSION, previousVersion);
+        assertInstalledVersion(PROJECT_VERSION, previousVersion);
         verifyVirtualTableContainsData(virtualTable);
     }
 
@@ -239,15 +245,14 @@ class ExtensionIT {
                 .build();
     }
 
-    private void assertInstalledVersion(final String expectedName, final String expectedVersion,
-            final PreviousExtensionVersion previousVersion) {
+    private void assertInstalledVersion(final String expectedVersion, final PreviousExtensionVersion previousVersion) {
         // The extension is installed twice (previous and current version), so each one returns one installation.
         assertThat(setup.client().getInstallations(),
                 containsInAnyOrder(
-                        new InstallationsResponseInstallation().name(expectedName).version(expectedVersion)
+                        new InstallationsResponseInstallation().name("S3 Virtual Schema").version(expectedVersion)
                                 .id(EXTENSION_ID), //
-                        new InstallationsResponseInstallation().name(expectedName).version(expectedVersion)
-                                .id(previousVersion.getExtensionId())));
+                        new InstallationsResponseInstallation().name("EXA_EXTENSIONS.S3_FILES_ADAPTER")
+                                .version(expectedVersion).id(previousVersion.getExtensionId())));
     }
 
     @Test
@@ -304,11 +309,13 @@ class ExtensionIT {
         final String name = "my_virtual_SCHEMA";
         createInstance(name);
 
-        setup.exasolMetadata().assertConnection(table().row("MY_VIRTUAL_SCHEMA_CONNECTION",
-                "Created by Extension Manager for S3 Virtual Schema my_virtual_SCHEMA").matches());
+        setup.exasolMetadata()
+                .assertConnection(table().row("MY_VIRTUAL_SCHEMA_CONNECTION",
+                        "Created by Extension Manager for S3 Virtual Schema v" + PROJECT_VERSION + " my_virtual_SCHEMA")
+                        .matches());
         setup.exasolMetadata()
                 .assertVirtualSchema(table()
-                        .row("my_virtual_SCHEMA", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString()))
+                        .row("my_virtual_SCHEMA", "SYS", "EXA_EXTENSIONS", "S3_FILES_ADAPTER", not(emptyOrNullString()))
                         .matches());
         assertThat(setup.client().listInstances(),
                 allOf(hasSize(1), equalTo(List.of(new Instance().id(name).name(name)))));
@@ -320,28 +327,37 @@ class ExtensionIT {
         createInstance("vs1");
         createInstance("vs2");
 
-        setup.exasolMetadata()
-                .assertConnection(table()
-                        .row("VS1_CONNECTION", "Created by Extension Manager for S3 Virtual Schema vs1")
-                        .row("VS2_CONNECTION", "Created by Extension Manager for S3 Virtual Schema vs2").matches());
-        setup.exasolMetadata()
-                .assertVirtualSchema(table()
-                        .row("vs1", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString()))
-                        .row("vs2", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString())).matches());
+        assertAll(
+                () -> setup.exasolMetadata()
+                        .assertConnection(table()
+                                .row("VS1_CONNECTION",
+                                        "Created by Extension Manager for S3 Virtual Schema v" + PROJECT_VERSION
+                                                + " vs1")
+                                .row("VS2_CONNECTION",
+                                        "Created by Extension Manager for S3 Virtual Schema v" + PROJECT_VERSION
+                                                + " vs2")
+                                .matches()),
+                () -> setup.exasolMetadata().assertVirtualSchema(table()
+                        .row("vs1", "SYS", "EXA_EXTENSIONS", "S3_FILES_ADAPTER", not(emptyOrNullString()))
+                        .row("vs2", "SYS", "EXA_EXTENSIONS", "S3_FILES_ADAPTER", not(emptyOrNullString())).matches()),
 
-        assertThat(setup.client().listInstances(), allOf(hasSize(2),
-                equalTo(List.of(new Instance().id("vs1").name("vs1"), new Instance().id("vs2").name("vs2")))));
+                () -> assertThat(setup.client().listInstances(), allOf(hasSize(2),
+                        equalTo(List.of(new Instance().id("vs1").name("vs1"), new Instance().id("vs2").name("vs2"))))));
     }
 
     @Test
     void createInstanceWithSingleQuote() {
         setup.client().install();
         createInstance("Quoted'schema");
-        setup.exasolMetadata().assertConnection(table()
-                .row("QUOTED'SCHEMA_CONNECTION", "Created by Extension Manager for S3 Virtual Schema Quoted'schema")
-                .matches());
-        setup.exasolMetadata().assertVirtualSchema(table()
-                .row("Quoted'schema", "SYS", "EXA_EXTENSIONS.S3_FILES_ADAPTER", not(emptyOrNullString())).matches());
+        assertAll(
+                () -> setup.exasolMetadata()
+                        .assertConnection(table().row("QUOTED'SCHEMA_CONNECTION",
+                                "Created by Extension Manager for S3 Virtual Schema v" + PROJECT_VERSION
+                                        + " Quoted'schema")
+                                .matches()),
+                () -> setup.exasolMetadata().assertVirtualSchema(table()
+                        .row("Quoted'schema", "SYS", "EXA_EXTENSIONS", "S3_FILES_ADAPTER", not(emptyOrNullString()))
+                        .matches()));
     }
 
     @Test
@@ -363,8 +379,9 @@ class ExtensionIT {
         final List<Instance> instances = setup.client().listInstances();
         assertThat(instances, hasSize(1));
         setup.client().deleteInstance(instances.get(0).getId());
-        assertThat(setup.client().listInstances(), is(empty()));
-        assertAll(() -> setup.exasolMetadata().assertNoConnections(),
+
+        assertAll(() -> assertThat(setup.client().listInstances(), is(empty())),
+                () -> setup.exasolMetadata().assertNoConnections(),
                 () -> setup.exasolMetadata().assertNoVirtualSchema());
     }
 
@@ -381,17 +398,26 @@ class ExtensionIT {
         setup.addVirtualSchemaToCleanupQueue(virtualSchemaName);
         setup.addConnectionToCleanupQueue(virtualSchemaName.toUpperCase() + "_CONNECTION");
         final String instanceName = setup.client().createInstance(extensionId, extensionVersion,
-                createValidParameters(virtualSchemaName, mapping));
+                createValidParameters(virtualSchemaName, mapping, extensionVersion));
         assertThat(instanceName, equalTo(virtualSchemaName));
     }
 
-    private List<ParameterValue> createValidParameters(final String virtualSchemaName, final EdmlDefinition mapping) {
-        final List<ParameterValue> parameters = new ArrayList<>(
-                List.of(param("virtualSchemaName", virtualSchemaName), param("awsRegion", s3TestSetup.getRegion()), //
-                        param("s3Bucket", s3BucketName), //
-                        param("awsAccessKeyId", s3TestSetup.getUsername()), //
-                        param("awsSecretAccessKey", s3TestSetup.getPassword()), //
-                        param("mapping", new EdmlSerializer().serialize(mapping))));
+    private List<ParameterValue> createValidParameters(final String virtualSchemaName, final EdmlDefinition mapping,
+            final String extensionVersion) {
+        final List<ParameterValue> parameters = new ArrayList<>();
+        parameters.addAll(List.of( //
+                param("awsRegion", s3TestSetup.getRegion()), //
+                param("s3Bucket", s3BucketName), //
+                param("awsAccessKeyId", s3TestSetup.getUsername()), //
+                param("awsSecretAccessKey", s3TestSetup.getPassword())));
+        if (extensionVersion.equals(PREVIOUS_VERSION)) {
+            parameters.add(param("virtualSchemaName", virtualSchemaName));
+            parameters.add(param("mapping", new EdmlSerializer().serialize(mapping)));
+        } else {
+            parameters.add(param("base-vs.virtual-schema-name", virtualSchemaName));
+            parameters.add(param("MAPPING", new EdmlSerializer().serialize(mapping)));
+        }
+
         getInDatabaseS3Address().map(address -> param("awsEndpointOverride", address)) //
                 .ifPresent(parameters::add);
         if (s3TestSetup.getMfaToken().isPresent()) {
@@ -422,7 +448,7 @@ class ExtensionIT {
 
     private void assertScriptsExist() {
         final String jarDirective = "%jar /buckets/bfsdefault/default/" + IntegrationTestSetup.ADAPTER_JAR + ";";
-        final String comment = "Created by Extension Manager for S3 Virtual Schema extension " + PROJECT_VERSION;
+        final String comment = "Created by Extension Manager for S3 Virtual Schema " + PROJECT_VERSION;
         setup.exasolMetadata()
                 .assertScript(table()
                         .row("IMPORT_FROM_S3_DOCUMENT_FILES", "UDF", "SET", "EMITS",

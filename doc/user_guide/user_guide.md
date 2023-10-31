@@ -17,7 +17,7 @@ Next create the Adapter Script:
 ```sql
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.3.6-s3-2.8.2.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.3.6-s3-2.8.3.jar;
 /
 ```
 
@@ -30,7 +30,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   CONNECTION_NAME VARCHAR(500))
   EMITS(...) AS
     %scriptclass com.exasol.adapter.document.UdfEntryPoint;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.3.6-s3-2.8.2.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-7.3.6-s3-2.8.3.jar;
 /
 ```
 
@@ -77,7 +77,7 @@ In the definitions you have to define the `source` property. For S3, you define 
 
 This Virtual Schema adapter automatically detects the type of the document file by the file extension. You can find a list of supported file types and their extensions in the [user guide of the common repository for all file Virtual Schemas](https://github.com/exasol/virtual-schema-common-document-files/blob/main/doc/user_guide/user_guide.md).
 
-### Mapping multiple files
+### Mapping Multiple Files
 
 For some file type (for example JSON) each source file contains only a single document. That means, that you have one file for each row in the mapped table. To define mappings for such types, you can use the GLOB syntax. That means, you can use `*` and `?` as wildcards, where `*` matches multiple characters and `?` a single one.
 
@@ -126,7 +126,7 @@ In DbVisualizer use exactly this command:
 --/
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
    %scriptclass com.exasol.adapter.RequestDispatcher;
-   %jar /buckets/bfsdefault/default/vs/document-files-virtual-schema-dist-7.3.6-s3-2.8.2.jar;
+   %jar /buckets/bfsdefault/default/vs/document-files-virtual-schema-dist-7.3.6-s3-2.8.3.jar;
 /
 ```
 

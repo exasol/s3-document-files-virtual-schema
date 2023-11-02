@@ -11,7 +11,6 @@ import { ADAPTER_SCRIPT_NAME, EXTENSION_NAME, IMPORT_SCRIPT_NAME } from "./commo
 import { CONFIG } from "./extension-config";
 
 export function createExtension(): ExasolExtension {
-    const virtualSchemaAdapterScript = ADAPTER_SCRIPT_NAME
     return convertVirtualSchemaBaseExtension({
         name: EXTENSION_NAME,
         description: "Virtual Schema for document files on AWS S3",
@@ -19,10 +18,9 @@ export function createExtension(): ExasolExtension {
         version: CONFIG.version,
         file: { name: CONFIG.fileName, size: CONFIG.fileSizeBytes },
         scripts: getUdfScriptDefinitions(),
-        virtualSchemaAdapterScript,
+        virtualSchemaAdapterScript: ADAPTER_SCRIPT_NAME,
         scriptVersionExtractor: jarFileVersionExtractor(/document-files-virtual-schema-dist-[\d.]+-s3-(\d+\.\d+\.\d+).jar/),
         builder: createVirtualSchemaBuilder({
-            adapterName: virtualSchemaAdapterScript,
             connectionNameProperty: "CONNECTION_NAME",
             virtualSchemaParameters: getVirtualSchemaParameterDefinitions(),
             connectionDefinition: createJsonConnectionDefinition(getConnectionParameterDefinitions())

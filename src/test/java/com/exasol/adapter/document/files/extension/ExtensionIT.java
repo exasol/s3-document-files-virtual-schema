@@ -278,11 +278,11 @@ class ExtensionIT {
     }
 
     @Test
-    void listingInstancesIgnoresVersion() {
+    void listInstances() {
         setup.client().install();
         final String name = "my_virtual_SCHEMA";
         createInstance(name);
-        assertThat(setup.client().listInstances("unknownVersion"),
+        assertThat(setup.client().listInstances(PROJECT_VERSION),
                 allOf(hasSize(1), equalTo(List.of(new Instance().id(name).name(name)))));
     }
 

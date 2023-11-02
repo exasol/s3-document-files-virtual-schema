@@ -10,7 +10,6 @@ import { convertVirtualSchemaBaseExtension, createJsonConnectionDefinition, crea
 import { ADAPTER_SCRIPT_NAME, EXTENSION_NAME, IMPORT_SCRIPT_NAME } from "./common";
 import { CONFIG } from "./extension-config";
 
-
 export function createExtension(): ExasolExtension {
     const virtualSchemaAdapterScript = ADAPTER_SCRIPT_NAME
     return convertVirtualSchemaBaseExtension({

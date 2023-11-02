@@ -1,12 +1,18 @@
-# S3 Document Files Virtual Schema 2.8.3, released 2023-??-??
+# S3 Document Files Virtual Schema 2.8.3, released 2023-11-02
 
-Code name:
+Code name: Refactoring of Extension
 
 ## Summary
 
+This release moves common extension code to `extension-manager-interface` to simplify the extension. We added the following optional parameters to the extension, so you can also use them with Extension Manager:
+
+* `MAX_PARALLEL_UDFS`: Maximum number of UDFs that are executed in parallel
+* `DEBUG_ADDRESS`: Network address and port to which to send debug output
+* `LOG_LEVEL`: Log level for debug output
+
 ## Refactoring
 
-* #137: Extracted common code for virtual schema based extensions
+* #137: Moved common extension code to `extension-manager-interface`
 
 ## Dependency Updates
 

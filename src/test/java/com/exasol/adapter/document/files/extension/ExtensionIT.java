@@ -55,7 +55,6 @@ class ExtensionIT {
 
     @BeforeAll
     static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
-        System.setProperty("com.exasol.dockerdb.image", "8.23.0");
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
         ExasolVersionCheck.assumeExasolVersion8(exasolTestSetup);
         setup = ExtensionManagerSetup.create(exasolTestSetup, ExtensionBuilder.createDefaultNpmBuilder(

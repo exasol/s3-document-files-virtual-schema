@@ -87,7 +87,7 @@
 [10]: https://junit.org/junit5/
 [11]: https://www.eclipse.org/legal/epl-v20.html
 [12]: https://github.com/mockito/mockito
-[13]: https://github.com/mockito/mockito/blob/main/LICENSE
+[13]: https://opensource.org/licenses/MIT
 [14]: https://java.testcontainers.org
 [15]: http://opensource.org/licenses/MIT
 [16]: https://github.com/exasol/test-db-builder-java/
@@ -138,4 +138,4 @@
 [61]: http://zlika.github.io/reproducible-build-maven-plugin
 [62]: https://maven.apache.org/plugins/maven-clean-plugin/
 [63]: https://www.mojohaus.org/exec-maven-plugin
-[64]: file:../../../../extension-manager-interface
+[64]: https://registry.npmjs.org/@exasol/extension-manager-interface/-/extension-manager-interface-0.3.1.tgz

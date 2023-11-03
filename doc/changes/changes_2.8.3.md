@@ -25,7 +25,7 @@ This release moves common extension code to `extension-manager-interface` to sim
 #### Test Dependency Updates
 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.572` to `1.12.580`
-* Updated `com.exasol:extension-manager-integration-test-java:0.5.3` to `0.5.5`
+* Updated `com.exasol:extension-manager-integration-test-java:0.5.3` to `0.5.4`
 * Updated `com.exasol:hamcrest-resultset-matcher:1.6.1` to `1.6.2`
 * Updated `nl.jqno.equalsverifier:equalsverifier:3.15.2` to `3.15.3`
 * Updated `org.mockito:mockito-core:5.6.0` to `5.7.0`

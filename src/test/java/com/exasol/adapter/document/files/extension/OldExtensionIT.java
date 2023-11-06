@@ -34,7 +34,8 @@ import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 import software.amazon.awssdk.core.sync.RequestBody;
 
 /**
- * This test can be deleted once {@link ExtensionIT#upgradeFromPreviousVersion()} is deleted.
+ * This test class can be deleted once version 2.8.3 was released and {@link ExtensionIT#upgradeFromPreviousVersion()}
+ * is deleted.
  */
 class OldExtensionIT {
     private static final String PREVIOUS_VERSION = "2.8.2";

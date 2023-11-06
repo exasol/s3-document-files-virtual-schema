@@ -134,7 +134,7 @@ class ExtensionIT extends AbstractExtensionIT {
     }
 
     @Override
-    protected void verifyVirtualTableContainsData(final String virtualSchemaName) {
+    protected void assertVirtualSchemaContent(final String virtualSchemaName) {
         final String virtualTable = "\"" + virtualSchemaName + "\".\"" + MAPPING_DESTINATION_TABLE + "\"";
         try (final ResultSet result = exasolTestSetup.createConnection().createStatement()
                 .executeQuery("SELECT ID, NAME FROM " + virtualTable + " ORDER BY ID ASC")) {

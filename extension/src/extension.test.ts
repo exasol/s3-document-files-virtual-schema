@@ -215,7 +215,7 @@ describe("S3 VS Extension", () => {
         function findInstances(rows: Row[]): Instance[] {
             const context = createMockContext();
             context.mocks.sqlQuery.mockReturnValue({ columns: [], rows });
-            return createExtension().findInstances(context, "version")
+            return createExtension().findInstances(context, CONFIG.version)
         }
         it("returns empty list for empty metadata", () => {
             expect(findInstances([])).toEqual([])
@@ -231,7 +231,7 @@ describe("S3 VS Extension", () => {
         it("filters by schema and script name", () => {
             const context = createMockContext();
             context.mocks.sqlQuery.mockReturnValue({ columns: [], rows: [] });
-            createExtension().findInstances(context, "version")
+            createExtension().findInstances(context, CONFIG.version)
             const queryCalls = context.mocks.sqlQuery.mock.calls
             expect(queryCalls.length).toEqual(1)
             expect(queryCalls[0]).toEqual(["SELECT SCHEMA_NAME FROM SYS.EXA_ALL_VIRTUAL_SCHEMAS WHERE ADAPTER_SCRIPT_SCHEMA = ? AND ADAPTER_SCRIPT_NAME = ? ORDER BY SCHEMA_NAME", "ext-schema", "S3_FILES_ADAPTER"])

@@ -1,20 +1,25 @@
 package com.exasol.adapter.document.files.extension;
 
 import static com.exasol.matcher.ResultSetStructureMatcher.table;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import java.io.FileNotFoundException;
+import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.*;
 
 import com.exasol.adapter.RequestDispatcher;
 import com.exasol.adapter.document.GenericUdfCallHandler;
 import com.exasol.adapter.document.UdfEntryPoint;
+import com.exasol.adapter.document.edml.*;
+import com.exasol.adapter.document.edml.serializer.EdmlSerializer;
 import com.exasol.adapter.document.files.IntegrationTestSetup;
 import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
 import com.exasol.bucketfs.BucketAccessException;
@@ -32,15 +37,24 @@ import com.exasol.extensionmanager.itest.base.ExtensionITConfig;
 import com.exasol.extensionmanager.itest.builder.ExtensionBuilder;
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
+import software.amazon.awssdk.core.sync.RequestBody;
+
 class NewExtensionIT extends AbstractExtensionIT {
     private static final Path EXTENSION_SOURCE_DIR = Paths.get("extension").toAbsolutePath();
     private static final String PROJECT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
-
     private static final String EXTENSION_ID = "s3-vs-extension.js";
+    private static final String MAPPING_DESTINATION_TABLE = "DESTINATION_TABLE";
+
     private static ExasolTestSetup exasolTestSetup;
     private static ExtensionManagerSetup setup;
     private static AwsS3TestSetup s3TestSetup;
     private static String s3BucketName;
+    private String s3ImportPrefix;
+
+    @BeforeEach
+    void createS3ImportPrefix() {
+        s3ImportPrefix = "vs-works-test-" + System.currentTimeMillis() + "/";
+    }
 
     @Override
     protected ExtensionITConfig createConfig() {
@@ -110,19 +124,70 @@ class NewExtensionIT extends AbstractExtensionIT {
 
     @Override
     protected void prepareInstance() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prepareInstance'");
+        upload(s3ImportPrefix + "test-data-1.json", "{\"id\": 1, \"name\": \"abc\" }");
+        upload(s3ImportPrefix + "test-data-2.json", "{\"id\": 2, \"name\": \"xyz\" }");
+
+    }
+
+    private void upload(final String key, final String content) {
+        s3TestSetup.upload(s3BucketName, key, RequestBody.fromString(content));
     }
 
     @Override
     protected void verifyVirtualTableContainsData(final String virtualSchemaName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verifyVirtualTableContainsData'");
+        final String virtualTable = "\"" + virtualSchemaName + "\".\"" + MAPPING_DESTINATION_TABLE + "\"";
+        try (final ResultSet result = exasolTestSetup.createConnection().createStatement()
+                .executeQuery("SELECT ID, NAME FROM " + virtualTable + " ORDER BY ID ASC")) {
+            assertThat(result, table().row(1L, "abc").row(2L, "xyz").matches());
+        } catch (final SQLException exception) {
+            throw new AssertionError("Assertion query failed", exception);
+        }
     }
 
     @Override
     protected Collection<ParameterValue> createValidParameterValues() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createValidParameterValues'");
+        final List<ParameterValue> parameters = new ArrayList<>();
+        parameters.addAll(List.of( //
+                param("awsRegion", s3TestSetup.getRegion()), //
+                param("s3Bucket", s3BucketName), //
+                param("awsAccessKeyId", s3TestSetup.getUsername()), //
+                param("awsSecretAccessKey", s3TestSetup.getPassword())));
+        parameters.add(param("MAPPING", new EdmlSerializer().serialize(getMappingDefinition())));
+
+        getInDatabaseS3Address().map(address -> param("awsEndpointOverride", address)) //
+                .ifPresent(parameters::add);
+        if (s3TestSetup.getMfaToken().isPresent()) {
+            parameters.add(param("awsSessionToken", s3TestSetup.getMfaToken().get()));
+        }
+        return parameters;
+    }
+
+    private EdmlDefinition getMappingDefinition() {
+        return getMappingDefinition(s3ImportPrefix + "test-data-*.json");
+    }
+
+    private EdmlDefinition getMappingDefinition(final String source) {
+        return EdmlDefinition.builder().source(source).destinationTable(MAPPING_DESTINATION_TABLE) //
+                .mapping(Fields.builder() //
+                        .mapField("id", ToDecimalMapping.builder().build()) //
+                        .mapField("name", ToVarcharMapping.builder().varcharColumnSize(200).build()) //
+                        .mapField("fieldWith'Quote", ToVarcharMapping.builder().varcharColumnSize(200).build()) //
+                        .build())
+                .build();
+    }
+
+    private Optional<String> getInDatabaseS3Address() {
+        return s3TestSetup.getEntrypoint()
+                .map(endpoint -> exasolTestSetup.makeTcpServiceAccessibleFromDatabase(endpoint))
+                .map(InetSocketAddress::toString);
+    }
+
+    @Override
+    @Test
+    public void upgradeFromPreviousVersion() {
+        // This test can be removed once version 2.8.3 was released
+        setup.client().assertRequestFails(super::upgradeFromPreviousVersion, containsString(
+                "invalid parameters: Failed to validate parameter 'Name of the new virtual schema' (virtualSchemaName): This is a required parameter."),
+                equalTo(400));
     }
 }

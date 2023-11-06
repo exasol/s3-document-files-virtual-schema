@@ -2,12 +2,10 @@ package com.exasol.adapter.document.files.extension;
 
 import static com.exasol.matcher.ResultSetStructureMatcher.table;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 import java.io.FileNotFoundException;
 import java.net.InetSocketAddress;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
@@ -17,36 +15,58 @@ import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.*;
 
+import com.exasol.adapter.RequestDispatcher;
+import com.exasol.adapter.document.GenericUdfCallHandler;
+import com.exasol.adapter.document.UdfEntryPoint;
 import com.exasol.adapter.document.edml.*;
 import com.exasol.adapter.document.edml.serializer.EdmlSerializer;
 import com.exasol.adapter.document.files.IntegrationTestSetup;
 import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
-import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
 import com.exasol.bucketfs.BucketAccessException;
+import com.exasol.dbbuilder.dialects.exasol.AdapterScript.Language;
+import com.exasol.dbbuilder.dialects.exasol.ExasolSchema;
+import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
+import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript.InputType;
 import com.exasol.exasoltestsetup.ExasolTestSetup;
 import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
-import com.exasol.extensionmanager.client.model.InstallationsResponseInstallation;
 import com.exasol.extensionmanager.client.model.ParameterValue;
-import com.exasol.extensionmanager.itest.*;
+import com.exasol.extensionmanager.itest.ExasolVersionCheck;
+import com.exasol.extensionmanager.itest.ExtensionManagerSetup;
+import com.exasol.extensionmanager.itest.base.AbstractExtensionIT;
+import com.exasol.extensionmanager.itest.base.ExtensionITConfig;
 import com.exasol.extensionmanager.itest.builder.ExtensionBuilder;
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
 import software.amazon.awssdk.core.sync.RequestBody;
 
-/**
- * This test can be deleted once {@link NewExtensionIT#upgradeFromPreviousVersion()} is deleted.
- */
-class ExtensionIT {
-    private static final String PREVIOUS_VERSION = "2.8.2";
-    private static final String PREVIOUS_VERSION_JAR_FILE = "document-files-virtual-schema-dist-7.3.6-s3-"
-            + PREVIOUS_VERSION + ".jar";
+class ExtensionIT extends AbstractExtensionIT {
     private static final Path EXTENSION_SOURCE_DIR = Paths.get("extension").toAbsolutePath();
-    private static final String EXTENSION_ID = "s3-vs-extension.js";
     private static final String PROJECT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
+    private static final String EXTENSION_ID = "s3-vs-extension.js";
+    private static final String MAPPING_DESTINATION_TABLE = "DESTINATION_TABLE";
+
     private static ExasolTestSetup exasolTestSetup;
     private static ExtensionManagerSetup setup;
-    private static S3TestSetup s3TestSetup;
+    private static AwsS3TestSetup s3TestSetup;
     private static String s3BucketName;
+    private String s3ImportPrefix;
+
+    @BeforeEach
+    void createS3ImportPrefix() {
+        s3ImportPrefix = "vs-works-test-" + System.currentTimeMillis() + "/";
+    }
+
+    @Override
+    protected ExtensionITConfig createConfig() {
+        return ExtensionITConfig.builder().projectName("s3-document-files-virtual-schema") //
+                .extensionId(EXTENSION_ID) //
+                .currentVersion(PROJECT_VERSION) //
+                .expectedParameterCount(13) //
+                .extensionName("S3 Virtual Schema") //
+                .extensionDescription("Virtual Schema for document files on AWS S3") //
+                .previousVersion("2.8.2") //
+                .previousVersionJarFile("document-files-virtual-schema-dist-7.3.6-s3-2.8.2.jar").build();
+    }
 
     @BeforeAll
     static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
@@ -64,69 +84,58 @@ class ExtensionIT {
                 IntegrationTestSetup.ADAPTER_JAR);
     }
 
-    @AfterAll
-    static void teardown() throws Exception {
-        if (s3TestSetup != null) {
-            s3TestSetup.emptyS3Bucket(s3BucketName);
-            s3TestSetup.deleteBucket(s3BucketName);
-        }
-        if (setup != null) {
-            setup.close();
-        }
-        // do not delete ADAPTER_JAR as it is required by other integration tests, too
-        // and upload immediately after delete fails.
-        exasolTestSetup.close();
+    @Override
+    protected ExtensionManagerSetup getSetup() {
+        return setup;
     }
 
-    @AfterEach
-    void cleanup() {
-        setup.cleanup();
-    }
-
-    @Test
-    void upgradeFromPreviousVersion() throws InterruptedException, BucketAccessException, TimeoutException,
-            FileNotFoundException, URISyntaxException {
-        final PreviousExtensionVersion previousVersion = createPreviousVersion();
-        previousVersion.prepare();
-        previousVersion.install();
-        final String virtualTable = createVirtualSchema(previousVersion.getExtensionId(), PREVIOUS_VERSION);
-        verifyVirtualTableContainsData(virtualTable);
-        assertInstalledVersion(PREVIOUS_VERSION, previousVersion);
-        previousVersion.upgrade();
-        assertInstalledVersion(PROJECT_VERSION, previousVersion);
-        verifyVirtualTableContainsData(virtualTable);
-    }
-
-    private PreviousExtensionVersion createPreviousVersion() {
-        return setup.previousVersionManager().newVersion().currentVersion(PROJECT_VERSION) //
-                .previousVersion(PREVIOUS_VERSION) //
-                .adapterFileName(PREVIOUS_VERSION_JAR_FILE) //
-                .extensionFileName(EXTENSION_ID) //
-                .project("s3-document-files-virtual-schema") //
+    @Override
+    protected void createScripts() {
+        final String adapterJarBucketFsPath = "/buckets/bfsdefault/default/"
+                + IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH.getFileName().toString();
+        final ExasolSchema schema = setup.createExtensionSchema();
+        schema.createAdapterScriptBuilder("S3_FILES_ADAPTER")
+                .bucketFsContent("com.exasol.adapter.RequestDispatcher", adapterJarBucketFsPath).language(Language.JAVA)
                 .build();
+        schema.createUdfBuilder("IMPORT_FROM_S3_DOCUMENT_FILES").language(UdfScript.Language.JAVA)
+                .inputType(InputType.SET)
+                .parameter(GenericUdfCallHandler.PARAMETER_DOCUMENT_FETCHER, "VARCHAR(2000000)")
+                .parameter(GenericUdfCallHandler.PARAMETER_SCHEMA_MAPPING_REQUEST, "VARCHAR(2000000)")
+                .parameter(GenericUdfCallHandler.PARAMETER_CONNECTION_NAME, "VARCHAR(500)").emits()
+                .bucketFsContent(UdfEntryPoint.class.getName(), adapterJarBucketFsPath).build();
     }
 
-    private void assertInstalledVersion(final String expectedVersion, final PreviousExtensionVersion previousVersion) {
-        // The extension is installed twice (previous and current version), so each one returns one installation.
-        assertThat(setup.client().getInstallations(),
-                containsInAnyOrder(
-                        new InstallationsResponseInstallation().name("S3 Virtual Schema").version(expectedVersion)
-                                .id(EXTENSION_ID), //
-                        new InstallationsResponseInstallation().name("EXA_EXTENSIONS.S3_FILES_ADAPTER")
-                                .version(expectedVersion).id(previousVersion.getExtensionId())));
+    @Override
+    protected void assertScriptsExist() {
+        final String jarDirective = "%jar /buckets/bfsdefault/default/" + IntegrationTestSetup.ADAPTER_JAR + ";";
+        final String comment = "Created by Extension Manager for S3 Virtual Schema " + PROJECT_VERSION;
+        setup.exasolMetadata()
+                .assertScript(table()
+                        .row("IMPORT_FROM_S3_DOCUMENT_FILES", "UDF", "SET", "EMITS",
+                                allOf(containsString("%scriptclass " + UdfEntryPoint.class.getName() + ";"), //
+                                        containsString(jarDirective)),
+                                comment) //
+                        .row("S3_FILES_ADAPTER", "ADAPTER", null, null,
+                                allOf(containsString("%scriptclass " + RequestDispatcher.class.getName() + ";"), //
+                                        containsString(jarDirective)),
+                                comment) //
+                        .matches());
     }
 
-    private String createVirtualSchema(final String extensionId, final String extensionVersion) {
-        final String prefix = "vs-works-test-" + System.currentTimeMillis() + "/";
-        upload(prefix + "test-data-1.json", "{\"id\": 1, \"name\": \"abc\" }");
-        upload(prefix + "test-data-2.json", "{\"id\": 2, \"name\": \"xyz\" }");
-        final String virtualSchemaName = "MY_VS";
-        final EdmlDefinition mappingDefinition = getMappingDefinition(prefix + "test-data-*.json");
-        createInstance(extensionId, extensionVersion, virtualSchemaName, mappingDefinition);
-        return virtualSchemaName + "." + mappingDefinition.getDestinationTable();
+    @Override
+    protected void prepareInstance() {
+        upload(s3ImportPrefix + "test-data-1.json", "{\"id\": 1, \"name\": \"abc\" }");
+        upload(s3ImportPrefix + "test-data-2.json", "{\"id\": 2, \"name\": \"xyz\" }");
+
     }
 
-    private void verifyVirtualTableContainsData(final String virtualTable) {
+    private void upload(final String key, final String content) {
+        s3TestSetup.upload(s3BucketName, key, RequestBody.fromString(content));
+    }
+
+    @Override
+    protected void verifyVirtualTableContainsData(final String virtualSchemaName) {
+        final String virtualTable = "\"" + virtualSchemaName + "\".\"" + MAPPING_DESTINATION_TABLE + "\"";
         try (final ResultSet result = exasolTestSetup.createConnection().createStatement()
                 .executeQuery("SELECT ID, NAME FROM " + virtualTable + " ORDER BY ID ASC")) {
             assertThat(result, table().row(1L, "abc").row(2L, "xyz").matches());
@@ -135,34 +144,15 @@ class ExtensionIT {
         }
     }
 
-    private void upload(final String key, final String content) {
-        s3TestSetup.upload(s3BucketName, key, RequestBody.fromString(content));
-    }
-
-    private void createInstance(final String extensionId, final String extensionVersion, final String virtualSchemaName,
-            final EdmlDefinition mapping) {
-        setup.addVirtualSchemaToCleanupQueue(virtualSchemaName);
-        setup.addConnectionToCleanupQueue(virtualSchemaName.toUpperCase() + "_CONNECTION");
-        final String instanceName = setup.client().createInstance(extensionId, extensionVersion,
-                createValidParameters(virtualSchemaName, mapping, extensionVersion));
-        assertThat(instanceName, equalTo(virtualSchemaName));
-    }
-
-    private List<ParameterValue> createValidParameters(final String virtualSchemaName, final EdmlDefinition mapping,
-            final String extensionVersion) {
+    @Override
+    protected Collection<ParameterValue> createValidParameterValues() {
         final List<ParameterValue> parameters = new ArrayList<>();
         parameters.addAll(List.of( //
                 param("awsRegion", s3TestSetup.getRegion()), //
                 param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
                 param("awsSecretAccessKey", s3TestSetup.getPassword())));
-        if (extensionVersion.equals(PREVIOUS_VERSION)) {
-            parameters.add(param("virtualSchemaName", virtualSchemaName));
-            parameters.add(param("mapping", new EdmlSerializer().serialize(mapping)));
-        } else {
-            parameters.add(param("base-vs.virtual-schema-name", virtualSchemaName));
-            parameters.add(param("MAPPING", new EdmlSerializer().serialize(mapping)));
-        }
+        parameters.add(param("MAPPING", new EdmlSerializer().serialize(getMappingDefinition())));
 
         getInDatabaseS3Address().map(address -> param("awsEndpointOverride", address)) //
                 .ifPresent(parameters::add);
@@ -172,8 +162,12 @@ class ExtensionIT {
         return parameters;
     }
 
+    private EdmlDefinition getMappingDefinition() {
+        return getMappingDefinition(s3ImportPrefix + "test-data-*.json");
+    }
+
     private EdmlDefinition getMappingDefinition(final String source) {
-        return EdmlDefinition.builder().source(source).destinationTable("TEST") //
+        return EdmlDefinition.builder().source(source).destinationTable(MAPPING_DESTINATION_TABLE) //
                 .mapping(Fields.builder() //
                         .mapField("id", ToDecimalMapping.builder().build()) //
                         .mapField("name", ToVarcharMapping.builder().varcharColumnSize(200).build()) //
@@ -188,7 +182,12 @@ class ExtensionIT {
                 .map(InetSocketAddress::toString);
     }
 
-    private ParameterValue param(final String name, final String value) {
-        return new ParameterValue().name(name).value(value);
+    @Override
+    @Test
+    public void upgradeFromPreviousVersion() {
+        // This test can be removed once version 2.8.3 was released
+        setup.client().assertRequestFails(super::upgradeFromPreviousVersion, containsString(
+                "invalid parameters: Failed to validate parameter 'Name of the new virtual schema' (virtualSchemaName): This is a required parameter."),
+                equalTo(400));
     }
 }

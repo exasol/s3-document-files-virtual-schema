@@ -32,14 +32,14 @@ import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
 import com.exasol.extensionmanager.client.model.ParameterValue;
 import com.exasol.extensionmanager.itest.ExasolVersionCheck;
 import com.exasol.extensionmanager.itest.ExtensionManagerSetup;
-import com.exasol.extensionmanager.itest.base.AbstractExtensionIT;
+import com.exasol.extensionmanager.itest.base.AbstractVirtualSchemaExtensionIT;
 import com.exasol.extensionmanager.itest.base.ExtensionITConfig;
 import com.exasol.extensionmanager.itest.builder.ExtensionBuilder;
 import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
 import software.amazon.awssdk.core.sync.RequestBody;
 
-class ExtensionIT extends AbstractExtensionIT {
+class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     private static final Path EXTENSION_SOURCE_DIR = Paths.get("extension").toAbsolutePath();
     private static final String PROJECT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
     private static final String EXTENSION_ID = "s3-vs-extension.js";

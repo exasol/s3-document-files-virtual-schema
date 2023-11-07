@@ -234,6 +234,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     // The following tests fail for Exasol 8. They will be fixed in
     // https://github.com/exasol/s3-document-files-virtual-schema/issues/140
+    @Test
     @Override
     void testReadCsvWithTypesWithHeader() throws IOException, SQLException {
         if (isExasol8()) {
@@ -244,6 +245,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         }
     }
 
+    @Test
     @Override
     void testLoadRandomCsvFile() throws Exception {
         if (isExasol8()) {
@@ -254,6 +256,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         }
     }
 
+    @Test
     @Override
     void testReadCsvWithTypesWithoutHeader() throws IOException, SQLException {
         if (isExasol8()) {
@@ -264,6 +267,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         }
     }
 
+    @Test
     @Override
     void testReadParquetFile() throws IOException, SQLException {
         if (isExasol8()) {
@@ -274,6 +278,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         }
     }
 
+    @Test
     @Override
     void testReadParquetFileWithAutomaticInference() throws IOException, SQLException {
         if (isExasol8()) {

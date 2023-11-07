@@ -58,14 +58,16 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
 
     @Override
     protected ExtensionITConfig createConfig() {
+        final String previousVersion = "2.8.2";
         return ExtensionITConfig.builder().projectName("s3-document-files-virtual-schema") //
                 .extensionId(EXTENSION_ID) //
                 .currentVersion(PROJECT_VERSION) //
                 .expectedParameterCount(13) //
                 .extensionName("S3 Virtual Schema") //
                 .extensionDescription("Virtual Schema for document files on AWS S3") //
-                .previousVersion("2.8.2") //
-                .previousVersionJarFile("document-files-virtual-schema-dist-7.3.6-s3-2.8.2.jar").build();
+                .previousVersion(previousVersion) //
+                .previousVersionJarFile("document-files-virtual-schema-dist-7.3.6-s3-" + previousVersion + ".jar")
+                .build();
     }
 
     @BeforeAll

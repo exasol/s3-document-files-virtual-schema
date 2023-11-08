@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 2.8.3, released 2023-11-07
+# S3 Document Files Virtual Schema 2.8.3, released 2023-11-08
 
 Code name: Refactoring of Extension
 

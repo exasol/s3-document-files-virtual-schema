@@ -16,13 +16,17 @@ This release adapts the virtual schema to Exasol v8.
 
 #### Compile Dependency Updates
 
-* Updated `software.amazon.awssdk:s3:2.21.16` to `2.21.21`
+* Updated `com.exasol:virtual-schema-common-document-files:7.3.6` to `7.3.7`
+* Updated `software.amazon.awssdk:s3:2.21.16` to `2.21.23`
 
 #### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.582` to `1.12.587`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.582` to `1.12.589`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:2.0.4` to `2.1.0`
 * Updated `com.exasol:extension-manager-integration-test-java:0.5.5` to `0.5.6`
+* Updated `com.exasol:virtual-schema-common-document-files:7.3.6` to `7.3.7`
+* Updated `org.testcontainers:junit-jupiter:1.19.1` to `1.19.2`
+* Updated `org.testcontainers:localstack:1.19.1` to `1.19.2`
 
 #### Plugin Dependency Updates
 

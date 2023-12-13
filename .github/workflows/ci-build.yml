@@ -1,5 +1,4 @@
 name: CI Build
-
 on:
   push:
     branches:
@@ -7,18 +6,17 @@ on:
   pull_request:
 
 jobs:
-  build:
-    name: Build with Exasol ${{ matrix.exasol_db_version }}
-    runs-on: ubuntu-20.04 # UDFs fail with "VM error: Internal error: VM crashed" on ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        exasol_db_version: ["7.1.24", "8.23.1"]
-    env:
-      DEFAULT_EXASOL_DB_VERSION: "7.1.24"
+  matrix-build:
+    runs-on: ubuntu-20.04
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.exasol_db_version }}
       cancel-in-progress: true
+    strategy:
+      fail-fast: false
+      matrix:
+        exasol_db_version: ["8.23.1", "7.1.25"]
+    env:
+      DEFAULT_EXASOL_DB_VERSION: "8.23.1"
     steps:
       - name: Free Disk Space
         run: |
@@ -29,21 +27,21 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up JDK 11 & 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: |
             17
             11
           cache: "maven"
-      - name: Set up Node 18
-        uses: actions/setup-node@v3
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: "20"
           cache: "npm"
           cache-dependency-path: extension/package-lock.json
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: "1.20"
       - name: Cache Go modules
@@ -83,7 +81,7 @@ jobs:
         with:
           name: generated-classes.lst
           path: target/generated-classes.lst
-      - name: Publish Test Report
+      - name: Publish Test Report for Exasol ${{ matrix.exasol_db_version }}
         uses: scacap/action-surefire-report@v1
         if: ${{ always() && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
         with:
@@ -100,3 +98,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build:
+    needs: matrix-build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Build successful"

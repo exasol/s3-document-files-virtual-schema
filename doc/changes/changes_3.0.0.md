@@ -1,12 +1,39 @@
-# S3 Document Files Virtual Schema 3.0.0, released 2023-??-??
+# S3 Document Files Virtual Schema 3.0.0, released 2023-12-13
 
 Code name: Support Exasol 8
 
 ## Summary
 
+This release adds support for Exasol 8. This brings the following changes:
+
+### Remove support for `TIMESTAMP WITH LOCAL TIME ZONE`
+
+This release removes support for data type `TIMESTAMP WITH LOCAL TIME ZONE`. This type caused problems with the stricter type checks enabled by default in Exasol 8, causing pushdown queries for document based virtual schemas to fail with the following error:
+
+```
+Data type mismatch in column number 5 (1-indexed).Expected TIMESTAMP(3) WITH LOCAL TIME ZONE, but got TIMESTAMP(3).
+```
+
+We fixed this error by removing support `TIMESTAMP WITH LOCAL TIME ZONE` completely.
+
+###  Support `ALTER VIRTUAL SCHEMA SET`
+
+This release adds support for `ALTER VIRTUAL SCHEMA SET`. This will allow changing properties like `MAPPING` of a virtual schema without dropping and re-creating it:
+
+```sql
+-- Update EDML mapping of the virtual schema
+ALTER VIRTUAL SCHEMA MY_VIRTUAL_SCHEMA SET MAPPING = '...';
+
+-- Enable remote logging or change the log level
+ALTER VIRTUAL SCHEMA MY_VIRTUAL_SCHEMA SET DEBUG_ADDRESS = 'host:3000' LOG_LEVEL = 'FINEST';
+ALTER VIRTUAL SCHEMA MY_VIRTUAL_SCHEMA SET LOG_LEVEL = 'INFO';
+```
+
+See the [documentation for `ALTER SCHEMA`](https://docs.exasol.com/db/latest/sql/alter_schema.htm) for details.
+
 ## Features
 
-* #140: Adapted to Exasol v8
+* #140: Added support for Exasol 8
 
 ## Dependency Updates
 

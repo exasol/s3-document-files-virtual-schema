@@ -176,31 +176,38 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @Test
     void testClassList() throws BucketAccessException, FileNotFoundException, TimeoutException, SQLException {
+        final List<String> classList = getClassListFromVirtualSchema();
+        new ClassListVerifier(CLASS_LIST_IGNORES).verifyClassListFile(classList,
+                IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
+    }
+
+    private List<String> getClassListFromVirtualSchema()
+            throws BucketAccessException, TimeoutException, FileNotFoundException {
         final ClassListExtractor classListExtractor = new ClassListExtractor(SETUP.getBucket(),
                 SETUP::makeLocalServiceAvailableInExasol);
         final ExasolObjectFactory objectFactory = new ExasolObjectFactory(SETUP.getConnection(),
                 ExasolObjectConfiguration.builder().withJvmOptions(classListExtractor.getJvmOptions()).build());
-        final ExasolSchema schema = objectFactory.createSchema("ADAPTER_FOR_LIST");
-        final AdapterScript adapterScript = SETUP.createAdapterScript(schema);
-        final UdfScript udf = IntegrationTestSetup.createUdf(schema);
         AWS_S3_TEST_SETUP.upload(s3BucketName, "test-data-1.json",
                 RequestBody.fromString("{ \"id\": 1, \"name\": \"tom\" }"));
         final String mapping = getMappingDefinitionForSmallJsonFiles();
-        final VirtualSchema virtualSchema = SETUP.getPreconfiguredVirtualSchemaBuilder("VS_FOR_CLASS_LIST_EXTRACTION")
-                .adapterScript(adapterScript).properties(Map.of("MAPPING", mapping)).build();
-        final List<String> classList = classListExtractor.capture(() -> {
-            try (final ResultSet resultSet = getStatement()
-                    .executeQuery("SELECT * FROM " + virtualSchema.getFullyQualifiedName() + ".TEST;")) {
+        try (final ExasolSchema schema = objectFactory.createSchema("ADAPTER_FOR_LIST");
+                final AdapterScript adapterScript = SETUP.createAdapterScript(schema);
+                final UdfScript udf = IntegrationTestSetup.createUdf(schema);
+                final VirtualSchema virtualSchema = SETUP
+                        .getPreconfiguredVirtualSchemaBuilder("VS_FOR_CLASS_LIST_EXTRACTION")
+                        .adapterScript(adapterScript).properties(Map.of("MAPPING", mapping)).build()) {
+            return readClassList(classListExtractor, virtualSchema);
+        }
+    }
+
+    private List<String> readClassList(final ClassListExtractor classListExtractor, final VirtualSchema virtualSchema) {
+        final String query = "SELECT * FROM " + virtualSchema.getFullyQualifiedName() + ".TEST";
+        return classListExtractor.capture(() -> {
+            try (final ResultSet resultSet = getStatement().executeQuery(query)) {
                 resultSet.next();
                 assertThat(resultSet.getInt("ID"), equalTo(1));
             }
         });
-        virtualSchema.drop();
-        adapterScript.drop();
-        udf.drop();
-        schema.drop();
-        new ClassListVerifier(CLASS_LIST_IGNORES).verifyClassListFile(classList,
-                IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
     }
 
     private String getMappingDefinitionForSmallJsonFiles() {

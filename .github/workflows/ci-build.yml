@@ -16,6 +16,9 @@ jobs:
         exasol_db_version: ["7.1.24", "8.23.1"]
     env:
       DEFAULT_EXASOL_DB_VERSION: "7.1.24"
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.exasol_db_version }}
+      cancel-in-progress: true
     steps:
       - name: Free Disk Space
         run: |

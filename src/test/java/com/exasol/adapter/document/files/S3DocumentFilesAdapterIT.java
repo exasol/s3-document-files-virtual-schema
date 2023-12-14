@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -18,10 +17,8 @@ import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.function.Executable;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.exasol.adapter.document.edml.*;
@@ -179,31 +176,38 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @Test
     void testClassList() throws BucketAccessException, FileNotFoundException, TimeoutException, SQLException {
+        final List<String> classList = getClassListFromVirtualSchema();
+        new ClassListVerifier(CLASS_LIST_IGNORES).verifyClassListFile(classList,
+                IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
+    }
+
+    private List<String> getClassListFromVirtualSchema()
+            throws BucketAccessException, TimeoutException, FileNotFoundException {
         final ClassListExtractor classListExtractor = new ClassListExtractor(SETUP.getBucket(),
                 SETUP::makeLocalServiceAvailableInExasol);
         final ExasolObjectFactory objectFactory = new ExasolObjectFactory(SETUP.getConnection(),
                 ExasolObjectConfiguration.builder().withJvmOptions(classListExtractor.getJvmOptions()).build());
-        final ExasolSchema schema = objectFactory.createSchema("ADAPTER_FOR_LIST");
-        final AdapterScript adapterScript = SETUP.createAdapterScript(schema);
-        final UdfScript udf = IntegrationTestSetup.createUdf(schema);
         AWS_S3_TEST_SETUP.upload(s3BucketName, "test-data-1.json",
                 RequestBody.fromString("{ \"id\": 1, \"name\": \"tom\" }"));
         final String mapping = getMappingDefinitionForSmallJsonFiles();
-        final VirtualSchema virtualSchema = SETUP.getPreconfiguredVirtualSchemaBuilder("VS_FOR_CLASS_LIST_EXTRACTION")
-                .adapterScript(adapterScript).properties(Map.of("MAPPING", mapping)).build();
-        final List<String> classList = classListExtractor.capture(() -> {
-            try (final ResultSet resultSet = getStatement()
-                    .executeQuery("SELECT * FROM " + virtualSchema.getFullyQualifiedName() + ".TEST;")) {
+        try (final ExasolSchema schema = objectFactory.createSchema("ADAPTER_FOR_LIST");
+                final AdapterScript adapterScript = SETUP.createAdapterScript(schema);
+                final UdfScript udf = IntegrationTestSetup.createUdf(schema);
+                final VirtualSchema virtualSchema = SETUP
+                        .getPreconfiguredVirtualSchemaBuilder("VS_FOR_CLASS_LIST_EXTRACTION")
+                        .adapterScript(adapterScript).properties(Map.of("MAPPING", mapping)).build()) {
+            return readClassList(classListExtractor, virtualSchema);
+        }
+    }
+
+    private List<String> readClassList(final ClassListExtractor classListExtractor, final VirtualSchema virtualSchema) {
+        final String query = "SELECT * FROM " + virtualSchema.getFullyQualifiedName() + ".TEST";
+        return classListExtractor.capture(() -> {
+            try (final ResultSet resultSet = getStatement().executeQuery(query)) {
                 resultSet.next();
                 assertThat(resultSet.getInt("ID"), equalTo(1));
             }
         });
-        virtualSchema.drop();
-        adapterScript.drop();
-        udf.drop();
-        schema.drop();
-        new ClassListVerifier(CLASS_LIST_IGNORES).verifyClassListFile(classList,
-                IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
     }
 
     private String getMappingDefinitionForSmallJsonFiles() {
@@ -229,83 +233,6 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
             AWS_S3_TEST_SETUP.getS3Client().createBucket(request -> request.bucket(bucketName));
         } catch (final BucketAlreadyOwnedByYouException | BucketAlreadyExistsException exception) {
             // ignore
-        }
-    }
-
-    // The following tests fail for Exasol 8. They will be fixed in
-    // https://github.com/exasol/s3-document-files-virtual-schema/issues/140
-    @Test
-    @Override
-    void testReadCsvWithTypesWithHeader() throws IOException, SQLException {
-        if (isExasol8()) {
-            assertSqlException(super::testReadCsvWithTypesWithHeader, containsString(
-                    "Data type mismatch in column number 7 (1-indexed).Expected TIMESTAMP(3) WITH LOCAL TIME ZONE, but got TIMESTAMP(3)."));
-        } else {
-            super.testReadCsvWithTypesWithHeader();
-        }
-    }
-
-    @Test
-    @Override
-    void testLoadRandomCsvFile() throws Exception {
-        if (isExasol8()) {
-            assertSqlException(super::testLoadRandomCsvFile, containsString(
-                    "Data type mismatch in column number 6 (1-indexed).Expected TIMESTAMP(3) WITH LOCAL TIME ZONE, but got TIMESTAMP(3)."));
-        } else {
-            super.testLoadRandomCsvFile();
-        }
-    }
-
-    @Test
-    @Override
-    void testReadCsvWithTypesWithoutHeader() throws IOException, SQLException {
-        if (isExasol8()) {
-            assertSqlException(super::testReadCsvWithTypesWithoutHeader, containsString(
-                    "Data type mismatch in column number 7 (1-indexed).Expected TIMESTAMP(3) WITH LOCAL TIME ZONE, but got TIMESTAMP(3)."));
-        } else {
-            super.testReadCsvWithTypesWithoutHeader();
-        }
-    }
-
-    @Test
-    @Override
-    void testReadParquetFile() throws IOException, SQLException {
-        if (isExasol8()) {
-            assertSqlException(super::testReadParquetFile, containsString(
-                    "Data type mismatch in column number 5 (1-indexed).Expected TIMESTAMP(3) WITH LOCAL TIME ZONE, but got TIMESTAMP(3)."));
-        } else {
-            super.testReadParquetFile();
-        }
-    }
-
-    @Test
-    @Override
-    void testReadParquetFileWithAutomaticInference() throws IOException, SQLException {
-        if (isExasol8()) {
-            assertSqlException(super::testReadParquetFileWithAutomaticInference, containsString(
-                    "Data type mismatch in column number 5 (1-indexed).Expected TIMESTAMP(3) WITH LOCAL TIME ZONE, but got TIMESTAMP(3)."));
-        } else {
-            super.testReadParquetFileWithAutomaticInference();
-        }
-    }
-
-    private void assertSqlException(final Executable executable, final Matcher<String> exceptionMatcher) {
-        final SQLException exception = assertThrows(SQLException.class, executable);
-        assertThat(exception.getMessage(), exceptionMatcher);
-    }
-
-    private boolean isExasol8() {
-        return getExasolMajorVersion().equals("8");
-    }
-
-    private static String getExasolMajorVersion() {
-        try (Statement stmt = SETUP.getConnection().createStatement()) {
-            final ResultSet result = stmt
-                    .executeQuery("SELECT PARAM_VALUE FROM SYS.EXA_METADATA WHERE PARAM_NAME='databaseMajorVersion'");
-            assertTrue(result.next(), "no result");
-            return result.getString(1);
-        } catch (final SQLException exception) {
-            throw new IllegalStateException("Failed to query Exasol version: " + exception.getMessage(), exception);
         }
     }
 }

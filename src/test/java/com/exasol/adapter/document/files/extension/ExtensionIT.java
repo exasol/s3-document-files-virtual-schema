@@ -2,7 +2,8 @@ package com.exasol.adapter.document.files.extension;
 
 import static com.exasol.matcher.ResultSetStructureMatcher.table;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
 import java.net.InetSocketAddress;
@@ -13,7 +14,8 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 
 import com.exasol.adapter.RequestDispatcher;
 import com.exasol.adapter.document.GenericUdfCallHandler;
@@ -58,7 +60,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
 
     @Override
     protected ExtensionITConfig createConfig() {
-        final String previousVersion = "2.8.2";
+        final String previousVersion = "2.8.3";
         return ExtensionITConfig.builder().projectName("s3-document-files-virtual-schema") //
                 .extensionId(EXTENSION_ID) //
                 .currentVersion(PROJECT_VERSION) //
@@ -154,7 +156,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
                 param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
                 param("awsSecretAccessKey", s3TestSetup.getPassword())));
-        parameters.add(param("MAPPING", new EdmlSerializer().serialize(getMappingDefinition())));
+        parameters.add(param("MAPPING", getMappingParameterValue()));
 
         getInDatabaseS3Address().map(address -> param("awsEndpointOverride", address)) //
                 .ifPresent(parameters::add);
@@ -162,6 +164,14 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
             parameters.add(param("awsSessionToken", s3TestSetup.getMfaToken().get()));
         }
         return parameters;
+    }
+
+    private String getMappingParameterValue() {
+        final String edmlJson = new EdmlSerializer().serialize(getMappingDefinition());
+        // Patch EDML schema version to fix test with previous version.
+        // This can be removed once version 3.0.0 of of the S3 VS is released.
+        return edmlJson.replaceAll("https://schemas.exasol.com/edml-2.0.0.json",
+                "https://schemas.exasol.com/edml-1.5.0.json");
     }
 
     private EdmlDefinition getMappingDefinition() {
@@ -182,14 +192,5 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
         return s3TestSetup.getEntrypoint()
                 .map(endpoint -> exasolTestSetup.makeTcpServiceAccessibleFromDatabase(endpoint))
                 .map(InetSocketAddress::toString);
-    }
-
-    @Override
-    @Test
-    public void upgradeFromPreviousVersion() {
-        // This test can be removed once version 2.8.3 was released
-        setup.client().assertRequestFails(super::upgradeFromPreviousVersion, containsString(
-                "invalid parameters: Failed to validate parameter 'Name of the new virtual schema' (virtualSchemaName): This is a required parameter."),
-                equalTo(400));
     }
 }

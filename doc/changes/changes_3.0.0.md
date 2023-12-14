@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 3.0.0, released 2023-12-13
+# S3 Document Files Virtual Schema 3.0.0, released 2023-12-14
 
 Code name: Support Exasol 8
 

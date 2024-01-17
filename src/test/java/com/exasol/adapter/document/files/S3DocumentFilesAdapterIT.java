@@ -17,7 +17,6 @@ import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -31,7 +30,6 @@ import com.exasol.classlistextractor.verifier.ClassListVerifier;
 import com.exasol.dbbuilder.dialects.DatabaseObjectException;
 import com.exasol.dbbuilder.dialects.exasol.*;
 import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
-import com.exasol.matcher.ResultSetStructureMatcher;
 import com.exasol.matcher.TypeMatchMode;
 import com.exasol.performancetestrecorder.PerformanceTestRecorder;
 import com.exasol.smalljsonfilesfixture.SmallJsonFilesTestSetup;
@@ -140,7 +138,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         try {
             this.createJsonVirtualSchema();
             final ResultSet result = this.getStatement().executeQuery("SELECT ID FROM TEST.BOOKS ORDER BY ID ASC;");
-            MatcherAssert.assertThat(result, ResultSetStructureMatcher.table().row("book-1").row("book-2").matches());
+            assertThat(result, table().row("book-1").row("book-2").matches());
         } finally {
             SETUP.setConnectionDefinition(originalConnection);
         }
@@ -154,19 +152,17 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         final String mapping = getMappingDefinitionForSmallJsonFiles();
         final JsonObjectBuilder connectionConfig = SETUP.getConnectionConfig();
         connectionConfig.add("s3Bucket", SMALL_JSON_FILES_FIXTURE_BUCKET);
-        final ConnectionDefinition connection = SETUP.createConnectionDefinition(connectionConfig);
-        try {
-            SETUP.createVirtualSchema("SMALL_JSON_FILES_VS", mapping, connection);
-            for (int runCounter = 0; runCounter < 5; runCounter++) {
+        try (final ConnectionDefinition connection = SETUP.createConnectionDefinition(connectionConfig);
+                VirtualSchema virtualSchema = SETUP.createVirtualSchema("SMALL_JSON_FILES_VS", mapping, connection)) {
+            final String sql = "SELECT COUNT(*) FROM (SELECT * FROM " + virtualSchema.getFullyQualifiedName()
+                    + ".TEST)";
+            for (int runCounter = 0; runCounter < 1; runCounter++) {
                 PerformanceTestRecorder.getInstance().recordExecution(testInfo, () -> {
-                    try (final ResultSet resultSet = getStatement()
-                            .executeQuery("SELECT COUNT(*) FROM (SELECT * FROM SMALL_JSON_FILES_VS.TEST)")) {
+                    try (final ResultSet resultSet = getStatement().executeQuery(sql)) {
                         assertThat(resultSet, table().row(numberOfJsonFiles).matches(TypeMatchMode.NO_JAVA_TYPE_CHECK));
                     }
                 });
             }
-        } finally {
-            connection.drop();
         }
     }
 

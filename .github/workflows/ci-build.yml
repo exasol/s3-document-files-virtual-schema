@@ -71,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: generated-classes.lst
+          name: generated-classes-${{ matrix.exasol_db_version }}.lst
           path: target/generated-classes.lst
       - name: Publish Test Report for Exasol ${{ matrix.exasol_db_version }}
         uses: scacap/action-surefire-report@v1

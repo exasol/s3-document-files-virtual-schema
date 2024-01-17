@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 3.0.1, released 2024-01-17
+# S3 Document Files Virtual Schema 3.0.1, released 2024-01-18
 
 Code name: Fix CVE-2024-21634 in test dependency `software.amazon.ion:ion-java`
 

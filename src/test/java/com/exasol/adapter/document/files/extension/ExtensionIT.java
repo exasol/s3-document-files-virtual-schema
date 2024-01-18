@@ -75,7 +75,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     @BeforeAll
     static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
         if (System.getProperty("com.exasol.dockerdb.image") == null) {
-            System.setProperty("com.exasol.dockerdb.image", "8.23.1");
+            System.setProperty("com.exasol.dockerdb.image", "8.24.0");
         }
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
         ExasolVersionCheck.assumeExasolVersion8(exasolTestSetup);

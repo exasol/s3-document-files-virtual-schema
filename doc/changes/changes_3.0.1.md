@@ -8,7 +8,7 @@ This release fixes CVE-2024-21634 (CWE-770: Allocation of Resources Without Limi
 
 ## Security
 
-* #91: Fixed CVE-2024-21634 in test dependency `software.amazon.ion:ion-java`
+* #144: Fixed CVE-2024-21634 in test dependency `software.amazon.ion:ion-java`
 
 ## Dependency Updates
 

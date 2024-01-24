@@ -16,7 +16,7 @@ export function createExtension(): ExasolExtension {
         description: "Virtual Schema for document files on AWS S3",
         category: "document-virtual-schema",
         version: CONFIG.version,
-        file: { name: CONFIG.fileName, size: CONFIG.fileSizeBytes },
+        files: [{ name: CONFIG.fileName, size: CONFIG.fileSizeBytes }],
         scripts: getUdfScriptDefinitions(),
         virtualSchemaAdapterScript: ADAPTER_SCRIPT_NAME,
         scriptVersionExtractor: jarFileVersionExtractor(/document-files-virtual-schema-dist-[\d.]+-s3-(\d+\.\d+\.\d+).jar/),

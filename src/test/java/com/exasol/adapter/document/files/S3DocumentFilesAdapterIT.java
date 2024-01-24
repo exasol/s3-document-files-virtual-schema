@@ -137,8 +137,10 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         SETUP.setConnectionDefinition(pathStyleConnection);
         try {
             this.createJsonVirtualSchema();
-            final ResultSet result = this.getStatement().executeQuery("SELECT ID FROM TEST.BOOKS ORDER BY ID ASC;");
-            assertThat(result, table().row("book-1").row("book-2").matches());
+            try (final ResultSet result = this.getStatement()
+                    .executeQuery("SELECT ID FROM TEST.BOOKS ORDER BY ID ASC;")) {
+                assertThat(result, table().row("book-1").row("book-2").matches());
+            }
         } finally {
             SETUP.setConnectionDefinition(originalConnection);
         }
@@ -152,11 +154,11 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         final String mapping = getMappingDefinitionForSmallJsonFiles();
         final JsonObjectBuilder connectionConfig = SETUP.getConnectionConfig();
         connectionConfig.add("s3Bucket", SMALL_JSON_FILES_FIXTURE_BUCKET);
-        try (final ConnectionDefinition connection = SETUP.createConnectionDefinition(connectionConfig);
-                VirtualSchema virtualSchema = SETUP.createVirtualSchema("SMALL_JSON_FILES_VS", mapping, connection)) {
+        try (final ConnectionDefinition connection = SETUP.createConnectionDefinition(connectionConfig)) {
+            final VirtualSchema virtualSchema = SETUP.createVirtualSchema("SMALL_JSON_FILES_VS", mapping, connection);
             final String sql = "SELECT COUNT(*) FROM (SELECT * FROM " + virtualSchema.getFullyQualifiedName()
                     + ".TEST)";
-            for (int runCounter = 0; runCounter < 1; runCounter++) {
+            for (int runCounter = 0; runCounter < 5; runCounter++) {
                 PerformanceTestRecorder.getInstance().recordExecution(testInfo, () -> {
                     try (final ResultSet resultSet = getStatement().executeQuery(sql)) {
                         assertThat(resultSet, table().row(numberOfJsonFiles).matches(TypeMatchMode.NO_JAVA_TYPE_CHECK));

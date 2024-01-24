@@ -16,7 +16,7 @@ export function createExtension(): ExasolExtension {
         description: "Virtual Schema for document files on AWS S3",
         category: "document-virtual-schema",
         version: CONFIG.version,
-        file: { name: CONFIG.fileName, size: CONFIG.fileSizeBytes },
+        files: [{ name: CONFIG.fileName, size: CONFIG.fileSizeBytes }],
         scripts: getUdfScriptDefinitions(),
         virtualSchemaAdapterScript: ADAPTER_SCRIPT_NAME,
         scriptVersionExtractor: jarFileVersionExtractor(/document-files-virtual-schema-dist-[\d.]+-s3-(\d+\.\d+\.\d+).jar/),
@@ -64,7 +64,7 @@ function getVirtualSchemaParameterDefinitions(): Parameter[] {
             id: "MAPPING", name: "EDML Mapping", type: "string",
             description: "See documentation at https://github.com/exasol/virtual-schema-common-document/blob/main/doc/user_guide/edml_user_guide.md",
             placeholder: `{
-                  "$schema": "https://schemas.exasol.com/edml-1.5.0.json",
+                  "$schema": "https://schemas.exasol.com/edml-2.0.0.json",
                   "source": "path/to/books.csv",
                   "destinationTable": "BOOKS",
                   "description": "Example mapping",

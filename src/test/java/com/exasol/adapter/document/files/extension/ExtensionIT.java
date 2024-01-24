@@ -60,7 +60,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
 
     @Override
     protected ExtensionITConfig createConfig() {
-        final String previousVersion = "2.8.3";
+        final String previousVersion = "3.0.1";
         return ExtensionITConfig.builder().projectName("s3-document-files-virtual-schema") //
                 .extensionId(EXTENSION_ID) //
                 .currentVersion(PROJECT_VERSION) //
@@ -68,7 +68,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
                 .extensionName("S3 Virtual Schema") //
                 .extensionDescription("Virtual Schema for document files on AWS S3") //
                 .previousVersion(previousVersion) //
-                .previousVersionJarFile("document-files-virtual-schema-dist-7.3.6-s3-" + previousVersion + ".jar")
+                .previousVersionJarFile("document-files-virtual-schema-dist-8.0.0-s3-" + previousVersion + ".jar")
                 .build();
     }
 
@@ -156,7 +156,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
                 param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
                 param("awsSecretAccessKey", s3TestSetup.getPassword())));
-        parameters.add(param("MAPPING", getMappingParameterValue()));
+        parameters.add(param("MAPPING", new EdmlSerializer().serialize(getMappingDefinition())));
 
         getInDatabaseS3Address().map(address -> param("awsEndpointOverride", address)) //
                 .ifPresent(parameters::add);
@@ -164,14 +164,6 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
             parameters.add(param("awsSessionToken", s3TestSetup.getMfaToken().get()));
         }
         return parameters;
-    }
-
-    private String getMappingParameterValue() {
-        final String edmlJson = new EdmlSerializer().serialize(getMappingDefinition());
-        // Patch EDML schema version to fix test with previous version.
-        // This can be removed once version 3.0.0 of of the S3 VS is released.
-        return edmlJson.replaceAll("https://schemas.exasol.com/edml-2.0.0.json",
-                "https://schemas.exasol.com/edml-1.5.0.json");
     }
 
     private EdmlDefinition getMappingDefinition() {

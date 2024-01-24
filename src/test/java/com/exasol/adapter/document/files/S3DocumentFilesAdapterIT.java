@@ -156,7 +156,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
                 VirtualSchema virtualSchema = SETUP.createVirtualSchema("SMALL_JSON_FILES_VS", mapping, connection)) {
             final String sql = "SELECT COUNT(*) FROM (SELECT * FROM " + virtualSchema.getFullyQualifiedName()
                     + ".TEST)";
-            for (int runCounter = 0; runCounter < 1; runCounter++) {
+            for (int runCounter = 0; runCounter < 5; runCounter++) {
                 PerformanceTestRecorder.getInstance().recordExecution(testInfo, () -> {
                     try (final ResultSet resultSet = getStatement().executeQuery(sql)) {
                         assertThat(resultSet, table().row(numberOfJsonFiles).matches(TypeMatchMode.NO_JAVA_TYPE_CHECK));

@@ -15,7 +15,7 @@ Code name:
 #### Compile Dependency Updates
 
 * Updated `com.exasol:virtual-schema-common-document-files:8.0.0` to `8.0.1`
-* Updated `software.amazon.awssdk:s3:2.23.9` to `2.25.6`
+* Updated `software.amazon.awssdk:s3:2.23.9` to `2.25.7`
 
 #### Runtime Dependency Updates
 
@@ -23,9 +23,11 @@ Code name:
 
 #### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.643` to `1.12.676`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.643` to `1.12.677`
+* Updated `com.exasol:exasol-test-setup-abstraction-java:2.1.0` to `2.1.1`
 * Updated `com.exasol:hamcrest-resultset-matcher:1.6.4` to `1.6.5`
 * Updated `com.exasol:java-class-list-verifier:0.2.5` to `0.2.6`
+* Updated `com.exasol:test-db-builder-java:3.5.3` to `3.5.4`
 * Updated `com.exasol:udf-debugging-java:0.6.11` to `0.6.12`
 * Updated `com.exasol:virtual-schema-common-document-files:8.0.0` to `8.0.1`
 * Updated `com.fasterxml.jackson.core:jackson-databind:2.16.1` to `2.16.2`

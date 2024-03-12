@@ -16,6 +16,9 @@ build:
     - "8.24.0"
     - "7.1.25"
 excludes:
+  # Requires custom build steps for configuring S3 credentials
   - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build.yml'"
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_prepare_original_checksum.yml'"
+  # Upload custom release artifact extension
   - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_upload_github_release_assets.yml'"
+  - "W-PK-CORE-153: Project-keeper version 4.1.0 is outdated. Please update project-keeper to latest version 4.2.0."

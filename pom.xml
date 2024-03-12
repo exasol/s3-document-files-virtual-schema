@@ -204,14 +204,22 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint:all,-path</arg>
+                        <arg>-Werror</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.sonatype.ossindex.maven</groupId>
                 <artifactId>ossindex-maven-plugin</artifactId>
                 <configuration>
                     <excludeVulnerabilityIds>
-                        <!-- Transitive dependency fr.turri:aXMLRPC used by com.exasol:bucketfs-java.
-                        CVE-2020-36641 is reported to be fixed in aXMLRPC 1.12.1. We use version 1.13.0, so this is a false
-                        positive. -->
-                        <exclude>CVE-2020-36641</exclude>
+                        <!-- Transitive test dependency xerces:xercesImpl:jar:2.12.2. We assume that we only connect to the known endpoint ExaOperations.-->
+                        <exclude>CVE-2017-10355</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>

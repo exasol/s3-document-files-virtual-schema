@@ -11,6 +11,8 @@ This release vulnerabilities in the following compile dependencies:
   * CVE-2024-26308
   * CVE-2024-25710
 
+**Excluded Vulnerability** We accept vulnerability CVE-2017-10355 (CWE-833: Deadlock) in test dependency `xerces:xercesImpl:jar:2.12.2` as we assume that we only connect to the known endpoint ExaOperations.
+
 ## Security
 
 * #149: Fixed CVE-2023-52428 in `com.nimbusds:nimbus-jose-jwt:jar:9.8.1:compile`

@@ -258,6 +258,14 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <useModulePath>false</useModulePath>
+                    <systemPropertyVariables>
+                        <!-- Avoid exception running integration tests caused by wrong XML parser (xerces:xercesImpl) beeing loaded:
+                             java.lang.IllegalArgumentException: Property 'http://javax.xml.XMLConstants/property/accessExternalDTD' is not recognized.
+                                at org.apache.xerces.jaxp.DocumentBuilderFactoryImpl.setAttribute(Unknown Source)
+                             We can't exclude xerces:xercesImpl because it's required for performance tests, so we explicitly select the correct parser here.
+                        -->
+                        <javax.xml.parsers.DocumentBuilderFactory>com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl</javax.xml.parsers.DocumentBuilderFactory>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             <plugin>

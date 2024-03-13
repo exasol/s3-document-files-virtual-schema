@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 3.0.3, released 2024-03-12
+# S3 Document Files Virtual Schema 3.0.3, released 2024-03-13
 
 Code name: Fix vulnerabilities CVE-2023-52428, CVE-2024-26308 and CVE-2024-25710 in compile dependencies
 

@@ -179,6 +179,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
                 IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
     }
 
+    @SuppressWarnings("try") // auto-closeable resource udf is never referenced in body of corresponding try statement
     private List<String> getClassListFromVirtualSchema()
             throws BucketAccessException, TimeoutException, FileNotFoundException {
         final ClassListExtractor classListExtractor = new ClassListExtractor(SETUP.getBucket(),

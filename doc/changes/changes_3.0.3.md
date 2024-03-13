@@ -25,8 +25,8 @@ This release vulnerabilities in the following compile dependencies:
 
 #### Compile Dependency Updates
 
-* Updated `com.exasol:virtual-schema-common-document-files:8.0.0` to `8.0.1`
-* Updated `software.amazon.awssdk:s3:2.23.9` to `2.25.7`
+* Updated `com.exasol:virtual-schema-common-document-files:8.0.0` to `8.0.2`
+* Updated `software.amazon.awssdk:s3:2.23.9` to `2.25.8`
 
 #### Runtime Dependency Updates
 
@@ -34,14 +34,15 @@ This release vulnerabilities in the following compile dependencies:
 
 #### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.643` to `1.12.677`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.643` to `1.12.678`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:2.1.0` to `2.1.1`
+* Updated `com.exasol:extension-manager-integration-test-java:0.5.7` to `0.5.8`
 * Updated `com.exasol:hamcrest-resultset-matcher:1.6.4` to `1.6.5`
 * Updated `com.exasol:java-class-list-verifier:0.2.5` to `0.2.6`
 * Updated `com.exasol:test-db-builder-java:3.5.3` to `3.5.4`
 * Updated `com.exasol:udf-debugging-java:0.6.11` to `0.6.12`
-* Updated `com.exasol:virtual-schema-common-document-files:8.0.0` to `8.0.1`
-* Updated `com.fasterxml.jackson.core:jackson-databind:2.16.1` to `2.16.2`
+* Updated `com.exasol:virtual-schema-common-document-files:8.0.0` to `8.0.2`
+* Updated `com.fasterxml.jackson.core:jackson-databind:2.16.1` to `2.17.0`
 * Updated `nl.jqno.equalsverifier:equalsverifier:3.15.6` to `3.15.8`
 * Updated `org.junit.jupiter:junit-jupiter-engine:5.10.1` to `5.10.2`
 * Updated `org.junit.jupiter:junit-jupiter-params:5.10.1` to `5.10.2`

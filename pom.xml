@@ -9,7 +9,7 @@
     <properties>
         <junit.version>5.10.2</junit.version>
         <org.testcontainers.version>1.19.7</org.testcontainers.version>
-        <vs-common-document-files.version>8.0.1</vs-common-document-files.version>
+        <vs-common-document-files.version>8.0.2</vs-common-document-files.version>
         <!-- Additional sonar configuration for analyzing TypeScript extension -->
         <sonar.sources>src/main/,extension/src/</sonar.sources>
         <sonar.exclusions>extension/src/*.test.ts</sonar.exclusions>
@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.25.7</version>
+                <version>2.25.8</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -136,7 +136,7 @@
             <!-- Required by org.testcontainer:localstack -->
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.677</version>
+            <version>1.12.678</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -190,14 +190,14 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>extension-manager-integration-test-java</artifactId>
-            <version>0.5.7</version>
+            <version>0.5.8</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- Required for integration testing the extension. This is required by extension-manager-integration-test-java but seems to be overwritten by another dependency. -->
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.16.2</version>
+            <version>2.17.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

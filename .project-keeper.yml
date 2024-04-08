@@ -52,6 +52,7 @@ build:
           stepId: build-pk-verify
           content:
             name: Run tests and build with Maven
+            id: build-pk-verify
             run: |
               mvn --batch-mode clean verify \
                   -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \

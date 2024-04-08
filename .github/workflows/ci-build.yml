@@ -27,7 +27,7 @@ jobs:
       matrix:
         exasol_db_version: [
           8.24.0,
-          7.1.25
+          7.1.26
         ]
         
     env: {
@@ -55,6 +55,26 @@ jobs:
             11
             17
           cache: maven
+      - name: Set up Node 20
+        id: setup-node
+        uses: actions/setup-node@v4
+        with: {
+          node-version: '20',
+          cache: npm,
+          cache-dependency-path: extension/package-lock.json
+        }
+      - name: Create test_config.properties
+        id: create-test-config
+        run: |
+          echo "owner = ${{ secrets.AWS_TAG_OWNER }}" > test_config.properties
+          echo "s3CacheBucket = persistent-s3-vs-test-file-cache" >> test_config.properties
+      - name: Set up Go
+        id: setup-go
+        uses: actions/setup-go@v5
+        with: {
+          go-version: '1.21',
+          cache-dependency-path: pom.xml
+        }
       - name: Cache SonarCloud packages
         id: cache-sonar
         uses: actions/cache@v4
@@ -76,7 +96,16 @@ jobs:
               -DtrimStackTrace=false \
               -Dcom.exasol.dockerdb.image=${{ matrix.exasol_db_version }}
         env: {
-          EXASOL_DB_VERSION: '${{ matrix.exasol_db_version }}'
+          AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}',
+          AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}',
+          AWS_REGION: eu-central-1
+        }
+      - name: Upload generated class list to artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with: {
+          name: 'generated-classes-${{ matrix.exasol_db_version }}.lst',
+          path: target/generated-classes.lst
         }
       - name: Sonar analysis
         id: sonar-analysis

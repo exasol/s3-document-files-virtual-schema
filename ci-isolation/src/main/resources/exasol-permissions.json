@@ -46,6 +46,7 @@
         "iam:GetRole",
         "iam:CreateRole",
         "iam:DeleteRole",
+        "iam:TagRole",
         "iam:PutRolePolicy",
         "iam:DetachRolePolicy",
         "iam:DeleteRolePolicy",

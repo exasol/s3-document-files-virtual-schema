@@ -71,3 +71,5 @@ build:
             with:
               name: generated-classes-${{ matrix.exasol_db_version }}.lst
               path: target/generated-classes.lst
+excludes:
+  - "E-PK-CORE-17: Missing required file: 'release_config.yml'"

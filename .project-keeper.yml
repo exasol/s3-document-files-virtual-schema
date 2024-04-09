@@ -7,6 +7,8 @@ sources:
       - udf_coverage
   - type: npm
     path: extension/package.json
+    artifacts:
+      - dist/s3-vs-extension.js
 version:
   fromSource: pom.xml
 build:
@@ -14,11 +16,60 @@ build:
   freeDiskSpace: true
   exasolDbVersions:
     - "8.24.0"
-    - "7.1.25"
+    - "7.1.26"
+  workflows:
+    - name: ci-build.yml
+      stepCustomizations:
+        - action: INSERT_AFTER
+          stepId: setup-java
+          content:
+            name: Set up Node 20
+            id: setup-node
+            uses: actions/setup-node@v4
+            with:
+              node-version: "20"
+              cache: "npm"
+              cache-dependency-path: extension/package-lock.json
+        - action: INSERT_AFTER
+          stepId: setup-node
+          content:
+            name: Set up Go
+            id: setup-go
+            uses: actions/setup-go@v5
+            with:
+              go-version: "1.21"
+              cache-dependency-path: pom.xml
+        - action: INSERT_AFTER
+          stepId: setup-node
+          content:
+            name: Create test_config.properties
+            id: create-test-config
+            run: |
+              echo "owner = ${{ secrets.AWS_TAG_OWNER }}" > test_config.properties
+              echo "s3CacheBucket = persistent-s3-vs-test-file-cache" >> test_config.properties
+
+        - action: REPLACE
+          stepId: build-pk-verify
+          content:
+            name: Run tests and build with Maven
+            id: build-pk-verify
+            run: |
+              mvn --batch-mode clean verify \
+                  -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+                  -DtrimStackTrace=false \
+                  -Dcom.exasol.dockerdb.image=${{ matrix.exasol_db_version }}
+            env:
+              AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              AWS_REGION: "eu-central-1"
+        - action: INSERT_AFTER
+          stepId: build-pk-verify
+          content:
+            name: Upload generated class list to artifacts
+            uses: actions/upload-artifact@v4
+            if: always()
+            with:
+              name: generated-classes-${{ matrix.exasol_db_version }}.lst
+              path: target/generated-classes.lst
 excludes:
-  # Requires custom build steps for configuring S3 credentials
-  - "E-PK-CORE-18: Outdated content: '.github/workflows/ci-build.yml'"
-  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_prepare_original_checksum.yml'"
-  # Upload custom release artifact extension
-  - "E-PK-CORE-18: Outdated content: '.github/workflows/release_droid_upload_github_release_assets.yml'"
-  - "W-PK-CORE-153: Project-keeper version 4.1.0 is outdated. Please update project-keeper to latest version 4.2.0."
+  - "E-PK-CORE-17: Missing required file: 'release_config.yml'"

@@ -68,7 +68,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
                 .extensionName("S3 Virtual Schema") //
                 .extensionDescription("Virtual Schema for document files on AWS S3") //
                 .previousVersion(previousVersion) //
-                .previousVersionJarFile("document-files-virtual-schema-dist-8.0.0-s3-" + previousVersion + ".jar")
+                .previousVersionJarFile("document-files-virtual-schema-dist-8.0.3-s3-" + previousVersion + ".jar")
                 .build();
     }
 
@@ -130,7 +130,6 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     protected void prepareInstance() {
         upload(s3ImportPrefix + "test-data-1.json", "{\"id\": 1, \"name\": \"abc\" }");
         upload(s3ImportPrefix + "test-data-2.json", "{\"id\": 2, \"name\": \"xyz\" }");
-
     }
 
     private void upload(final String key, final String content) {
@@ -142,7 +141,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
         final String virtualTable = "\"" + virtualSchemaName + "\".\"" + MAPPING_DESTINATION_TABLE + "\"";
         try (final ResultSet result = exasolTestSetup.createConnection().createStatement()
                 .executeQuery("SELECT ID, NAME FROM " + virtualTable + " ORDER BY ID ASC")) {
-            assertThat(result, table().row(1L, "abc").row(2L, "xyz").matches());
+            assertThat("content of " + virtualTable, result, table().row(1L, "abc").row(2L, "xyz").matches());
         } catch (final SQLException exception) {
             throw new AssertionError("Assertion query failed", exception);
         }

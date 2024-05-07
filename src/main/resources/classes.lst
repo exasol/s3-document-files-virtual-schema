@@ -1863,7 +1863,6 @@ java/security/spec/RSAPrivateCrtKeySpec
 java/security/spec/RSAPrivateKeySpec
 java/security/spec/RSAPublicKeySpec
 java/security/spec/X509EncodedKeySpec
-java/security/spec/XECPublicKeySpec
 java/security/Timestamp
 java/security/UnresolvedPermission
 java/text/DateFormatSymbols
@@ -2484,7 +2483,6 @@ java/util/zip/ZipFile$Source$Key
 java/util/zip/ZipFile$ZipFileInflaterInputStream
 java/util/zip/ZipFile$ZipFileInputStream
 java/util/zip/ZipUtils
-javax/crypto/AEADBadTagException
 javax/crypto/BadPaddingException
 javax/crypto/Cipher
 javax/crypto/Cipher$Transform
@@ -5087,8 +5085,6 @@ sun/security/ec/SunEC
 sun/security/ec/SunEC$1
 sun/security/ec/SunEC$2
 sun/security/ec/SunEC$ProviderService
-sun/security/ec/XDHKeyAgreement
-sun/security/ec/XDHKeyFactory
 sun/security/ec/XDHKeyPairGenerator
 sun/security/ec/XDHPrivateKeyImpl
 sun/security/ec/XDHPublicKeyImpl
@@ -5172,7 +5168,6 @@ sun/security/provider/Sun
 sun/security/provider/SunEntries
 sun/security/provider/SunEntries$1
 sun/security/provider/X509Factory
-sun/security/rsa/MGF1
 sun/security/rsa/PSSParameters
 sun/security/rsa/RSACore
 sun/security/rsa/RSAKeyFactory
@@ -5207,7 +5202,6 @@ sun/security/ssl/Authenticator$MacImpl
 sun/security/ssl/Authenticator$SSLAuthenticator
 sun/security/ssl/Authenticator$SSLNullAuthenticator
 sun/security/ssl/Authenticator$SSLNullMac
-sun/security/ssl/Authenticator$TLS13Authenticator
 sun/security/ssl/BaseSSLSocketImpl
 sun/security/ssl/CertificateAuthoritiesExtension
 sun/security/ssl/CertificateAuthoritiesExtension$CertificateAuthoritiesStringizer
@@ -5216,11 +5210,9 @@ sun/security/ssl/CertificateAuthoritiesExtension$CHCertificateAuthoritiesProduce
 sun/security/ssl/CertificateAuthoritiesExtension$CRCertificateAuthoritiesConsumer
 sun/security/ssl/CertificateAuthoritiesExtension$CRCertificateAuthoritiesProducer
 sun/security/ssl/CertificateMessage
-sun/security/ssl/CertificateMessage$CertificateEntry
 sun/security/ssl/CertificateMessage$T12CertificateConsumer
 sun/security/ssl/CertificateMessage$T12CertificateProducer
 sun/security/ssl/CertificateMessage$T13CertificateConsumer
-sun/security/ssl/CertificateMessage$T13CertificateMessage
 sun/security/ssl/CertificateMessage$T13CertificateProducer
 sun/security/ssl/CertificateRequest
 sun/security/ssl/CertificateRequest$T10CertificateRequestConsumer
@@ -5241,7 +5233,6 @@ sun/security/ssl/CertificateVerify$T10CertificateVerifyProducer
 sun/security/ssl/CertificateVerify$T12CertificateVerifyConsumer
 sun/security/ssl/CertificateVerify$T12CertificateVerifyProducer
 sun/security/ssl/CertificateVerify$T13CertificateVerifyConsumer
-sun/security/ssl/CertificateVerify$T13CertificateVerifyMessage
 sun/security/ssl/CertificateVerify$T13CertificateVerifyProducer
 sun/security/ssl/CertSignAlgsExtension
 sun/security/ssl/CertSignAlgsExtension$CertSignatureSchemesStringizer
@@ -5323,7 +5314,6 @@ sun/security/ssl/ECPointFormatsExtension$ECPointFormatsStringizer
 sun/security/ssl/ECPointFormatsExtension$SHECPointFormatsConsumer
 sun/security/ssl/EncryptedExtensions
 sun/security/ssl/EncryptedExtensions$EncryptedExtensionsConsumer
-sun/security/ssl/EncryptedExtensions$EncryptedExtensionsMessage
 sun/security/ssl/EncryptedExtensions$EncryptedExtensionsProducer
 sun/security/ssl/EphemeralKeyManager
 sun/security/ssl/EphemeralKeyManager$EphemeralKeyPair
@@ -5355,7 +5345,6 @@ sun/security/ssl/HandshakeContext
 sun/security/ssl/HandshakeHash
 sun/security/ssl/HandshakeHash$CacheOnlyHash
 sun/security/ssl/HandshakeHash$NonCloneableHash
-sun/security/ssl/HandshakeHash$T13HandshakeHash
 sun/security/ssl/HandshakeHash$TranscriptHash
 sun/security/ssl/HandshakeOutStream
 sun/security/ssl/HandshakeProducer
@@ -5366,7 +5355,6 @@ sun/security/ssl/HelloRequest$HelloRequestProducer
 sun/security/ssl/HelloVerifyRequest
 sun/security/ssl/HelloVerifyRequest$HelloVerifyRequestConsumer
 sun/security/ssl/HelloVerifyRequest$HelloVerifyRequestProducer
-sun/security/ssl/HKDF
 sun/security/ssl/InputRecord
 sun/security/ssl/JsseJce
 sun/security/ssl/JsseJce$EcAvailability
@@ -5385,7 +5373,6 @@ sun/security/ssl/KeyShareExtension$KeyShareEntry
 sun/security/ssl/KeyShareExtension$SHKeyShareAbsence
 sun/security/ssl/KeyShareExtension$SHKeyShareConsumer
 sun/security/ssl/KeyShareExtension$SHKeyShareProducer
-sun/security/ssl/KeyShareExtension$SHKeyShareSpec
 sun/security/ssl/KeyShareExtension$SHKeyShareStringizer
 sun/security/ssl/KeyUpdate
 sun/security/ssl/KeyUpdate$KeyUpdateConsumer
@@ -5499,8 +5486,6 @@ sun/security/ssl/SSLAlgorithmConstraints
 sun/security/ssl/SSLAlgorithmConstraints$SupportedSignatureAlgorithmConstraints
 sun/security/ssl/SSLAlgorithmDecomposer
 sun/security/ssl/SSLAlgorithmDecomposer$1
-sun/security/ssl/SSLBasicKeyDerivation
-sun/security/ssl/SSLBasicKeyDerivation$SecretSizeSpec
 sun/security/ssl/SSLCipher
 sun/security/ssl/SSLCipher$1
 sun/security/ssl/SSLCipher$NullReadCipherGenerator
@@ -5523,9 +5508,7 @@ sun/security/ssl/SSLCipher$T12GcmWriteCipherGenerator
 sun/security/ssl/SSLCipher$T13CC20P1305ReadCipherGenerator
 sun/security/ssl/SSLCipher$T13CC20P1305WriteCipherGenerator
 sun/security/ssl/SSLCipher$T13GcmReadCipherGenerator
-sun/security/ssl/SSLCipher$T13GcmReadCipherGenerator$GcmReadCipher
 sun/security/ssl/SSLCipher$T13GcmWriteCipherGenerator
-sun/security/ssl/SSLCipher$T13GcmWriteCipherGenerator$GcmWriteCipher
 sun/security/ssl/SSLCipher$WriteCipherGenerator
 sun/security/ssl/SSLConfiguration
 sun/security/ssl/SSLConfiguration$1
@@ -5566,8 +5549,6 @@ sun/security/ssl/SSLPossession
 sun/security/ssl/SSLPossessionGenerator
 sun/security/ssl/SSLProducer
 sun/security/ssl/SSLRecord
-sun/security/ssl/SSLSecretDerivation
-sun/security/ssl/SSLSecretDerivation$SecretSchedule
 sun/security/ssl/SSLSessionContextImpl
 sun/security/ssl/SSLSessionImpl
 sun/security/ssl/SSLSocketFactoryImpl
@@ -5579,11 +5560,9 @@ sun/security/ssl/SSLSocketOutputRecord
 sun/security/ssl/SSLStringizer
 sun/security/ssl/SSLTrafficKeyDerivation
 sun/security/ssl/SSLTrafficKeyDerivation$1
-sun/security/ssl/SSLTrafficKeyDerivation$KeySchedule
 sun/security/ssl/SSLTrafficKeyDerivation$S30TrafficKeyDerivationGenerator
 sun/security/ssl/SSLTrafficKeyDerivation$T10TrafficKeyDerivationGenerator
 sun/security/ssl/SSLTrafficKeyDerivation$T12TrafficKeyDerivationGenerator
-sun/security/ssl/SSLTrafficKeyDerivation$T13TrafficKeyDerivation
 sun/security/ssl/SSLTrafficKeyDerivation$T13TrafficKeyDerivationGenerator
 sun/security/ssl/SSLTransport
 sun/security/ssl/SunJSSE
@@ -5607,7 +5586,6 @@ sun/security/ssl/SupportedVersionsExtension$HRRSupportedVersionsProducer
 sun/security/ssl/SupportedVersionsExtension$HRRSupportedVersionsReproducer
 sun/security/ssl/SupportedVersionsExtension$SHSupportedVersionsConsumer
 sun/security/ssl/SupportedVersionsExtension$SHSupportedVersionsProducer
-sun/security/ssl/SupportedVersionsExtension$SHSupportedVersionsSpec
 sun/security/ssl/SupportedVersionsExtension$SHSupportedVersionsStringizer
 sun/security/ssl/TransportContext
 sun/security/ssl/TransportContext$1
@@ -5620,10 +5598,7 @@ sun/security/ssl/TrustStoreManager$TrustStoreDescriptor$1
 sun/security/ssl/Utilities
 sun/security/ssl/X509Authentication$X509Credentials
 sun/security/ssl/X509TrustManagerImpl
-sun/security/ssl/XDHKeyExchange
 sun/security/ssl/XDHKeyExchange$1
-sun/security/ssl/XDHKeyExchange$XDHECredentials
-sun/security/ssl/XDHKeyExchange$XDHEKAGenerator
 sun/security/ssl/XDHKeyExchange$XDHEPossession
 sun/security/util/AbstractAlgorithmConstraints
 sun/security/util/AbstractAlgorithmConstraints$1

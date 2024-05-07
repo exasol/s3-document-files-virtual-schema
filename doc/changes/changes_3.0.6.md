@@ -33,6 +33,10 @@ This release improves error handling when creating a new Virtual Schema using th
 
 ### Extension
 
+#### Compile Dependency Updates
+
+* Updated `@exasol/extension-manager-interface:0.4.1` to `0.4.2`
+
 #### Development Dependency Updates
 
 * Updated `typescript-eslint:^7.5.0` to `^7.8.0`

@@ -1,12 +1,14 @@
-# S3 Document Files Virtual Schema 3.0.6, released 2024-??-??
+# S3 Document Files Virtual Schema 3.0.6, released 2024-05-07
 
-Code name:
+Code name: Improve error handling for extension
 
 ## Summary
 
-## Features
+This release improves error handling when creating a new Virtual Schema using the extension: the extension now checks if a schema with the same name exists and returns a helpful error message. This check is case-insensitive because Exasol's `CONNECTION` names are also case-insensitive.
 
-* ISSUE_NUMBER: description
+## Bugfix
+
+* #164: Improved error handling for creating Virtual Schema using the extension
 
 ## Dependency Updates
 

@@ -5,6 +5,8 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -174,6 +176,8 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @Test
     void testClassList() throws BucketAccessException, FileNotFoundException, TimeoutException, SQLException {
+        // Class list for Exasol 8 differs from 7.1. We compare the class list for Exasol 8 to improve test stability.
+        assumeExasolVersion8();
         final List<String> classList = getClassListFromVirtualSchema();
         new ClassListVerifier(CLASS_LIST_IGNORES).verifyClassListFile(classList,
                 IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
@@ -232,6 +236,22 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
             AWS_S3_TEST_SETUP.getS3Client().createBucket(request -> request.bucket(bucketName));
         } catch (final BucketAlreadyOwnedByYouException | BucketAlreadyExistsException exception) {
             // ignore
+        }
+    }
+
+    private static void assumeExasolVersion8() {
+        final String version = getExasolMajorVersion();
+        assumeTrue("8".equals(version), "Expected Exasol version 8 but got '" + version + "'");
+    }
+
+    private static String getExasolMajorVersion() {
+        try (Statement stmt = SETUP.getStatement()) {
+            final ResultSet result = stmt
+                    .executeQuery("SELECT PARAM_VALUE FROM SYS.EXA_METADATA WHERE PARAM_NAME='databaseMajorVersion'");
+            assertTrue(result.next(), "no result");
+            return result.getString(1);
+        } catch (final SQLException exception) {
+            throw new IllegalStateException("Failed to query Exasol version: " + exception.getMessage(), exception);
         }
     }
 }

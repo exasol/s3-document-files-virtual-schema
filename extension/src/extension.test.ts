@@ -168,6 +168,7 @@ describe("S3 VS Extension", () => {
             for (const test of tests) {
                 it(test.name, () => {
                     const context = createMockContext();
+                    context.mocks.sqlQuery.mockReturnValue({ columns: [], rows: [] });
                     const parameters = test.paramValues.concat([{ name: "base-vs.virtual-schema-name", value: "NEW_S3_VS" }, { name: "MAPPING", value: "my mapping" }])
                     const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
                     expect(instance.name).toEqual("NEW_S3_VS")
@@ -177,6 +178,7 @@ describe("S3 VS Extension", () => {
         })
         it("executes expected statements", () => {
             const context = createMockContext();
+            context.mocks.sqlQuery.mockReturnValue({ columns: [], rows: [] });
             const parameters = [{ name: "base-vs.virtual-schema-name", value: "NEW_S3_VS" }, { name: "MAPPING", value: "my mapping" }, { name: "awsAccessKeyId", value: "id" }]
             const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
             expect(instance.name).toBe("NEW_S3_VS")
@@ -191,6 +193,7 @@ describe("S3 VS Extension", () => {
 
         it("returns id and name", () => {
             const context = createMockContext();
+            context.mocks.sqlQuery.mockReturnValue({ columns: [], rows: [] });
             const parameters = [{ name: "base-vs.virtual-schema-name", value: "NEW_S3_VS" }, { name: "MAPPING", value: "my mapping" }, { name: "awsAccessKeyId", value: "id" }]
             const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
             expect(instance).toStrictEqual({ id: "NEW_S3_VS", name: "NEW_S3_VS" })
@@ -198,11 +201,12 @@ describe("S3 VS Extension", () => {
 
         it("escapes single quotes", () => {
             const context = createMockContext();
+            context.mocks.sqlQuery.mockReturnValue({ columns: [], rows: [] });
             const parameters = [{ name: "base-vs.virtual-schema-name", value: "vs'name" }, { name: "MAPPING", value: "mapping'with''quotes" }, { name: "awsAccessKeyId", value: "access'key" }]
             const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
             expect(instance).toStrictEqual({ id: "vs'name", name: "vs'name", })
             const calls = context.mocks.sqlExecute.mock.calls
-            expect(calls[1]).toEqual([`CREATE VIRTUAL SCHEMA "vs'name" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'vs''name_CONNECTION' MAPPING = 'mapping''with''''quotes'`])
+            expect(calls[1]).toEqual([`CREATE VIRTUAL SCHEMA "vs'name" USING "ext-schema"."S3_FILES_ADAPTER" WITH CONNECTION_NAME = 'VS''NAME_CONNECTION' MAPPING = 'mapping''with''''quotes'`])
         })
 
         it("fails for wrong version", () => {
@@ -245,7 +249,7 @@ describe("S3 VS Extension", () => {
             const executeCalls = context.mocks.sqlExecute.mock.calls
             expect(executeCalls.length).toEqual(2)
             expect(executeCalls[0]).toEqual(["DROP VIRTUAL SCHEMA IF EXISTS \"instId\" CASCADE"])
-            expect(executeCalls[1]).toEqual(["DROP CONNECTION IF EXISTS \"instId_CONNECTION\""])
+            expect(executeCalls[1]).toEqual(["DROP CONNECTION IF EXISTS \"INSTID_CONNECTION\""])
         })
         it("fails for wrong version", () => {
             expect(() => { createExtension().deleteInstance(createMockContext(), "wrongVersion", "instId") })

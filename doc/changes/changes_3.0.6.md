@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 3.0.6, released 2024-05-07
+# S3 Document Files Virtual Schema 3.0.6, released 2024-05-08
 
 Code name: Improve error handling for extension
 

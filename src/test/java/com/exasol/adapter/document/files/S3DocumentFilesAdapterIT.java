@@ -1,12 +1,11 @@
 package com.exasol.adapter.document.files;
 
 import static com.exasol.matcher.ResultSetStructureMatcher.table;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -47,8 +46,7 @@ import software.amazon.awssdk.services.s3.model.BucketAlreadyOwnedByYouException
 class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     private static final S3TestSetup AWS_S3_TEST_SETUP = new AwsS3TestSetup();
     private static final String SMALL_JSON_FILES_FIXTURE_BUCKET = "persistent-small-json-files-test-fixture";
-    private static final List<Pattern> CLASS_LIST_IGNORES = List.of(Pattern.compile("java/util/concurrent/.*"),
-            Pattern.compile("io/netty/util/concurrent/.*"));
+
     private static final Logger LOGGER = Logger.getLogger(S3DocumentFilesAdapterIT.class.getName());
     private static String s3BucketName;
     private static IntegrationTestSetup SETUP;
@@ -176,11 +174,14 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @Test
     void testClassList() throws BucketAccessException, FileNotFoundException, TimeoutException, SQLException {
-        // Class list for Exasol 8 differs from 7.1. We compare the class list for Exasol 8 to improve test stability.
-        assumeExasolVersion8();
         final List<String> classList = getClassListFromVirtualSchema();
-        new ClassListVerifier(CLASS_LIST_IGNORES).verifyClassListFile(classList,
+        new ClassListVerifier(classListIgnores()).verifyClassListFile(classList,
                 IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
+    }
+
+    private static List<Pattern> classListIgnores() {
+        return List.of("java/util/concurrent/.*", "io/netty/util/concurrent/.*", "java/security/spec/.*",
+                "javax/crypto/.*", "sun/security/.*").stream().map(Pattern::compile).collect(toList());
     }
 
     @SuppressWarnings("try") // auto-closeable resource udf is never referenced in body of corresponding try statement
@@ -236,22 +237,6 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
             AWS_S3_TEST_SETUP.getS3Client().createBucket(request -> request.bucket(bucketName));
         } catch (final BucketAlreadyOwnedByYouException | BucketAlreadyExistsException exception) {
             // ignore
-        }
-    }
-
-    private static void assumeExasolVersion8() {
-        final String version = getExasolMajorVersion();
-        assumeTrue("8".equals(version), "Expected Exasol version 8 but got '" + version + "'");
-    }
-
-    private static String getExasolMajorVersion() {
-        try (Statement stmt = SETUP.getStatement()) {
-            final ResultSet result = stmt
-                    .executeQuery("SELECT PARAM_VALUE FROM SYS.EXA_METADATA WHERE PARAM_NAME='databaseMajorVersion'");
-            assertTrue(result.next(), "no result");
-            return result.getString(1);
-        } catch (final SQLException exception) {
-            throw new IllegalStateException("Failed to query Exasol version: " + exception.getMessage(), exception);
         }
     }
 }

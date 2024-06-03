@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 3.0.7,  released 2024-06-03
+# S3 Document Files Virtual Schema 3.0.7, released 2024-06-03
 
 Code name: Security update - fix for CVE-2024-36114
 

@@ -8,7 +8,7 @@ Fixed CVE-2024-36114  https://github.com/advisories/GHSA-973x-65j7-xcf4.
 
 ## Security
 
-* #161: CVE-2024-36114: io.airlift:aircompressor:jar:0.21:compile
+* #166: CVE-2024-36114: io.airlift:aircompressor:jar:0.21:compile
 
 ## Dependency Updates
 

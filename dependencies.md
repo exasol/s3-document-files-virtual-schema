@@ -34,7 +34,7 @@
 | [Maven Project Version Getter][30]              | [MIT License][31]                             |
 | [Extension integration tests library][32]       | [MIT License][33]                             |
 | [jackson-databind][34]                          | [The Apache Software License, Version 2.0][9] |
-| [JaCoCo :: Agent][35]                           | [Eclipse Public License 2.0][36]              |
+| [JaCoCo :: Agent][35]                           | [EPL-2.0][36]                                 |
 
 ### Runtime Dependencies
 
@@ -47,7 +47,7 @@
 | Dependency                                              | License                          |
 | ------------------------------------------------------- | -------------------------------- |
 | [SonarQube Scanner for Maven][39]                       | [GNU LGPL 3][40]                 |
-| [Apache Maven Toolchains Plugin][41]                    | [Apache License, Version 2.0][9] |
+| [Apache Maven Toolchains Plugin][41]                    | [Apache-2.0][9]                  |
 | [Apache Maven Compiler Plugin][42]                      | [Apache-2.0][9]                  |
 | [Apache Maven Enforcer Plugin][43]                      | [Apache-2.0][9]                  |
 | [Maven Flatten Plugin][44]                              | [Apache Software Licenese][9]    |
@@ -57,7 +57,7 @@
 | [duplicate-finder-maven-plugin Maven Mojo][49]          | [Apache License 2.0][50]         |
 | [Project Keeper Maven plugin][51]                       | [The MIT License][52]            |
 | [Apache Maven Assembly Plugin][53]                      | [Apache-2.0][9]                  |
-| [Apache Maven JAR Plugin][54]                           | [Apache License, Version 2.0][9] |
+| [Apache Maven JAR Plugin][54]                           | [Apache-2.0][9]                  |
 | [Artifact reference checker and unifier][55]            | [MIT License][56]                |
 | [Apache Maven Dependency Plugin][57]                    | [Apache-2.0][9]                  |
 | [Maven Failsafe Plugin][58]                             | [Apache-2.0][9]                  |

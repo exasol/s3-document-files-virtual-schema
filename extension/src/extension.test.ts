@@ -1,4 +1,5 @@
 import { ExaMetadata, Installation, Instance, ParameterValue, Row } from '@exasol/extension-manager-interface';
+import { testJavaVirtualSchemaBaseExtension } from '@exasol/extension-manager-interface/dist/base-vs-test/vsTestBase';
 import { ExaScriptsRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
 import { describe, expect, it } from '@jest/globals';
 import { EXTENSION_NAME } from './common';
@@ -7,6 +8,8 @@ import { CONFIG } from './extension-config';
 import { adapterScript, createMockContext, getInstalledExtension, importScript, script } from './test-utils';
 
 describe("S3 VS Extension", () => {
+
+    testJavaVirtualSchemaBaseExtension(createExtension);
 
     describe("installableVersions", () => {
         it("contains exactly one 'latest', non deprecated version", () => {
@@ -93,7 +96,7 @@ describe("S3 VS Extension", () => {
             const actual = createExtension().getInstanceParameters(createMockContext(), CONFIG.version)
             expect(actual).toHaveLength(13)
             expect(actual[0]).toStrictEqual({
-                id: "base-vs.virtual-schema-name", name: "Virtual Schema name", required: true, type: "string",
+                id: "baseVirtualSchemaName", name: "Virtual Schema name", required: true, type: "string",
                 description: "Name for the new virtual schema",
                 placeholder: "MY_VIRTUAL_SCHEMA", regex: "[a-zA-Z_]+"
             })
@@ -169,7 +172,7 @@ describe("S3 VS Extension", () => {
                 it(test.name, () => {
                     const context = createMockContext();
                     context.mocks.sqlQuery.mockReturnValue({ columns: [], rows: [] });
-                    const parameters = test.paramValues.concat([{ name: "base-vs.virtual-schema-name", value: "NEW_S3_VS" }, { name: "MAPPING", value: "my mapping" }])
+                    const parameters = test.paramValues.concat([{ name: "baseVirtualSchemaName", value: "NEW_S3_VS" }, { name: "MAPPING", value: "my mapping" }])
                     const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
                     expect(instance.name).toEqual("NEW_S3_VS")
                     expect(context.mocks.sqlExecute.mock.calls[0]).toEqual([`CREATE OR REPLACE CONNECTION "NEW_S3_VS_CONNECTION" TO '' IDENTIFIED BY '${test.expected}'`])
@@ -179,7 +182,7 @@ describe("S3 VS Extension", () => {
         it("executes expected statements", () => {
             const context = createMockContext();
             context.mocks.sqlQuery.mockReturnValue({ columns: [], rows: [] });
-            const parameters = [{ name: "base-vs.virtual-schema-name", value: "NEW_S3_VS" }, { name: "MAPPING", value: "my mapping" }, { name: "awsAccessKeyId", value: "id" }]
+            const parameters = [{ name: "baseVirtualSchemaName", value: "NEW_S3_VS" }, { name: "MAPPING", value: "my mapping" }, { name: "awsAccessKeyId", value: "id" }]
             const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
             expect(instance.name).toBe("NEW_S3_VS")
             const calls = context.mocks.sqlExecute.mock.calls
@@ -194,7 +197,7 @@ describe("S3 VS Extension", () => {
         it("returns id and name", () => {
             const context = createMockContext();
             context.mocks.sqlQuery.mockReturnValue({ columns: [], rows: [] });
-            const parameters = [{ name: "base-vs.virtual-schema-name", value: "NEW_S3_VS" }, { name: "MAPPING", value: "my mapping" }, { name: "awsAccessKeyId", value: "id" }]
+            const parameters = [{ name: "baseVirtualSchemaName", value: "NEW_S3_VS" }, { name: "MAPPING", value: "my mapping" }, { name: "awsAccessKeyId", value: "id" }]
             const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
             expect(instance).toStrictEqual({ id: "NEW_S3_VS", name: "NEW_S3_VS" })
         })
@@ -202,7 +205,7 @@ describe("S3 VS Extension", () => {
         it("escapes single quotes", () => {
             const context = createMockContext();
             context.mocks.sqlQuery.mockReturnValue({ columns: [], rows: [] });
-            const parameters = [{ name: "base-vs.virtual-schema-name", value: "vs'name" }, { name: "MAPPING", value: "mapping'with''quotes" }, { name: "awsAccessKeyId", value: "access'key" }]
+            const parameters = [{ name: "baseVirtualSchemaName", value: "vs'name" }, { name: "MAPPING", value: "mapping'with''quotes" }, { name: "awsAccessKeyId", value: "access'key" }]
             const instance = createExtension().addInstance(context, CONFIG.version, { values: parameters });
             expect(instance).toStrictEqual({ id: "vs'name", name: "vs'name", })
             const calls = context.mocks.sqlExecute.mock.calls

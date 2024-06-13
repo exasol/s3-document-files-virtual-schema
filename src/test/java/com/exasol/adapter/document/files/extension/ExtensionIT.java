@@ -60,7 +60,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
 
     @Override
     protected ExtensionITConfig createConfig() {
-        final String previousVersion = "3.0.5";
+        final String previousVersion = "3.0.7";
         return ExtensionITConfig.builder().projectName("s3-document-files-virtual-schema") //
                 .extensionId(EXTENSION_ID) //
                 .currentVersion(PROJECT_VERSION) //
@@ -75,7 +75,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     @BeforeAll
     static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
         if (System.getProperty("com.exasol.dockerdb.image") == null) {
-            System.setProperty("com.exasol.dockerdb.image", "8.26.0");
+            System.setProperty("com.exasol.dockerdb.image", "8.27.0");
         }
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
         ExasolVersionCheck.assumeExasolVersion8(exasolTestSetup);

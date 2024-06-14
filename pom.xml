@@ -190,7 +190,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>extension-manager-integration-test-java</artifactId>
-            <version>0.5.11</version>
+            <version>0.5.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -68,7 +68,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
                 .extensionName("S3 Virtual Schema") //
                 .extensionDescription("Virtual Schema for document files on AWS S3") //
                 .previousVersion(previousVersion) //
-                .previousVersionJarFile("document-files-virtual-schema-dist-8.0.3-s3-" + previousVersion + ".jar")
+                .previousVersionJarFile("document-files-virtual-schema-dist-8.0.4-s3-" + previousVersion + ".jar")
                 .build();
     }
 

@@ -191,7 +191,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
                 .map(InetSocketAddress::toString);
     }
 
-    // Remove this once a new version is released that supports the new VS name
+    // Remove this once version 3.1.0 of s3-document-files-virtual-schema is released
     @Override
     protected List<ParameterValue> createValidParameters(final String extensionVersion,
             final String virtualSchemaName) {

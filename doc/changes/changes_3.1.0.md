@@ -21,11 +21,11 @@ See the [EDML user guide](https://github.com/exasol/virtual-schema-common-docume
 #### Compile Dependency Updates
 
 * Updated `com.exasol:virtual-schema-common-document-files:8.0.4` to `8.1.0`
-* Updated `software.amazon.awssdk:s3:2.25.45` to `2.26.1`
+* Updated `software.amazon.awssdk:s3:2.25.45` to `2.26.3`
 
 #### Test Dependency Updates
 
-* Updated `com.amazonaws:aws-java-sdk-s3:1.12.715` to `1.12.742`
+* Updated `com.amazonaws:aws-java-sdk-s3:1.12.715` to `1.12.744`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:2.1.3` to `2.1.4`
 * Updated `com.exasol:extension-manager-integration-test-java:0.5.11` to `0.5.12`
 * Updated `com.exasol:java-class-list-verifier:0.2.6` to `0.2.7`

@@ -99,13 +99,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}',
           AWS_REGION: eu-central-1
         }
-      - name: Upload generated class list to artifacts
-        uses: actions/upload-artifact@v4
-        if: always()
-        with: {
-          name: 'generated-classes-${{ matrix.exasol_db_version }}.lst',
-          path: target/generated-classes.lst
-        }
       - name: Sonar analysis
         id: sonar-analysis
         if: ${{ env.SONAR_TOKEN != null && matrix.exasol_db_version == env.DEFAULT_EXASOL_DB_VERSION }}

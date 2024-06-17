@@ -96,9 +96,9 @@ describe("S3 VS Extension", () => {
             const actual = createExtension().getInstanceParameters(createMockContext(), CONFIG.version)
             expect(actual).toHaveLength(13)
             expect(actual[0]).toStrictEqual({
-                id: "baseVirtualSchemaName", name: "Virtual Schema name", required: true, type: "string",
+                id: "baseVirtualSchemaName", name: "Virtual schema name", required: true, type: "string",
                 description: "Name for the new virtual schema",
-                placeholder: "MY_VIRTUAL_SCHEMA", regex: "[a-zA-Z_]+"
+                placeholder: "MY_VIRTUAL_SCHEMA", regex: "[a-zA-Z][a-zA-Z0-9_]*"
             })
         })
     })

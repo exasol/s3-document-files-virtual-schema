@@ -46,6 +46,7 @@ See the [EDML user guide](https://github.com/exasol/virtual-schema-common-docume
 
 #### Development Dependency Updates
 
-* Updated `ts-jest:^29.1.2` to `^29.1.4`
-* Updated `typescript-eslint:^7.8.0` to `^7.13.0`
+* Updated `eslint:^8.57.0` to `^9.5.0`
+* Updated `ts-jest:^29.1.2` to `^29.1.5`
+* Updated `typescript-eslint:^7.8.0` to `^8.0.0-alpha.30`
 * Updated `esbuild:^0.20.2` to `^0.21.5`

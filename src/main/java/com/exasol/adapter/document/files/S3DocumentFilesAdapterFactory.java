@@ -9,7 +9,7 @@ import com.exasol.logging.VersionCollector;
  * Factory for the S3 virtual schema adapter.
  * 
  * <p>
- * This factory is loaded via a service loader (resources/services/com.exasol.adapter.AdapterFactory).
+ * This factory is loaded via a service loader ({@code resources/services/com.exasol.adapter.AdapterFactory}).
  * </p>
  */
 public class S3DocumentFilesAdapterFactory implements AdapterFactory {

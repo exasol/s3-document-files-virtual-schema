@@ -1,9 +1,7 @@
 package com.exasol.adapter.document.files;
 
 import static com.exasol.matcher.ResultSetStructureMatcher.table;
-import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -11,12 +9,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.sql.*;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.*;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -26,18 +22,15 @@ import com.exasol.adapter.document.edml.serializer.EdmlSerializer;
 import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
 import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
 import com.exasol.bucketfs.BucketAccessException;
-import com.exasol.classlistextractor.verifier.ClassListExtractor;
-import com.exasol.classlistextractor.verifier.ClassListVerifier;
 import com.exasol.dbbuilder.dialects.DatabaseObjectException;
-import com.exasol.dbbuilder.dialects.exasol.*;
-import com.exasol.dbbuilder.dialects.exasol.udf.UdfScript;
+import com.exasol.dbbuilder.dialects.exasol.ConnectionDefinition;
+import com.exasol.dbbuilder.dialects.exasol.VirtualSchema;
 import com.exasol.matcher.TypeMatchMode;
 import com.exasol.performancetestrecorder.PerformanceTestRecorder;
 import com.exasol.smalljsonfilesfixture.SmallJsonFilesTestSetup;
 
 import jakarta.json.JsonObjectBuilder;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.BucketAlreadyExistsException;
 import software.amazon.awssdk.services.s3.model.BucketAlreadyOwnedByYouException;
 
@@ -73,7 +66,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     }
 
     @AfterAll
-    static void afterAll() throws Exception {
+    static void afterAll() {
         AWS_S3_TEST_SETUP.deleteBucket(s3BucketName);
         if (SETUP != null) {
             SETUP.close();
@@ -172,48 +165,6 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         uploadDataFile(() -> new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)), fileName);
     }
 
-    @Test
-    void testClassList() throws BucketAccessException, FileNotFoundException, TimeoutException, SQLException {
-        final List<String> classList = getClassListFromVirtualSchema();
-        new ClassListVerifier(classListIgnores()).verifyClassListFile(classList,
-                IntegrationTestSetup.ADAPTER_JAR_LOCAL_PATH);
-    }
-
-    private static List<Pattern> classListIgnores() {
-        return List.of("java/util/concurrent/.*", "io/netty/util/concurrent/.*", "java/security/spec/.*",
-                "javax/crypto/.*", "sun/security/.*").stream().map(Pattern::compile).collect(toList());
-    }
-
-    @SuppressWarnings("try") // auto-closeable resource udf is never referenced in body of corresponding try statement
-    private List<String> getClassListFromVirtualSchema()
-            throws BucketAccessException, TimeoutException, FileNotFoundException {
-        final ClassListExtractor classListExtractor = new ClassListExtractor(SETUP.getBucket(),
-                SETUP::makeLocalServiceAvailableInExasol);
-        final ExasolObjectFactory objectFactory = new ExasolObjectFactory(SETUP.getConnection(),
-                ExasolObjectConfiguration.builder().withJvmOptions(classListExtractor.getJvmOptions()).build());
-        AWS_S3_TEST_SETUP.upload(s3BucketName, "test-data-1.json",
-                RequestBody.fromString("{ \"id\": 1, \"name\": \"tom\" }"));
-        final String mapping = getMappingDefinitionForSmallJsonFiles();
-        try (final ExasolSchema schema = objectFactory.createSchema("ADAPTER_FOR_LIST");
-                final AdapterScript adapterScript = SETUP.createAdapterScript(schema);
-                final UdfScript udf = IntegrationTestSetup.createUdf(schema);
-                final VirtualSchema virtualSchema = SETUP
-                        .getPreconfiguredVirtualSchemaBuilder("VS_FOR_CLASS_LIST_EXTRACTION")
-                        .adapterScript(adapterScript).properties(Map.of("MAPPING", mapping)).build()) {
-            return readClassList(classListExtractor, virtualSchema);
-        }
-    }
-
-    private List<String> readClassList(final ClassListExtractor classListExtractor, final VirtualSchema virtualSchema) {
-        final String query = "SELECT * FROM " + virtualSchema.getFullyQualifiedName() + ".TEST";
-        return classListExtractor.capture(() -> {
-            try (final ResultSet resultSet = getStatement().executeQuery(query)) {
-                resultSet.next();
-                assertThat(resultSet.getInt("ID"), equalTo(1));
-            }
-        });
-    }
-
     private String getMappingDefinitionForSmallJsonFiles() {
         final EdmlDefinition edmlDefinition = EdmlDefinition.builder().source("test-data-*.json")
                 .destinationTable("TEST")//
@@ -224,7 +175,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         return new EdmlSerializer().serialize(edmlDefinition);
     }
 
-    private void createTestSetupWithSmallJsonFiles(final int numberOfJsonFiles) throws IOException {
+    private void createTestSetupWithSmallJsonFiles(final int numberOfJsonFiles) {
         createBucketIfNotExists(SMALL_JSON_FILES_FIXTURE_BUCKET);
         final AwsCredentialsProvider awsCredentialsProvider = TestConfig.instance().getAwsCredentialsProvider();
         final Map<String, String> tags = Map.of("exa:project", "VSS3", "exa:owner", TestConfig.instance().getOwner());

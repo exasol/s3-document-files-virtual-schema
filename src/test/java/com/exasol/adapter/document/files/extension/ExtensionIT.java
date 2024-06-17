@@ -46,6 +46,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     private static final String PROJECT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
     private static final String EXTENSION_ID = "s3-vs-extension.js";
     private static final String MAPPING_DESTINATION_TABLE = "DESTINATION_TABLE";
+    private static final String PREVIOUS_VERSION = "3.0.7";
 
     private static ExasolTestSetup exasolTestSetup;
     private static ExtensionManagerSetup setup;
@@ -60,22 +61,22 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
 
     @Override
     protected ExtensionITConfig createConfig() {
-        final String previousVersion = "3.0.5";
         return ExtensionITConfig.builder().projectName("s3-document-files-virtual-schema") //
                 .extensionId(EXTENSION_ID) //
                 .currentVersion(PROJECT_VERSION) //
                 .expectedParameterCount(13) //
                 .extensionName("S3 Virtual Schema") //
                 .extensionDescription("Virtual Schema for document files on AWS S3") //
-                .previousVersion(previousVersion) //
-                .previousVersionJarFile("document-files-virtual-schema-dist-8.0.3-s3-" + previousVersion + ".jar")
+                .previousVersion(PREVIOUS_VERSION) //
+                .previousVersionJarFile("document-files-virtual-schema-dist-8.0.4-s3-" + PREVIOUS_VERSION + ".jar")
+                .virtualSchemaNameParameterName("baseVirtualSchemaName") //
                 .build();
     }
 
     @BeforeAll
     static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
         if (System.getProperty("com.exasol.dockerdb.image") == null) {
-            System.setProperty("com.exasol.dockerdb.image", "8.26.0");
+            System.setProperty("com.exasol.dockerdb.image", "8.27.0");
         }
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
         ExasolVersionCheck.assumeExasolVersion8(exasolTestSetup);
@@ -148,14 +149,19 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     }
 
     @Override
-    protected Collection<ParameterValue> createValidParameterValues() {
+    protected Collection<ParameterValue> createValidParameterValues(final String extensionVersion) {
         final List<ParameterValue> parameters = new ArrayList<>();
         parameters.addAll(List.of( //
                 param("awsRegion", s3TestSetup.getRegion()), //
                 param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
                 param("awsSecretAccessKey", s3TestSetup.getPassword())));
-        parameters.add(param("MAPPING", new EdmlSerializer().serialize(getMappingDefinition())));
+        String edmlMapping = new EdmlSerializer().serialize(getMappingDefinition());
+        if (extensionVersion.equals(PREVIOUS_VERSION)) {
+            edmlMapping = edmlMapping.replace("https://schemas.exasol.com/edml-2.1.0.json",
+                    "https://schemas.exasol.com/edml-2.0.0.json");
+        }
+        parameters.add(param("MAPPING", edmlMapping));
 
         getInDatabaseS3Address().map(address -> param("awsEndpointOverride", address)) //
                 .ifPresent(parameters::add);
@@ -183,5 +189,19 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
         return s3TestSetup.getEntrypoint()
                 .map(endpoint -> exasolTestSetup.makeTcpServiceAccessibleFromDatabase(endpoint))
                 .map(InetSocketAddress::toString);
+    }
+
+    // Remove this once version 3.1.0 of s3-document-files-virtual-schema is released
+    @Override
+    protected List<ParameterValue> createValidParameters(final String extensionVersion,
+            final String virtualSchemaName) {
+        if (extensionVersion.equals(PREVIOUS_VERSION)) {
+            final List<ParameterValue> parameters = new ArrayList<>();
+            parameters.add(param("base-vs.virtual-schema-name", virtualSchemaName));
+            parameters.addAll(createValidParameterValues(extensionVersion));
+            return parameters;
+        } else {
+            return super.createValidParameters(extensionVersion, virtualSchemaName);
+        }
     }
 }

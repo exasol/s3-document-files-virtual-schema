@@ -50,8 +50,13 @@ abstract class AbstractFileFinderIT {
 
     private List<String> runAndGetFirstLines(final S3FileFinder s3FileFinder) {
         final List<String> result = new ArrayList<>();
-        s3FileFinder.loadFiles()
-                .forEachRemaining(file -> result.add(readFirstLine(file.getContent().getInputStream())));
+        s3FileFinder.loadFiles().forEachRemaining(file -> {
+            try (InputStream inputStream = file.getContent().getInputStream()) {
+                result.add(readFirstLine(inputStream));
+            } catch (final IOException exception) {
+                throw new UncheckedIOException("Failed to read file " + file, exception);
+            }
+        });
         return result;
     }
 

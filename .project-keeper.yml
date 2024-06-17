@@ -15,7 +15,7 @@ build:
   runnerOs: ubuntu-20.04
   freeDiskSpace: true
   exasolDbVersions:
-    - "8.26.0"
+    - "8.27.0"
     - "7.1.26"
   workflows:
     - name: ci-build.yml
@@ -62,14 +62,3 @@ build:
               AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
               AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               AWS_REGION: "eu-central-1"
-        - action: INSERT_AFTER
-          stepId: build-pk-verify
-          content:
-            name: Upload generated class list to artifacts
-            uses: actions/upload-artifact@v4
-            if: always()
-            with:
-              name: generated-classes-${{ matrix.exasol_db_version }}.lst
-              path: target/generated-classes.lst
-excludes:
-  - "E-PK-CORE-17: Missing required file: 'release_config.yml'"

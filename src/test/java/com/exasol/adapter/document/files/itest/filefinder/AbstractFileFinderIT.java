@@ -53,6 +53,8 @@ abstract class AbstractFileFinderIT {
         s3FileFinder.loadFiles().forEachRemaining(file -> {
             try (InputStream inputStream = file.getContent().getInputStream()) {
                 result.add(readFirstLine(inputStream));
+            } catch (final IOException exception) {
+                throw new UncheckedIOException("Failed to read file " + file, exception);
             }
         });
         return result;

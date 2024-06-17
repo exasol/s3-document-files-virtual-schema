@@ -23,16 +23,16 @@ import software.amazon.awssdk.services.s3.S3Client;
 public class S3ContainerSetup implements S3TestSetup {
 
     static class DockerImage {
-        static final String LOCALSTACK = "localstack/localstack:2.2.0";
-        static final String MINIO = "minio/minio:RELEASE.2023-07-21T21-12-44Z.fips";
+        static final String LOCALSTACK = "localstack/localstack:3.5.0";
+        static final String MINIO = "minio/minio:RELEASE.2024-06-13T22-53-53Z.fips";
     }
 
     @SuppressWarnings("resource")
     public static S3ContainerSetup localStack() {
         final LocalStackContainer container = new LocalStackContainer( //
                 DockerImageName.parse(DockerImage.LOCALSTACK)) //
-                        .withServices(S3) //
-                        .withReuse(true);
+                .withServices(S3) //
+                .withReuse(true);
         return new S3ContainerSetup(LocalStackS3Container.of(container));
     }
 

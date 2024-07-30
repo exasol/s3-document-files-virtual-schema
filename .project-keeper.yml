@@ -16,7 +16,7 @@ build:
   freeDiskSpace: true
   exasolDbVersions:
     - "8.27.0" # 8.29.1 not yet supported by exasol-testcontainers, see https://github.com/exasol/exasol-testcontainers/issues/258
-    - "7.1.29"
+    - "7.1.26" # Upgrade to 7.1.29 once https://github.com/exasol/virtual-schema-common-document-files/issues/169 is fixed
   workflows:
     - name: ci-build.yml
       stepCustomizations:

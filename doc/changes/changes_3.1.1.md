@@ -28,3 +28,12 @@ This release fixes vulnerability CVE-2024-25638 in `dnsjava:dnsjava:jar:3.4.0:co
 * Updated `org.junit.jupiter:junit-jupiter-params:5.10.2` to `5.10.3`
 * Updated `org.testcontainers:junit-jupiter:1.19.8` to `1.20.0`
 * Updated `org.testcontainers:localstack:1.19.8` to `1.20.0`
+
+### Extension
+
+#### Development Dependency Updates
+
+* Updated `eslint:^9.5.0` to `^9.8.0`
+* Updated `ts-jest:^29.1.5` to `^29.2.3`
+* Updated `typescript:^5.4.5` to `^5.5.4`
+* Updated `esbuild:^0.21.5` to `^0.23.0`

@@ -46,7 +46,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     private static final String PROJECT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
     private static final String EXTENSION_ID = "s3-vs-extension.js";
     private static final String MAPPING_DESTINATION_TABLE = "DESTINATION_TABLE";
-    private static final String PREVIOUS_VERSION = "3.0.7";
+    private static final String PREVIOUS_VERSION = "3.1.0";
 
     private static ExasolTestSetup exasolTestSetup;
     private static ExtensionManagerSetup setup;
@@ -68,7 +68,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
                 .extensionName("S3 Virtual Schema") //
                 .extensionDescription("Virtual Schema for document files on AWS S3") //
                 .previousVersion(PREVIOUS_VERSION) //
-                .previousVersionJarFile("document-files-virtual-schema-dist-8.0.4-s3-" + PREVIOUS_VERSION + ".jar")
+                .previousVersionJarFile("document-files-virtual-schema-dist-8.1.0-s3-" + PREVIOUS_VERSION + ".jar")
                 .virtualSchemaNameParameterName("baseVirtualSchemaName") //
                 .build();
     }
@@ -156,11 +156,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
                 param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
                 param("awsSecretAccessKey", s3TestSetup.getPassword())));
-        String edmlMapping = new EdmlSerializer().serialize(getMappingDefinition());
-        if (extensionVersion.equals(PREVIOUS_VERSION)) {
-            edmlMapping = edmlMapping.replace("https://schemas.exasol.com/edml-2.1.0.json",
-                    "https://schemas.exasol.com/edml-2.0.0.json");
-        }
+        final String edmlMapping = new EdmlSerializer().serialize(getMappingDefinition());
         parameters.add(param("MAPPING", edmlMapping));
 
         getInDatabaseS3Address().map(address -> param("awsEndpointOverride", address)) //
@@ -189,19 +185,5 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
         return s3TestSetup.getEntrypoint()
                 .map(endpoint -> exasolTestSetup.makeTcpServiceAccessibleFromDatabase(endpoint))
                 .map(InetSocketAddress::toString);
-    }
-
-    // Remove this once version 3.1.0 of s3-document-files-virtual-schema is released
-    @Override
-    protected List<ParameterValue> createValidParameters(final String extensionVersion,
-            final String virtualSchemaName) {
-        if (extensionVersion.equals(PREVIOUS_VERSION)) {
-            final List<ParameterValue> parameters = new ArrayList<>();
-            parameters.add(param("base-vs.virtual-schema-name", virtualSchemaName));
-            parameters.addAll(createValidParameterValues(extensionVersion));
-            return parameters;
-        } else {
-            return super.createValidParameters(extensionVersion, virtualSchemaName);
-        }
     }
 }

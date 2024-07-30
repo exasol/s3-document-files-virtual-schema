@@ -21,6 +21,7 @@ import com.exasol.adapter.document.edml.*;
 import com.exasol.adapter.document.edml.serializer.EdmlSerializer;
 import com.exasol.adapter.document.files.s3testsetup.AwsS3TestSetup;
 import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
+import com.exasol.bucketfs.Bucket;
 import com.exasol.bucketfs.BucketAccessException;
 import com.exasol.dbbuilder.dialects.DatabaseObjectException;
 import com.exasol.dbbuilder.dialects.exasol.ConnectionDefinition;
@@ -104,6 +105,11 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
     @Override
     protected void createVirtualSchema(final String schemaName, final String mapping) {
         SETUP.createVirtualSchema(schemaName, mapping);
+    }
+
+    @Override
+    protected Bucket getBucketFSDefaultBucket() {
+        return SETUP.getBucket();
     }
 
     @Test

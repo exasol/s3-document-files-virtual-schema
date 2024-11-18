@@ -12,7 +12,7 @@
         "vmArgs": [
             "-Djava.util.logging.config.file=src/test/resources/logging.properties",
             "-Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl",
-            "-Dcom.exasol.dockerdb.image=8.27.0"
+            "-Dcom.exasol.dockerdb.image=8.32.0"
         ]
     },
     "sonarlint.connectedMode.project": {

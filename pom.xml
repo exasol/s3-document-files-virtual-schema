@@ -164,6 +164,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <!-- Upgrade transitive dependency of exasol-test-setup-abstraction-java to fix NoSuchMethodError: 'com.exasol.bucketfs.ReadEnabledBucket$Builder com.exasol.bucketfs.WriteEnabledBucket$Builder.allowAlternativeHostName -->
+             <groupId>com.exasol</groupId>
+             <artifactId>bucketfs-java</artifactId>
+             <version>3.2.0</version>
+             <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>small-json-files-test-fixture</artifactId>
             <version>0.1.11</version>

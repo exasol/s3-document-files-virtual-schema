@@ -29,6 +29,7 @@ This release fixes the following vulnerabilities:
 #### Test Dependency Updates
 
 * Updated `com.amazonaws:aws-java-sdk-s3:1.12.766` to `1.12.778`
+* Added `com.exasol:bucketfs-java:3.2.0`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:2.1.4` to `2.1.5`
 * Updated `com.exasol:hamcrest-resultset-matcher:1.6.5` to `1.7.0`
 * Updated `com.exasol:small-json-files-test-fixture:0.1.10` to `0.1.11`

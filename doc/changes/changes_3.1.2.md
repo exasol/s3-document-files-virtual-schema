@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 3.1.2, released 2024-11-18
+# S3 Document Files Virtual Schema 3.1.2, released 2024-11-19
 
 Code name: Fix CVE-2024-47561 and CVE-2024-47535
 

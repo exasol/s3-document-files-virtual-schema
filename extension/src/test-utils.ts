@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-explicit-any: "off" */
 import { Context, QueryResult, SqlClient } from '@exasol/extension-manager-interface';
 import { ExaScriptsRow } from '@exasol/extension-manager-interface/dist/exasolSchema';
 import * as jestMock from "jest-mock";

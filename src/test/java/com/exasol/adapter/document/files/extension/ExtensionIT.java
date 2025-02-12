@@ -46,7 +46,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     private static final String PROJECT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
     private static final String EXTENSION_ID = "s3-vs-extension.js";
     private static final String MAPPING_DESTINATION_TABLE = "DESTINATION_TABLE";
-    private static final String PREVIOUS_VERSION = "3.1.0";
+    private static final String PREVIOUS_VERSION = "3.1.2";
 
     private static ExasolTestSetup exasolTestSetup;
     private static ExtensionManagerSetup setup;
@@ -76,7 +76,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     @BeforeAll
     static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
         if (System.getProperty("com.exasol.dockerdb.image") == null) {
-            System.setProperty("com.exasol.dockerdb.image", "8.27.0");
+            System.setProperty("com.exasol.dockerdb.image", "8.32.0");
         }
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
         ExasolVersionCheck.assumeExasolVersion8(exasolTestSetup);

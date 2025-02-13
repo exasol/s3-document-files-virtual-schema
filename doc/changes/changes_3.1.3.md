@@ -48,7 +48,7 @@ Code name:
 
 #### Compile Dependency Updates
 
-* Updated `@exasol/extension-manager-interface:0.4.3` to `0.4.5`
+* Updated `@exasol/extension-manager-interface:0.4.3` to `0.5.0`
 
 #### Development Dependency Updates
 

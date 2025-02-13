@@ -15,7 +15,7 @@ Code name:
 #### Compile Dependency Updates
 
 * Updated `com.exasol:virtual-schema-common-document-files:8.1.5` to `8.1.6`
-* Updated `software.amazon.awssdk:s3:2.29.15` to `2.30.18`
+* Updated `software.amazon.awssdk:s3:2.29.15` to `2.30.19`
 
 #### Test Dependency Updates
 

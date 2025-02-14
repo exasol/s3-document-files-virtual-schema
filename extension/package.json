@@ -11,8 +11,8 @@
         "generate": "bash generate-config.sh",
         "lint": "eslint ./src/",
         "clean": "rm -rf dist/",
-        "test": "jest --silent",
-        "test-watch": "jest --watch"
+        "test": "NODE_OPTIONS=--experimental-vm-modules jest --silent",
+        "test-watch": "NODE_OPTIONS=--experimental-vm-modules  jest --watch"
     },
     "dependencies": {
         "@exasol/extension-manager-interface": "0.5.0"

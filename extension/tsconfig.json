@@ -4,6 +4,7 @@
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
+    "module": "es6",
     "target": "es6",
     "outDir": "dist/",
     "declaration": true,

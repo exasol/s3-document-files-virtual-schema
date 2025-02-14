@@ -8,7 +8,7 @@ export default {
   coverageDirectory: "coverage",
   coverageProvider: "v8",
   errorOnDeprecated: true,
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   testMatch: [
     "**/?(*.)+(spec|test).ts"

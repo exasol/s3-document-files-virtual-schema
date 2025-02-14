@@ -165,8 +165,8 @@ describe("S3 VS Extension", () => {
                 { name: "parameter with double quote", paramValues: [{ name: "awsAccessKeyId", value: 'abc"123""xyz' }], expected: `{"awsAccessKeyId":"abc\\"123\\"\\"xyz"}` },
                 { name: "multiple parameters", paramValues: [{ name: "awsAccessKeyId", value: 'id' }, { name: "awsSecretAccessKey", value: "key" }], expected: `{"awsAccessKeyId":"id","awsSecretAccessKey":"key"}` },
                 { name: "mixed parameters", paramValues: [{ name: "awsAccessKeyId", value: 'id' }, { name: "unknown", value: "ignored" }], expected: `{"awsAccessKeyId":"id"}` },
-                { name: "boolean", paramValues: [{ name: "useSsl", value: "true" }], expected: `{"useSsl":"true"}` },
-                { name: "ignores invalid boolean", paramValues: [{ name: "useSsl", value: "invalid" }], expected: `{"useSsl":"invalid"}` },
+                { name: "boolean set to true", paramValues: [{ name: "useSsl", value: "true" }], expected: `{"useSsl":true}` },
+                { name: "boolean set to false", paramValues: [{ name: "useSsl", value: "false" }], expected: `{"useSsl":false}` },
             ];
             for (const test of tests) {
                 it(test.name, () => {

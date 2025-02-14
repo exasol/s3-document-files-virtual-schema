@@ -21,6 +21,7 @@ build:
     - name: ci-build.yml
       stepCustomizations:
         - action: INSERT_AFTER
+          job: matrix-build
           stepId: setup-java
           content:
             name: Set up Node 20
@@ -31,6 +32,7 @@ build:
               cache: "npm"
               cache-dependency-path: extension/package-lock.json
         - action: INSERT_AFTER
+          job: matrix-build
           stepId: setup-node
           content:
             name: Set up Go
@@ -40,6 +42,7 @@ build:
               go-version: "1.21"
               cache-dependency-path: pom.xml
         - action: INSERT_AFTER
+          job: matrix-build
           stepId: setup-node
           content:
             name: Create test_config.properties
@@ -50,6 +53,7 @@ build:
 
         - action: REPLACE
           stepId: build-pk-verify
+          job: matrix-build
           content:
             name: Run tests and build with Maven
             id: build-pk-verify

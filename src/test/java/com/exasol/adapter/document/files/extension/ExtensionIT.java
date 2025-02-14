@@ -46,7 +46,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     private static final String PROJECT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
     private static final String EXTENSION_ID = "s3-vs-extension.js";
     private static final String MAPPING_DESTINATION_TABLE = "DESTINATION_TABLE";
-    private static final String PREVIOUS_VERSION = "3.1.0";
+    private static final String PREVIOUS_VERSION = "3.1.2";
 
     private static ExasolTestSetup exasolTestSetup;
     private static ExtensionManagerSetup setup;
@@ -68,7 +68,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
                 .extensionName("S3 Virtual Schema") //
                 .extensionDescription("Virtual Schema for document files on AWS S3") //
                 .previousVersion(PREVIOUS_VERSION) //
-                .previousVersionJarFile("document-files-virtual-schema-dist-8.1.0-s3-" + PREVIOUS_VERSION + ".jar")
+                .previousVersionJarFile("document-files-virtual-schema-dist-8.1.5-s3-" + PREVIOUS_VERSION + ".jar")
                 .virtualSchemaNameParameterName("baseVirtualSchemaName") //
                 .build();
     }
@@ -76,7 +76,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
     @BeforeAll
     static void setup() throws FileNotFoundException, BucketAccessException, TimeoutException {
         if (System.getProperty("com.exasol.dockerdb.image") == null) {
-            System.setProperty("com.exasol.dockerdb.image", "8.27.0");
+            System.setProperty("com.exasol.dockerdb.image", "8.32.0");
         }
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
         ExasolVersionCheck.assumeExasolVersion8(exasolTestSetup);
@@ -150,12 +150,16 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
 
     @Override
     protected Collection<ParameterValue> createValidParameterValues(final String extensionVersion) {
-        final List<ParameterValue> parameters = new ArrayList<>();
-        parameters.addAll(List.of( //
+        final List<ParameterValue> parameters = new ArrayList<>(List.of( //
                 param("awsRegion", s3TestSetup.getRegion()), //
                 param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
                 param("awsSecretAccessKey", s3TestSetup.getPassword())));
+        // In previous version boolean parameters crashed. First fixed version supporting boolean is 3.1.3
+        if (!extensionVersion.equals(PREVIOUS_VERSION)) {
+            parameters.add(param("useSsl", "true"));
+        }
+
         final String edmlMapping = new EdmlSerializer().serialize(getMappingDefinition());
         parameters.add(param("MAPPING", edmlMapping));
 

@@ -4,7 +4,7 @@ on:
   - push
 
 jobs:
-  build:
+  ci-isolation-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository

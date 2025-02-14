@@ -1,12 +1,20 @@
-# S3 Document Files Virtual Schema 3.1.3, released 2025-??-??
+# S3 Document Files Virtual Schema 3.1.3, released 2025-02-14
 
-Code name:
+Code name: useSsl parameter fix and CVE fixes
 
 ## Summary
 
-## Features
+This update fixes an issue that prevented the extension to be used with explicit boolean parameters (e.g `useSsl`)
+This update also fixes CVE-2025-24970 and CVE-2025-25193 in transitive `netty` dependency.
 
-* ISSUE_NUMBER: description
+## BugFixes
+
+* #172: useSsl rendered as string instead of boolean
+
+## Security
+
+* #176: CVE-2025-24970
+* #177: CVE-2025-25193
 
 ## Dependency Updates
 

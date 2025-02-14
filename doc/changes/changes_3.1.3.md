@@ -7,14 +7,14 @@ Code name: useSsl parameter fix and CVE fixes
 This update fixes an issue that prevented the extension to be used with explicit boolean parameters (e.g `useSsl`)
 This update also fixes CVE-2025-24970 and CVE-2025-25193 in transitive `netty` dependency.
 
-## BugFixes
+## Bugfixes
 
 * #172: useSsl rendered as string instead of boolean
 
 ## Security
 
-* #176: CVE-2025-24970
-* #177: CVE-2025-25193
+* #176: Fixed CVE-2025-24970
+* #177: Fixed CVE-2025-25193
 
 ## Dependency Updates
 

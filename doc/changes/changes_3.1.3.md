@@ -15,16 +15,17 @@ Code name:
 #### Compile Dependency Updates
 
 * Updated `com.exasol:virtual-schema-common-document-files:8.1.5` to `8.1.6`
-* Updated `software.amazon.awssdk:s3:2.29.15` to `2.30.19`
+* Updated `software.amazon.awssdk:s3:2.29.15` to `2.30.20`
 
 #### Test Dependency Updates
 
 * Removed `com.amazonaws:aws-java-sdk-s3:1.12.778`
 * Removed `com.exasol:bucketfs-java:3.2.0`
 * Updated `com.exasol:exasol-test-setup-abstraction-java:2.1.5` to `2.1.7`
-* Updated `com.exasol:extension-manager-integration-test-java:0.5.12` to `0.5.14`
+* Updated `com.exasol:extension-manager-integration-test-java:0.5.12` to `0.5.15`
 * Updated `com.exasol:maven-project-version-getter:1.2.0` to `1.2.1`
-* Updated `com.exasol:udf-debugging-java:0.6.13` to `0.6.14`
+* Updated `com.exasol:small-json-files-test-fixture:0.1.11` to `0.1.12`
+* Updated `com.exasol:udf-debugging-java:0.6.13` to `0.6.15`
 * Updated `com.exasol:virtual-schema-common-document-files:8.1.5` to `8.1.6`
 * Updated `com.fasterxml.jackson.core:jackson-databind:2.18.1` to `2.18.2`
 * Updated `nl.jqno.equalsverifier:equalsverifier:3.17.3` to `3.19`

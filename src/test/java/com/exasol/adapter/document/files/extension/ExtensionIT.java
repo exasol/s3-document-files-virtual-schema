@@ -150,12 +150,16 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
 
     @Override
     protected Collection<ParameterValue> createValidParameterValues(final String extensionVersion) {
-        final List<ParameterValue> parameters = new ArrayList<>();
-        parameters.addAll(List.of( //
+        final List<ParameterValue> parameters = new ArrayList<>(List.of( //
                 param("awsRegion", s3TestSetup.getRegion()), //
                 param("s3Bucket", s3BucketName), //
                 param("awsAccessKeyId", s3TestSetup.getUsername()), //
                 param("awsSecretAccessKey", s3TestSetup.getPassword())));
+        // In previous version boolean parameters crashed. First fixed version supporting boolean is 3.1.3
+        if (!extensionVersion.equals(PREVIOUS_VERSION)) {
+            parameters.add(param("useSsl", "true"));
+        }
+
         final String edmlMapping = new EdmlSerializer().serialize(getMappingDefinition());
         parameters.add(param("MAPPING", edmlMapping));
 

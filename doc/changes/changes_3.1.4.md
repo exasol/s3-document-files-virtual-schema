@@ -1,12 +1,13 @@
 # S3 Document Files Virtual Schema 3.1.4, released 2025-??-??
 
-Code name:
+Code name: public s3 buckets
 
 ## Summary
+Implemented support of public S3 buckets access.
 
 ## Features
 
-* ISSUE_NUMBER: description
+* #181: Implement support of public s3 buckets
 
 ## Dependency Updates
 

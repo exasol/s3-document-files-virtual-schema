@@ -31,13 +31,13 @@ public class S3ConnectionPropertiesReader {
     public S3ConnectionProperties read(final ConnectionPropertiesReader reader) {
         return S3ConnectionProperties.builder()//
                 .useSsl(reader.readBooleanWithDefault("useSsl", true))//
-                .awsAccessKeyId(reader.readRequiredString("awsAccessKeyId"))
-                .awsSecretAccessKey(reader.readRequiredString("awsSecretAccessKey"))
-                .awsRegion(reader.readRequiredString("awsRegion")) //
+                .awsAccessKeyId(reader.readString("awsAccessKeyId").orElse(null))
+                .awsSecretAccessKey(reader.readString("awsSecretAccessKey").orElse(null))
+                .awsRegion(reader.readRequiredString("awsRegion"))
                 .awsEndpointOverride(readAwsEndpointOverride(reader).orElse(null))
                 .awsSessionToken(reader.readString("awsSessionToken").orElse(null))
                 .s3PathStyleAccess(reader.readBooleanWithDefault("s3PathStyleAccess", false))
-                .s3Bucket(reader.readRequiredString("s3Bucket"))//
+                .s3Bucket(reader.readRequiredString("s3Bucket"))
                 .build();
     }
 }

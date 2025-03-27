@@ -199,6 +199,8 @@
                     <excludeVulnerabilityIds>
                         <!-- Transitive test dependency xerces:xercesImpl:jar:2.12.2. We assume that we only connect to the known endpoint ExaOperations.-->
                         <exclude>CVE-2017-10355</exclude>
+                        <!-- com.exasol:exasol-jdbc:jar:24.2.1:test -->
+                        <exclude>CVE-2024-55551</exclude>
                     </excludeVulnerabilityIds>
                 </configuration>
             </plugin>

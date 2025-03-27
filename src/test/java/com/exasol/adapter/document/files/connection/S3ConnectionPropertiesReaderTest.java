@@ -43,6 +43,13 @@ class S3ConnectionPropertiesReaderTest {
     }
 
     @Test
+    void testAnonymousCredentials() {
+        final S3ConnectionProperties properties = runReader(
+                "{\"awsRegion\": \"eu-central-1\", \"s3Bucket\": \"my-bucket\" }");
+        assertThat(properties.isAnonymous(), equalTo(true));
+    }
+
+    @Test
     void testMissingRequired() {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> runReader("{\"awsAccessKeyId\": \"myKey\", \"awsSecretAccessKey\": \"mySecretAccessKey\", "

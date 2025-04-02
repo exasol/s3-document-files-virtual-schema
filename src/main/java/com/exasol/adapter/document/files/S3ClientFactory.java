@@ -53,6 +53,9 @@ public class S3ClientFactory {
     }
 
     private AwsCredentials getCredentials(final S3ConnectionProperties properties) {
+        if (properties.isAnonymous()) {
+            return AwsBasicCredentials.builder().validateCredentials(false).build();
+        }
         if (properties.hasAwsSessionToken()) {
             return AwsSessionCredentials.create(properties.getAwsAccessKeyId(), properties.getAwsSecretAccessKey(),
                     properties.getAwsSessionToken());

@@ -14,10 +14,9 @@ class S3ConnectionPropertiesReaderTest {
     @Test
     void testReadOnlyRequired() {
         final S3ConnectionProperties properties = runReader(
-                "{\"awsAccessKeyId\": \"myKey\", \"awsSecretAccessKey\": \"mySecretAccessKey\", "
-                        + "\"awsRegion\": \"eu-central-1\", \"s3Bucket\": \"my-bucket\" }");
-        assertAll(() -> assertThat(properties.getAwsAccessKeyId(), equalTo("myKey")),
-                () -> assertThat(properties.getAwsSecretAccessKey(), equalTo("mySecretAccessKey")),
+                "{\"awsRegion\": \"eu-central-1\", \"s3Bucket\": \"my-bucket\" }");
+        assertAll(() -> assertThat(properties.getAwsAccessKeyId(), equalTo(null)),
+                () -> assertThat(properties.getAwsSecretAccessKey(), equalTo(null)),
                 () -> assertThat(properties.getAwsRegion(), equalTo("eu-central-1")),
                 () -> assertThat(properties.getS3Bucket(), equalTo("my-bucket")),
                 () -> assertThat(properties.getAwsEndpointOverride(), equalTo(null)),
@@ -41,6 +40,13 @@ class S3ConnectionPropertiesReaderTest {
                 () -> assertThat(properties.getAwsSessionToken(), equalTo("myToken")),
                 () -> assertThat(properties.isS3PathStyleAccess(), equalTo(true)),
                 () -> assertThat(properties.isUseSsl(), equalTo(false)));
+    }
+
+    @Test
+    void testAnonymousCredentials() {
+        final S3ConnectionProperties properties = runReader(
+                "{\"awsRegion\": \"eu-central-1\", \"s3Bucket\": \"my-bucket\" }");
+        assertThat(properties.isAnonymous(), equalTo(true));
     }
 
     @Test

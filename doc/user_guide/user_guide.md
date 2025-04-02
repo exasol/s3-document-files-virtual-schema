@@ -17,7 +17,7 @@ Next create the Adapter Script:
 ```sql
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-8.1.6-s3-3.1.3.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-8.1.6-s3-3.1.4.jar;
 /
 ```
 
@@ -30,7 +30,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   CONNECTION_NAME VARCHAR(500))
   EMITS(...) AS
     %scriptclass com.exasol.adapter.document.UdfEntryPoint;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-8.1.6-s3-3.1.3.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-8.1.6-s3-3.1.4.jar;
 /
 ```
 
@@ -54,14 +54,16 @@ The connection stores all connection details as JSON in the `IDENTIFIED BY` part
 
 | Key                   | Default        |  Required  | Example                  |
 |-----------------------|----------------|:----------:|--------------------------|
-| `awsAccessKeyId`      |                |     ✓      | `"ABCDABCDABCDABCD1234"` |
-| `awsSecretAccessKey`  |                |     ✓      |                          |
+| `awsAccessKeyId`      |                |     ✘      | `"ABCDABCDABCDABCD1234"` |
+| `awsSecretAccessKey`  |                |     ✘      |                          |
 | `awsRegion`           |                |     ✓      | `"eu-central-1"`         |
 | `s3Bucket`            |                |     ✓      | `"my-s3-bucket"`         |
 | `awsSessionToken`     |                |     ✘      |                          |
 | `awsEndpointOverride` | _AWS endpoint_ |     ✘      | `"s3.my-company.de"`     |
 | `s3PathStyleAccess`   | `false`        |     ✘      | `true`                   |
 | `useSsl`              | `true`         |     ✘      | `false`                  |
+
+Parameters `awsAccessKeyId` and `awsSecretAcessKey` are optional. If they are omitted or equal to empty strings, anonymous S3 connection is established, which is useful for public S3 buckets.
 
 By setting `awsSessionToken` you can use two-factor authentication with this Virtual Schema adapter. However, please keep in mind that the token will expire within few hours. So usually it's better to create a machine user without two-factor authentication enabled.
 
@@ -126,7 +128,7 @@ In DbVisualizer use exactly this command:
 --/
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
    %scriptclass com.exasol.adapter.RequestDispatcher;
-   %jar /buckets/bfsdefault/default/vs/document-files-virtual-schema-dist-8.1.6-s3-3.1.3.jar;
+   %jar /buckets/bfsdefault/default/vs/document-files-virtual-schema-dist-8.1.6-s3-3.1.4.jar;
 /
 ```
 

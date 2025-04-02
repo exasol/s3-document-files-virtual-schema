@@ -92,6 +92,16 @@ public final class S3ConnectionProperties {
     }
 
     /**
+     * Check if this is an anonymous connection.
+     *
+     * @return {@code true} if connection is anonynmous
+     */
+    public boolean isAnonymous() {
+        return (this.awsAccessKeyId == null || this.awsAccessKeyId.isBlank() ||
+                this.awsSecretAccessKey == null || this.awsSecretAccessKey.isBlank());
+    }
+
+    /**
      * Check if this connection contains an AWS endpoint override.
      *
      * @return AWS endpoint override

@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 3.1.4, released 2025-??-??
+# S3 Document Files Virtual Schema 3.1.4, released 2025-04-02
 
 Code name: public s3 buckets
 

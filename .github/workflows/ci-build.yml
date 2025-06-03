@@ -16,7 +16,7 @@ on:
     
 jobs:
   matrix-build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     defaults:
       run: {
         shell: bash
@@ -32,8 +32,7 @@ jobs:
       fail-fast: false
       matrix:
         exasol_db_version: [
-          8.31.0,
-          7.1.30
+          8.31.0
         ]
         
     env: {
@@ -61,11 +60,11 @@ jobs:
             11
             17
           cache: maven
-      - name: Set up Node 20
+      - name: Set up Node 22
         id: setup-node
         uses: actions/setup-node@v4
         with: {
-          node-version: '20',
+          node-version: '22',
           cache: npm,
           cache-dependency-path: extension/package-lock.json
         }
@@ -78,7 +77,7 @@ jobs:
         id: setup-go
         uses: actions/setup-go@v5
         with: {
-          go-version: '1.21',
+          go-version: '1.24',
           cache-dependency-path: pom.xml
         }
       - name: Cache SonarCloud packages
@@ -93,6 +92,11 @@ jobs:
         name: Enable testcontainer reuse,
         id: enable-testcontainer-reuse,
         run: echo 'testcontainers.reuse.enable=true' > "$HOME/.testcontainers.properties"
+      }
+      - {
+        name: Fix VM Crash in UDFs,
+        id: fix-vm-crash,
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       }
       - name: Run tests and build with Maven
         id: build-pk-verify

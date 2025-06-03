@@ -115,3 +115,10 @@ npm run lint
 To use a local, non-published version of the extension manager interface during development, edit [extension/package.json](../../extension/package.json) and replace the version of `"@exasol/extension-manager-interface"` with the path to your local clone of [extension-manager-interface](https://github.com/exasol/extension-manager-interface).
 
 Then run `npm install` and restart your IDE.
+
+### Upgrade Extension Dependencies
+
+```shell
+cd extension
+npx npm-check-updates -u && rm -rf ./node_modules/ && npm install
+```

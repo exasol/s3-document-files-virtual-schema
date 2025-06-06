@@ -1,6 +1,6 @@
 # S3 Document Files Virtual Schema 3.1.6, released 2025-06-06
 
-Code name: Updated virtual-schema-common-document-files dependencies to include the latest logging additions.
+Code name: Update virtual-schema-common-document-files dependencies to include the latest logging additions.
 
 ## Summary
 
@@ -8,7 +8,7 @@ This release updates dependencies on virtual-schema-common-document-files to inc
 
 ## Features
 
-* #188: Upgraded virtual-schema-common-document-files dependencies to include the latest logging additions
+* #188: Updated virtual-schema-common-document-files dependencies to include the latest logging additions
 
 ## Dependency Updates
 

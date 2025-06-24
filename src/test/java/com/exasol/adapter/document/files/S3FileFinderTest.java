@@ -1,7 +1,6 @@
 package com.exasol.adapter.document.files;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -104,10 +103,12 @@ class S3FileFinderTest {
                 .reduce("", (a, b) -> a + "\n" + b);
 
         // Assert logs contain expected fragments
-        assertTrue(allLogs.contains("Starting to load files using S3 file pattern matcher."));
-        assertTrue(allLogs.contains("Checking if key matches pattern: file1.txt => true"));
-        assertTrue(allLogs.contains("Checking if key matches pattern: file2.log => false"));
-        assertTrue(allLogs.contains("Filtered object keys with file pattern matcher."));
-        assertTrue(allLogs.contains("Transformed S3 object to RemoteFile: file1.txt"));
+        assertAll(
+                () -> assertTrue(allLogs.contains("Starting to load files using S3 file pattern matcher.")),
+                () -> assertTrue(allLogs.contains("Checking if key matches pattern: file1.txt => true")),
+                () -> assertTrue(allLogs.contains("Checking if key matches pattern: file2.log => false")),
+                () -> assertTrue(allLogs.contains("Filtered object keys with file pattern matcher.")),
+                () -> assertTrue(allLogs.contains("Transformed S3 object to RemoteFile: file1.txt"))
+        );
     }
 }

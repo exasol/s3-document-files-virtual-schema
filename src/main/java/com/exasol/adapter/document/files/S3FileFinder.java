@@ -55,7 +55,7 @@ public class S3FileFinder implements RemoteFileFinder {
      * @param connectionProperties connection information
      */
     public S3FileFinder(final StringFilter filePattern, final S3ConnectionProperties connectionProperties) {
-        this(filePattern, connectionProperties, Logger.getLogger(FilesDocumentFetcherFactory.class.getName()));
+        this(filePattern, connectionProperties, Logger.getLogger(S3FileFinder.class.getName()));
     }
 
     /**

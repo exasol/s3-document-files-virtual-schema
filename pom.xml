@@ -9,7 +9,7 @@
     <properties>
         <junit.version>5.13.0</junit.version>
         <org.testcontainers.version>1.21.1</org.testcontainers.version>
-        <vs-common-document-files.version>8.1.9</vs-common-document-files.version>
+        <vs-common-document-files.version>8.1.10</vs-common-document-files.version>
         <!-- Additional sonar configuration for analyzing TypeScript extension -->
         <sonar.sources>src/main/,extension/src/</sonar.sources>
         <sonar.exclusions>extension/src/*.test.ts</sonar.exclusions>

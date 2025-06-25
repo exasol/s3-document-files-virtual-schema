@@ -16,11 +16,11 @@ This release implements logging for `loadFiles` method of the class `S3FileFinde
 
 #### Compile Dependency Updates
 
-* Updated `com.exasol:virtual-schema-common-document-files:8.1.9` to `8.1.10`
+* Updated `com.exasol:virtual-schema-common-document-files:8.1.9` to `8.1.11`
 
 #### Test Dependency Updates
 
-* Updated `com.exasol:virtual-schema-common-document-files:8.1.9` to `8.1.10`
+* Updated `com.exasol:virtual-schema-common-document-files:8.1.9` to `8.1.11`
 
 #### Plugin Dependency Updates
 

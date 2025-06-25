@@ -1,5 +1,7 @@
 package com.exasol.adapter.document.files;
 
+import static com.exasol.utils.LogHelper.logFine;
+
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,7 +77,7 @@ public class S3FileFinder implements RemoteFileFinder {
      */
     @Override
     public CloseableIterator<RemoteFile> loadFiles() {
-        logFine("Starting to load files using S3 file pattern matcher with static prefix: '%s' | s3 bucket: '%s' | awsAccessKeyId: '***%s'.", filePattern.getStaticPrefix(), this.connectionProperties.getS3Bucket(), getAwsAccessKeyIdLast3Digits());
+        logFine(logger, "Starting to load files using S3 file pattern matcher with static prefix: '%s' | s3 bucket: '%s' | awsAccessKeyId: '***%s'.", filePattern.getStaticPrefix(), this.connectionProperties.getS3Bucket(), getAwsAccessKeyIdLast3Digits());
 
         final com.exasol.adapter.document.files.stringfilter.matcher.Matcher filePatternMatcher =
                 this.filePattern.getDirectoryIgnoringMatcher();
@@ -85,11 +87,11 @@ public class S3FileFinder implements RemoteFileFinder {
                 objectKeys,
                 s3Object -> {
                     boolean matches = filePatternMatcher.matches(s3Object.getKey());
-                    logFine("Checking if key matches pattern: %s => %b", s3Object.getKey(), matches);
+                    logFine(logger, "Checking if key matches pattern: %s => %b", s3Object.getKey(), matches);
                     return matches;
                 });
 
-        return new TransformingIterator<>(filteredObjectKeys, s3Object -> getS3Object(s3Object));
+        return new TransformingIterator<>(filteredObjectKeys, this::getS3Object);
     }
 
     /**
@@ -103,25 +105,9 @@ public class S3FileFinder implements RemoteFileFinder {
      */
     private String getAwsAccessKeyIdLast3Digits() {
         String accessKeyId = this.connectionProperties.getAwsAccessKeyId();
-        String last3 = (accessKeyId != null && accessKeyId.length() >= 3)
+        return (accessKeyId != null && accessKeyId.length() >= 3)
                 ? accessKeyId.substring(accessKeyId.length() - 3)
                 : "null";
-        return last3;
-    }
-
-    /**
-     * Logs a formatted message at {@link Level#FINE} if fine-level logging is enabled.
-     * <p>
-     * This helper method avoids unnecessary string construction (such as {@code String.format(...)})
-     * when fine-level logging is not enabled. This improves performance and prevents static analysis
-     * warnings related to inefficient logging.
-     * </p>
-     *
-     * @param stringPattern the format string, as used by {@link String#format(String, Object...)}
-     * @param args          the arguments referenced by the format specifiers in the format string
-     */
-    private void logFine(final String stringPattern, final Object... args) {
-        logger.fine(() -> args.length == 0 ? stringPattern : String.format(stringPattern, args));
     }
 
     /**

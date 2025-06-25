@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 3.1.7, released 2025-06-24
+# S3 Document Files Virtual Schema 3.1.7, released 2025-06-25
 
 Code name: Improve query plan logging
 

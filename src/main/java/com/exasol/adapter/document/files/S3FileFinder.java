@@ -75,7 +75,7 @@ public class S3FileFinder implements RemoteFileFinder {
      */
     @Override
     public CloseableIterator<RemoteFile> loadFiles() {
-        logFine("Starting to load files using S3 file pattern matcher.");
+        logFine("Starting to load files using S3 file pattern matcher with static prefix: '%s' | s3 bucket: '%s' | awsAccessKeyId: '***%s'.", filePattern.getStaticPrefix(), this.connectionProperties.getS3Bucket(), getAwsAccessKeyIdLast3Digits());
 
         final com.exasol.adapter.document.files.stringfilter.matcher.Matcher filePatternMatcher =
                 this.filePattern.getDirectoryIgnoringMatcher();
@@ -89,13 +89,24 @@ public class S3FileFinder implements RemoteFileFinder {
                     return matches;
                 });
 
-        logFine("Filtered object keys with file pattern matcher.");
+        return new TransformingIterator<>(filteredObjectKeys, s3Object -> getS3Object(s3Object));
+    }
 
-        return new TransformingIterator<>(filteredObjectKeys, s3Object -> {
-            RemoteFile remoteFile = getS3Object(s3Object);
-            logFine("Transformed S3 object to RemoteFile: %s", s3Object.getKey());
-            return remoteFile;
-        });
+    /**
+     * Returns the last 3 characters of the AWS access key ID if it is non-null and has at least 3 characters.
+     * <p>
+     * If the access key ID is {@code null} or shorter than 3 characters, the string {@code "null"} is returned.
+     * This method is typically used for safe logging or debugging without exposing the full key.
+     * </p>
+     *
+     * @return the last 3 characters of the access key ID, or {@code "null"} if not available
+     */
+    private String getAwsAccessKeyIdLast3Digits() {
+        String accessKeyId = this.connectionProperties.getAwsAccessKeyId();
+        String last3 = (accessKeyId != null && accessKeyId.length() >= 3)
+                ? accessKeyId.substring(accessKeyId.length() - 3)
+                : "null";
+        return last3;
     }
 
     /**

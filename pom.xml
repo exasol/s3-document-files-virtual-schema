@@ -44,10 +44,13 @@
                 <scope>import</scope>
             </dependency>
             <!--Transitive dependency override for CVE-2025-55163, direct dependency: software.amazon.awssdk:s3:2.31.55:compile-->
+            <!-- Align all Netty artifacts on 4.1.124.Final -->
             <dependency>
                 <groupId>io.netty</groupId>
-                <artifactId>netty-codec-http2</artifactId>
-                <version>4.2.4.Final</version>
+                <artifactId>netty-bom</artifactId>
+                <version>4.1.124.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>3.1.7</version>
+    <version>3.1.8</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
@@ -42,6 +42,12 @@
                 <version>2.31.55</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!--Transitive dependency override for CVE-2025-55163, direct dependency: software.amazon.awssdk:s3:2.31.55:compile-->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-codec-http2</artifactId>
+                <version>4.2.4.Final</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -134,7 +140,7 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>udf-debugging-java</artifactId>
-            <version>0.6.16</version>
+            <version>0.6.17</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -219,7 +225,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>5.2.2</version>
+                <version>5.2.3</version>
                 <executions>
                     <execution>
                         <goals>
@@ -345,7 +351,7 @@
     <parent>
         <artifactId>s3-document-files-virtual-schema-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>3.1.7</version>
+        <version>3.1.8</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
 </project>

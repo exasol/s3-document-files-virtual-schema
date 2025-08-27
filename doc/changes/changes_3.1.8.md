@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 3.1.8, released 2025-08-26
+# S3 Document Files Virtual Schema 3.1.8, released 2025-08-27
 
 Code name: Fixes for vulnerabilities CVE-2025-48924 and CVE-2025-55163
 

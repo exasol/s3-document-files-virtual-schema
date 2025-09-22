@@ -1,4 +1,4 @@
-# S3 Document Files Virtual Schema 3.1.9, released 2025-??-??
+# S3 Document Files Virtual Schema 3.1.9, released 2025-09-22
 
 Code name: Fixed vulnerabilities in io.netty:netty-codec:jar:4.1.124.Final:runtime
 

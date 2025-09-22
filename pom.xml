@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.33.3</version>
+                <version>2.34.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -48,7 +48,7 @@
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-bom</artifactId>
-                <version>4.2.5.Final</version>
+                <version>4.2.6.Final</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -112,7 +112,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.19.0</version>
+            <version>5.20.0</version>
             <scope>test</scope>
         </dependency>
         <!--Integration test dependencies-->

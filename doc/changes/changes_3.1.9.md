@@ -24,7 +24,7 @@ netty-codec - Improper Handling of Highly Compressed Data (Data Amplification)
 #### Compile Dependency Updates
 
 * Updated `com.exasol:virtual-schema-common-document-files:8.1.11` to `8.1.12`
-* Updated `software.amazon.awssdk:s3:2.31.55` to `2.33.3`
+* Updated `software.amazon.awssdk:s3:2.31.55` to `2.34.0`
 
 #### Test Dependency Updates
 
@@ -38,6 +38,6 @@ netty-codec - Improper Handling of Highly Compressed Data (Data Amplification)
 * Updated `nl.jqno.equalsverifier:equalsverifier:3.19` to `3.19.4`
 * Updated `org.junit.jupiter:junit-jupiter-engine:5.13.0` to `5.13.4`
 * Updated `org.junit.jupiter:junit-jupiter-params:5.13.0` to `5.13.4`
-* Updated `org.mockito:mockito-core:5.18.0` to `5.19.0`
+* Updated `org.mockito:mockito-core:5.18.0` to `5.20.0`
 * Updated `org.testcontainers:junit-jupiter:1.21.1` to `1.21.3`
 * Updated `org.testcontainers:localstack:1.21.1` to `1.21.3`

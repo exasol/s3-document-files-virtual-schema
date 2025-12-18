@@ -14,11 +14,24 @@ Code name:
 
 #### Compile Dependency Updates
 
+* Updated `com.exasol:error-reporting-java:1.0.1` to `1.0.2`
 * Updated `software.amazon.awssdk:s3:2.34.0` to `2.40.11`
 
 #### Test Dependency Updates
 
+* Updated `com.exasol:exasol-test-setup-abstraction-java:2.1.9` to `2.1.10`
+* Updated `com.exasol:maven-project-version-getter:1.2.1` to `1.2.2`
+* Updated `com.exasol:small-json-files-test-fixture:0.1.13` to `0.1.14`
+* Updated `com.exasol:test-db-builder-java:3.6.3` to `3.6.4`
+* Updated `com.exasol:udf-debugging-java:0.6.17` to `0.6.18`
+* Updated `com.fasterxml.jackson.core:jackson-databind:2.20.0` to `2.20.1`
+* Added `org.apache.commons:commons-text:1.14.0`
 * Updated `org.jacoco:org.jacoco.agent:0.8.13` to `0.8.14`
+* Updated `org.junit.jupiter:junit-jupiter-engine:5.13.4` to `5.14.1`
+* Updated `org.junit.jupiter:junit-jupiter-params:5.13.4` to `5.14.1`
+* Updated `org.mockito:mockito-core:5.20.0` to `5.21.0`
+* Updated `org.testcontainers:junit-jupiter:1.21.3` to `1.21.4`
+* Updated `org.testcontainers:localstack:1.21.3` to `1.21.4`
 
 #### Plugin Dependency Updates
 

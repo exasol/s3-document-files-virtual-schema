@@ -1,12 +1,14 @@
-# S3 Document Files Virtual Schema 3.1.10, released 2025-??-??
+# S3 Document Files Virtual Schema 3.1.10, released 2025-12-18
 
-Code name:
+Code name: Update AWS SDK
 
 ## Summary
 
-## Features
+This release updates the AWS SDK to 2.40.11
 
-* ISSUE_NUMBER: description
+## Dependencies
+
+* #199: Update AWS SDK
 
 ## Dependency Updates
 

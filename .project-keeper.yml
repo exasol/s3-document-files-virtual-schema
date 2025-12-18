@@ -15,8 +15,7 @@ build:
   runnerOs: ubuntu-24.04
   freeDiskSpace: true
   exasolDbVersions:
-    - "2025.1.8" # Tests fail with 8.32.0, see https://github.com/exasol/virtual-schema-common-document-files/issues/177
-    - "8.29.13" # Tests fail with 8.32.0, see https://github.com/exasol/virtual-schema-common-document-files/issues/177
+    - "8.29.13" # Tests fail with 2025.1.8, see https://github.com/exasol/virtual-schema-common-document-files/issues/177
     # - "7.1.30" # Exasol 7.1.x currently does not support the latest Ubuntu version
   workflows:
     - name: ci-build.yml

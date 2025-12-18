@@ -14,7 +14,7 @@ Code name:
 
 #### Compile Dependency Updates
 
-* Updated `software.amazon.awssdk:s3:2.34.0` to `2.40.10`
+* Updated `software.amazon.awssdk:s3:2.34.0` to `2.40.11`
 
 #### Test Dependency Updates
 

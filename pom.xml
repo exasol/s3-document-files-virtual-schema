@@ -39,16 +39,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.40.10</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!--Transitive dependency override for CVE-2025-55163, direct dependency: software.amazon.awssdk:s3:2.31.55:compile-->
-            <!-- Align all Netty artifacts on 4.1.124.Final -->
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-bom</artifactId>
-                <version>4.2.6.Final</version>
+                <version>2.40.11</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

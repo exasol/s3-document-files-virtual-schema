@@ -12,6 +12,10 @@ Code name:
 
 ### Virtual Schema for Document Data in Files on AWS S3
 
+#### Compile Dependency Updates
+
+* Updated `software.amazon.awssdk:s3:2.34.0` to `2.40.10`
+
 #### Test Dependency Updates
 
 * Updated `org.jacoco:org.jacoco.agent:0.8.13` to `0.8.14`

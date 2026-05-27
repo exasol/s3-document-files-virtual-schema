@@ -1,12 +1,18 @@
-# S3 Document Files Virtual Schema 4.0.0, released 2026-??-??
+# S3 Document Files Virtual Schema 4.0.0, released 2026-05-27
 
-Code name:
+Code name: Anonymous telemetry
 
 ## Summary
 
+This release introduces anonymous feature-usage telemetry through `telemetry-java`. See the [documentation](https://github.com/exasol/telemetry-java/blob/main/doc/app-user-guide.md) for details about the collected data and how to opt out.
+
+## Breaking Change
+
+Starting with this release, this Virtual Schema no longer supports Exasol 7.1. The supported versions are the current release and the LTS release line `2025.1.x`.
+
 ## Features
 
-* ISSUE_NUMBER: description
+* #203: Added anonymous feature-usage tracking
 
 ## Dependency Updates
 

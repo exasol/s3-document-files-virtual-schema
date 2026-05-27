@@ -43,14 +43,14 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     private static final Logger LOGGER = Logger.getLogger(S3DocumentFilesAdapterIT.class.getName());
     private static String s3BucketName;
-    private static IntegrationTestSetup SETUP;
+    private static IntegrationTestSetup setup;
     private static S3UploadInterface s3Uploader;
 
     @BeforeAll
     static void beforeAll() throws Exception {
         s3BucketName = "my.s3.virtual-schema-test-bucket-" + System.currentTimeMillis();
         AWS_S3_TEST_SETUP.createBucket(s3BucketName);
-        SETUP = new IntegrationTestSetup(AWS_S3_TEST_SETUP, s3BucketName);
+        setup = new IntegrationTestSetup(AWS_S3_TEST_SETUP, s3BucketName);
         s3Uploader = getS3UploadClient();
     }
 
@@ -60,29 +60,29 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
             LOGGER.warning("The " + TestConfig.FILE_NAME
                     + " does not set a s3CacheBucket. So we will upload all the test files again and again. If you run the tests more often, consider to create it and add it's name to the "
                     + TestConfig.FILE_NAME + ".");
-            return new S3DirectUploader(SETUP.getS3Client(), s3BucketName);
+            return new S3DirectUploader(setup.getS3Client(), s3BucketName);
         } else {
-            return new S3Cache(SETUP.getS3Client(), s3BucketName, s3CacheBucketName);
+            return new S3Cache(setup.getS3Client(), s3BucketName, s3CacheBucketName);
         }
     }
 
     @AfterAll
     static void afterAll() {
         AWS_S3_TEST_SETUP.deleteBucket(s3BucketName);
-        if (SETUP != null) {
-            SETUP.close();
+        if (setup != null) {
+            setup.close();
         }
     }
 
     @AfterEach
     void after() {
-        SETUP.emptyS3Bucket();
-        SETUP.dropCreatedObjects();
+        setup.emptyS3Bucket();
+        setup.dropCreatedObjects();
     }
 
     @Override
     protected Statement getStatement() {
-        return SETUP.getStatement();
+        return setup.getStatement();
     }
 
     @Override
@@ -104,23 +104,23 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @Override
     protected void createVirtualSchema(final String schemaName, final String mapping) {
-        SETUP.createVirtualSchema(schemaName, mapping);
+        setup.createVirtualSchema(schemaName, mapping);
     }
 
     @Override
     protected Bucket getBucketFSDefaultBucket() {
-        return SETUP.getBucket();
+        return setup.getBucket();
     }
 
     @Test
     void testInvalidConnection() throws BucketAccessException, TimeoutException {
-        SETUP.getBucket().uploadInputStream(() -> getClass().getClassLoader().getResourceAsStream("simpleMapping.json"),
+        setup.getBucket().uploadInputStream(() -> getClass().getClassLoader().getResourceAsStream("simpleMapping.json"),
                 "mapping.json");
-        final ConnectionDefinition connection = SETUP.getExasolObjectFactory()
+        final ConnectionDefinition connection = setup.getExasolObjectFactory()
                 .createConnectionDefinition("EMPTY_S3_CONNECTION", "", "", "{");
-        final VirtualSchema.Builder virtualSchemaBuilder = SETUP
+        final VirtualSchema.Builder virtualSchemaBuilder = setup
                 .getPreconfiguredVirtualSchemaBuilder("EMPTY_CONNECTION_SCHEMA").connectionDefinition(connection)
-                .properties(Map.of("MAPPING", "/bfsdefault/default/mapping.json"));
+                .addProperties(Map.of("MAPPING", "/bfsdefault/default/mapping.json"));
         final DatabaseObjectException exception = assertThrows(DatabaseObjectException.class,
                 virtualSchemaBuilder::build);
         assertThat(exception.getCause().getMessage(), containsString(
@@ -129,11 +129,11 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
 
     @Test
     void testPathStyleAccess() throws IOException, SQLException {
-        final ConnectionDefinition originalConnection = SETUP.getConnectionDefinition();
-        final JsonObjectBuilder connectionConfig = SETUP.getConnectionConfig();
+        final ConnectionDefinition originalConnection = setup.getConnectionDefinition();
+        final JsonObjectBuilder connectionConfig = setup.getConnectionConfig();
         connectionConfig.add("s3PathStyleAccess", true);
-        final ConnectionDefinition pathStyleConnection = SETUP.createConnectionDefinition(connectionConfig);
-        SETUP.setConnectionDefinition(pathStyleConnection);
+        final ConnectionDefinition pathStyleConnection = setup.createConnectionDefinition(connectionConfig);
+        setup.setConnectionDefinition(pathStyleConnection);
         try {
             this.createJsonVirtualSchema();
             try (final ResultSet result = this.getStatement()
@@ -141,7 +141,7 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
                 assertThat(result, table().row("book-1").row("book-2").matches());
             }
         } finally {
-            SETUP.setConnectionDefinition(originalConnection);
+            setup.setConnectionDefinition(originalConnection);
         }
     }
 
@@ -151,10 +151,10 @@ class S3DocumentFilesAdapterIT extends AbstractDocumentFilesAdapterIT {
         final int numberOfJsonFiles = 1_000_000;
         createTestSetupWithSmallJsonFiles(numberOfJsonFiles);
         final String mapping = getMappingDefinitionForSmallJsonFiles();
-        final JsonObjectBuilder connectionConfig = SETUP.getConnectionConfig();
+        final JsonObjectBuilder connectionConfig = setup.getConnectionConfig();
         connectionConfig.add("s3Bucket", SMALL_JSON_FILES_FIXTURE_BUCKET);
-        try (final ConnectionDefinition connection = SETUP.createConnectionDefinition(connectionConfig)) {
-            final VirtualSchema virtualSchema = SETUP.createVirtualSchema("SMALL_JSON_FILES_VS", mapping, connection);
+        try (final ConnectionDefinition connection = setup.createConnectionDefinition(connectionConfig)) {
+            final VirtualSchema virtualSchema = setup.createVirtualSchema("SMALL_JSON_FILES_VS", mapping, connection);
             final String sql = "SELECT COUNT(*) FROM (SELECT * FROM " + virtualSchema.getFullyQualifiedName()
                     + ".TEST)";
             for (int runCounter = 0; runCounter < 5; runCounter++) {

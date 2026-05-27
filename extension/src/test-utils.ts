@@ -7,7 +7,7 @@ import { ADAPTER_SCRIPT_NAME, IMPORT_SCRIPT_NAME } from './common';
 const EXTENSION_SCHEMA_NAME = "ext-schema"
 
 export function getInstalledExtension(): any {
-    return (global as any).installedExtension
+    return (globalThis as any).installedExtension
 }
 
 export type ContextMock = Context & {

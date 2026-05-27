@@ -4,7 +4,6 @@ import java.net.*;
 import java.time.Duration;
 
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.localstack.LocalStackContainer.Service;
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
 import org.testcontainers.utility.DockerImageName;
 
@@ -43,7 +42,7 @@ public class MinioContainer extends GenericContainer<MinioContainer> implements 
     }
 
     @Override
-    public URI getEndpointOverride(final Service service) {
+    public URI getEndpointOverride() {
         try {
             final String address = getHost();
             // resolve IP address and use that as the endpoint so that path-style access is automatically used for S3

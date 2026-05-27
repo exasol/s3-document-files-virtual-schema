@@ -79,7 +79,7 @@ class ExtensionIT extends AbstractVirtualSchemaExtensionIT {
             System.setProperty("com.exasol.dockerdb.image", "8.32.0");
         }
         exasolTestSetup = new ExasolTestSetupFactory(IntegrationTestSetup.CLOUD_SETUP_CONFIG).getTestSetup();
-        ExasolVersionCheck.assumeExasolVersion8(exasolTestSetup);
+        ExasolVersionCheck.assumeSupportedExasolVersion(exasolTestSetup);
         setup = ExtensionManagerSetup.create(exasolTestSetup, ExtensionBuilder.createDefaultNpmBuilder(
                 EXTENSION_SOURCE_DIR, EXTENSION_SOURCE_DIR.resolve("dist").resolve(EXTENSION_ID)));
         s3TestSetup = new AwsS3TestSetup();

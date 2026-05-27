@@ -21,6 +21,7 @@ dependency-reduced-pom.xml
 /extension/dist/
 /extension/coverage/
 /extension/src/extension-config.ts
+/extension/tsconfig.tsbuildinfo
 /extension-test.properties
 
 # Others
@@ -45,3 +46,4 @@ test_config.properties
 deleteLambdaResources.sh
 *.flattened-pom.xml
 /.apt_generated/
+/.serena/

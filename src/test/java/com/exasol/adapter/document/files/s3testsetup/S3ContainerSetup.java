@@ -1,12 +1,10 @@
 package com.exasol.adapter.document.files.s3testsetup;
 
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
-
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Optional;
 
-import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import com.exasol.adapter.document.files.connection.S3ConnectionProperties;
@@ -23,16 +21,17 @@ import software.amazon.awssdk.services.s3.S3Client;
 public class S3ContainerSetup implements S3TestSetup {
 
     static class DockerImage {
-        static final String LOCALSTACK = "localstack/localstack:3.5.0";
-        static final String MINIO = "minio/minio:RELEASE.2024-06-13T22-53-53Z.fips";
+        // Latest free version. Switching to floci / https://github.com/floci-io/testcontainers-floci requires Java 17
+        static final String LOCALSTACK = "localstack/localstack:4.14.0";
+        static final String MINIO = "minio/minio:RELEASE.2025-09-07T16-13-09Z";
     }
 
     @SuppressWarnings("resource")
     public static S3ContainerSetup localStack() {
-        final LocalStackContainer container = new LocalStackContainer( //
-                DockerImageName.parse(DockerImage.LOCALSTACK)) //
-                .withServices(S3) //
-                .withReuse(true);
+        final LocalStackContainer container = new LocalStackContainer(
+                DockerImageName.parse(DockerImage.LOCALSTACK))
+                        .withServices("s3")
+                        .withReuse(true);
         return new S3ContainerSetup(LocalStackS3Container.of(container));
     }
 
@@ -67,7 +66,7 @@ public class S3ContainerSetup implements S3TestSetup {
     }
 
     public URI getEndpointOverride() {
-        return this.container.getEndpointOverride(S3);
+        return this.container.getEndpointOverride();
     }
 
     private AwsCredentialsProvider getCredentialsProvider() {

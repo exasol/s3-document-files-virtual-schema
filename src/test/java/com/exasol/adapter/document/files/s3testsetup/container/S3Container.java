@@ -2,8 +2,6 @@ package com.exasol.adapter.document.files.s3testsetup.container;
 
 import java.net.URI;
 
-import org.testcontainers.containers.localstack.LocalStackContainer.Service;
-
 public interface S3Container {
 
     String getAccessKey();
@@ -12,7 +10,7 @@ public interface S3Container {
 
     String getRegion();
 
-    URI getEndpointOverride(Service service);
+    URI getEndpointOverride();
 
     void start();
 

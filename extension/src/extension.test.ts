@@ -157,7 +157,7 @@ describe("S3 VS Extension", () => {
 
     describe("addInstance()", () => {
         describe("connection parameters converted", () => {
-            type TestCase = { name: string, paramValues: ParameterValue[], expected: string }
+            interface TestCase { name: string, paramValues: ParameterValue[], expected: string }
             const tests: TestCase[] = [
                 { name: "no parameters", paramValues: [], expected: '{}' },
                 { name: "unknown parameter", paramValues: [{ name: "unknown", value: "ignore" }], expected: '{}' },

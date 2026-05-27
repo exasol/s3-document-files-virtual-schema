@@ -2,6 +2,12 @@
 
 This user guide helps you with getting started with the S3 Files Virtual Schemas.
 
+## Telemetry
+
+This virtual schema uses `telemetry-java` to send anonymous feature-usage events.
+
+For details on what is collected and how to disable telemetry, see the [documentation](https://github.com/exasol/telemetry-java/blob/main/doc/app-user-guide.md).
+
 ### Installation
 
 Upload the latest available [release of this adapter](https://github.com/exasol/s3-document-files-virtual-schema/releases) to BucketFS. See the Exasol documentation for details: [Create a bucket in BucketFS](https://docs.exasol.com/administration/on-premise/bucketfs/create_new_bucket_in_bucketfs_service.htm), [Access Files in BucketFS](https://docs.exasol.com/administration/on-premise/bucketfs/accessfiles.htm).
@@ -17,7 +23,7 @@ Next create the Adapter Script:
 ```sql
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
     %scriptclass com.exasol.adapter.RequestDispatcher;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-8.1.14-s3-3.1.11.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-9.0.1-s3-4.0.0.jar;
 /
 ```
 
@@ -30,7 +36,7 @@ CREATE OR REPLACE JAVA SET SCRIPT ADAPTER.IMPORT_FROM_S3_DOCUMENT_FILES(
   CONNECTION_NAME VARCHAR(500))
   EMITS(...) AS
     %scriptclass com.exasol.adapter.document.UdfEntryPoint;
-    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-8.1.14-s3-3.1.11.jar;
+    %jar /buckets/bfsdefault/default/document-files-virtual-schema-dist-9.0.1-s3-4.0.0.jar;
 /
 ```
 
@@ -128,7 +134,7 @@ In DbVisualizer use exactly this command:
 --/
 CREATE OR REPLACE JAVA ADAPTER SCRIPT ADAPTER.S3_FILES_ADAPTER AS
    %scriptclass com.exasol.adapter.RequestDispatcher;
-   %jar /buckets/bfsdefault/default/vs/document-files-virtual-schema-dist-8.1.14-s3-3.1.11.jar;
+   %jar /buckets/bfsdefault/default/vs/document-files-virtual-schema-dist-9.0.1-s3-4.0.0.jar;
 /
 ```
 

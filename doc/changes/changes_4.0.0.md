@@ -55,6 +55,7 @@ Code name:
 #### Development Dependency Updates
 
 * Updated `eslint:9.28.0` to `10.4.0`
+* Added `@eslint/js:^10.0.1`
 * Updated `ts-jest:^29.3.4` to `^29.4.11`
 * Updated `@types/jest:^29.5.14` to `^30.0.0`
 * Updated `typescript-eslint:^8.33.1` to `^8.60.0`

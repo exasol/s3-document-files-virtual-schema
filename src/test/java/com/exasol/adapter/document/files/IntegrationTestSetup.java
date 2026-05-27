@@ -2,16 +2,11 @@ package com.exasol.adapter.document.files;
 
 import static com.exasol.adapter.document.GenericUdfCallHandler.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
 
@@ -28,15 +23,12 @@ import com.exasol.exasoltestsetup.ExasolTestSetup;
 import com.exasol.exasoltestsetup.ExasolTestSetupFactory;
 import com.exasol.udfdebugging.UdfTestSetup;
 
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
-import jakarta.json.JsonWriter;
+import jakarta.json.*;
 import software.amazon.awssdk.services.s3.S3Client;
 
 public class IntegrationTestSetup implements AutoCloseable {
     public static final Path CLOUD_SETUP_CONFIG = Path.of("cloudSetup/generated/testConfig.json");
-    public static final String ADAPTER_JAR = "document-files-virtual-schema-dist-8.1.14-s3-3.1.11.jar";
+    public static final String ADAPTER_JAR = "document-files-virtual-schema-dist-9.0.1-s3-4.0.0.jar";
     public static final Path ADAPTER_JAR_LOCAL_PATH = Path.of("target", ADAPTER_JAR);
     public final String s3BucketName;
     private final ExasolTestSetup exasolTestSetup = new ExasolTestSetupFactory(CLOUD_SETUP_CONFIG).getTestSetup();
@@ -97,7 +89,7 @@ public class IntegrationTestSetup implements AutoCloseable {
                 .add("awsAccessKeyId", this.s3TestSetup.getUsername())//
                 .add("awsSecretAccessKey", this.s3TestSetup.getPassword());
         this.s3TestSetup.getMfaToken().ifPresent(s -> builder.add("awsSessionToken", s));
-        this.getInDatabaseS3Address().ifPresent(address -> builder.add("awsEndpointOverride", address.toString()));
+        this.getInDatabaseS3Address().ifPresent(address -> builder.add("awsEndpointOverride", address));
         return builder;
     }
 
@@ -118,7 +110,7 @@ public class IntegrationTestSetup implements AutoCloseable {
 
     private Optional<String> getInDatabaseS3Address() {
         return this.s3TestSetup.getEntrypoint()
-                .map(address -> this.exasolTestSetup.makeTcpServiceAccessibleFromDatabase(address))
+                .map(this.exasolTestSetup::makeTcpServiceAccessibleFromDatabase)
                 .map(InetSocketAddress::toString);
     }
 
@@ -162,7 +154,7 @@ public class IntegrationTestSetup implements AutoCloseable {
             final ConnectionDefinition connection) {
         final VirtualSchema virtualSchema = getPreconfiguredVirtualSchemaBuilder(schemaName)
                 .connectionDefinition(connection)//
-                .properties(getVirtualSchemaProperties(mapping)).build();
+                .addProperties(getVirtualSchemaProperties(mapping)).build();
         this.createdObjects.add(virtualSchema);
         return virtualSchema;
     }

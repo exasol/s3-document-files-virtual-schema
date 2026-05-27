@@ -2,8 +2,7 @@ package com.exasol.adapter.document.files.s3testsetup.container;
 
 import java.net.URI;
 
-import org.testcontainers.containers.localstack.LocalStackContainer;
-import org.testcontainers.containers.localstack.LocalStackContainer.Service;
+import org.testcontainers.localstack.LocalStackContainer;
 
 public class LocalStackS3Container implements S3Container {
 
@@ -33,8 +32,8 @@ public class LocalStackS3Container implements S3Container {
     }
 
     @Override
-    public URI getEndpointOverride(final Service service) {
-        return this.container.getEndpointOverride(service);
+    public URI getEndpointOverride() {
+        return this.container.getEndpoint();
     }
 
     @Override

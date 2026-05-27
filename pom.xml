@@ -2,14 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>3.1.11</version>
+    <version>4.0.0</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
-        <junit.version>5.14.1</junit.version>
-        <org.testcontainers.version>1.21.4</org.testcontainers.version>
-        <vs-common-document-files.version>8.1.14</vs-common-document-files.version>
+        <org.testcontainers.version>2.0.5</org.testcontainers.version>
+        <vs-common-document-files.version>9.0.1</vs-common-document-files.version>
         <!-- Additional sonar configuration for analyzing TypeScript extension -->
         <sonar.sources>src/main/,extension/src/</sonar.sources>
         <sonar.exclusions>extension/src/*.test.ts</sonar.exclusions>
@@ -39,15 +38,7 @@
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
-                <version>2.40.11</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!-- Fix CVE-2025-12383 in transitive dependencies of extension-manager-integration-test-java -->
-            <dependency>
-                <groupId>org.glassfish.jersey</groupId>
-                <artifactId>jersey-bom</artifactId>
-                <version>2.47</version>
+                <version>2.44.13</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -98,45 +89,40 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>${junit.version}</version>
+            <!-- Version 6 requires Java 17 -->
+            <version>5.14.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.21.0</version>
+            <version>5.23.0</version>
             <scope>test</scope>
         </dependency>
         <!--Integration test dependencies-->
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>testcontainers-junit-jupiter</artifactId>
             <version>${org.testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>localstack</artifactId>
+            <artifactId>testcontainers-localstack</artifactId>
             <version>${org.testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>test-db-builder-java</artifactId>
-            <version>3.6.4</version>
+            <version>4.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>2.0.17</version>
+            <version>2.0.18</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -173,7 +159,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.14.0</version>
+            <version>1.15.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -185,14 +171,14 @@
         <dependency>
             <groupId>com.exasol</groupId>
             <artifactId>extension-manager-integration-test-java</artifactId>
-            <version>0.5.16</version>
+            <version>0.5.19</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- Required for integration testing the extension. This is required by extension-manager-integration-test-java but seems to be overwritten by another dependency. -->
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.20.1</version>
+            <version>2.21.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -215,18 +201,7 @@
                     <excludeVulnerabilityIds>
                         <!-- Transitive test dependency xerces:xercesImpl:jar:2.12.2. We assume that we only connect to the known endpoint ExaOperations.-->
                         <exclude>CVE-2017-10355</exclude>
-                        <!-- com.exasol:exasol-jdbc:jar:24.2.1:test -->
-                        <exclude>CVE-2024-55551</exclude>
                     </excludeVulnerabilityIds>
-                    <excludeCoordinates>
-                        <!-- Excludes CVE-2025-67721 in transitive dependency `io.airlift:aircompressor:jar:2.0.2` of `parquet-hadoop` and `parquet-io` -->
-                        <!-- Remove when the new version of `parquet-hadoop` and `parquet-io` fixes this vulnerability -->
-                        <exclude>
-                            <groupId>io.airlift</groupId>
-                            <artifactId>aircompressor</artifactId>
-                            <version>2.0.2</version>
-                        </exclude>
-                    </excludeCoordinates>
                 </configuration>
             </plugin>
             <plugin>
@@ -243,7 +218,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>5.4.6</version>
+                <version>5.6.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -275,7 +250,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.5.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -308,7 +282,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <id>npm-ci</id>
@@ -369,7 +342,7 @@
     <parent>
         <artifactId>s3-document-files-virtual-schema-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>3.1.11</version>
+        <version>4.0.0</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
 </project>

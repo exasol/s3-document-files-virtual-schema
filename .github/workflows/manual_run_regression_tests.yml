@@ -9,25 +9,28 @@ on:
 jobs:
   performance-regression-tests:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Print tag name
-        run: echo ${{ github.event.release.tag_name }}
+        run: echo ${GITHUB_EVENT_RELEASE_TAG_NAME}
+        env:
+          GITHUB_EVENT_RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
       - name: Checkout the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          persist-credentials: false
       - name: Set up JDKs
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version: |
             11
             17
-          cache: "maven"
       - name: Run local smoketests
         run: |
           mvn --batch-mode --update-snapshots clean artifact-reference-checker:verify test -DtrimStackTrace=false -Dtest.coverage=false \
-            -Derror-code-crawler.skip=true -Dmaven.javadoc.skip=true -Dproject-keeper.skip=true
+            -Derror-code-crawler.skip=true -Dmaven.javadoc.skip=true -Dproject-keeper.skip=true -DossindexSkip=true
       - name: Create AWS test setup
         run: |
           echo "owner = \"$OWNER\"" > cloudSetup/terraform.tfvars
@@ -47,18 +50,13 @@ jobs:
         run: |
           mvn --batch-mode verify \
                -DtrimStackTrace=false -PregressionTests -Dtest.coverage=false \
-               -Derror-code-crawler.skip=true -Dmaven.javadoc.skip=true -Dproject-keeper.skip=true
+               -Derror-code-crawler.skip=true -Dmaven.javadoc.skip=true -Dproject-keeper.skip=true -DossindexSkip=true
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "eu-central-1"
-      - name: Publish Test Report
-        uses: scacap/action-surefire-report@v1
-        if: ${{ always() }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload regression test result
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: performance-test-results
           path: target/performanceLog-*.csv
@@ -76,7 +74,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Report Status to Slack channel
         if: always()
-        uses: ravsamhq/notify-slack-action@v2
+        uses: ravsamhq/notify-slack-action@be814b201e233b2dc673608aa46e5447c8ab13f2
         with:
           status: ${{ job.status }}
           notification_title: "AWS S3 VS Performance regression tests: {workflow} has {status_message}"

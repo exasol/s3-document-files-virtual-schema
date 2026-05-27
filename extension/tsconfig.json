@@ -4,11 +4,12 @@
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
-    "module": "es6",
     "target": "es6",
-    "outDir": "dist/",
+    "outDir": "./dist/",
+    "rootDir": "./src/",
     "declaration": true,
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
@@ -16,6 +17,10 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.test.ts"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "src/**/*.test.ts"
+  ]
 }

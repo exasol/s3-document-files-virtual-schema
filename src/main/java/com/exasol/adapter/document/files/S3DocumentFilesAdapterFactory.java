@@ -1,7 +1,6 @@
 package com.exasol.adapter.document.files;
 
-import com.exasol.adapter.AdapterFactory;
-import com.exasol.adapter.VirtualSchemaAdapter;
+import com.exasol.adapter.*;
 import com.exasol.adapter.document.DocumentAdapter;
 import com.exasol.logging.VersionCollector;
 
@@ -16,7 +15,7 @@ public class S3DocumentFilesAdapterFactory implements AdapterFactory {
     public static final String ADAPTER_NAME = "S3_DOCUMENT_FILES";
 
     @Override
-    public VirtualSchemaAdapter createAdapter() {
+    public VirtualSchemaAdapter createAdapter(final AdapterContext context) {
         return new DocumentAdapter(new DocumentFilesAdapter(ADAPTER_NAME, new S3FileFinderFactory()));
     }
 
@@ -30,5 +29,10 @@ public class S3DocumentFilesAdapterFactory implements AdapterFactory {
     @Override
     public String getAdapterName() {
         return ADAPTER_NAME;
+    }
+
+    @Override
+    public String getAdapterProjectShortTag() {
+        return "VSS3";
     }
 }

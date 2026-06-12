@@ -34,3 +34,11 @@ This release fixes vulnerabilities in the following dependencies:
 * Updated `com.exasol:performance-test-recorder-java:0.1.5` to `0.1.6`
 * Updated `com.exasol:test-db-builder-java:4.0.0` to `4.0.1`
 * Updated `com.fasterxml.jackson.core:jackson-databind:2.21.3` to `2.22.0`
+
+### Extension
+
+#### Development Dependency Updates
+
+* Updated `eslint:10.4.0` to `10.4.1`
+* Updated `typescript-eslint:^8.60.0` to `^8.61.0`
+* Updated `esbuild:^0.28.0` to `^0.28.1`

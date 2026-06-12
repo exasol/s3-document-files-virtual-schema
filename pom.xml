@@ -292,7 +292,7 @@
                         <configuration>
                             <workingDirectory>extension/</workingDirectory>
                             <executable>npm</executable>
-                            <commandlineArgs>ci</commandlineArgs>
+                            <commandlineArgs>ci --ignore-scripts --no-fund</commandlineArgs>
                             <useMavenLogger>false</useMavenLogger>
                         </configuration>
                     </execution>

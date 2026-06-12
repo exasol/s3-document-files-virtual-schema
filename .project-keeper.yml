@@ -24,7 +24,7 @@ build:
           job: matrix-build
           stepId: setup-java
           content:
-            name: Set up Node 22
+            name: Set up Node
             id: setup-node
             uses: actions/setup-node@v6
             with:

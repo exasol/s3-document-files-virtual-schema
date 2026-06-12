@@ -23,7 +23,9 @@ public class S3ContainerSetup implements S3TestSetup {
     static class DockerImage {
         // Latest free version. Switching to floci / https://github.com/floci-io/testcontainers-floci requires Java 17
         static final String LOCALSTACK = "localstack/localstack:4.14.0";
-        static final String MINIO = "minio/minio:RELEASE.2025-09-07T16-13-09Z";
+        // MinIO no longer provides binaries. Chainguard only provides the latest version, tags require payment.
+        // https://images.chainguard.dev/directory/image/minio/versions
+        static final String MINIO = "cgr.dev/chainguard/minio:latest";
     }
 
     @SuppressWarnings("resource")

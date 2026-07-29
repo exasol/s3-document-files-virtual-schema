@@ -5,10 +5,6 @@ sources:
       - integration_tests
       - jar_artifact
       - udf_coverage
-  - type: npm
-    path: extension/package.json
-    artifacts:
-      - dist/s3-vs-extension.js
 version:
   fromSource: pom.xml
 build:
@@ -16,40 +12,21 @@ build:
   freeDiskSpace: true
   exasolDbVersions:
     - "2026.1.0"
-    - "2025.1.10"
+    - "2025.1.13"
   workflows:
     - name: ci-build.yml
       stepCustomizations:
         - action: INSERT_AFTER
           job: matrix-build
-          stepId: setup-java
-          content:
-            name: Set up Node
-            id: setup-node
-            uses: actions/setup-node@v6
-            with:
-              node-version: "24"
-              cache: "npm"
-              cache-dependency-path: extension/package-lock.json
-        - action: INSERT_AFTER
-          job: matrix-build
-          stepId: setup-node
-          content:
-            name: Set up Go
-            id: setup-go
-            uses: actions/setup-go@v6
-            with:
-              go-version: "1.26"
-              cache-dependency-path: pom.xml
-        - action: INSERT_AFTER
-          job: matrix-build
-          stepId: setup-node
+          stepId: enable-testcontainer-reuse
           content:
             name: Create test_config.properties
             id: create-test-config
             run: |
-              echo "owner = ${{ secrets.AWS_TAG_OWNER }}" > test_config.properties
+              echo "owner = $AWS_TAG_OWNER" > test_config.properties
               echo "s3CacheBucket = persistent-s3-vs-test-file-cache" >> test_config.properties
+            env:
+              AWS_TAG_OWNER: ${{ secrets.AWS_TAG_OWNER }}
 
         - action: REPLACE
           stepId: build-pk-verify

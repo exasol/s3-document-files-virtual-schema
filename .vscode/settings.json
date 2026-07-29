@@ -5,14 +5,12 @@
         "source.generate.finalModifiers": "explicit",
         "source.fixAll": "explicit"
     },
-    "java.saveActions.organizeImports": true,
     "java.sources.organizeImports.starThreshold": 3,
     "java.sources.organizeImports.staticStarThreshold": 3,
     "java.test.config": {
         "vmArgs": [
             "-Djava.util.logging.config.file=src/test/resources/logging.properties",
-            "-Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl",
-            "-Dcom.exasol.dockerdb.image=8.32.0"
+            "-Dcom.exasol.dockerdb.image=2026.1.0"
         ]
     },
     "sonarlint.connectedMode.project": {

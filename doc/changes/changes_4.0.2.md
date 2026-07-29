@@ -1,12 +1,31 @@
-# Virtual Schema for Document Data in Files on AWS S3 4.0.2, released 2026-??-??
+# Virtual Schema for Document Data in Files on AWS S3 4.0.2, released 2026-07-29
 
-Code name:
+Code name: Fixed vulnerabilities CVE-2026-59900, CVE-2026-59899, CVE-2026-59898, CVE-2026-56746, CVE-2026-56745, CVE-2026-55833, CVE-2026-55831, CVE-2026-56819, CVE-2026-59921, CVE-2026-59901, CVE-2026-9563, CVE-2026-59889, CVE-2026-54515, CVE-2017-10355, CVE-2017-7503, CVE-2026-54428, CVE-2026-54399
 
 ## Summary
 
-## Features
+This release fixes 17 vulnerabilities in dependencies.
 
-* ISSUE_NUMBER: description
+## Security
+
+* #223: Fixed CVE-2026-59900 in `io.netty:netty-codec-http2:jar:4.1.135.Final:runtime`
+* #222: Fixed CVE-2026-59899 in `io.netty:netty-codec-http:jar:4.1.135.Final:runtime`
+* #221: Fixed CVE-2026-59898 in `io.netty:netty-codec-http:jar:4.1.135.Final:runtime`
+* #220: Fixed CVE-2026-56746 in `io.netty:netty-codec-http:jar:4.1.135.Final:runtime`
+* #219: Fixed CVE-2026-56745 in `io.netty:netty-codec-http:jar:4.1.135.Final:runtime`
+* #218: Fixed CVE-2026-55833 in `io.netty:netty-codec-http:jar:4.1.135.Final:runtime`
+* #217: Fixed CVE-2026-55831 in `io.netty:netty-codec-http:jar:4.1.135.Final:runtime`
+* #216: Fixed CVE-2026-56819 in `io.netty:netty-codec-http2:jar:4.1.135.Final:runtime`
+* #215: Fixed CVE-2026-59921 in `io.netty:netty-codec-http:jar:4.1.135.Final:runtime`
+* #214: Fixed CVE-2026-59901 in `io.netty:netty-codec:jar:4.1.135.Final:runtime`
+* #213: Fixed CVE-2026-9563 in `org.eclipse.parsson:parsson:jar:1.1.7:test`
+* #212: Fixed CVE-2026-59889 in `com.fasterxml.jackson.core:jackson-databind:jar:2.22.0:test`
+* #211: Fixed CVE-2026-54515 in `com.fasterxml.jackson.core:jackson-databind:jar:2.22.0:test`
+* #210: Fixed CVE-2017-10355 in `xerces:xercesImpl:jar:2.12.2:test`
+* #209: Fixed CVE-2017-7503 in `xerces:xercesImpl:jar:2.12.2:test`
+* #208: Fixed CVE-2026-54428 in `org.apache.httpcomponents.core5:httpcore5-h2:jar:5.4:runtime`
+* #207: Fixed CVE-2026-54399 in `org.apache.httpcomponents.core5:httpcore5:jar:5.4.2:runtime`
+
 
 ## Dependency Updates
 

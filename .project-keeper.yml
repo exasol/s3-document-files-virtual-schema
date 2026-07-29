@@ -23,8 +23,10 @@ build:
             name: Create test_config.properties
             id: create-test-config
             run: |
-              echo "owner = ${{ secrets.AWS_TAG_OWNER }}" > test_config.properties
+              echo "owner = $AWS_TAG_OWNER" > test_config.properties
               echo "s3CacheBucket = persistent-s3-vs-test-file-cache" >> test_config.properties
+            env:
+              AWS_TAG_OWNER: ${{ secrets.AWS_TAG_OWNER }}
 
         - action: REPLACE
           stepId: build-pk-verify

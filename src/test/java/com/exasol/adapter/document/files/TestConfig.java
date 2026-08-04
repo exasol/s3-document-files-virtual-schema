@@ -60,7 +60,8 @@ public final class TestConfig {
                 properties.load(stream);
                 return properties;
             } catch (final NoSuchFileException exception) {
-                throw new IllegalArgumentException("Could not find " + path + ". Please create that file in the root of this project.");
+                throw new IllegalArgumentException(
+                        "Could not find " + path + ". This file is required for integration tests. See developer guide for details.");
             } catch (final IOException exception) {
                 throw new UncheckedIOException("Failed to load " + path, exception);
             }

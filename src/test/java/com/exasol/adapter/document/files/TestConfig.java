@@ -60,8 +60,7 @@ public final class TestConfig {
                 properties.load(stream);
                 return properties;
             } catch (final NoSuchFileException exception) {
-                throw new IllegalArgumentException("Could not find " + path
-                        + ". Please create that file in the root of this project or migrate from old config file 'test_config.yml'");
+                throw new IllegalArgumentException("Could not find " + path + ". Please create that file in the root of this project.");
             } catch (final IOException exception) {
                 throw new UncheckedIOException("Failed to load " + path, exception);
             }

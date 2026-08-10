@@ -21,5 +21,4 @@ io.netty:netty-codec-http - Use of Cache Containing Sensitive Information
 
 ### Compile Dependency Updates
 
-* Added `io.netty:netty-codec-http:4.2.17.Final`
 * Updated `software.amazon.awssdk:s3:2.50.3` to `2.51.3`

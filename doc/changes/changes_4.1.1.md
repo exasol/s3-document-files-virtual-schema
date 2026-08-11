@@ -1,4 +1,4 @@
-# Virtual Schema for Document Data in Files on AWS S3 4.1.1, released 2026-??-??
+# Virtual Schema for Document Data in Files on AWS S3 4.1.1, released 2026-08-10
 
 Code name: Fixed vulnerability CVE-2026-59903 in io.netty:netty-codec-http:jar:4.1.136.Final:runtime
 

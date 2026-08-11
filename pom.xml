@@ -53,16 +53,12 @@
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>io.netty</groupId>
-                    <artifactId>netty-codec-http</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <!-- Upgrade transitive dependency of software.amazon.awssdk:s3 to fix CVE-2026-59903 -->
             <groupId>io.netty</groupId>
-            <artifactId>netty-codec-http</artifactId>
+            <artifactId>netty-bom</artifactId>
             <version>4.1.137.Final</version>
         </dependency>
         <dependency>

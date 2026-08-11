@@ -36,6 +36,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <!-- Upgrade transitive dependency of software.amazon.awssdk:s3 to fix CVE-2026-59903 -->
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>4.1.137.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -54,12 +62,6 @@
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <!-- Upgrade transitive dependency of software.amazon.awssdk:s3 to fix CVE-2026-59903 -->
-            <groupId>io.netty</groupId>
-            <artifactId>netty-bom</artifactId>
-            <version>4.1.137.Final</version>
         </dependency>
         <dependency>
             <groupId>com.exasol</groupId>

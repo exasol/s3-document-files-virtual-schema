@@ -1,16 +1,16 @@
-# Virtual Schema for Document Data in Files on AWS S3 4.1.2, released 2026-??-??
+# Virtual Schema for Document Data in Files on AWS S3 4.1.2, released 2026-09-16
 
-Code name: Fixed vulnerabilities CVE-2026-73334, CVE-2026-86231, CVE-2026-89044, CVE-2026-87795, CVE-2026-87823, CVE-2026-89045, CVE-2026-89044
+Code name: Fixed vulnerabilities CVE-2026-73334, CVE-2026-86231, CVE-2026-89044, CVE-2026-87795, CVE-2026-87823, CVE-2026-89045, CVE-2026-89044, CVE-2026-71290, CVE-2026-64607
 
 ## Summary
 
-This release fixes the following 7 vulnerabilities:
+This release fixes the following 9 vulnerabilities:
 
 ### CVE-2026-73334 (CWE-20) in dependency `org.apache.parquet:parquet-hadoop:jar:1.17.1:compile`
-Potential problem for users of theÂ org.apache.parquet.crypto.keytools package in Apache Parquet, versions 1.12 to 1.18. 
+Potential problem for users of theÂ org.apache.parquet.crypto.keytools package in Apache Parquet, versions 1.12 to 1.18.
 This package enables users to encrypt Parquet files via an envelope encryption mechanism that wraps (encrypts) data keys via a Key Management Service (KMS).Â 
 On the reader side, the KMS URL can be application-controlled or file-controlled.
-If the user does not leverage application control for this parameter, a file-controlled KMS URL is forwarded to a pluggable KmsClient implementation. 
+If the user does not leverage application control for this parameter, a file-controlled KMS URL is forwarded to a pluggable KmsClient implementation.
 If the pluggable implementation does not perform host validation, a KMS token can be sent to a malicious host set by an attacker in the file.
 
 Before the problem is fixed, users are recommended toÂ leverage application control for KMS URL parameter in readers (versions 1.12-1.18).
@@ -73,8 +73,31 @@ Netty versions 4.1.133.Final through 4.1.137.Final and 4.2.13.Final through 4.2.
 * https://github.com/netty/netty/releases/tag/netty-4.2.18.Final
 * https://github.com/netty/netty/security/advisories/GHSA-hcvj-94mj-jp5c
 
+### CVE-2026-71290 (CWE-295) in dependency `org.apache.httpcomponents.client5:httpclient5:jar:5.6.2:runtime`
+Improper TLS hostname verification vulnerability in Apache HttpComponents Client 5.4 or newer.Â HostnameVerificationPolicy#BUILTIN setting has no effect when used with the async version of HttpClient. An attacker that can intercept and modify traffic between the client and the server can impersonate the server by presenting a valid certificate for a different domain.Â 
+
+Please note the classic version of HttpClient is not affected by this vulnerability.Â 
+
+Affected users are recommended to upgrade to at least version 5.6.4, which fixes the issue.
+#### References
+* https://guide.sonatype.com/vulnerability/CVE-2026-71290?component-type=maven&component-name=org.apache.httpcomponents.client5%2Fhttpclient5&utm_source=ossindex-client&utm_medium=integration&utm_content=1.8.1
+* http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-71290
+* https://lists.apache.org/thread/bhf7g2zwpom2ohvwjjjlonc93br2s8vq
+* https://github.com/advisories/GHSA-72q8-9rgw-5g6j
+
+### CVE-2026-64607 (CWE-772) in dependency `org.apache.httpcomponents.client5:httpclient5:jar:5.6.2:runtime`
+HttpClient based on the classic i/o model fails to correctly release the underlying connection back to the connection manager if it encounters an invalid or unsupported `Content-Encoding` header value in the response message.Â Please note this defect does not affect HttpClient based on the async i/o model.
+
+This issue affects Apache HttpComponents Client: from 5.0-alpha1 through 5.6.2.
+#### References
+* https://guide.sonatype.com/vulnerability/CVE-2026-64607?component-type=maven&component-name=org.apache.httpcomponents.client5%2Fhttpclient5&utm_source=ossindex-client&utm_medium=integration&utm_content=1.8.1
+* http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2026-64607
+* https://github.com/advisories/GHSA-hjcp-jmpx-g3qm
+
 ## Security
 
+* #230: Fixed vulnerability CVE-2026-64607 in dependency `org.apache.httpcomponents.client5:httpclient5:jar:5.6.2:runtime`
+* #232: Fixed vulnerability CVE-2026-71290 in dependency `org.apache.httpcomponents.client5:httpclient5:jar:5.6.2:runtime`
 * #234: Fixed vulnerability CVE-2026-73334 in dependency `org.apache.parquet:parquet-hadoop:jar:1.17.1:compile`
 * #235: Fixed vulnerability CVE-2026-86231 in dependency `com.github.mwiede:jsch:jar:2.28.4:test`
 * #236: Fixed vulnerability CVE-2026-89044 in dependency `io.netty:netty-codec-http2:jar:4.1.137.Final:runtime`
@@ -87,7 +110,8 @@ Netty versions 4.1.133.Final through 4.1.137.Final and 4.2.13.Final through 4.2.
 
 ### Compile Dependency Updates
 
-* Updated `software.amazon.awssdk:s3:2.51.3` to `2.54.17`
+* Updated `com.exasol:virtual-schema-common-document-files:9.1.0` to `9.1.1`
+* Updated `software.amazon.awssdk:s3:2.51.3` to `2.54.19`
 
 ### Runtime Dependency Updates
 
@@ -95,9 +119,17 @@ Netty versions 4.1.133.Final through 4.1.137.Final and 4.2.13.Final through 4.2.
 
 ### Test Dependency Updates
 
-* Updated `nl.jqno.equalsverifier:equalsverifier:3.19.4` to `4.5.2`
-* Updated `org.junit.jupiter:junit-jupiter-params:5.14.4` to `6.1.3`
+* Updated `com.exasol:exasol-test-setup-abstraction-java:3.0.0` to `3.0.1`
+* Updated `com.exasol:hamcrest-resultset-matcher:1.7.3` to `1.7.4`
+* Updated `com.exasol:small-json-files-test-fixture:0.1.15` to `0.1.16`
+* Updated `com.exasol:test-db-builder-java:4.0.2` to `4.0.3`
+* Updated `com.exasol:virtual-schema-common-document-files:9.1.0` to `9.1.1`
 
 ### Plugin Dependency Updates
 
+* Updated `com.exasol:error-code-crawler-maven-plugin:2.1.0` to `2.1.1`
 * Updated `com.exasol:project-keeper-maven-plugin:5.7.4` to `5.7.5`
+* Updated `io.github.git-commit-id:git-commit-id-maven-plugin:10.0.0` to `10.0.1`
+* Updated `org.apache.maven.plugins:maven-jar-plugin:3.5.0` to `3.5.1`
+* Updated `org.apache.maven.plugins:maven-toolchains-plugin:3.2.0` to `3.3.0`
+* Updated `org.codehaus.mojo:flatten-maven-plugin:1.7.3` to `1.8.0`

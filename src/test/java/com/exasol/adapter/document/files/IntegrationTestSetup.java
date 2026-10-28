@@ -42,6 +42,7 @@ public class IntegrationTestSetup implements AutoCloseable {
     private final S3TestSetup s3TestSetup;
     private final UdfTestSetup udfTestSetup;
 
+    @SuppressWarnings("this-escape") // Acceptable
     public IntegrationTestSetup(final S3TestSetup s3TestSetup, final String s3BucketName)
             throws SQLException, BucketAccessException, TimeoutException, FileNotFoundException {
         this.s3TestSetup = s3TestSetup;

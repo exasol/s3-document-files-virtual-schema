@@ -13,6 +13,7 @@ public class MinioContainer extends GenericContainer<MinioContainer> implements 
     private static final String ADMIN_ACCESS_KEY = "admin";
     private static final String ADMIN_SECRET_KEY = "12345678";
 
+    @SuppressWarnings("this-escape") // Acceptable
     public MinioContainer(final DockerImageName dockerImageName) {
         super(dockerImageName);
         this.withEnv("MINIO_ACCESS_KEY", ADMIN_ACCESS_KEY) //

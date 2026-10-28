@@ -1,4 +1,4 @@
 {
-  "app": "mvn -e -q compile exec:java",
+  "app": "../mvnw -e -q compile exec:java",
   "context": {}
 }

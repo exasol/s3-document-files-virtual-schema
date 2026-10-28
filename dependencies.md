@@ -16,7 +16,7 @@
 | [Hamcrest][6]                                   | [BSD-3-Clause][7]                 |
 | [EqualsVerifier \| release normal jar][8]       | [Apache License, Version 2.0][9]  |
 | [Virtual Schema for document data in files][0]  | [MIT License][1]                  |
-| [JUnit Jupiter Params][10]                      | [Eclipse Public License v2.0][11] |
+| [JUnit Jupiter (Aggregator)][10]                | [Eclipse Public License v2.0][11] |
 | [mockito-core][12]                              | [MIT][13]                         |
 | [Testcontainers :: JUnit Jupiter Extension][14] | [MIT][15]                         |
 | [Testcontainers :: Localstack][14]              | [MIT][15]                         |

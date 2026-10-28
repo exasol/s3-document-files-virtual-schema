@@ -2,11 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>s3-document-files-virtual-schema</artifactId>
-    <version>4.1.1</version>
+    <version>5.0.0</version>
     <name>Virtual Schema for document data in files on AWS S3</name>
     <description>Adapter for document data access from files from AWS S3.</description>
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
+        <java.version>17</java.version>
         <org.testcontainers.version>2.0.5</org.testcontainers.version>
         <vs-common-document-files.version>9.1.0</vs-common-document-files.version>
     </properties>
@@ -197,7 +198,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>5.7.4</version>
+                <version>5.8.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -225,7 +226,7 @@
     <parent>
         <artifactId>s3-document-files-virtual-schema-generated-parent</artifactId>
         <groupId>com.exasol</groupId>
-        <version>4.1.1</version>
+        <version>5.0.0</version>
         <relativePath>pk_generated_parent.pom</relativePath>
     </parent>
 </project>

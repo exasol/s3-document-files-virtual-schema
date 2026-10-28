@@ -8,7 +8,6 @@
     <url>https://github.com/exasol/s3-document-files-virtual-schema/</url>
     <properties>
         <java.version>17</java.version>
-        <org.testcontainers.version>2.0.5</org.testcontainers.version>
         <vs-common-document-files.version>10.0.1</vs-common-document-files.version>
     </properties>
     <profiles>
@@ -105,13 +104,13 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers-junit-jupiter</artifactId>
-            <version>${org.testcontainers.version}</version>
+            <version>2.0.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers-localstack</artifactId>
-            <version>${org.testcontainers.version}</version>
+            <groupId>io.floci</groupId>
+            <artifactId>testcontainers-floci-aws</artifactId>
+            <version>2.17.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

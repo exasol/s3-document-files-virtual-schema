@@ -17,7 +17,7 @@ See also [PK ticket #461](https://github.com/exasol/project-keeper/issues/461).
 
 The integration tests of this project use an S3 bucket. There are multiple ways to use or emulate S3 buckets:
 * Real S3 buckets in the AWS cloud
-* [Localstack](https://github.com/localstack/localstack)
+* [Floci](https://github.com/floci-io/floci)
 * [MinIO](https://min.io)
 
 For using real AWS S3 buckets you need to configure the tests appropriately by creating file `s3-document-files-virtual-schema/test_config.properties` with the following content:

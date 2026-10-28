@@ -19,7 +19,7 @@
 | [JUnit Jupiter (Aggregator)][10]                | [Eclipse Public License v2.0][11] |
 | [mockito-core][12]                              | [MIT][13]                         |
 | [Testcontainers :: JUnit Jupiter Extension][14] | [MIT][15]                         |
-| [Testcontainers Floci AWS][16]                  | [MIT License][13]                 |
+| [Testcontainers Floci (relocated)][16]          | [MIT License][13]                 |
 | [Test Database Builder for Java][17]            | [MIT License][18]                 |
 | [udf-debugging-java][19]                        | [MIT License][20]                 |
 | [Matcher for SQL Result Sets][21]               | [MIT License][22]                 |
@@ -81,7 +81,7 @@
 [13]: https://opensource.org/licenses/MIT
 [14]: https://java.testcontainers.org
 [15]: http://opensource.org/licenses/MIT
-[16]: https://github.com/floci-io/testcontainers-floci/testcontainers-floci-aws
+[16]: https://github.com/floci-io/testcontainers-floci/testcontainers-floci
 [17]: https://github.com/exasol/test-db-builder-java/
 [18]: https://github.com/exasol/test-db-builder-java/blob/main/LICENSE
 [19]: https://github.com/exasol/udf-debugging-java/

@@ -10,57 +10,37 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Random;
-import java.util.stream.Stream;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.junit.jupiter.params.AfterParameterizedClassInvocation;
-import org.junit.jupiter.params.BeforeParameterizedClassInvocation;
-import org.junit.jupiter.params.Parameter;
-import org.junit.jupiter.params.ParameterizedClass;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import com.exasol.adapter.document.files.S3Cache;
 import com.exasol.adapter.document.files.s3testsetup.S3ContainerSetup;
-import com.exasol.adapter.document.files.s3testsetup.S3TestBackend;
+import com.exasol.adapter.document.files.s3testsetup.S3TestSetup;
 
 import software.amazon.awssdk.services.s3.S3Client;
 
-@ParameterizedClass
-@MethodSource("backends")
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
-class CacheIT {
+abstract class AbstractCacheIT {
     private static final String TEST_BUCKET_NAME = "test-bucket";
     private static final String CACHE_BUCKET_NAME = "cache-bucket";
-    @Parameter(0)
-    private S3TestBackend backend;
-    private S3ContainerSetup setup;
-    private S3Client s3Client;
+    private static S3Client s3Client;
     private S3Cache.S3Interface s3Interface;
     private S3Cache s3Cache;
 
-    static Stream<S3TestBackend> backends() {
-        return Stream.of(S3TestBackend.values());
+    static void beforeAll(final S3ContainerSetup setup) {
+        s3Client = setup.getS3Client();
+        s3Client.createBucket(request -> request.bucket(TEST_BUCKET_NAME));
+        s3Client.createBucket(request -> request.bucket(CACHE_BUCKET_NAME));
     }
 
-    @BeforeParameterizedClassInvocation
-    void beforeAll(final S3TestBackend backend) {
-        this.backend = backend;
-        this.setup = this.backend.createSetup();
-        this.s3Client = this.setup.getS3Client();
-        this.s3Client.createBucket(request -> request.bucket(TEST_BUCKET_NAME));
-        this.s3Client.createBucket(request -> request.bucket(CACHE_BUCKET_NAME));
-    }
-
-    @AfterParameterizedClassInvocation
-    void afterAll() {
-        this.setup.close();
+    static void afterAll(final S3TestSetup setup) {
+        setup.close();
     }
 
     @BeforeEach
     void beforeEach() {
-        this.s3Interface = spy(new S3Cache.S3Interface(this.s3Client));
+        this.s3Interface = spy(new S3Cache.S3Interface(s3Client));
         this.s3Cache = new S3Cache(this.s3Interface, TEST_BUCKET_NAME, CACHE_BUCKET_NAME);
     }
 
@@ -71,7 +51,7 @@ class CacheIT {
         this.s3Cache.uploadFile(file, fileName);
         this.s3Cache.uploadFile(file, fileName);
         verify(this.s3Interface, times(1)).uploadFile(eq(CACHE_BUCKET_NAME), any(), eq(file));
-        assertThat(this.s3Client.getObject(request -> request.bucket(TEST_BUCKET_NAME).key(fileName)).readAllBytes(),
+        assertThat(s3Client.getObject(request -> request.bucket(TEST_BUCKET_NAME).key(fileName)).readAllBytes(),
                 equalTo(Files.readAllBytes(file)));
     }
 
@@ -84,7 +64,7 @@ class CacheIT {
         this.s3Cache.uploadFile(otherFile, fileName);
         verify(this.s3Interface, times(1)).uploadFile(eq(CACHE_BUCKET_NAME), any(), eq(file));
         verify(this.s3Interface, times(1)).uploadFile(eq(CACHE_BUCKET_NAME), any(), eq(otherFile));
-        assertThat(this.s3Client.getObject(request -> request.bucket(TEST_BUCKET_NAME).key(fileName)).readAllBytes(),
+        assertThat(s3Client.getObject(request -> request.bucket(TEST_BUCKET_NAME).key(fileName)).readAllBytes(),
                 equalTo(Files.readAllBytes(otherFile)));
     }
 

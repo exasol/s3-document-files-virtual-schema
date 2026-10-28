@@ -110,7 +110,7 @@
         </dependency>
         <dependency>
             <groupId>io.floci</groupId>
-            <artifactId>testcontainers-floci-aws</artifactId>
+            <artifactId>testcontainers-floci</artifactId>
             <version>2.17.0</version>
             <scope>test</scope>
         </dependency>

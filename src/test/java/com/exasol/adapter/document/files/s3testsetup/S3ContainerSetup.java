@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Optional;
 
+import org.testcontainers.localstack.LocalStackContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import com.exasol.adapter.document.files.connection.S3ConnectionProperties;
@@ -15,20 +16,25 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
 /**
- * This setup currently supports Floci as well as MinIO containers.
+ * This setup currently supports LocalStack as well as MinIO containers.
  */
 public class S3ContainerSetup implements S3TestSetup {
 
     static class DockerImage {
-        // https://hub.docker.com/r/floci/floci/tags
-        static final DockerImageName FLOCI = DockerImageName.parse("floci/floci").withTag("2.3.0");
+        // Latest free version. Switching to floci / https://github.com/floci-io/testcontainers-floci requires Java 17
+        static final String LOCALSTACK = "localstack/localstack:4.14.0";
         // MinIO no longer provides binaries. Chainguard only provides the latest version, tags require payment.
         // https://images.chainguard.dev/directory/image/minio/versions
         static final String MINIO = "cgr.dev/chainguard/minio:latest";
     }
 
-    public static S3ContainerSetup floci() {
-        return new S3ContainerSetup(new FlociS3Container(DockerImage.FLOCI));
+    @SuppressWarnings("resource")
+    public static S3ContainerSetup localStack() {
+        final LocalStackContainer container = new LocalStackContainer(
+                DockerImageName.parse(DockerImage.LOCALSTACK))
+                        .withServices("s3")
+                        .withReuse(true);
+        return new S3ContainerSetup(LocalStackS3Container.of(container));
     }
 
     public static S3ContainerSetup minio() {

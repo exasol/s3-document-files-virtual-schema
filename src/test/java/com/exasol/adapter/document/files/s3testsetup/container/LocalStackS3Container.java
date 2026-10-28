@@ -2,20 +2,17 @@ package com.exasol.adapter.document.files.s3testsetup.container;
 
 import java.net.URI;
 
-import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.localstack.LocalStackContainer;
 
-import io.floci.testcontainers.FlociContainer;
+public class LocalStackS3Container implements S3Container {
 
-public class FlociS3Container implements S3Container {
-
-    private final FlociContainer container;
-
-    @SuppressWarnings("resource") // Container will be closed in stop()
-    public FlociS3Container(final DockerImageName image) {
-        this(new FlociContainer(image).withReuse(true));
+    public static LocalStackS3Container of(final LocalStackContainer localStackContainer) {
+        return new LocalStackS3Container(localStackContainer);
     }
 
-    private FlociS3Container(final FlociContainer container) {
+    private final LocalStackContainer container;
+
+    LocalStackS3Container(final LocalStackContainer container) {
         this.container = container;
     }
 
@@ -36,7 +33,7 @@ public class FlociS3Container implements S3Container {
 
     @Override
     public URI getEndpointOverride() {
-        return URI.create(this.container.getEndpoint());
+        return this.container.getEndpoint();
     }
 
     @Override
@@ -51,6 +48,6 @@ public class FlociS3Container implements S3Container {
 
     @Override
     public Integer getMappedS3Port() {
-        return getEndpointOverride().getPort();
+        return this.container.getFirstMappedPort();
     }
 }

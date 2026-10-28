@@ -1,4 +1,4 @@
-# Virtual Schema for Document Data in Files on AWS S3 5.0.0, released 2026-10-??
+# Virtual Schema for Document Data in Files on AWS S3 5.0.0, released 2026-10-28
 
 Code name: Secure foundations
 

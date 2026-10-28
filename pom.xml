@@ -9,7 +9,7 @@
     <properties>
         <java.version>17</java.version>
         <org.testcontainers.version>2.0.5</org.testcontainers.version>
-        <vs-common-document-files.version>10.0.0</vs-common-document-files.version>
+        <vs-common-document-files.version>10.0.1</vs-common-document-files.version>
     </properties>
     <profiles>
         <profile>

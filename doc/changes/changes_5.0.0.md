@@ -46,7 +46,7 @@ This release requires Java 17 and no longer supports Exasol 8. It also updates v
 
 ### Compile Dependency Updates
 
-* Updated `com.exasol:virtual-schema-common-document-files:9.1.0` to `10.0.0`
+* Updated `com.exasol:virtual-schema-common-document-files:9.1.0` to `10.0.1`
 * Updated `software.amazon.awssdk:s3:2.51.3` to `2.57.5`
 
 ### Runtime Dependency Updates
@@ -60,7 +60,7 @@ This release requires Java 17 and no longer supports Exasol 8. It also updates v
 * Updated `com.exasol:small-json-files-test-fixture:0.1.15` to `0.1.16`
 * Updated `com.exasol:test-db-builder-java:4.0.2` to `4.0.3`
 * Updated `com.exasol:udf-debugging-java:0.6.20` to `0.6.22`
-* Updated `com.exasol:virtual-schema-common-document-files:9.1.0` to `10.0.0`
+* Updated `com.exasol:virtual-schema-common-document-files:9.1.0` to `10.0.1`
 * Updated `nl.jqno.equalsverifier:equalsverifier:3.19.4` to `4.5.2`
 * Updated `org.junit.jupiter:junit-jupiter-params:5.14.4` to `6.1.3`
 * Updated `org.mockito:mockito-core:5.23.0` to `5.24.0`

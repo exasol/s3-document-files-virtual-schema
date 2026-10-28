@@ -10,10 +10,7 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.AfterParameterizedClassInvocation;
-import org.junit.jupiter.params.BeforeParameterizedClassInvocation;
-import org.junit.jupiter.params.Parameter;
-import org.junit.jupiter.params.ParameterizedClass;
+import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.exasol.adapter.document.documentfetcher.files.randomaccessinputstream.RandomAccessInputStream;
@@ -48,8 +45,7 @@ class RandomAccessInputStreamIT {
         this.testSetup = this.backend.createSetup();
         final S3Client s3Client = this.testSetup.getS3Client();
         s3Client.createBucket(CreateBucketRequest.builder().bucket(TEST_BUCKET).build());
-        s3Client.putObject(builder -> builder.bucket(TEST_BUCKET).key(TEST_DATA_KEY),
-                RequestBody.fromBytes(TEST_DATA));
+        s3Client.putObject(builder -> builder.bucket(TEST_BUCKET).key(TEST_DATA_KEY), RequestBody.fromBytes(TEST_DATA));
     }
 
     @AfterParameterizedClassInvocation
@@ -59,10 +55,10 @@ class RandomAccessInputStreamIT {
 
     @BeforeEach
     void beforeEach() {
-        this.stream = new RandomAccessInputStreamBuilder(this.testSetup) //
-                .bucket(TEST_BUCKET) //
-                .key(TEST_DATA_KEY) //
-                .dataSize(TEST_DATA.length) //
+        this.stream = new RandomAccessInputStreamBuilder(this.testSetup)
+                .bucket(TEST_BUCKET)
+                .key(TEST_DATA_KEY)
+                .dataSize(TEST_DATA.length)
                 .build();
     }
 

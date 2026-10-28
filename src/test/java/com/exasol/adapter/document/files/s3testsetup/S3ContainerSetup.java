@@ -45,19 +45,21 @@ public class S3ContainerSetup implements S3TestSetup {
 
     @Override
     public S3Client getS3Client() {
-        return S3Client.builder() //
-                .endpointOverride(getEndpointOverride()) //
-                .credentialsProvider(getCredentialsProvider()) //
-                .region(Region.of(getRegion())) //
+        return S3Client.builder()
+                .endpointOverride(getEndpointOverride())
+                .credentialsProvider(getCredentialsProvider())
+                .region(Region.of(getRegion()))
+                .forcePathStyle(true)
                 .build();
     }
 
     @Override
     public S3AsyncClient getS3AsyncClient() {
-        return S3AsyncClient.builder() //
-                .endpointOverride(getEndpointOverride()) //
-                .credentialsProvider(getCredentialsProvider()) //
-                .region(Region.of(getRegion())) //
+        return S3AsyncClient.builder()
+                .endpointOverride(getEndpointOverride())
+                .credentialsProvider(getCredentialsProvider())
+                .region(Region.of(getRegion()))
+                .forcePathStyle(true)
                 .build();
     }
 
@@ -102,13 +104,14 @@ public class S3ContainerSetup implements S3TestSetup {
 
     public S3ConnectionProperties getConnectionProperties(final String bucket) {
         final String endpoint = getEndpointOverride().toString().replace("http://", "");
-        return S3ConnectionProperties.builder() //
-                .s3Bucket(bucket) //
-                .awsRegion(getRegion()) //
-                .awsEndpointOverride(endpoint) //
-                .awsAccessKeyId(getUsername()) //
-                .awsSecretAccessKey(getPassword()) //
-                .useSsl(false) //
+        return S3ConnectionProperties.builder()
+                .s3Bucket(bucket)
+                .awsRegion(getRegion())
+                .awsEndpointOverride(endpoint)
+                .awsAccessKeyId(getUsername())
+                .awsSecretAccessKey(getPassword())
+                .s3PathStyleAccess(true)
+                .useSsl(false)
                 .build();
     }
 }

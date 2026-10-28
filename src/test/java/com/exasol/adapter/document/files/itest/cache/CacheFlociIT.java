@@ -9,9 +9,9 @@ import com.exasol.adapter.document.files.s3testsetup.S3ContainerSetup;
  * implementing interface {@code S3ContainerSetup}.
  */
 @Tag("integration")
-class CacheLocalStackIT extends AbstractCacheIT {
+class CacheFlociIT extends AbstractCacheIT {
 
-    private static final S3ContainerSetup SETUP = S3ContainerSetup.localStack();
+    private static final S3ContainerSetup SETUP = S3ContainerSetup.floci();
 
     @BeforeAll
     static void beforeAll() {

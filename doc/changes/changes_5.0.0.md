@@ -61,10 +61,12 @@ This release requires Java 17 and no longer supports Exasol 8. It also updates v
 * Updated `com.exasol:test-db-builder-java:4.0.2` to `4.0.3`
 * Updated `com.exasol:udf-debugging-java:0.6.20` to `0.6.22`
 * Updated `com.exasol:virtual-schema-common-document-files:9.1.0` to `10.0.1`
+* Added `io.floci:testcontainers-floci:2.17.0`
 * Updated `nl.jqno.equalsverifier:equalsverifier:3.19.4` to `4.5.2`
 * Removed `org.junit.jupiter:junit-jupiter-params:5.14.4`
 * Added `org.junit.jupiter:junit-jupiter:6.1.3`
 * Updated `org.mockito:mockito-core:5.23.0` to `5.24.0`
+* Removed `org.testcontainers:testcontainers-localstack:2.0.5`
 
 ### Plugin Dependency Updates
 
